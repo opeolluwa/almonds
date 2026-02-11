@@ -1,0 +1,10 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+body {
+  font-family: "Poppins", sans-serif;
+  user-select: none;
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
