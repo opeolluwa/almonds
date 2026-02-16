@@ -1,10 +1,41 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
 
+@theme {
+  --color-accent-50: #fdf2f4;
+  --color-accent-100: #fce7eb;
+  --color-accent-200: #f9d0d9;
+  --color-accent-300: #f4a9b9;
+  --color-accent-400: #ed7694;
+  --color-accent-500: #D02752;
+  --color-accent-600: #bf2249;
+  --color-accent-700: #a11d3f;
+  --color-accent-800: #871b3a;
+  --color-accent-900: #741b36;
+  --color-accent-950: #410a1a;
+
+  --color-surface-50: #f0f2f5;
+  --color-surface-100: #d9dee6;
+  --color-surface-200: #b3bdcc;
+  --color-surface-300: #8d9db3;
+  --color-surface-400: #566a85;
+  --color-surface-500: #2a3f5a;
+  --color-surface-600: #1d3049;
+  --color-surface-700: #111F35;
+  --color-surface-800: #0c1626;
+  --color-surface-900: #080e1a;
+  --color-surface-950: #04070d;
+}
+
 body {
   font-family: "Poppins", sans-serif;
   user-select: none;
   height: 100%;
   overflow: hidden;
   overscroll-behavior: none;
+  background-color: #f9fafb;
+}
+
+.dark body {
+  background-color: var(--color-surface-950);
 }
