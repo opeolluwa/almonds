@@ -1,5 +1,5 @@
 [package]
-name = "almond_kernels"
+name = "almond_kernel"
 version = "0.1.0"
 edition = "2024"
 
@@ -23,3 +23,5 @@ sea-orm = { version = "2.0.0-rc", features = [
 serde = { version = "1.0.228", features = ["derive"] }
 thiserror = "2.0.18"
 migration = { path = "migration" }
+ts-rs = "12.0.1"
+uuid = { version = "1.21.0", features = ["v4"] }
