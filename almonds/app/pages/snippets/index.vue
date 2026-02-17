@@ -17,7 +17,7 @@ const activeLanguage = ref("All");
     <template #main_content>
       <div class="flex items-center justify-between mb-6">
         <h1 class="text-2xl font-semibold text-gray-800 dark:text-gray-100">Snippets</h1>
-        <button class="flex items-center gap-2 py-2 px-4 bg-violet-600 text-white rounded-lg text-sm font-medium hover:bg-violet-700 transition-colors">
+        <button class="flex items-center gap-2 py-2 px-4 bg-accent-500 text-white rounded-lg text-sm font-medium hover:bg-accent-600 transition-colors">
           <UIcon name="heroicons:plus" class="size-4" />
           New Snippet
         </button>
@@ -28,7 +28,7 @@ const activeLanguage = ref("All");
           v-for="lang in languages"
           :key="lang"
           class="px-3 py-1 rounded-full text-xs font-medium transition-colors"
-          :class="activeLanguage === lang ? 'bg-violet-600 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'"
+          :class="activeLanguage === lang ? 'bg-accent-500 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'"
           @click="activeLanguage = lang"
         >
           {{ lang }}
@@ -54,7 +54,7 @@ const activeLanguage = ref("All");
           <div class="px-4 py-2 border-t border-gray-50 dark:border-gray-700 flex items-center justify-between">
             <p class="text-xs text-gray-400">{{ snippet.date }}</p>
             <div class="flex items-center gap-2">
-              <button class="text-xs text-violet-600 dark:text-violet-400 hover:text-violet-700 font-medium">Copy</button>
+              <button class="text-xs text-accent-600 dark:text-accent-400 hover:text-accent-700 font-medium">Copy</button>
               <button class="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">Edit</button>
             </div>
           </div>

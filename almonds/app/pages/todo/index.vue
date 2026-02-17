@@ -74,11 +74,11 @@ function addTodo() {
           v-model="newTodo"
           type="text"
           placeholder="Add a new task..."
-          class="flex-1 bg-white dark:bg-gray-800 rounded-lg px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 outline-none focus:ring-2 focus:ring-violet-300 dark:focus:ring-violet-600 focus:border-transparent placeholder-gray-400 dark:placeholder-gray-500"
+          class="flex-1 bg-white dark:bg-gray-800 rounded-lg px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 outline-none focus:ring-2 focus:ring-accent-300 dark:focus:ring-accent-600 focus:border-transparent placeholder-gray-400 dark:placeholder-gray-500"
           @keydown.enter="addTodo"
         />
         <button
-          class="p-2.5 bg-violet-600 text-white rounded-lg hover:bg-violet-700 transition-colors"
+          class="p-2.5 bg-accent-500 text-white rounded-lg hover:bg-accent-600 transition-colors"
           @click="addTodo"
         >
           <UIcon name="heroicons:plus" class="size-4" />
@@ -95,7 +95,7 @@ function addTodo() {
             <UIcon
               :name="todo.completed ? 'heroicons:check-circle-solid' : 'heroicons:circle'"
               class="size-5"
-              :class="todo.completed ? 'text-violet-500' : 'text-gray-300 dark:text-gray-600'"
+              :class="todo.completed ? 'text-accent-500' : 'text-gray-300 dark:text-gray-600'"
             />
           </button>
           <div class="flex-1 min-w-0">
@@ -116,9 +116,9 @@ function addTodo() {
     <template #side_content>
       <h2 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">Summary</h2>
       <div class="flex flex-col gap-3 mb-6">
-        <div class="bg-violet-50 dark:bg-violet-950 rounded-lg p-3">
-          <p class="text-2xl font-semibold text-violet-700 dark:text-violet-300">{{ todos.filter((t) => !t.completed).length }}</p>
-          <p class="text-xs text-violet-500 dark:text-violet-400">Active tasks</p>
+        <div class="bg-accent-50 dark:bg-accent-950 rounded-lg p-3">
+          <p class="text-2xl font-semibold text-accent-700 dark:text-accent-300">{{ todos.filter((t) => !t.completed).length }}</p>
+          <p class="text-xs text-accent-500 dark:text-accent-400">Active tasks</p>
         </div>
         <div class="bg-emerald-50 dark:bg-emerald-950 rounded-lg p-3">
           <p class="text-2xl font-semibold text-emerald-700 dark:text-emerald-300">{{ todos.filter((t) => t.completed).length }}</p>

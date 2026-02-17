@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-const value = ref('## Hello, World!\n\nThis is a markdown editor. You can write your notes here.');
+const value = ref('');
 
 definePageMeta({
   layout: false
@@ -43,7 +43,7 @@ const notes = [
     <template #main_content>
       <div class="flex items-center justify-between mb-6">
         <h1 class="text-2xl font-semibold text-gray-800 dark:text-gray-100">Notes</h1>
-        <button class="flex items-center gap-2 py-2 px-4 bg-violet-600 text-white rounded-lg text-sm font-medium hover:bg-violet-700 transition-colors">
+        <button class="flex items-center gap-2 py-2 px-4 bg-accent-500 text-white rounded-lg text-sm font-medium hover:bg-accent-600 transition-colors">
           <UIcon name="heroicons:plus" class="size-4" />
           New Note
         </button>
