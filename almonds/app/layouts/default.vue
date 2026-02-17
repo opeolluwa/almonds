@@ -19,12 +19,10 @@ function toggleTheme() {
 }
 
 const themeIcon = computed(() =>
-  isDark.value ? "heroicons:sun" : "heroicons:moon"
+  isDark.value ? "heroicons:sun" : "heroicons:moon",
 );
 
-const themeLabel = computed(() =>
-  isDark.value ? "Light mode" : "Dark mode"
-);
+const themeLabel = computed(() => (isDark.value ? "Light mode" : "Dark mode"));
 
 const primaryRoutes: Route[] = [
   {
@@ -92,7 +90,7 @@ function isActive(path: string): boolean {
 }
 
 const sidebarCollapsed = ref(false);
-const asideOpen = ref(false);
+const asideOpen = ref(true);
 
 watch(sidebarCollapsed, () => {
   asideOpen.value = false;
@@ -118,7 +116,7 @@ function onSearchInput(val: string) {
       :min-size="12"
       :max-size="32"
       :ui="{
-        root: 'bg-white dark:bg-gray-900 transition-[width] duration-300 overflow-hidden border-e border-gray-200 dark:border-gray-800',
+        root: 'bg-white dark:bg-gray-900 transition-[width] duration-300 border-e border-gray-200 dark:border-gray-800',
         header: 'shrink-0 h-auto p-0',
         body: 'flex-1 overflow-y-auto p-0 gap-0',
         footer: 'shrink-0 h-auto p-0',
@@ -157,12 +155,11 @@ function onSearchInput(val: string) {
             />
           </div>
 
-          <div class="px-3 mb-3">
+          <div class="px-3 mb-3 flex max-w-9/12">
             <UButton
               color="error"
               variant="solid"
-              class="bg-accent-500 hover:bg-accent-600 w-full justify-center"
-              :class="collapsed ? 'px-2' : 'px-4'"
+              class="flex-1 bg-accent-500 hover:bg-accent-600 justify-center"
             >
               <UIcon name="heroicons:plus" class="size-4 shrink-0" />
               <span v-if="!collapsed">New Project</span>
@@ -276,6 +273,13 @@ function onSearchInput(val: string) {
             size="sm"
             color="neutral"
             variant="ghost"
+            icon="heroicons:bell"
+            @click="navigateTo('/notifications')"
+          />
+          <UButton
+            size="sm"
+            color="neutral"
+            variant="ghost"
             icon="heroicons:bars-3-bottom-right"
             aria-label="Open panel"
             @click="asideOpen = true"
@@ -295,8 +299,12 @@ function onSearchInput(val: string) {
             v-if="!sidebarCollapsed && asideOpen"
             class="w-72 shrink-0 flex flex-col border-l border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 overflow-hidden"
           >
-            <div class="flex items-center justify-between px-4 py-3 shrink-0 border-b border-gray-200 dark:border-gray-800">
-              <span class="font-semibold text-sm text-gray-900 dark:text-white">Panel</span>
+            <div
+              class="flex items-center justify-between px-4 py-3 shrink-0 border-b border-gray-200 dark:border-gray-800"
+            >
+              <span class="font-semibold text-sm text-gray-900 dark:text-white"
+                >Panel</span
+              >
               <UButton
                 size="sm"
                 color="neutral"
@@ -346,7 +354,9 @@ function onSearchInput(val: string) {
 <style scoped>
 .aside-slide-enter-active,
 .aside-slide-leave-active {
-  transition: width 0.25s ease, opacity 0.25s ease;
+  transition:
+    width 0.25s ease,
+    opacity 0.25s ease;
   overflow: hidden;
 }
 .aside-slide-enter-from,

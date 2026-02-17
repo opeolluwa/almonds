@@ -15,13 +15,13 @@ export default defineNuxtConfig({
     "@nuxtjs/i18n",
   ],
   colorMode: {
-    preference: "system",
+    preference: "dark",
     fallback: "light",
     globalName: "__NUXT_COLOR_MODE__",
     componentName: "ColorScheme",
     classPrefix: "",
     classSuffix: "",
-    storage: "localStorage", // or 'sessionStorage' or 'cookie'
+    storage: "localStorage", 
     storageKey: "nuxt-color-mode",
   },
 });
