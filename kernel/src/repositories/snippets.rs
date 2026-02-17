@@ -1,7 +1,10 @@
 use std::sync::Arc;
 
 use async_trait::async_trait;
-use sea_orm::{ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter};
+use sea_orm::{
+    ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter, QueryOrder,
+    QuerySelect,
+};
 use uuid::Uuid;
 
 use crate::{adapters::snippets::Snippet, entities::snippets, error::KernelError};
@@ -21,6 +24,8 @@ pub trait SnippetRepositoryExt {
     async fn find_all(&self) -> Result<Vec<snippets::Model>, KernelError>;
 
     async fn delete(&self, identifier: &Uuid) -> Result<(), KernelError>;
+
+    async fn recently_added(&self) -> Result<Vec<snippets::Model>, KernelError>;
 }
 
 #[async_trait]
@@ -60,5 +65,14 @@ impl SnippetRepositoryExt for SnippetRepository {
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))?;
         Ok(())
+    }
+
+    async fn recently_added(&self) -> Result<Vec<snippets::Model>, KernelError> {
+        snippets::Entity::find()
+            .limit(10)
+            .order_by_asc(snippets::Column::CreatedAt)
+            .all(self.conn.as_ref())
+            .await
+            .map_err(|err| KernelError::DbOperationError(err.to_string()))
     }
 }
