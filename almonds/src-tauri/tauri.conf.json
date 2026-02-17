@@ -1,13 +1,13 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
-  "productName": "wild-almonds",
+  "productName": "Wild almonds",
   "version": "0.1.0",
   "identifier": "com.wildalmonds.app",
   "build": {
     "frontendDist": "../dist",
     "devUrl": "http://localhost:3000",
     "beforeDevCommand": "npm run dev",
-    "beforeBuildCommand": "npm run build"
+    "beforeBuildCommand": "npm run generate"
   },
   "app": {
     "windows": [

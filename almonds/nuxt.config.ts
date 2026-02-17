@@ -2,7 +2,8 @@
 export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
   devtools: { enabled: true },
-css: ["@/assets/css/main.css"],
+  css: ["@/assets/css/main.css"],
+  ssr:false,
   modules: [
     "@nuxt/a11y",
     "@nuxt/eslint",
@@ -14,7 +15,7 @@ css: ["@/assets/css/main.css"],
     "@nuxtjs/i18n",
   ],
   colorMode: {
-    preference: "system", 
+    preference: "system",
     fallback: "light",
     globalName: "__NUXT_COLOR_MODE__",
     componentName: "ColorScheme",
