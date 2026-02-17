@@ -134,7 +134,7 @@ function isActive(path: string): boolean {
           >
             <UIcon
               :name="isActive(r.path) ? r.activeIcon : r.icon"
-              class="size-5"
+              class="size-4"
             />
             <span>{{ r.name }}</span>
           </NuxtLink>
@@ -164,7 +164,7 @@ function isActive(path: string): boolean {
           >
             <UIcon
               :name="isActive(r.path) ? r.activeIcon : r.icon"
-              class="size-5"
+              class="size-4"
             />
             <span>{{ r.name }}</span>
           </NuxtLink>
