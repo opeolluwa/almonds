@@ -1,4 +1,5 @@
 
 [working-directory:'kernel']
 watch-kernel: 
-    cargo watch -qcx run 
+    cargo watch -qcx check
+
