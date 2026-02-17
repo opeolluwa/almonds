@@ -1,20 +1,15 @@
-alias w := watch-desktop
-alias b := build-desktop
+alias w := watch
+alias b := build
+alias cfg := configure
 
 
-[working-directory:'almonds']
-watch-frontend:
-    npm run dev
 
-[working-directory:'almonds']
-watch-tauri:
-    npm run tauri dev
+configure:
+	just install-dependencies
 
-[working-directory:'almonds']
-watch-desktop:
-    npm run dev & npm run tauri dev
+watch target:
+	just watch-{{target}}
 
 
-[working-directory:'almonds']
-build-desktop:
-    npm run tauri build
+build target:
+	just build-{{target}}
