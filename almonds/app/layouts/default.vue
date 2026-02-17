@@ -94,6 +94,10 @@ function isActive(path: string): boolean {
 const sidebarCollapsed = ref(false);
 const asideOpen = ref(false);
 
+watch(sidebarCollapsed, () => {
+  asideOpen.value = false;
+});
+
 const { searchConfig, searchQuery } = useAppSearch();
 
 function onSearchInput(val: string) {
@@ -279,14 +283,39 @@ function onSearchInput(val: string) {
         </div>
       </header>
 
-      <!-- Page content -->
-      <main class="flex-1 overflow-y-auto p-6 bg-gray-50 dark:bg-surface-950">
-        <slot name="main_content" />
-      </main>
+      <!-- Page content + inline aside (fullscreen mode) -->
+      <div class="flex flex-1 overflow-hidden">
+        <main class="flex-1 overflow-y-auto p-6 bg-gray-50 dark:bg-surface-950">
+          <slot name="main_content" />
+        </main>
+
+        <!-- Inline aside: only when sidebar is expanded -->
+        <Transition name="aside-slide">
+          <aside
+            v-if="!sidebarCollapsed && asideOpen"
+            class="w-72 shrink-0 flex flex-col border-l border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 overflow-hidden"
+          >
+            <div class="flex items-center justify-between px-4 py-3 shrink-0 border-b border-gray-200 dark:border-gray-800">
+              <span class="font-semibold text-sm text-gray-900 dark:text-white">Panel</span>
+              <UButton
+                size="sm"
+                color="neutral"
+                variant="ghost"
+                icon="heroicons:x-mark"
+                @click="asideOpen = false"
+              />
+            </div>
+            <div class="flex-1 overflow-y-auto p-4">
+              <slot name="side_content" />
+            </div>
+          </aside>
+        </Transition>
+      </div>
     </div>
 
-    <!-- Aside drawer (slideover) -->
+    <!-- Drawer aside: only when sidebar is collapsed (minimized mode) -->
     <USlideover
+      v-if="sidebarCollapsed"
       v-model:open="asideOpen"
       side="right"
       :ui="{ content: 'max-w-sm' }"
@@ -313,3 +342,21 @@ function onSearchInput(val: string) {
     </USlideover>
   </UDashboardGroup>
 </template>
+
+<style scoped>
+.aside-slide-enter-active,
+.aside-slide-leave-active {
+  transition: width 0.25s ease, opacity 0.25s ease;
+  overflow: hidden;
+}
+.aside-slide-enter-from,
+.aside-slide-leave-to {
+  width: 0;
+  opacity: 0;
+}
+.aside-slide-enter-to,
+.aside-slide-leave-from {
+  width: 18rem; /* matches w-72 */
+  opacity: 1;
+}
+</style>
