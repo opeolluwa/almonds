@@ -31,6 +31,10 @@ impl Kernel {
         })
     }
 
+    pub fn connection(&self) -> &DatabaseConnection {
+        &self.database_connection
+    }
+
     pub async fn run_migrations(&self) -> Result<(), KernelError> {
         Migrator::up(&self.database_connection, None)
             .await

@@ -1,34 +1,79 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-const value = ref('');
+import { ref } from "vue";
+const value = ref("");
 
 definePageMeta({
-  layout: false
+  layout: false,
 });
 
-import type { EditorToolbarItem } from '@nuxt/ui'
+import type { EditorToolbarItem } from "@nuxt/ui";
 
 const items: EditorToolbarItem[][] = [
   [
     {
-      icon: 'i-lucide-heading',
-      tooltip: { text: 'Headings' },
-      content: { align: 'start' },
+      icon: "i-lucide-heading",
+      tooltip: { text: "Headings" },
+      content: { align: "start" },
       items: [
-        { kind: 'heading', level: 1, icon: 'i-lucide-heading-1', label: 'Heading 1' },
-        { kind: 'heading', level: 2, icon: 'i-lucide-heading-2', label: 'Heading 2' },
-        { kind: 'heading', level: 3, icon: 'i-lucide-heading-3', label: 'Heading 3' },
-        { kind: 'heading', level: 4, icon: 'i-lucide-heading-4', label: 'Heading 4' },
-      ]
-    }
+        {
+          kind: "heading",
+          level: 1,
+          icon: "i-lucide-heading-1",
+          label: "Heading 1",
+        },
+        {
+          kind: "heading",
+          level: 2,
+          icon: "i-lucide-heading-2",
+          label: "Heading 2",
+        },
+        {
+          kind: "heading",
+          level: 3,
+          icon: "i-lucide-heading-3",
+          label: "Heading 3",
+        },
+        {
+          kind: "heading",
+          level: 4,
+          icon: "i-lucide-heading-4",
+          label: "Heading 4",
+        },
+      ],
+    },
   ],
   [
-    { kind: 'mark', mark: 'bold', icon: 'i-lucide-bold', tooltip: { text: 'Bold' } },
-    { kind: 'mark', mark: 'italic', icon: 'i-lucide-italic', tooltip: { text: 'Italic' } },
-    { kind: 'mark', mark: 'underline', icon: 'i-lucide-underline', tooltip: { text: 'Underline' } },
-    { kind: 'mark', mark: 'strike', icon: 'i-lucide-strikethrough', tooltip: { text: 'Strikethrough' } },
-    { kind: 'mark', mark: 'code', icon: 'i-lucide-code', tooltip: { text: 'Code' } },
-  ]
+    {
+      kind: "mark",
+      mark: "bold",
+      icon: "i-lucide-bold",
+      tooltip: { text: "Bold" },
+    },
+    {
+      kind: "mark",
+      mark: "italic",
+      icon: "i-lucide-italic",
+      tooltip: { text: "Italic" },
+    },
+    {
+      kind: "mark",
+      mark: "underline",
+      icon: "i-lucide-underline",
+      tooltip: { text: "Underline" },
+    },
+    {
+      kind: "mark",
+      mark: "strike",
+      icon: "i-lucide-strikethrough",
+      tooltip: { text: "Strikethrough" },
+    },
+    {
+      kind: "mark",
+      mark: "code",
+      icon: "i-lucide-code",
+      tooltip: { text: "Code" },
+    },
+  ],
 ];
 
 const notes = [
@@ -41,23 +86,34 @@ const notes = [
 <template>
   <NuxtLayout name="default">
     <template #main_content>
-      <div class="flex items-center justify-between mb-6">
-        <h1 class="text-2xl font-semibold text-gray-800 dark:text-gray-100">Notes</h1>
-        <button class="flex items-center gap-2 py-2 px-4 bg-accent-500 text-white rounded-lg text-sm font-medium hover:bg-accent-600 transition-colors">
+      <div class="flex items-center justify-end mb-6">
+        <button
+          class="flex justify-end items-center gap-2 py-2 px-4 bg-accent-500 text-white rounded-lg text-sm font-medium hover:bg-accent-600 transition-colors"
+        >
           <UIcon name="heroicons:plus" class="size-4" />
           New Note
         </button>
       </div>
 
-      <div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700" style="height: calc(100vh - 180px)">
-        <UEditor v-slot="{ editor }" v-model="value" content-type="markdown" placeholder="Start writing...">
+      <div
+        class="bg-white dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700"
+        style="height: calc(100vh - 180px)"
+      >
+        <UEditor
+          v-slot="{ editor }"
+          v-model="value"
+          content-type="markdown"
+          placeholder="Start writing..."
+        >
           <UEditorToolbar :editor="editor" :items="items" layout="bubble" />
         </UEditor>
       </div>
     </template>
 
     <template #side_content>
-      <h2 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">Recently modified</h2>
+      <h2 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">
+        Recently modified
+      </h2>
       <div class="flex flex-col gap-1">
         <div
           v-for="note in notes"
@@ -66,7 +122,9 @@ const notes = [
         >
           <UIcon name="heroicons:document-text" class="size-4 text-gray-400" />
           <div class="flex-1">
-            <p class="font-medium text-gray-700 dark:text-gray-300">{{ note.title }}</p>
+            <p class="font-medium text-gray-700 dark:text-gray-300">
+              {{ note.title }}
+            </p>
             <p class="text-xs text-gray-400">{{ note.date }}</p>
           </div>
         </div>

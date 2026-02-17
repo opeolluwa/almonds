@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import _ from "lodash";
+
 interface Route {
   path: string;
   name: string;
@@ -102,6 +104,14 @@ function onSearchInput(val: string) {
   searchQuery.value = val;
   searchConfig.value?.searchFn?.(val);
 }
+
+const pageTitle = computed(() => {
+  const raw = route.name?.toString().replaceAll("-", " ") ?? "";
+  return raw
+    .split(" ")
+    .map((w) => _.capitalize(w))
+    .join(" ");
+});
 </script>
 
 <template>
@@ -290,6 +300,10 @@ function onSearchInput(val: string) {
       <!-- Page content + inline aside (fullscreen mode) -->
       <div class="flex flex-1 overflow-hidden">
         <main class="flex-1 overflow-y-auto p-6 bg-gray-50 dark:bg-surface-950">
+          <h1 class="text-2xl font-semibold text-gray-800 dark:text-gray-100">
+            {{ pageTitle }}
+          </h1>
+          <slot name="primary_cta" />
           <slot name="main_content" />
         </main>
 
