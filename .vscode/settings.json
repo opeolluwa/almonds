@@ -24,8 +24,10 @@
     "singlepart",
     "smaple",
     "sqlx",
+    "tauri",
     "tbody",
     "tinytemplate",
-    "TOTP"
+    "TOTP",
+    "wildalmonds"
   ]
 }
