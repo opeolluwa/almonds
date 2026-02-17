@@ -90,94 +90,226 @@ function isActive(path: string): boolean {
   if (path === "/") return route.path === "/";
   return route.path.startsWith(path);
 }
+
+const sidebarCollapsed = ref(false);
+const asideOpen = ref(false);
+
+const { searchConfig, searchQuery } = useAppSearch();
+
+function onSearchInput(val: string) {
+  searchQuery.value = val;
+  searchConfig.value?.searchFn?.(val);
+}
 </script>
 
 <template>
-  <div class="w-full h-screen grid grid-cols-12 bg-gray-50 dark:bg-surface-950" id="wild_almonds_app">
-    <nav
-      class="col-span-2 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 flex flex-col h-screen overflow-y-auto"
+  <UDashboardGroup id="wild_almonds_app" as="div">
+    <!-- Sidebar: icons-only strip when collapsed -->
+    <UDashboardSidebar
+      v-model:collapsed="sidebarCollapsed"
+      :collapsible="true"
+      :collapsed-size="4"
+      :default-size="15"
+      :resizable="true"
+      :min-size="12"
+      :max-size="32"
+      :ui="{
+        root: 'bg-white dark:bg-gray-900 transition-[width] duration-300 overflow-hidden border-e border-gray-200 dark:border-gray-800',
+        header: 'shrink-0 h-auto p-0',
+        body: 'flex-1 overflow-y-auto p-0 gap-0',
+        footer: 'shrink-0 h-auto p-0',
+      }"
     >
-      <div class="px-4 pt-5 pb-3">
-        <UUser
-          name="Nick Woods"
-          description="nick.woods@gmail.com"
-          :avatar="{
-            src: 'https://i.pravatar.cc/150?u=nick-woods',
-            icon: 'i-lucide-image',
-          }"
-        />
-      </div>
+      <!-- Sidebar header: user info + collapse button -->
+      <template #header="{ collapsed }">
+        <div class="flex flex-col pt-4">
+          <div
+            class="flex items-center px-4 pb-3 gap-2"
+            :class="collapsed ? 'justify-center flex-col' : 'justify-between'"
+          >
+            <UUser
+              v-if="!collapsed"
+              name="Nick Woods"
+              description="nick.woods@gmail.com"
+              :avatar="{
+                src: 'https://i.pravatar.cc/150?u=nick-woods',
+                icon: 'i-lucide-image',
+              }"
+              class="min-w-0 flex-1 truncate"
+            />
 
-      <div class="px-3 mb-2">
-        <button
-          class="w-full flex items-center justify-center gap-2 py-2 px-4 bg-accent-500 text-white rounded-lg text-sm font-medium hover:bg-accent-600 transition-colors"
-        >
-          <UIcon name="heroicons:plus" class="size-4" />
-          <span>New Project</span>
-        </button>
-      </div>
+            <UDashboardSidebarCollapse
+              v-if="!collapsed"
+              size="sm"
+              color="neutral"
+              variant="ghost"
+            />
 
-      <USeparator class="mx-3 my-2" />
+            <UAvatar
+              v-else
+              src="https://i.pravatar.cc/150?u=nick-woods"
+              size="sm"
+              class="shrink-0"
+            />
+          </div>
 
-      <div class="flex-1 px-3">
-        <div class="flex flex-col gap-0.5">
+          <div class="px-3 mb-3">
+            <UButton
+              color="error"
+              variant="solid"
+              class="bg-accent-500 hover:bg-accent-600 w-full justify-center"
+              :class="collapsed ? 'px-2' : 'px-4'"
+            >
+              <UIcon name="heroicons:plus" class="size-4 shrink-0" />
+              <span v-if="!collapsed">New Project</span>
+            </UButton>
+          </div>
+
+          <USeparator class="mx-3" />
+        </div>
+      </template>
+
+      <!-- Sidebar body: primary nav -->
+      <template #default="{ collapsed }">
+        <div class="flex flex-col gap-0.5 px-2 py-2">
           <NuxtLink
             v-for="r in primaryRoutes"
             :key="r.name"
             :to="r.path"
-            class="flex items-center gap-3 py-2 px-3 text-sm cursor-pointer rounded-lg transition-colors"
-            :class="
+            class="flex items-center py-2 px-3 text-sm cursor-pointer rounded-lg transition-colors"
+            :class="[
+              collapsed ? 'justify-center' : 'gap-3',
               isActive(r.path)
                 ? 'bg-accent-50 dark:bg-accent-950 text-accent-700 dark:text-accent-300 font-medium'
-                : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
-            "
+                : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800',
+            ]"
           >
             <UIcon
               :name="isActive(r.path) ? r.activeIcon : r.icon"
-              class="size-4"
+              class="size-4 shrink-0"
             />
-            <span>{{ r.name }}</span>
+            <span v-if="!collapsed">{{ r.name }}</span>
           </NuxtLink>
         </div>
-      </div>
+      </template>
 
-      <div class="px-3 pb-5 mt-auto">
-        <USeparator class="my-3" />
-        <div class="flex flex-col gap-0.5">
+      <!-- Sidebar footer: theme + secondary nav -->
+      <template #footer="{ collapsed }">
+        <div class="flex flex-col gap-0.5 px-2 pb-4">
+          <USeparator class="mx-1 mb-2" />
+
           <button
             @click="toggleTheme"
-            class="flex items-center gap-3 py-2 px-3 text-sm cursor-pointer rounded-lg transition-colors text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 w-full"
+            class="flex items-center py-2 px-3 text-sm cursor-pointer rounded-lg transition-colors text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 w-full"
+            :class="collapsed ? 'justify-center' : 'gap-3'"
           >
-            <UIcon :name="themeIcon" class="size-5" />
-            <span>{{ themeLabel }}</span>
+            <UIcon :name="themeIcon" class="size-4 shrink-0" />
+            <span v-if="!collapsed">{{ themeLabel }}</span>
           </button>
+
           <NuxtLink
             v-for="r in secondaryRoutes"
             :key="r.name"
             :to="r.path"
-            class="flex items-center gap-3 py-2 px-3 text-sm cursor-pointer rounded-lg transition-colors"
-            :class="
+            class="flex items-center py-2 px-3 text-sm cursor-pointer rounded-lg transition-colors"
+            :class="[
+              collapsed ? 'justify-center' : 'gap-3',
               isActive(r.path)
                 ? 'bg-accent-50 dark:bg-accent-950 text-accent-700 dark:text-accent-300 font-medium'
-                : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
-            "
+                : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800',
+            ]"
           >
             <UIcon
               :name="isActive(r.path) ? r.activeIcon : r.icon"
-              class="size-4"
+              class="size-4 shrink-0"
             />
-            <span>{{ r.name }}</span>
+            <span v-if="!collapsed">{{ r.name }}</span>
           </NuxtLink>
         </div>
-      </div>
-    </nav>
+      </template>
+    </UDashboardSidebar>
 
-    <main class="col-span-7 overflow-y-auto h-screen p-6">
-      <slot name="main_content" />
-    </main>
+    <!-- Right column: header + main content -->
+    <div class="flex flex-col flex-1 min-w-0 overflow-hidden">
+      <!-- App header -->
+      <header
+        class="flex items-center gap-3 h-14 px-4 shrink-0 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900"
+      >
+        <!-- Expand sidebar button (only shown when sidebar is collapsed) -->
+        <UDashboardSidebarCollapse
+          v-if="sidebarCollapsed"
+          size="sm"
+          color="neutral"
+          variant="ghost"
+          class="shrink-0"
+        />
 
-    <aside class="col-span-3 overflow-y-auto h-screen border-l border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 p-5">
-      <slot name="side_content" />
-    </aside>
-  </div>
+        <!-- Search bar -->
+        <div class="flex-1 max-w-xl">
+          <UInput
+            :model-value="searchQuery"
+            :placeholder="searchConfig?.placeholder ?? 'Search...'"
+            :disabled="!searchConfig"
+            icon="heroicons:magnifying-glass"
+            size="sm"
+            variant="outline"
+            class="w-full"
+            @update:model-value="onSearchInput"
+          />
+        </div>
+
+        <!-- Right actions -->
+        <div class="flex items-center gap-1 ml-auto">
+          <UButton
+            size="sm"
+            color="neutral"
+            variant="ghost"
+            :icon="themeIcon"
+            :aria-label="themeLabel"
+            @click="toggleTheme"
+          />
+          <UButton
+            size="sm"
+            color="neutral"
+            variant="ghost"
+            icon="heroicons:bars-3-bottom-right"
+            aria-label="Open panel"
+            @click="asideOpen = true"
+          />
+        </div>
+      </header>
+
+      <!-- Page content -->
+      <main class="flex-1 overflow-y-auto p-6 bg-gray-50 dark:bg-surface-950">
+        <slot name="main_content" />
+      </main>
+    </div>
+
+    <!-- Aside drawer (slideover) -->
+    <USlideover
+      v-model:open="asideOpen"
+      side="right"
+      :ui="{ content: 'max-w-sm' }"
+    >
+      <template #content>
+        <div class="flex flex-col h-full p-5 bg-white dark:bg-gray-900">
+          <div class="flex items-center justify-between mb-4 shrink-0">
+            <span class="font-semibold text-sm text-gray-900 dark:text-white">
+              Panel
+            </span>
+            <UButton
+              size="sm"
+              color="neutral"
+              variant="ghost"
+              icon="heroicons:x-mark"
+              @click="asideOpen = false"
+            />
+          </div>
+          <div class="flex-1 overflow-y-auto">
+            <slot name="side_content" />
+          </div>
+        </div>
+      </template>
+    </USlideover>
+  </UDashboardGroup>
 </template>
