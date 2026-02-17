@@ -12,6 +12,7 @@ alias cfg := configure
 
 configure:
 	just install-dependencies
+	just create-kernel-test-file
 
 watch target:
 	just watch-{{target}}
