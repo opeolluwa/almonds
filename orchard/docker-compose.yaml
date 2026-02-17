@@ -1,0 +1,60 @@
+
+services:
+  app:
+    container_name: uranium
+    build:
+      context: .
+      dockerfile: docker/${ENVIRONMENT}/Dockerfile
+      args:
+        - CARGO_TARGET_DIR=/cargo-target
+    ports:
+      - ${PORT}:${PORT}
+    environment:
+      PORT: 5006
+      ENVIRONMENT: dev
+      DATABASE_NAME: uranium
+      DATABASE_USER: uranium
+      DATABASE_PASSWORD: uranium
+      DATABASE_PORT: 5432
+      DATABASE_HOST: postgres
+      DATABASE_URL: postgres://${DATABASE_USER}:${DATABASE_PASSWORD}@${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}
+      JWT_SIGNING_KEY: fXUuojVKfWgVi3qLgQl8GjPWHsihf33aExhi
+    # env_file:
+    #   - .env.local
+    depends_on:
+      database: 
+        condition: service_started
+    networks:
+      - internal
+    volumes:
+      - .:/app:cached
+      - cargo-target:/cargo-target:delegated
+      - rust-cache:/usr/local/cargo/registry:delegated
+    command: cargo watch -qcx run 
+    stdin_open: true
+    tty: true
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${PORT}/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s  # Wait 30 seconds before starting health checks
+
+  database:
+    image: postgres:15-alpine 
+    restart: always
+    container_name: postgres
+    environment:
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+      - POSTGRES_DB=${DATABASE_NAME}
+    networks:
+      - internal
+
+networks:
+  internal:
+    name: uranium-network
+
+volumes:
+  cargo-target:
+  rust-cache:
