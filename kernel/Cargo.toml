@@ -7,7 +7,10 @@ edition = "2024"
 members = [".", "migration"]
 
 [dependencies]
+async-trait = "0.1.89"
 log = "0.4.29"
+migration = { path = "migration" }
+sanitizer = "1.0.0"
 sea-orm = { version = "2.0.0-rc", features = [
     "sqlx-sqlite",
     "sqlx-mysql",
@@ -22,6 +25,5 @@ sea-orm = { version = "2.0.0-rc", features = [
 ] }
 serde = { version = "1.0.228", features = ["derive"] }
 thiserror = "2.0.18"
-migration = { path = "migration" }
 ts-rs = "12.0.1"
 uuid = { version = "1.21.0", features = ["v4"] }
