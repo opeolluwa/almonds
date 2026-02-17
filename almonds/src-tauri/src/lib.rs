@@ -8,6 +8,7 @@ use std::sync::Arc;
 
 use tauri::Manager;
 
+use commands::snippets::{create_snippet, delete_snippet, get_all_snippets, get_snippet};
 use commands::sync_queue::{
     add_sync_queue_entry, count_sync_queue_entries, remove_sync_queue_entry, run_sync,
 };
@@ -59,6 +60,10 @@ pub fn run() {
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
+            create_snippet,
+            get_snippet,
+            get_all_snippets,
+            delete_snippet,
             add_sync_queue_entry,
             remove_sync_queue_entry,
             count_sync_queue_entries,

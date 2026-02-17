@@ -13,6 +13,7 @@ export default defineNuxtConfig({
     "@nuxtjs/device",
     "@nuxtjs/google-fonts",
     "@nuxtjs/i18n",
+    "@pinia/nuxt",
   ],
   colorMode: {
     preference: "dark",
