@@ -43,18 +43,11 @@ const activeLanguage = ref("All");
   <Script> hljs.highlightAll(); </Script>
   <NuxtLayout name="default">
     <template #main_content>
-     
-      <div class="flex items-center justify-between mb-6">
-        <h1 class="text-2xl font-semibold text-gray-800 dark:text-gray-100">
-          Snippets
-        </h1>
-        <button
-          class="flex items-center gap-2 py-2 px-4 bg-accent-500 text-white rounded-lg text-sm font-medium hover:bg-accent-600 transition-colors"
-        >
-          <UIcon name="heroicons:plus" class="size-4" />
-          New Snippet
-        </button>
-      </div>
+      <PrimaryCta
+        label="New Snippet"
+        icon="heroicons:plus"
+        to="/snippets/create-snippets"
+      />
 
       <div class="flex gap-2 mb-4">
         <button

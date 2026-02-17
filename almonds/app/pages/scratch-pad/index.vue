@@ -15,10 +15,7 @@ const pads = [
 <template>
   <NuxtLayout name="default">
     <template #main_content>
-      <div class="flex items-center justify-between mb-6">
-        <h1 class="text-2xl font-semibold text-gray-800 dark:text-gray-100">
-          Scratch Pad
-        </h1>
+      <div class="flex items-center justify-end mb-6">
         <div class="flex items-center gap-2">
           <button
             class="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"

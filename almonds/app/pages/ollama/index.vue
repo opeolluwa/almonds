@@ -25,8 +25,8 @@ function sendMessage() {
 <template>
   <NuxtLayout name="default">
     <template #main_content>
-      <div class="flex items-center justify-between mb-6">
-        <h1 class="text-2xl font-semibold text-gray-800 dark:text-gray-100">Ollama</h1>
+      <div class="flex items-center justify-end mb-6">
+
         <div class="flex items-center gap-2">
           <span class="size-2 rounded-full bg-emerald-400"></span>
           <span class="text-xs text-gray-500 dark:text-gray-400">Connected</span>
