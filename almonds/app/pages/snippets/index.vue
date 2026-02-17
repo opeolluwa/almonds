@@ -43,10 +43,7 @@ const activeLanguage = ref("All");
   <Script> hljs.highlightAll(); </Script>
   <NuxtLayout name="default">
     <template #main_content>
-      <pre><code class="language-html">
-
-        export function useCounter() {\n  const count = ref(0)\n  return { count }\n}
-      </code></pre>
+     
       <div class="flex items-center justify-between mb-6">
         <h1 class="text-2xl font-semibold text-gray-800 dark:text-gray-100">
           Snippets
