@@ -29,17 +29,13 @@ pub async fn remove_sync_queue_entry(
 }
 
 #[tauri::command]
-pub async fn count_sync_queue_entries(
-    state: State<'_, AppState>,
-) -> Result<i32, AppError> {
+pub async fn count_sync_queue_entries(state: State<'_, AppState>) -> Result<i32, AppError> {
     let repo = SyncQueueRepository::new(state.conn.clone());
     repo.len().await.map_err(Into::into)
 }
 
 #[tauri::command]
-pub async fn run_sync(
-    state: State<'_, AppState>,
-) -> Result<Vec<sync_queue::Model>, AppError> {
+pub async fn run_sync(state: State<'_, AppState>) -> Result<Vec<sync_queue::Model>, AppError> {
     let repo = SyncQueueRepository::new(state.conn.clone());
     let entries = repo.entries().await?;
     Ok(entries)

@@ -35,8 +35,7 @@ pub fn run() {
                     .app_data_dir()
                     .expect("failed to resolve app data dir");
 
-                std::fs::create_dir_all(&app_data_dir)
-                    .expect("failed to create app data dir");
+                std::fs::create_dir_all(&app_data_dir).expect("failed to create app data dir");
 
                 let db_path = app_data_dir.join("almond.db");
                 let db_url = format!("sqlite://{}?mode=rwc", db_path.display());
