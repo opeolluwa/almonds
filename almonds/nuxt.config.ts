@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
-  devtools: { enabled: true },
+  devtools: { enabled: false },
   css: ["@/assets/css/main.css"],
   ssr:false,
   modules: [
@@ -15,13 +15,13 @@ export default defineNuxtConfig({
     "@nuxtjs/i18n",
   ],
   colorMode: {
-    preference: "system",
+    preference: "dark",
     fallback: "light",
     globalName: "__NUXT_COLOR_MODE__",
     componentName: "ColorScheme",
     classPrefix: "",
     classSuffix: "",
-    storage: "localStorage", // or 'sessionStorage' or 'cookie'
+    storage: "localStorage", 
     storageKey: "nuxt-color-mode",
   },
 });
