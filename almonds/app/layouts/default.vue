@@ -20,10 +20,6 @@ const themeIcon = computed(() =>
 
 const themeLabel = computed(() => (isDark.value ? "Light mode" : "Dark mode"));
 
-
-
-
-
 function isActive(path: string): boolean {
   if (path === "/") return route.path === "/";
   return route.path.startsWith(path);
@@ -103,7 +99,8 @@ const pageTitle = computed(() => {
             />
           </div>
 
-          <div class="px-3 mb-3 flex max-w-9/12">
+          <!--TODO: enable when the project feature is done, the former class is flex befor hidden-->
+          <div class="px-3 mb-3 max-w-9/12 hidden">
             <UButton
               color="error"
               variant="solid"
