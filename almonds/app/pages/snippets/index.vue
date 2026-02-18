@@ -5,14 +5,29 @@ definePageMeta({ layout: false });
 
 const snippetStore = useSnippetStore();
 const activeLanguage = ref("All");
+const { searchQuery, setSearch, clearSearch } = useAppSearch();
 
 const allLanguages = computed(() => ["All", ...snippetStore.languages]);
 
 const filteredSnippets = computed(() => {
-  if (activeLanguage.value === "All") return snippetStore.snippets;
-  return snippetStore.snippets.filter(
-    (s) => s.language === activeLanguage.value,
-  );
+  let list = snippetStore.snippets;
+
+  if (activeLanguage.value !== "All") {
+    list = list.filter((s) => s.language === activeLanguage.value);
+  }
+
+  const q = searchQuery.value.trim().toLowerCase();
+  if (q) {
+    list = list.filter(
+      (s) =>
+        s.title?.toLowerCase().includes(q) ||
+        s.language?.toLowerCase().includes(q) ||
+        s.description?.toLowerCase().includes(q) ||
+        s.code.toLowerCase().includes(q),
+    );
+  }
+
+  return list;
 });
 
 function formatDate(dateStr: string) {
@@ -28,11 +43,14 @@ function lineCount(code: string) {
 }
 
 onMounted(async () => {
+  setSearch({ placeholder: "Search snippets..." });
   await Promise.all([
     snippetStore.fetchSnippets(),
     snippetStore.fetchRecentSnippets(),
   ]);
 });
+
+onUnmounted(() => clearSearch());
 </script>
 
 <template>
@@ -107,17 +125,27 @@ onMounted(async () => {
           />
         </div>
         <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-          No {{ activeLanguage }} snippets
+          No results found
         </h3>
         <p class="text-xs text-gray-400 dark:text-gray-500 mb-4">
-          Try selecting a different language.
+          Try a different search or language filter.
         </p>
-        <button
-          class="text-xs text-accent-500 hover:text-accent-600 font-medium"
-          @click="activeLanguage = 'All'"
-        >
-          Clear filter
-        </button>
+        <div class="flex items-center gap-3">
+          <button
+            v-if="searchQuery"
+            class="text-xs text-accent-500 hover:text-accent-600 font-medium"
+            @click="searchQuery = ''"
+          >
+            Clear search
+          </button>
+          <button
+            v-if="activeLanguage !== 'All'"
+            class="text-xs text-gray-400 hover:text-gray-600 font-medium"
+            @click="activeLanguage = 'All'"
+          >
+            Clear filter
+          </button>
+        </div>
       </div>
 
       <!-- Snippet list -->
