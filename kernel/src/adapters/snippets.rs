@@ -28,21 +28,6 @@ pub struct CreateSnippet {
     pub updated_at: DateTimeWithTimeZone,
 }
 
-impl Into<entities::snippets::ActiveModel> for Snippet {
-    fn into(self) -> entities::snippets::ActiveModel {
-        ActiveModel {
-            identifier: Set(Uuid::new_v4()),
-            title: Set(self.title),
-            language: Set(self.language),
-            code: Set(self.code),
-            description: Set(self.description),
-            is_pinned: Set(self.is_pinned),
-            created_at: Set(self.created_at),
-            updated_at: Set(self.updated_at),
-        }
-    }
-}
-
 impl Into<entities::snippets::ActiveModel> for CreateSnippet {
     fn into(self) -> entities::snippets::ActiveModel {
         ActiveModel {
