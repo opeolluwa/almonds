@@ -13,8 +13,7 @@ const filteredNotes = computed(() => {
   if (!q) return noteStore.notes;
   return noteStore.notes.filter(
     (n) =>
-      n.title.toLowerCase().includes(q) ||
-      n.content.toLowerCase().includes(q),
+      n.title.toLowerCase().includes(q) || n.content.toLowerCase().includes(q),
   );
 });
 
@@ -46,7 +45,6 @@ onUnmounted(() => clearSearch());
     </template>
 
     <template #main_content>
-
       <!-- Loading -->
       <div v-if="noteStore.loading" class="flex flex-col gap-3">
         <USkeleton v-for="i in 4" :key="i" class="h-24 rounded-lg" />
@@ -144,12 +142,19 @@ onUnmounted(() => clearSearch());
           class="flex items-center gap-3 py-2.5 px-3 rounded-lg text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer transition-colors"
           @click="router.push(`/notes/edit-notes?id=${note.identifier}`)"
         >
-          <UIcon name="heroicons:document-text" class="size-4 text-gray-400 shrink-0" />
+          <UIcon
+            name="heroicons:document-text"
+            class="size-4 text-gray-400 shrink-0"
+          />
           <div class="flex-1 min-w-0">
-            <p class="font-medium text-gray-700 dark:text-gray-300 truncate text-xs">
+            <p
+              class="font-medium text-gray-700 dark:text-gray-300 truncate text-xs"
+            >
               {{ note.title || "Untitled" }}
             </p>
-            <p class="text-xs text-gray-400">{{ formatDate(note.updatedAt) }}</p>
+            <p class="text-xs text-gray-400">
+              {{ formatDate(note.updatedAt) }}
+            </p>
           </div>
         </div>
       </div>

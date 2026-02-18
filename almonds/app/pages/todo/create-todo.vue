@@ -2,7 +2,7 @@
 import DatePicker from "~/components/ui/date-picker.vue";
 import { useTodoStore } from "~/stores/todo";
 
-definePageMeta({ layout: false });
+definePageMeta({ layout: false, name: "Create Todo" });
 
 const todoStore = useTodoStore();
 const router = useRouter();
@@ -59,18 +59,6 @@ async function handleSubmit() {
   <NuxtLayout name="default">
     <template #main_content>
       <div class="max-w-lg">
-        <div class="flex items-center gap-3 mb-6">
-          <button
-            class="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-            @click="router.back()"
-          >
-            <UIcon name="heroicons:arrow-left" class="size-4" />
-          </button>
-          <h1 class="text-sm font-semibold text-gray-800 dark:text-gray-100">
-            New Todo
-          </h1>
-        </div>
-
         <form class="flex flex-col gap-4" @submit.prevent="handleSubmit">
           <div class="flex flex-col gap-1.5">
             <label class="text-xs font-medium text-gray-500 dark:text-gray-400">
@@ -82,7 +70,7 @@ async function handleSubmit() {
               placeholder="What needs to be done?"
               autofocus
               class="w-full bg-white dark:bg-gray-800 rounded-lg px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 outline-none focus:ring-2 focus:ring-accent-300 dark:focus:ring-accent-600 focus:border-transparent placeholder-gray-400 dark:placeholder-gray-500"
-            />
+            >
           </div>
 
           <div class="flex flex-col gap-1.5">
@@ -106,10 +94,21 @@ async function handleSubmit() {
                 <button
                   type="button"
                   class="w-full flex items-center gap-2 bg-white dark:bg-gray-800 rounded-lg px-4 py-2.5 text-sm border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-colors text-left"
-                  :class="form.dueDate ? 'text-gray-700 dark:text-gray-200' : 'text-gray-400 dark:text-gray-500'"
+                  :class="
+                    form.dueDate
+                      ? 'text-gray-700 dark:text-gray-200'
+                      : 'text-gray-400 dark:text-gray-500'
+                  "
                 >
-                  <UIcon name="heroicons:calendar" class="size-4 shrink-0 text-gray-400" />
-                  {{ form.dueDate ? formatDisplayDate(form.dueDate) : "Pick a date" }}
+                  <UIcon
+                    name="heroicons:calendar"
+                    class="size-4 shrink-0 text-gray-400"
+                  />
+                  {{
+                    form.dueDate
+                      ? formatDisplayDate(form.dueDate)
+                      : "Pick a date"
+                  }}
                 </button>
                 <template #content>
                   <DatePicker v-model="form.dueDate" />
@@ -177,7 +176,9 @@ async function handleSubmit() {
         Priority guide
       </h2>
       <div class="flex flex-col gap-3">
-        <div class="flex items-start gap-2 text-xs text-gray-500 dark:text-gray-400">
+        <div
+          class="flex items-start gap-2 text-xs text-gray-500 dark:text-gray-400"
+        >
           <UIcon
             name="heroicons:flag"
             class="size-4 text-rose-500 shrink-0 mt-px"
@@ -187,7 +188,9 @@ async function handleSubmit() {
             — Urgent, needs immediate attention
           </span>
         </div>
-        <div class="flex items-start gap-2 text-xs text-gray-500 dark:text-gray-400">
+        <div
+          class="flex items-start gap-2 text-xs text-gray-500 dark:text-gray-400"
+        >
           <UIcon
             name="heroicons:flag"
             class="size-4 text-amber-500 shrink-0 mt-px"
@@ -197,7 +200,9 @@ async function handleSubmit() {
             — Important but not urgent
           </span>
         </div>
-        <div class="flex items-start gap-2 text-xs text-gray-500 dark:text-gray-400">
+        <div
+          class="flex items-start gap-2 text-xs text-gray-500 dark:text-gray-400"
+        >
           <UIcon
             name="heroicons:flag"
             class="size-4 text-emerald-500 shrink-0 mt-px"

@@ -5,10 +5,26 @@ const notifSyncComplete = ref(false);
 const notifAppUpdates = ref(true);
 
 const items = computed(() => [
-  { label: "Tasks due", desc: "Remind me when tasks are due", model: notifTasksDue },
-  { label: "Reminders", desc: "Calendar event reminders", model: notifReminders },
-  { label: "Sync complete", desc: "Notify when sync finishes", model: notifSyncComplete },
-  { label: "App updates", desc: "Notify about new versions", model: notifAppUpdates },
+  {
+    label: "Tasks due",
+    desc: "Remind me when tasks are due",
+    model: notifTasksDue,
+  },
+  {
+    label: "Reminders",
+    desc: "Calendar event reminders",
+    model: notifReminders,
+  },
+  {
+    label: "Sync complete",
+    desc: "Notify when sync finishes",
+    model: notifSyncComplete,
+  },
+  {
+    label: "App updates",
+    desc: "Notify about new versions",
+    model: notifAppUpdates,
+  },
 ]);
 </script>
 

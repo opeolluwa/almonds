@@ -28,7 +28,7 @@ export function getGreeting(username?: string): string {
   const date = now.getDate();
   const month = now.getMonth();
 
-  let parts: string[] = [];
+  const parts: string[] = [];
 
   // Special days (highest priority)
   if (month === 0 && date === 1) {

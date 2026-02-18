@@ -5,10 +5,30 @@ const backupProvider = ref<BackupProvider>("local");
 const selfHostedApiUrl = ref("");
 const selfHostedApiKey = ref("");
 
-const options: { key: BackupProvider; label: string; desc: string; icon: string }[] = [
-  { key: "local", label: "Local only", desc: "Data stays on this device, no sync.", icon: "heroicons:computer-desktop" },
-  { key: "cloud", label: "Almond Cloud", desc: "Sync across devices via Almond Cloud.", icon: "heroicons:cloud" },
-  { key: "self-hosted", label: "Self Hosted", desc: "Use your own server to sync data.", icon: "heroicons:server" },
+const options: {
+  key: BackupProvider;
+  label: string;
+  desc: string;
+  icon: string;
+}[] = [
+  {
+    key: "local",
+    label: "Local only",
+    desc: "Data stays on this device, no sync.",
+    icon: "heroicons:computer-desktop",
+  },
+  {
+    key: "cloud",
+    label: "Almond Cloud",
+    desc: "Sync across devices via Almond Cloud.",
+    icon: "heroicons:cloud",
+  },
+  {
+    key: "self-hosted",
+    label: "Self Hosted",
+    desc: "Use your own server to sync data.",
+    icon: "heroicons:server",
+  },
 ];
 </script>
 
@@ -113,7 +133,7 @@ const options: { key: BackupProvider; label: string; desc: string; icon: string 
             type="url"
             placeholder="https://sync.example.com/api"
             class="w-full bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-600 outline-none focus:ring-2 focus:ring-accent-300 dark:focus:ring-accent-600 focus:border-transparent font-mono"
-          />
+          >
           <p class="text-xs text-gray-400 mt-1">
             Base URL of your self-hosted Almond sync server.
           </p>
@@ -128,7 +148,7 @@ const options: { key: BackupProvider; label: string; desc: string; icon: string 
             type="password"
             placeholder="sk-••••••••••••"
             class="w-full bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-600 outline-none focus:ring-2 focus:ring-accent-300 dark:focus:ring-accent-600 focus:border-transparent font-mono"
-          />
+          >
         </div>
         <div class="flex items-center justify-between">
           <button

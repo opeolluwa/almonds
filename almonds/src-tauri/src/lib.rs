@@ -12,6 +12,7 @@ use crate::state::app::AppState;
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_os::init())
         .plugin(tauri_plugin_notification::init())
         .plugin(tauri_plugin_clipboard_manager::init())
         .plugin(tauri_plugin_single_instance::init(|_app, _args, _cwd| {}))
@@ -56,6 +57,13 @@ pub fn run() {
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
+            commands::bookmarks::create_bookmark,
+            commands::bookmarks::get_bookmark,
+            commands::bookmarks::get_all_bookmarks,
+            commands::bookmarks::get_bookmarks_by_tag,
+            commands::bookmarks::get_recently_added_bookmarks,
+            commands::bookmarks::update_bookmark,
+            commands::bookmarks::delete_bookmark,
             commands::notes::create_note,
             commands::notes::get_note,
             commands::notes::get_all_notes,

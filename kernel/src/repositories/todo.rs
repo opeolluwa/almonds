@@ -2,11 +2,11 @@ use std::sync::Arc;
 
 use async_trait::async_trait;
 use chrono::Utc;
+use sea_orm::prelude::Date;
 use sea_orm::{
     ActiveModelTrait, ActiveValue::Set, ColumnTrait, DatabaseConnection, EntityTrait,
     IntoActiveModel, QueryFilter,
 };
-use sea_orm::prelude::Date;
 use uuid::Uuid;
 
 use crate::{
@@ -49,11 +49,7 @@ pub trait TodoRepositoryExt {
         due_date: Option<Date>,
     ) -> Result<todo::Model, KernelError>;
 
-    async fn mark_done(
-        &self,
-        identifier: &Uuid,
-        done: bool,
-    ) -> Result<todo::Model, KernelError>;
+    async fn mark_done(&self, identifier: &Uuid, done: bool) -> Result<todo::Model, KernelError>;
 }
 
 #[async_trait]
@@ -166,11 +162,7 @@ impl TodoRepositoryExt for TodoRepository {
             .map_err(|err| KernelError::DbOperationError(err.to_string()))
     }
 
-    async fn mark_done(
-        &self,
-        identifier: &Uuid,
-        done: bool,
-    ) -> Result<todo::Model, KernelError> {
+    async fn mark_done(&self, identifier: &Uuid, done: bool) -> Result<todo::Model, KernelError> {
         let model = todo::Entity::find()
             .filter(todo::Column::Identifier.eq(*identifier))
             .one(self.conn.as_ref())

@@ -85,8 +85,7 @@ const yearlyDiscount = 28;
                 : 'bg-gray-200 dark:bg-gray-600'
             "
             @click="
-              billingCycle =
-                billingCycle === 'monthly' ? 'yearly' : 'monthly'
+              billingCycle = billingCycle === 'monthly' ? 'yearly' : 'monthly'
             "
           >
             <span
@@ -127,7 +126,9 @@ const yearlyDiscount = 28;
             <!-- Badge -->
             <div class="flex items-start justify-between mb-4">
               <div>
-                <p class="text-sm font-semibold text-gray-800 dark:text-gray-100">
+                <p
+                  class="text-sm font-semibold text-gray-800 dark:text-gray-100"
+                >
                   {{ plan.name }}
                 </p>
                 <p class="text-xs text-gray-400 mt-0.5">{{ plan.desc }}</p>
@@ -152,10 +153,7 @@ const yearlyDiscount = 28;
                 >
                   / mo
                 </span>
-                <span
-                  v-else
-                  class="text-xs text-gray-400 mb-1.5"
-                >
+                <span v-else class="text-xs text-gray-400 mb-1.5">
                   forever
                 </span>
               </div>

@@ -1,17 +1,18 @@
 import { useCompletion } from "@ai-sdk/vue";
 import type { Editor } from "@tiptap/vue-3";
 import { Completion } from "./notes-editor-completion-extension";
-import type { CompletionOptions, CompletionStorage } from "./notes-editor-completion-extension";
+import type {
+  CompletionOptions,
+  CompletionStorage,
+} from "./notes-editor-completion-extension";
 
-
-let completionExtension: ReturnType<typeof Completion.configure> | null = null
-
+let completionExtension: ReturnType<typeof Completion.configure> | null = null;
 
 function getCompletionExtension(config: CompletionOptions) {
   if (!completionExtension) {
-    completionExtension = Completion.configure(config)
+    completionExtension = Completion.configure(config);
   }
-  return completionExtension
+  return completionExtension;
 }
 
 type CompletionMode =
@@ -267,24 +268,20 @@ export function useEditorCompletion(
   // });
 
   const extension = getCompletionExtension({
-  onTrigger: (editor) => {
-    if (isLoading.value) return;
-    mode.value = "continue";
-    const textBefore = getMarkdownBefore(
-      editor,
-      editor.state.selection.from
-    );
-    complete(textBefore);
-  },
-  onAccept: () => {
-    setCompletion("");
-  },
-  onDismiss: () => {
-    stop();
-    setCompletion("");
-  },
-});
-
+    onTrigger: (editor) => {
+      if (isLoading.value) return;
+      mode.value = "continue";
+      const textBefore = getMarkdownBefore(editor, editor.state.selection.from);
+      complete(textBefore);
+    },
+    onAccept: () => {
+      setCompletion("");
+    },
+    onDismiss: () => {
+      stop();
+      setCompletion("");
+    },
+  });
 
   // Create handlers for toolbar
   const handlers = {
@@ -377,5 +374,3 @@ export function useEditorCompletion(
     mode,
   };
 }
-
-

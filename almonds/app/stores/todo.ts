@@ -71,7 +71,10 @@ export const useTodoStore = defineStore("todo_store", {
     },
 
     async toggleDone(identifier: string, done: boolean): Promise<Todo> {
-      const updated = await invoke<Todo>("mark_todo_done", { identifier, done });
+      const updated = await invoke<Todo>("mark_todo_done", {
+        identifier,
+        done,
+      });
       const idx = this.todos.findIndex((t) => t.identifier === identifier);
       if (idx !== -1) this.todos[idx] = updated;
       return updated;

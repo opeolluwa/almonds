@@ -21,7 +21,7 @@ const customHandlers = {
     isDisabled: undefined,
   },
 } satisfies EditorCustomHandlers;
-const props = defineProps<NodeViewProps>()
+const props = defineProps<NodeViewProps>();
 const items = [
   [
     {

@@ -65,7 +65,6 @@ onUnmounted(() => clearSearch());
     </template>
 
     <template #main_content>
-
       <!-- Language filter tabs -->
       <div
         v-if="!snippetStore.loading && allLanguages.length > 1"

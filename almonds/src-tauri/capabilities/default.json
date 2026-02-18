@@ -9,6 +9,8 @@
     "core:default",
     "sql:default",
     "clipboard-manager:default",
-    "notification:default"
+    "notification:default",
+    "os:default",
+    "core:app:allow-default-window-icon"
   ]
 }

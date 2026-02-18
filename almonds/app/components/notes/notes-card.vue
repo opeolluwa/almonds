@@ -42,7 +42,9 @@ async function confirmDelete() {
 
 function downloadMarkdown() {
   const filename = (props.title || "untitled").replace(/[^a-z0-9_\- ]/gi, "_");
-  const blob = new Blob([props.content], { type: "text/markdown;charset=utf-8" });
+  const blob = new Blob([props.content], {
+    type: "text/markdown;charset=utf-8",
+  });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement("a");
   anchor.href = url;
@@ -58,10 +60,14 @@ function downloadMarkdown() {
     @click="router.push(`/notes/edit-notes?id=${identifier}`)"
   >
     <div class="p-4">
-      <h3 class="text-sm font-medium text-gray-800 dark:text-gray-200 mb-1.5 truncate">
+      <h3
+        class="text-sm font-medium text-gray-800 dark:text-gray-200 mb-1.5 truncate"
+      >
         {{ title || "Untitled" }}
       </h3>
-      <p class="text-xs text-gray-400 dark:text-gray-500 leading-relaxed line-clamp-2">
+      <p
+        class="text-xs text-gray-400 dark:text-gray-500 leading-relaxed line-clamp-2"
+      >
         {{ preview || "No content" }}
       </p>
     </div>
@@ -102,7 +108,8 @@ function downloadMarkdown() {
           Are you sure you want to delete
           <span class="font-medium text-gray-800 dark:text-gray-200">{{
             title || "Untitled"
-          }}</span>? This action cannot be undone.
+          }}</span
+          >? This action cannot be undone.
         </p>
       </template>
       <template #footer>

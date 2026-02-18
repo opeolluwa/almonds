@@ -83,7 +83,9 @@ async function handleSubmit() {
         await todoStore.changePriority(identifier.value, form.priority);
       }
       const newDate = toIsoDate(form.dueDate);
-      const existingDate = todo.dueDate ? toIsoDate(new Date(todo.dueDate)) : null;
+      const existingDate = todo.dueDate
+        ? toIsoDate(new Date(todo.dueDate))
+        : null;
       if (newDate !== existingDate) {
         await todoStore.updateDueDate(identifier.value, newDate);
       }
@@ -142,7 +144,7 @@ async function handleDelete() {
               type="text"
               placeholder="What needs to be done?"
               class="w-full bg-white dark:bg-gray-800 rounded-lg px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 outline-none focus:ring-2 focus:ring-accent-300 dark:focus:ring-accent-600 focus:border-transparent placeholder-gray-400 dark:placeholder-gray-500"
-            />
+            >
           </div>
 
           <div class="flex flex-col gap-1.5">
@@ -166,10 +168,21 @@ async function handleDelete() {
                 <button
                   type="button"
                   class="w-full flex items-center gap-2 bg-white dark:bg-gray-800 rounded-lg px-4 py-2.5 text-sm border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-colors text-left"
-                  :class="form.dueDate ? 'text-gray-700 dark:text-gray-200' : 'text-gray-400 dark:text-gray-500'"
+                  :class="
+                    form.dueDate
+                      ? 'text-gray-700 dark:text-gray-200'
+                      : 'text-gray-400 dark:text-gray-500'
+                  "
                 >
-                  <UIcon name="heroicons:calendar" class="size-4 shrink-0 text-gray-400" />
-                  {{ form.dueDate ? formatDisplayDate(form.dueDate) : "Pick a date" }}
+                  <UIcon
+                    name="heroicons:calendar"
+                    class="size-4 shrink-0 text-gray-400"
+                  />
+                  {{
+                    form.dueDate
+                      ? formatDisplayDate(form.dueDate)
+                      : "Pick a date"
+                  }}
                 </button>
                 <template #content>
                   <DatePicker v-model="form.dueDate" />
@@ -223,13 +236,23 @@ async function handleDelete() {
             @click="form.done = !form.done"
           >
             <UIcon
-              :name="form.done ? 'heroicons:check-circle-solid' : 'heroicons:circle'"
+              :name="
+                form.done ? 'heroicons:check-circle-solid' : 'heroicons:circle'
+              "
               class="size-5 transition-colors"
-              :class="form.done ? 'text-emerald-500' : 'text-gray-300 dark:text-gray-600'"
+              :class="
+                form.done
+                  ? 'text-emerald-500'
+                  : 'text-gray-300 dark:text-gray-600'
+              "
             />
             <span
               class="text-sm font-medium transition-colors"
-              :class="form.done ? 'text-emerald-700 dark:text-emerald-300' : 'text-gray-600 dark:text-gray-400'"
+              :class="
+                form.done
+                  ? 'text-emerald-700 dark:text-emerald-300'
+                  : 'text-gray-600 dark:text-gray-400'
+              "
             >
               {{ form.done ? "Marked as done" : "Mark as done" }}
             </span>
@@ -270,7 +293,9 @@ async function handleDelete() {
         Priority guide
       </h2>
       <div class="flex flex-col gap-3">
-        <div class="flex items-start gap-2 text-xs text-gray-500 dark:text-gray-400">
+        <div
+          class="flex items-start gap-2 text-xs text-gray-500 dark:text-gray-400"
+        >
           <UIcon
             name="heroicons:flag"
             class="size-4 text-rose-500 shrink-0 mt-px"
@@ -280,7 +305,9 @@ async function handleDelete() {
             — Urgent, needs immediate attention
           </span>
         </div>
-        <div class="flex items-start gap-2 text-xs text-gray-500 dark:text-gray-400">
+        <div
+          class="flex items-start gap-2 text-xs text-gray-500 dark:text-gray-400"
+        >
           <UIcon
             name="heroicons:flag"
             class="size-4 text-amber-500 shrink-0 mt-px"
@@ -290,7 +317,9 @@ async function handleDelete() {
             — Important but not urgent
           </span>
         </div>
-        <div class="flex items-start gap-2 text-xs text-gray-500 dark:text-gray-400">
+        <div
+          class="flex items-start gap-2 text-xs text-gray-500 dark:text-gray-400"
+        >
           <UIcon
             name="heroicons:flag"
             class="size-4 text-emerald-500 shrink-0 mt-px"
