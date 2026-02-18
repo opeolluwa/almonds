@@ -34,16 +34,16 @@ const activeTag = ref("All");
 
 <template>
   <NuxtLayout name="default">
-    <template #main_content>
-      <div class="flex items-center justify-end mb-6">
-        <button
-          class="flex items-center gap-2 py-2 px-4 bg-accent-500 text-white rounded-lg text-sm font-medium hover:bg-accent-600 transition-colors"
-        >
-          <UIcon name="heroicons:plus" class="size-4" />
-          Add Bookmark
-        </button>
-      </div>
+    <template #primary_cta>
+      <button
+        class="flex items-center gap-2 py-2 px-4 bg-accent-500 text-white rounded-lg text-sm font-medium hover:bg-accent-600 transition-colors"
+      >
+        <UIcon name="heroicons:plus" class="size-4" />
+        Add Bookmark
+      </button>
+    </template>
 
+    <template #main_content>
       <div class="flex gap-2 mb-4">
         <button
           v-for="tag in tags"

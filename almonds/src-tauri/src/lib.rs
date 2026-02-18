@@ -73,6 +73,14 @@ pub fn run() {
             commands::sync_queue::count_sync_queue_entries,
             commands::sync_queue::run_sync,
             commands::ollama::is_ollama_installed,
+            commands::todo::create_todo,
+            commands::todo::get_todo,
+            commands::todo::get_all_todos,
+            commands::todo::update_todo,
+            commands::todo::delete_todo,
+            commands::todo::mark_todo_done,
+            commands::todo::change_todo_priority,
+            commands::todo::update_todo_due_date,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

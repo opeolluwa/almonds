@@ -7,3 +7,4 @@ pub use super::ollama_conversation_prompt::Entity as OllamaConversationPrompt;
 pub use super::ollama_conversation_response::Entity as OllamaConversationResponse;
 pub use super::snippets::Entity as Snippets;
 pub use super::sync_queue::Entity as SyncQueue;
+pub use super::todo::Entity as Todo;
