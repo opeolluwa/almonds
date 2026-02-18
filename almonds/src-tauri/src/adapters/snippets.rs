@@ -8,8 +8,11 @@ pub struct CreateSnippet {
     pub language: Option<String>,
     pub code: String,
     pub description: Option<String>,
+    #[serde(default)]
     pub is_pinned: bool,
+    #[serde(default)]
     pub created_at: String,
+    #[serde(default)]
     pub updated_at: String,
 }
 

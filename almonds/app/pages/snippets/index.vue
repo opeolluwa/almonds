@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import SnippetCard from '~/components/snippets/snippet-card.vue';
+
 definePageMeta({ layout: false });
 
 const snippetStore = useSnippetStore();
