@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({ layout: false });
-
+const { notify } = useAppNotification()
 const content = ref("");
 
 const pads = [
@@ -21,7 +21,7 @@ const pads = [
             <UIcon name="heroicons:arrow-path" class="size-4" />
           </button>
           <button
-            class="flex items-center gap-2 py-2 px-4 bg-primary text-white rounded-lg text-sm font-medium hover:bg-accent-600 transition-colors"
+            class="flex items-center gap-2 py-2 px-4 bg-accent-500 text-white rounded-lg text-sm font-medium hover:bg-accent-600 transition-colors"
           >
             <UIcon name="heroicons:plus" class="size-4" />
             New Pad
