@@ -19,4 +19,5 @@ lint-tauri:
 [working-directory:'almonds']
 lint-almonds:
     npm run format
+    npm run lint:fix
 

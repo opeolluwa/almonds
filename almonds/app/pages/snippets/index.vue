@@ -27,7 +27,6 @@ const filteredSnippets = computed(() => {
         s.code.toLowerCase().includes(q),
     );
   }
-
   return list;
 });
 
@@ -58,10 +57,10 @@ onUnmounted(() => clearSearch());
   <NuxtLayout name="default">
     <template #main_content>
       <PrimaryCta
+        v-if="snippetStore.snippets.length !== 0"
         label="New Snippet"
         icon="heroicons:plus"
         to="/snippets/create-snippets"
-        v-if="snippetStore.snippets.length !== 0"
       />
 
       <!-- Language filter tabs -->

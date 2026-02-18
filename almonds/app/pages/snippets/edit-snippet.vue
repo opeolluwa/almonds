@@ -92,7 +92,7 @@ onMounted(async () => {
         </button>
 
         <div class="max-w-2xl">
-          <form @submit.prevent="handleSubmit" class="flex flex-col gap-5">
+          <form class="flex flex-col gap-5" @submit.prevent="handleSubmit">
             <!-- Title -->
             <div class="flex flex-col gap-1">
               <label

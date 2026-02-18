@@ -210,9 +210,9 @@ const pageTitle = computed(() => {
           <USeparator class="mx-1 mb-2" />
 
           <button
-            @click="toggleTheme"
             class="flex items-center py-2 px-3 text-sm cursor-pointer rounded-lg transition-colors text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 w-full"
             :class="collapsed ? 'justify-center' : 'gap-3'"
+            @click="toggleTheme"
           >
             <UIcon :name="themeIcon" class="size-4 shrink-0" />
             <span v-if="!collapsed">{{ themeLabel }}</span>

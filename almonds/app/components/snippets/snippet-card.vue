@@ -99,7 +99,7 @@ async function copyCode() {
       </div>
       <pre
         class="bg-gray-900 rounded-md p-3 text-xs overflow-x-auto"
-      ><code v-html="highlighted"></code></pre>
+      ><code v-html="highlighted"/></pre>
     </div>
     <div
       class="px-4 py-2 border-t border-gray-50 dark:border-gray-700 flex items-center justify-between"

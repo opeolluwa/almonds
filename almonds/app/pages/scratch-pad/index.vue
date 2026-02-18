@@ -39,7 +39,7 @@ const pads = [
           v-model="content"
           class="w-full h-full p-6 text-sm text-gray-700 dark:text-gray-200 bg-transparent resize-none outline-none font-mono leading-relaxed placeholder-gray-400 dark:placeholder-gray-500"
           placeholder="Start typing..."
-        ></textarea>
+        />
       </div>
     </template>
 

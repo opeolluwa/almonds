@@ -50,7 +50,7 @@ const colorMap: Record<string, string> = {
               :src="image.src"
               :alt="image.title"
               class="w-full object-cover"
-            />
+            >
             <div
               class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-end"
             >
