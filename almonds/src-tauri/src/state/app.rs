@@ -1,4 +1,5 @@
-use crate::state::ollama::OllamaState;
+use std::sync::Arc;
+
 use almond_kernel::{
     repositories::{
         notes::{NotesRepository, NotesRepositoryExt},
@@ -7,7 +8,8 @@ use almond_kernel::{
     },
     sea_orm::DatabaseConnection,
 };
-use std::sync::Arc;
+
+use crate::state::ollama::OllamaState;
 
 pub struct AppState {
     pub notes_repository: NotesRepository,

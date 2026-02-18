@@ -31,14 +31,8 @@ pub async fn get_note(
 }
 
 #[tauri::command]
-pub async fn get_all_notes(
-    state: State<'_, AppState>,
-) -> Result<Vec<notes::Model>, AppError> {
-    state
-        .notes_repository
-        .find_all()
-        .await
-        .map_err(Into::into)
+pub async fn get_all_notes(state: State<'_, AppState>) -> Result<Vec<notes::Model>, AppError> {
+    state.notes_repository.find_all().await.map_err(Into::into)
 }
 
 #[tauri::command]

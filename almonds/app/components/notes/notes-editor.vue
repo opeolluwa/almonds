@@ -68,6 +68,20 @@ const {
   isLoading: aiLoading,
 } = useEditorCompletion(editorRef);
 
+const extensions = [
+  Emoji,
+  TextAlign.configure({ types: ["heading", "paragraph"] }),
+  ImageUpload,
+  CodeBlockShiki.configure({
+    defaultTheme: "material-theme",
+    themes: {
+      light: "material-theme-lighter",
+      dark: "material-theme-palenight",
+    },
+  }),
+  completionExtension,
+];
+
 const customHandlers = {
   imageUpload: {
     canExecute: (editor: Editor) =>
@@ -765,19 +779,7 @@ const emojiItems: EditorEmojiMenuItem[] = gitHubEmojis.filter(
     v-slot="{ editor, handlers }"
     v-model="value"
     content-type="markdown"
-    :extensions="[
-      Emoji,
-      TextAlign.configure({ types: ['heading', 'paragraph'] }),
-      ImageUpload,
-      CodeBlockShiki.configure({
-        defaultTheme: 'material-theme',
-        themes: {
-          light: 'material-theme-lighter',
-          dark: 'material-theme-palenight',
-        },
-      }),
-      completionExtension,
-    ]"
+    :extensions="extensions"
     :handlers="customHandlers"
     placeholder="Write, type '/' for commands..."
     :ui="{ base: 'p-8 sm:px-16 py-13.5' }"
