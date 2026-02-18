@@ -300,7 +300,7 @@ const pageTitle = computed(() => {
       <!-- Page content + inline aside (fullscreen mode) -->
       <div class="flex flex-1 overflow-hidden">
         <main class="flex-1 overflow-y-auto p-6 bg-gray-50 dark:bg-surface-950">
-          <h1 class="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-5">
+          <h1 class="text-2xl font-semibold text-gray-800 dark:text-gray-100">
             {{ pageTitle }}
           </h1>
           <slot name="primary_cta" />

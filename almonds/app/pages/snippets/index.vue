@@ -125,6 +125,7 @@ onMounted(async () => {
         <SnippetCard
           v-for="snippet in filteredSnippets"
           :key="snippet.identifier"
+          :identifier="snippet.identifier"
           :title="snippet.title ?? 'Untitled'"
           :language="snippet.language ?? 'Unknown'"
           :lines="lineCount(snippet.code)"

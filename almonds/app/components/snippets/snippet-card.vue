@@ -1,5 +1,55 @@
 <script setup lang="ts">
-defineProps<{
+import hljs from "highlight.js/lib/common";
+
+const hlLanguageMap: Record<string, string> = {
+  C: "c",
+  "C++": "cpp",
+  "C#": "csharp",
+  Rust: "rust",
+  Go: "go",
+  Python: "python",
+  Ruby: "ruby",
+  PHP: "php",
+  JavaScript: "javascript",
+  TypeScript: "typescript",
+  JSX: "javascript",
+  TSX: "typescript",
+  HTML: "xml",
+  CSS: "css",
+  SCSS: "scss",
+  Less: "less",
+  Bash: "bash",
+  Zsh: "bash",
+  PowerShell: "powershell",
+  SQL: "sql",
+  JSON: "json",
+  YAML: "yaml",
+  XML: "xml",
+  Markdown: "markdown",
+  Java: "java",
+  Swift: "swift",
+  Kotlin: "kotlin",
+  Scala: "scala",
+  Haskell: "haskell",
+  Erlang: "erlang",
+  Elixir: "elixir",
+  R: "r",
+  "Objective-C": "objectivec",
+  GraphQL: "graphql",
+  Docker: "dockerfile",
+  "Docker Compose": "yaml",
+  Makefile: "makefile",
+  Vue: "xml",
+  Svelte: "xml",
+  React: "javascript",
+  "Node.js": "javascript",
+  Deno: "javascript",
+  Bun: "javascript",
+  Angular: "typescript",
+};
+
+const props = defineProps<{
+  identifier: string;
   title: string;
   language: string;
   lines: number;
@@ -7,15 +57,32 @@ defineProps<{
   preview: string;
 }>();
 
-defineEmits<{
-  copy: [];
-  edit: [];
-}>();
+const router = useRouter();
+const copied = ref(false);
+
+const previewCode = computed(() =>
+  props.preview.split("\n").slice(0, 10).join("\n"),
+);
+
+const highlighted = computed(() => {
+  const lang = hlLanguageMap[props.language];
+  if (lang && hljs.getLanguage(lang)) {
+    return hljs.highlight(previewCode.value, { language: lang }).value;
+  }
+  return hljs.highlightAuto(previewCode.value).value;
+});
+
+async function copyCode() {
+  await navigator.clipboard.writeText(props.preview);
+  copied.value = true;
+  setTimeout(() => (copied.value = false), 1500);
+}
 </script>
 
 <template>
   <div
-    class="bg-white dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700 hover:shadow-sm transition-shadow overflow-hidden"
+    class="bg-white dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700 hover:shadow-sm transition-shadow overflow-hidden cursor-pointer"
+    @click="router.push(`/snippets/view-snippet?id=${identifier}`)"
   >
     <div class="p-4">
       <div class="flex items-center justify-between mb-2">
@@ -31,23 +98,24 @@ defineEmits<{
         </div>
       </div>
       <pre
-        class="bg-gray-900 text-gray-100 rounded-md p-3 text-xs overflow-x-auto"
-      ><code>{{ preview }}</code></pre>
+        class="bg-gray-900 rounded-md p-3 text-xs overflow-x-auto"
+      ><code v-html="highlighted"></code></pre>
     </div>
     <div
       class="px-4 py-2 border-t border-gray-50 dark:border-gray-700 flex items-center justify-between"
     >
       <p class="text-xs text-gray-400">{{ date }}</p>
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-2" @click.stop>
         <button
-          class="text-xs text-accent-600 dark:text-accent-400 hover:text-accent-700 font-medium"
-          @click="$emit('copy')"
+          class="text-xs font-medium transition-colors"
+          :class="copied ? 'text-green-500' : 'text-accent-600 dark:text-accent-400 hover:text-accent-700'"
+          @click="copyCode"
         >
-          Copy
+          {{ copied ? "Copied!" : "Copy" }}
         </button>
         <button
           class="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-          @click="$emit('edit')"
+          @click="router.push(`/snippets/edit-snippet?id=${identifier}`)"
         >
           Edit
         </button>
@@ -55,3 +123,10 @@ defineEmits<{
     </div>
   </div>
 </template>
+
+<style scoped>
+pre :deep(code) {
+  background: transparent;
+  padding: 0;
+}
+</style>

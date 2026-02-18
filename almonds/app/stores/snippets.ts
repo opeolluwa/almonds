@@ -3,6 +3,8 @@ import { invoke } from "@tauri-apps/api/core";
 import type { Snippet } from "~/composables/snippets/useGetSnippets";
 import type { CreateSnippetPayload } from "~/composables/snippets/useCreateSnippet";
 
+export type UpdateSnippetPayload = Partial<CreateSnippetPayload>;
+
 export const useSnippetStore = defineStore("snippets_store", {
   state: () => ({
     snippets: [] as Snippet[],
@@ -45,6 +47,13 @@ export const useSnippetStore = defineStore("snippets_store", {
       this.snippets.unshift(created);
       await this.fetchRecentSnippets();
       return created;
+    },
+
+    async updateSnippet(identifier: string, payload: UpdateSnippetPayload): Promise<Snippet> {
+      const updated = await invoke<Snippet>("update_snippet", { identifier, snippet: payload });
+      const idx = this.snippets.findIndex((s) => s.identifier === identifier);
+      if (idx !== -1) this.snippets[idx] = updated;
+      return updated;
     },
 
     async deleteSnippet(identifier: string) {
