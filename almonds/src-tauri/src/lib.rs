@@ -55,7 +55,6 @@ pub fn run() {
                 let sync_queue_repository = SyncQueueRepository::new(conn.clone());
 
                 let state = AppState {
-                    conn,
                     snippet_repository,
                     sync_queue_repository,
                 };
@@ -70,6 +69,7 @@ pub fn run() {
             commands::snippets::get_snippet,
             commands::snippets::get_all_snippets,
             commands::snippets::delete_snippet,
+            commands::snippets::update_snippet,
             commands::snippets::get_recently_added_snippet,
             commands::sync_queue::add_sync_queue_entry,
             commands::sync_queue::remove_sync_queue_entry,

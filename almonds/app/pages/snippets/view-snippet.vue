@@ -191,6 +191,7 @@ onMounted(async () => {
 
         <!-- Code block -->
         <div class="relative group">
+          <!-- eslint-disable-next-line vue/no-v-html — safe: content is hljs-escaped -->
           <pre
             class="bg-gray-900 rounded-lg p-4 text-xs overflow-x-auto"
           ><code v-html="highlighted"/></pre>
@@ -207,33 +208,38 @@ onMounted(async () => {
           </button>
         </div>
 
-        <!-- Delete confirm -->
-        <div
-          v-if="showDeleteConfirm"
-          class="mt-4 p-4 rounded-lg border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20"
-        >
-          <p class="text-sm text-red-700 dark:text-red-400 mb-3">
-            Delete this snippet? This action cannot be undone.
-          </p>
-          <div class="flex items-center gap-2">
-            <UButton
-              size="xs"
-              color="error"
-              :loading="deleting"
-              @click="confirmDelete"
-            >
-              Delete
-            </UButton>
-            <UButton
-              size="xs"
-              variant="ghost"
-              :disabled="deleting"
-              @click="showDeleteConfirm = false"
-            >
-              Cancel
-            </UButton>
-          </div>
-        </div>
+        <!-- Delete confirm modal -->
+        <UModal v-model:open="showDeleteConfirm" title="Delete snippet">
+          <template #body>
+            <p class="text-sm text-gray-600 dark:text-gray-400">
+              Are you sure you want to delete
+              <span class="font-medium text-gray-800 dark:text-gray-200">{{
+                snippet.title ?? "this snippet"
+              }}</span
+              >? This action cannot be undone.
+            </p>
+          </template>
+          <template #footer>
+            <div class="flex justify-end gap-2">
+              <UButton
+                size="xs"
+                variant="ghost"
+                :disabled="deleting"
+                @click="showDeleteConfirm = false"
+              >
+                Cancel
+              </UButton>
+              <UButton
+                size="xs"
+                color="error"
+                :loading="deleting"
+                @click="confirmDelete"
+              >
+                Delete
+              </UButton>
+            </div>
+          </template>
+        </UModal>
       </template>
     </template>
 
