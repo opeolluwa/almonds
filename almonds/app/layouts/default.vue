@@ -99,7 +99,7 @@ const pageTitle = computed(() => {
             />
           </div>
 
-          <!--TODO: enable when the project feature is done, the former class is flex befor hidden-->
+          <!--TODO: enable when the project feature is done, the former class is flex before hidden-->
           <div class="px-3 mb-3 max-w-9/12 hidden">
             <UButton
               color="error"

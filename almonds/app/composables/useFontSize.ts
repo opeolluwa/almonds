@@ -15,9 +15,9 @@ function applySize(key: FontSizeKey) {
   );
 }
 
-const fontSize = useState<FontSizeKey>("font-size", () => "md");
-
 export function useFontSize() {
+  const fontSize = useState<FontSizeKey>("font-size", () => "md");
+
   function setFontSize(key: FontSizeKey) {
     fontSize.value = key;
     localStorage.setItem(STORAGE_KEY, key);

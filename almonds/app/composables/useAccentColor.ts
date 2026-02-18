@@ -65,10 +65,9 @@ function applyPalette(key: AccentKey) {
   }
 }
 
-// Shared state across all composable calls
-const accent = useState<AccentKey>("accent-color", () => "rose");
-
 export function useAccentColor() {
+  const accent = useState<AccentKey>("accent-color", () => "rose");
+
   function setAccent(key: AccentKey) {
     accent.value = key;
     localStorage.setItem(STORAGE_KEY, key);
