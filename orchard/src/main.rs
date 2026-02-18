@@ -48,4 +48,3 @@ async fn main() -> Result<(), AppError> {
 
     Ok(())
 }
-
