@@ -13,7 +13,7 @@ watch-kernel:
 
 [working-directory: 'kernel']
 @generate-entities url:
-    sea-orm-cli generate entity --database-url={{url}} --with-serde both  --model-extra-attributes 'serde(rename_all="camelCase")','ts(export)' --model-extra-derives 'ts_rs::TS' -o src/entities
+    sea-orm-cli generate entity --database-url={{url}} --with-serde both  --model-extra-attributes 'serde(rename_all="camelCase")' -o src/entities
 
 [working-directory: 'kernel']
 db-pull:

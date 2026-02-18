@@ -45,6 +45,7 @@ dependencies = [
  "sanitizer",
  "sea-orm",
  "serde",
+ "serde_json",
  "thiserror",
  "uuid",
 ]
