@@ -58,7 +58,15 @@ const props = defineProps<{
 }>();
 
 const router = useRouter();
+const snippetStore = useSnippetStore();
 const copied = ref(false);
+const deleting = ref(false);
+const showDeleteConfirm = ref(false);
+
+async function confirmDelete() {
+  deleting.value = true;
+  await snippetStore.deleteSnippet(props.identifier);
+}
 
 const previewCode = computed(() =>
   props.preview.split("\n").slice(0, 10).join("\n"),
@@ -99,7 +107,7 @@ async function copyCode() {
       </div>
       <pre
         class="bg-gray-900 rounded-md p-3 text-xs overflow-x-auto"
-      ><code v-html="highlighted"></code></pre>
+      ><code v-html="highlighted"/></pre>
     </div>
     <div
       class="px-4 py-2 border-t border-gray-50 dark:border-gray-700 flex items-center justify-between"
@@ -108,7 +116,11 @@ async function copyCode() {
       <div class="flex items-center gap-2" @click.stop>
         <button
           class="text-xs font-medium transition-colors"
-          :class="copied ? 'text-green-500' : 'text-accent-600 dark:text-accent-400 hover:text-accent-700'"
+          :class="
+            copied
+              ? 'text-green-500'
+              : 'text-accent-600 dark:text-accent-400 hover:text-accent-700'
+          "
           @click="copyCode"
         >
           {{ copied ? "Copied!" : "Copy" }}
@@ -119,8 +131,45 @@ async function copyCode() {
         >
           Edit
         </button>
+        <button
+          class="text-xs text-red-400 hover:text-red-600 dark:hover:text-red-300"
+          @click="showDeleteConfirm = true"
+        >
+          Delete
+        </button>
       </div>
     </div>
+
+    <UModal v-model:open="showDeleteConfirm" title="Delete snippet">
+      <template #body>
+        <p class="text-sm text-gray-600 dark:text-gray-400">
+          Are you sure you want to delete
+          <span class="font-medium text-gray-800 dark:text-gray-200">{{
+            title
+          }}</span>? This action cannot be undone.
+        </p>
+      </template>
+      <template #footer>
+        <div class="flex justify-end gap-2">
+          <UButton
+            size="xs"
+            variant="ghost"
+            :disabled="deleting"
+            @click="showDeleteConfirm = false"
+          >
+            Cancel
+          </UButton>
+          <UButton
+            size="xs"
+            color="error"
+            :loading="deleting"
+            @click="confirmDelete"
+          >
+            Delete
+          </UButton>
+        </div>
+      </template>
+    </UModal>
   </div>
 </template>
 

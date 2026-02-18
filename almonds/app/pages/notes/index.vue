@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { ref } from "vue";
+
+import type { EditorToolbarItem } from "@nuxt/ui";
 const value = ref("");
 
 definePageMeta({
   layout: false,
 });
-
-import type { EditorToolbarItem } from "@nuxt/ui";
 
 const items: EditorToolbarItem[][] = [
   [

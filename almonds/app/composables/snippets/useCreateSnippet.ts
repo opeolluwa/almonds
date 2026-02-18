@@ -16,7 +16,9 @@ export function useCreateSnippet() {
     loading.value = true;
     error.value = null;
     try {
-      const created = await invoke<Snippet>("create_snippet", { snippet: payload });
+      const created = await invoke<Snippet>("create_snippet", {
+        snippet: payload,
+      });
       const { fetchSnippets } = useGetSnippets();
       await fetchSnippets();
       return created;

@@ -8,7 +8,10 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "lint": "eslint .",
+    "format": "prettier --write \"app/**/*.{js,jsx,ts,tsx,vue,html,css,scss,json,md}\"",
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
     "@nuxt/a11y": "^1.0.0-alpha.1",
@@ -31,6 +34,14 @@
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2.10.0",
-    "@types/lodash": "^4.17.23"
+    "@types/lodash": "^4.17.23",
+    "@typescript-eslint/eslint-plugin": "^8.50.0",
+    "@typescript-eslint/parser": "^8.50.0",
+    "@vue/eslint-config-standard": "^9.0.1",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "prettier": "^3.7.4",
+    "vue-eslint-parser": "^10.2.0"
   }
 }

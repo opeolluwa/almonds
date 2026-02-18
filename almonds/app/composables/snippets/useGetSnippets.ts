@@ -37,5 +37,11 @@ export function useGetSnippets() {
     }
   }
 
-  return { snippets: readonly(snippets), loading, error, fetchSnippets, fetchSnippet };
+  return {
+    snippets: readonly(snippets),
+    loading,
+    error,
+    fetchSnippets,
+    fetchSnippet,
+  };
 }

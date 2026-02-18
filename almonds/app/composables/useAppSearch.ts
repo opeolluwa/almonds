@@ -18,5 +18,10 @@ export function useAppSearch() {
     searchQuery.value = "";
   }
 
-  return { searchConfig: readonly(searchConfig), searchQuery, setSearch, clearSearch };
+  return {
+    searchConfig: readonly(searchConfig),
+    searchQuery,
+    setSearch,
+    clearSearch,
+  };
 }

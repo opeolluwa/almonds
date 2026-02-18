@@ -1,9 +1,7 @@
 <script setup lang="ts">
 definePageMeta({ layout: false });
 
-const content = ref(
-  "# Scratch Pad\n\nStart writing your thoughts here...\n\nThis is a free-form space for quick notes, ideas, and brainstorming.",
-);
+const content = ref("");
 
 const pads = [
   { title: "Quick thoughts", date: "Today", active: true },
@@ -23,7 +21,7 @@ const pads = [
             <UIcon name="heroicons:arrow-path" class="size-4" />
           </button>
           <button
-            class="flex items-center gap-2 py-2 px-4 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary-600 transition-colors"
+            class="flex items-center gap-2 py-2 px-4 bg-primary text-white rounded-lg text-sm font-medium hover:bg-accent-600 transition-colors"
           >
             <UIcon name="heroicons:plus" class="size-4" />
             New Pad
@@ -33,12 +31,16 @@ const pads = [
 
       <div
         class="bg-white dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700"
-        style="height: calc(100vh - 180px)"
+        style="height: calc(100vh - 380px)"
       >
         <textarea
           v-model="content"
           class="w-full h-full p-6 text-sm text-gray-700 dark:text-gray-200 bg-transparent resize-none outline-none font-mono leading-relaxed placeholder-gray-400 dark:placeholder-gray-500"
-          placeholder="Start typing..."
+          :placeholder="`# Scratch Pad
+
+Start writing your thoughts here...
+
+This is a free-form space for quick notes, ideas, and brainstorming.`"
         ></textarea>
       </div>
     </template>
@@ -54,7 +56,7 @@ const pads = [
           class="flex items-center gap-3 py-2.5 px-3 rounded-lg cursor-pointer transition-colors"
           :class="
             pad.active
-              ? 'bg-primary-50 dark:bg-primary-950 text-primary-700 dark:text-primary-300'
+              ? 'bg-accent-50 dark:bg-accent-950 text-accent-700 dark:text-accent-300'
               : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'
           "
         >
@@ -63,7 +65,7 @@ const pads = [
             <p class="text-sm font-medium">{{ pad.title }}</p>
             <p
               class="text-xs"
-              :class="pad.active ? 'text-primary-400' : 'text-gray-400'"
+              :class="pad.active ? 'text-accent-400' : 'text-gray-400'"
             >
               {{ pad.date }}
             </p>

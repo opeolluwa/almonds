@@ -3,16 +3,12 @@ mod commands;
 mod errors;
 mod state;
 mod utils;
-
 use std::sync::Arc;
 
-use almond_kernel::repositories::{
-    snippets::{SnippetRepository, SnippetRepositoryExt},
-    sync_queue::{SyncQueueRepository, SyncQueueRepositoryExt},
-};
 use tauri::Manager;
 
-use state::AppState;
+use crate::state::app::AppState;
+
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -51,14 +47,8 @@ pub fn run() {
                     .expect("failed to run migrations");
 
                 let conn = Arc::new(kernel.connection().clone());
-                let snippet_repository = SnippetRepository::new(conn.clone());
-                let sync_queue_repository = SyncQueueRepository::new(conn.clone());
 
-                let state = AppState {
-                    conn,
-                    snippet_repository,
-                    sync_queue_repository,
-                };
+                let state = AppState::new(conn);
 
                 app_handle.manage(state);
             });
@@ -70,11 +60,13 @@ pub fn run() {
             commands::snippets::get_snippet,
             commands::snippets::get_all_snippets,
             commands::snippets::delete_snippet,
+            commands::snippets::update_snippet,
             commands::snippets::get_recently_added_snippet,
             commands::sync_queue::add_sync_queue_entry,
             commands::sync_queue::remove_sync_queue_entry,
             commands::sync_queue::count_sync_queue_entries,
             commands::sync_queue::run_sync,
+            commands::ollama::is_ollama_installed,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -34,7 +34,9 @@ function formatDate(dateStr: string) {
       <p class="font-medium text-gray-700 dark:text-gray-300 truncate text-xs">
         {{ snippet.title ?? "Untitled" }}
       </p>
-      <p class="text-xs text-gray-400 mt-0.5">{{ formatDate(snippet.createdAt) }}</p>
+      <p class="text-xs text-gray-400 mt-0.5">
+        {{ formatDate(snippet.createdAt) }}
+      </p>
     </div>
   </div>
 </template>

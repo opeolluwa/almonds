@@ -36,7 +36,7 @@ async function handleSubmit() {
 </script>
 
 <template>
-  <form @submit.prevent="handleSubmit" class="flex flex-col gap-5">
+  <form class="flex flex-col gap-5" @submit.prevent="handleSubmit">
     <!-- Title -->
     <div class="flex flex-col gap-1">
       <label class="text-xs font-medium text-gray-600 dark:text-gray-400">
