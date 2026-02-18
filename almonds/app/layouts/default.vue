@@ -100,7 +100,7 @@ const pageTitle = computed(() => {
           </div>
 
           <!--TODO: enable when the project feature is done, the former class is flex before hidden-->
-          <div class="px-3 mb-3 max-w-9/12 hidden">
+          <div class="px-3 mb-3 max-w-9/12 flex">
             <UButton
               color="error"
               variant="solid"
@@ -236,7 +236,7 @@ const pageTitle = computed(() => {
       <div class="flex flex-1 overflow-hidden">
         <main class="flex-1 overflow-y-auto p-6 bg-gray-50 dark:bg-surface-950">
           <h1 class="text-2xl font-semibold text-gray-800 dark:text-gray-100">
-            {{ pageTitle }}
+            {{ pageTitle  }}
           </h1>
           <slot name="primary_cta" />
           <slot name="main_content" />

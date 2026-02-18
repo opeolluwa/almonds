@@ -1,9 +1,7 @@
 <script setup lang="ts">
 definePageMeta({ layout: false });
 
-const content = ref(
-  "# Scratch Pad\n\nStart writing your thoughts here...\n\nThis is a free-form space for quick notes, ideas, and brainstorming.",
-);
+const content = ref("");
 
 const pads = [
   { title: "Quick thoughts", date: "Today", active: true },
@@ -33,13 +31,17 @@ const pads = [
 
       <div
         class="bg-white dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700"
-        style="height: calc(100vh - 180px)"
+        style="height: calc(100vh - 380px)"
       >
         <textarea
           v-model="content"
           class="w-full h-full p-6 text-sm text-gray-700 dark:text-gray-200 bg-transparent resize-none outline-none font-mono leading-relaxed placeholder-gray-400 dark:placeholder-gray-500"
-          placeholder="Start typing..."
-        />
+          :placeholder="`# Scratch Pad
+
+Start writing your thoughts here...
+
+This is a free-form space for quick notes, ideas, and brainstorming.`"
+        ></textarea>
       </div>
     </template>
 
