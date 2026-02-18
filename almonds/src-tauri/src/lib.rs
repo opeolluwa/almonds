@@ -56,6 +56,12 @@ pub fn run() {
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
+            commands::notes::create_note,
+            commands::notes::get_note,
+            commands::notes::get_all_notes,
+            commands::notes::delete_note,
+            commands::notes::update_note,
+            commands::notes::get_recently_added_notes,
             commands::snippets::create_snippet,
             commands::snippets::get_snippet,
             commands::snippets::get_all_snippets,

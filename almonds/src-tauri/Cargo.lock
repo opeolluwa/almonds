@@ -66,8 +66,8 @@ dependencies = [
  "sanitizer",
  "sea-orm",
  "serde",
+ "serde_json",
  "thiserror 2.0.18",
- "ts-rs 12.0.1",
  "uuid",
 ]
 
@@ -170,7 +170,7 @@ dependencies = [
  "tauri-plugin-single-instance",
  "tauri-plugin-sql",
  "thiserror 2.0.18",
- "ts-rs 10.1.0",
+ "ts-rs",
  "uuid",
  "validator",
 ]
@@ -6181,19 +6181,7 @@ checksum = "e640d9b0964e9d39df633548591090ab92f7a4567bc31d3891af23471a3365c6"
 dependencies = [
  "lazy_static",
  "thiserror 2.0.18",
- "ts-rs-macros 10.1.0",
-]
-
-[[package]]
-name = "ts-rs"
-version = "12.0.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "756050066659291d47a554a9f558125db17428b073c5ffce1daf5dcb0f7231d8"
-dependencies = [
- "chrono",
- "thiserror 2.0.18",
- "ts-rs-macros 12.0.1",
- "uuid",
+ "ts-rs-macros",
 ]
 
 [[package]]
@@ -6201,18 +6189,6 @@ name = "ts-rs-macros"
 version = "10.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0e9d8656589772eeec2cf7a8264d9cda40fb28b9bc53118ceb9e8c07f8f38730"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn 2.0.114",
- "termcolor",
-]
-
-[[package]]
-name = "ts-rs-macros"
-version = "12.0.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "38d90eea51bc7988ef9e674bf80a85ba6804739e535e9cab48e4bb34a8b652aa"
 dependencies = [
  "proc-macro2",
  "quote",

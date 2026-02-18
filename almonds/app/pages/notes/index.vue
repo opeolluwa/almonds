@@ -2,6 +2,7 @@
 import { ref } from "vue";
 
 import type { EditorToolbarItem } from "@nuxt/ui";
+import NotesEditor from "~/components/notes/notes-editor.vue";
 const value = ref("");
 
 definePageMeta({
@@ -96,7 +97,7 @@ const notes = [
       </div>
 
       <div
-        class="bg-white dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700"
+        class="bg-white dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700 hidden"
         style="height: calc(100vh - 180px)"
       >
         <UEditor
@@ -108,6 +109,8 @@ const notes = [
           <UEditorToolbar :editor="editor" :items="items" layout="bubble" />
         </UEditor>
       </div>
+
+      <NotesEditor />
     </template>
 
     <template #side_content>
