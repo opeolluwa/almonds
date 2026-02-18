@@ -3,19 +3,19 @@
 	@just "android-{{target}}"
 
 
-[working-directory: 'app']
+[working-directory: 'almonds']
 @android-build-apk:
 	#!/usr/bin/env sh
 	export ENVIRONMENT=production
 	npm run tauri android build -- --apk true --verbose
 
 
-[working-directory: 'app']
+[working-directory: 'almonds']
 @android-build-aab:
 	npm run tauri android build -- --aab
 
 
-[working-directory: 'app']
+[working-directory: 'almonds']
 @android-watch:
 	#!/usr/bin/env sh
 	export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home"
@@ -37,6 +37,6 @@
 	npm run tauri android init
 
 
-[working-directory: 'app']
+[working-directory: 'almonds']
 @android-keychain target:
 	keytool -genkey -v -keystore {{target}}-release.jks -keyalg RSA -keysize 2048 -validity 10000 -alias {{target}}
