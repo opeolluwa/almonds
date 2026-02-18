@@ -1,6 +1,10 @@
 <script setup lang="ts">
 const { init } = useAccentColor();
-onMounted(init);
+const { init: initFontSize } = useFontSize();
+onMounted(() => {
+  init();
+  initFontSize();
+});
 </script>
 
 <template>

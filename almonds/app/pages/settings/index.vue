@@ -43,7 +43,7 @@ const isDark = computed({
   get: () => colorMode.value === "dark",
   set: (v) => (colorMode.preference = v ? "dark" : "light"),
 });
-const fontSize = ref<"sm" | "md" | "lg">("md");
+const { fontSize, setFontSize } = useFontSize();
 const { accent: selectedAccent, setAccent } = useAccentColor();
 const accentOptions: { key: AccentKey; label: string; bg: string }[] = [
   { key: "rose", label: "Rose", bg: "bg-rose-600" },
@@ -188,7 +188,7 @@ const notifAppUpdates = ref(true);
                       ? 'bg-white dark:bg-gray-600 text-gray-800 dark:text-gray-100 shadow-sm'
                       : 'text-gray-500 dark:text-gray-400'
                   "
-                  @click="fontSize = sz"
+                  @click="setFontSize(sz)"
                 >
                   {{ sz }}
                 </button>

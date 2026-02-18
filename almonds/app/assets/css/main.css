@@ -40,6 +40,10 @@
   --color-accent-950: oklch(0% 0 none);
 }
 
+html {
+  font-size: var(--font-size-base, 15px);
+}
+
 body {
   font-family: "Poppins", sans-serif;
   height: 100%;
