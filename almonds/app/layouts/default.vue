@@ -1,12 +1,6 @@
 <script setup lang="ts">
 import _ from "lodash";
-
-interface Route {
-  path: string;
-  name: string;
-  icon: string;
-  activeIcon: string;
-}
+import { primaryRoutes, secondaryRoutes } from "~/data/routes";
 
 const route = useRoute();
 const colorMode = useColorMode();
@@ -25,66 +19,6 @@ const themeIcon = computed(() =>
 );
 
 const themeLabel = computed(() => (isDark.value ? "Light mode" : "Dark mode"));
-
-const primaryRoutes: Route[] = [
-  {
-    path: "/",
-    name: "Home",
-    icon: "heroicons:home",
-    activeIcon: "heroicons:home-solid",
-  },
-  {
-    path: "/notes",
-    name: "Notes",
-    icon: "heroicons:document-text",
-    activeIcon: "heroicons:document-text-solid",
-  },
-  {
-    path: "/bookmarks",
-    name: "Bookmarks",
-    icon: "heroicons:bookmark",
-    activeIcon: "heroicons:bookmark-solid",
-  },
-  {
-    path: "/ollama",
-    name: "Ollama",
-    icon: "heroicons:cpu-chip",
-    activeIcon: "heroicons:cpu-chip-solid",
-  },
-  {
-    path: "/snippets",
-    name: "Snippets",
-    icon: "heroicons:code-bracket",
-    activeIcon: "heroicons:code-bracket-solid",
-  },
-  {
-    path: "/todo",
-    name: "Todo",
-    icon: "heroicons:check-circle",
-    activeIcon: "heroicons:check-circle-solid",
-  },
-  {
-    path: "/moodboard",
-    name: "Moodboard",
-    icon: "heroicons:squares-2x2",
-    activeIcon: "heroicons:squares-2x2-solid",
-  },
-  {
-    path: "/scratch-pad",
-    name: "Scratch Pad",
-    icon: "heroicons:pencil-square",
-    activeIcon: "heroicons:pencil-square-solid",
-  },
-];
-
-const secondaryRoutes: Route[] = [
-  {
-    path: "/settings",
-    name: "Settings",
-    icon: "heroicons:cog-6-tooth",
-    activeIcon: "heroicons:cog-6-tooth-solid",
-  },
-];
 
 function isActive(path: string): boolean {
   if (path === "/") return route.path === "/";
@@ -165,7 +99,8 @@ const pageTitle = computed(() => {
             />
           </div>
 
-          <div class="px-3 mb-3 flex max-w-9/12">
+          <!--TODO: enable when the project feature is done, the former class is flex before hidden-->
+          <div class="px-3 mb-3 max-w-9/12 flex">
             <UButton
               color="error"
               variant="solid"
@@ -301,7 +236,7 @@ const pageTitle = computed(() => {
       <div class="flex flex-1 overflow-hidden">
         <main class="flex-1 overflow-y-auto p-6 bg-gray-50 dark:bg-surface-950">
           <h1 class="text-2xl font-semibold text-gray-800 dark:text-gray-100">
-            {{ pageTitle }}
+            {{ pageTitle  }}
           </h1>
           <slot name="primary_cta" />
           <slot name="main_content" />

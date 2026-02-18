@@ -27,17 +27,21 @@
   --color-surface-950: #0a121f;
 
   --color-primary: oklch(56.262% 0.20195 13.152);
-  --color-primary-50: oklch(84.747% 0.06448 1.3462);
-  --color-primary-100: oklch(81.004% 0.08241 2.6317);
-  --color-primary-200: oklch(73.827% 0.11968 4.327);
-  --color-primary-300: oklch(66.956% 0.15683 6.1397);
-  --color-primary-400: oklch(61.3% 0.18887 9.459);
-  --color-primary-500: oklch(56.262% 0.20195 13.152);
-  --color-primary-600: oklch(46.7% 0.16531 12.87);
-  --color-primary-700: oklch(36.661% 0.12643 11.718);
-  --color-primary-800: oklch(25.697% 0.08247 10.016);
-  --color-primary-900: oklch(13.852% 0.03175 1.2983);
-  --color-primary-950: oklch(0% 0 none);
+  --color-accent-50: oklch(84.747% 0.06448 1.3462);
+  --color-accent-100: oklch(81.004% 0.08241 2.6317);
+  --color-accent-200: oklch(73.827% 0.11968 4.327);
+  --color-accent-300: oklch(66.956% 0.15683 6.1397);
+  --color-accent-400: oklch(61.3% 0.18887 9.459);
+  --color-accent-500: oklch(56.262% 0.20195 13.152);
+  --color-accent-600: oklch(46.7% 0.16531 12.87);
+  --color-accent-700: oklch(36.661% 0.12643 11.718);
+  --color-accent-800: oklch(25.697% 0.08247 10.016);
+  --color-accent-900: oklch(13.852% 0.03175 1.2983);
+  --color-accent-950: oklch(0% 0 none);
+}
+
+html {
+  font-size: var(--font-size-base, 15px);
 }
 
 body {

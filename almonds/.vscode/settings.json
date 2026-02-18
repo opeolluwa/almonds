@@ -1,8 +1,12 @@
 {
     "cSpell.words": [
+        "codellama",
         "heroicons",
+        "moodboard",
         "Nuxt",
         "nuxtjs",
+        "Ollama",
+        "Slideover",
         "tauri"
     ],
     "workbench.colorCustomizations": {

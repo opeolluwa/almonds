@@ -8,11 +8,7 @@ use sea_orm::{
 };
 use uuid::Uuid;
 
-use crate::{
-    adapters::snippets::{Snippet, UpdateSnippet},
-    entities::snippets,
-    error::KernelError,
-};
+use crate::{adapters::snippets::{CreateSnippet, UpdateSnippet}, entities::snippets, error::KernelError};
 
 pub struct SnippetRepository {
     conn: Arc<DatabaseConnection>,
@@ -22,7 +18,7 @@ pub struct SnippetRepository {
 pub trait SnippetRepositoryExt {
     fn new(conn: Arc<DatabaseConnection>) -> Self;
 
-    async fn create(&self, payload: &Snippet) -> Result<snippets::Model, KernelError>;
+    async fn create(&self, payload: &CreateSnippet) -> Result<snippets::Model, KernelError>;
 
     async fn find_by_id(&self, identifier: &Uuid) -> Result<Option<snippets::Model>, KernelError>;
 
@@ -37,7 +33,6 @@ pub trait SnippetRepositoryExt {
         identifier: &Uuid,
         payload: &UpdateSnippet,
     ) -> Result<snippets::Model, KernelError>;
-
 }
 
 #[async_trait]
@@ -46,7 +41,7 @@ impl SnippetRepositoryExt for SnippetRepository {
         Self { conn }
     }
 
-    async fn create(&self, payload: &Snippet) -> Result<snippets::Model, KernelError> {
+    async fn create(&self, payload: &CreateSnippet) -> Result<snippets::Model, KernelError> {
         let active_model: snippets::ActiveModel = payload.to_owned().into();
 
         active_model

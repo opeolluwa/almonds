@@ -58,7 +58,15 @@ const props = defineProps<{
 }>();
 
 const router = useRouter();
+const snippetStore = useSnippetStore();
 const copied = ref(false);
+const deleting = ref(false);
+const showDeleteConfirm = ref(false);
+
+async function confirmDelete() {
+  deleting.value = true;
+  await snippetStore.deleteSnippet(props.identifier);
+}
 
 const previewCode = computed(() =>
   props.preview.split("\n").slice(0, 10).join("\n"),
@@ -123,8 +131,45 @@ async function copyCode() {
         >
           Edit
         </button>
+        <button
+          class="text-xs text-red-400 hover:text-red-600 dark:hover:text-red-300"
+          @click="showDeleteConfirm = true"
+        >
+          Delete
+        </button>
       </div>
     </div>
+
+    <UModal v-model:open="showDeleteConfirm" title="Delete snippet">
+      <template #body>
+        <p class="text-sm text-gray-600 dark:text-gray-400">
+          Are you sure you want to delete
+          <span class="font-medium text-gray-800 dark:text-gray-200">{{
+            title
+          }}</span>? This action cannot be undone.
+        </p>
+      </template>
+      <template #footer>
+        <div class="flex justify-end gap-2">
+          <UButton
+            size="xs"
+            variant="ghost"
+            :disabled="deleting"
+            @click="showDeleteConfirm = false"
+          >
+            Cancel
+          </UButton>
+          <UButton
+            size="xs"
+            color="error"
+            :loading="deleting"
+            @click="confirmDelete"
+          >
+            Delete
+          </UButton>
+        </div>
+      </template>
+    </UModal>
   </div>
 </template>
 

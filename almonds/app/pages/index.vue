@@ -1,6 +1,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: false,
+  name: "Welcome back, Nick!",
 });
 
 const projects = [
@@ -49,10 +50,6 @@ const colorMap: Record<string, string> = {
 <template>
   <NuxtLayout name="default">
     <template #main_content>
-      <h1 class="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-6">
-        Welcome back, Nick!
-      </h1>
-
       <section class="mb-8">
         <h2
           class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3 flex items-center gap-2"

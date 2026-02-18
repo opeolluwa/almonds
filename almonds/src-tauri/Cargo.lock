@@ -60,6 +60,7 @@ name = "almond_kernel"
 version = "0.1.0"
 dependencies = [
  "async-trait",
+ "chrono",
  "log",
  "migration",
  "sanitizer",
