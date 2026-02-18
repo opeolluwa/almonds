@@ -1,0 +1,27 @@
+{
+    "cSpell.words": [
+        "heroicons",
+        "Nuxt",
+        "tauri"
+    ],
+    "workbench.colorCustomizations": {
+        "activityBar.activeBackground": "#a20e59",
+        "activityBar.background": "#a20e59",
+        "activityBar.foreground": "#e7e7e7",
+        "activityBar.inactiveForeground": "#e7e7e799",
+        "activityBarBadge.background": "#51930d",
+        "activityBarBadge.foreground": "#e7e7e7",
+        "commandCenter.border": "#e7e7e799",
+        "sash.hoverBorder": "#a20e59",
+        "statusBar.background": "#730a3f",
+        "statusBar.foreground": "#e7e7e7",
+        "statusBarItem.hoverBackground": "#a20e59",
+        "statusBarItem.remoteBackground": "#730a3f",
+        "statusBarItem.remoteForeground": "#e7e7e7",
+        "titleBar.activeBackground": "#730a3f",
+        "titleBar.activeForeground": "#e7e7e7",
+        "titleBar.inactiveBackground": "#730a3f99",
+        "titleBar.inactiveForeground": "#e7e7e799"
+    },
+    "peacock.color": "#730a3f"
+}

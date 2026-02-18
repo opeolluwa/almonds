@@ -25,5 +25,5 @@ sea-orm = { version = "2.0.0-rc", features = [
 ] }
 serde = { version = "1.0.228", features = ["derive"] }
 thiserror = "2.0.18"
-ts-rs = "12.0.1"
+ts-rs = { version = "12.0.1", features = ["chrono-impl", "uuid-impl"] }
 uuid = { version = "1.21.0", features = ["v4"] }

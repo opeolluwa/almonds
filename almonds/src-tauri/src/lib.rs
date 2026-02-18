@@ -6,12 +6,12 @@ mod utils;
 
 use std::sync::Arc;
 
+use almond_kernel::repositories::{
+    snippets::{SnippetRepository, SnippetRepositoryExt},
+    sync_queue::{SyncQueueRepository, SyncQueueRepositoryExt},
+};
 use tauri::Manager;
 
-use commands::snippets::{create_snippet, delete_snippet, get_all_snippets, get_snippet};
-use commands::sync_queue::{
-    add_sync_queue_entry, count_sync_queue_entries, remove_sync_queue_entry, run_sync,
-};
 use state::AppState;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -50,8 +50,14 @@ pub fn run() {
                     .await
                     .expect("failed to run migrations");
 
+                let conn = Arc::new(kernel.connection().clone());
+                let snippet_repository = SnippetRepository::new(conn.clone());
+                let sync_queue_repository = SyncQueueRepository::new(conn.clone());
+
                 let state = AppState {
-                    conn: Arc::new(kernel.connection().clone()),
+                    conn,
+                    snippet_repository,
+                    sync_queue_repository,
                 };
 
                 app_handle.manage(state);
@@ -60,14 +66,15 @@ pub fn run() {
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
-            create_snippet,
-            get_snippet,
-            get_all_snippets,
-            delete_snippet,
-            add_sync_queue_entry,
-            remove_sync_queue_entry,
-            count_sync_queue_entries,
-            run_sync,
+            commands::snippets::create_snippet,
+            commands::snippets::get_snippet,
+            commands::snippets::get_all_snippets,
+            commands::snippets::delete_snippet,
+            commands::snippets::get_recently_added_snippet,
+            commands::sync_queue::add_sync_queue_entry,
+            commands::sync_queue::remove_sync_queue_entry,
+            commands::sync_queue::count_sync_queue_entries,
+            commands::sync_queue::run_sync,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

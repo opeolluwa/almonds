@@ -25,7 +25,7 @@ pub trait SyncQueueRepositoryExt {
 
 #[async_trait]
 impl SyncQueueRepositoryExt for SyncQueueRepository {
-    fn new(conn: Arc<DatabaseConnection>) -> Self {
+     fn new(conn: Arc<DatabaseConnection>) -> Self {
         Self { conn }
     }
 

@@ -6,9 +6,6 @@ export interface CreateSnippetPayload {
   language: string | null;
   code: string;
   description: string | null;
-  isPinned: boolean;
-  createdAt: string;
-  updatedAt: string;
 }
 
 export function useCreateSnippet() {
