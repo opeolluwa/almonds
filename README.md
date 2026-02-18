@@ -2,6 +2,9 @@
 
 A personal productivity desktop app built with Tauri, Nuxt 4, and Vue 3. Almonds brings your notes, snippets, bookmarks, tasks, and AI conversations into one unified workspace.
 
+
+![screenshot](./almonds.png)
+
 ---
 
 ## Features
