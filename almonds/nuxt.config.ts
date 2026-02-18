@@ -3,9 +3,9 @@ export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
   devtools: { enabled: false },
   css: ["@/assets/css/main.css"],
-  ssr:false,
+  ssr: false,
   modules: [
-    "@nuxt/a11y",
+    // "@nuxt/a11y",
     "@nuxt/eslint",
     "@nuxt/hints",
     "@nuxt/image",
@@ -14,6 +14,7 @@ export default defineNuxtConfig({
     "@nuxtjs/google-fonts",
     "@nuxtjs/i18n",
     "@pinia/nuxt",
+    "pinia-plugin-persistedstate/nuxt",
   ],
   colorMode: {
     preference: "dark",
@@ -22,7 +23,7 @@ export default defineNuxtConfig({
     componentName: "ColorScheme",
     classPrefix: "",
     classSuffix: "",
-    storage: "localStorage", 
+    storage: "localStorage",
     storageKey: "nuxt-color-mode",
   },
 });

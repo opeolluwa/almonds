@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import CreateSnippetSideBar from "~/components/snippets/create-snippet-side-bar.vue";
+
 definePageMeta({ layout: false, name: "Create snippet" });
 </script>
 
@@ -12,10 +14,7 @@ definePageMeta({ layout: false, name: "Create snippet" });
     </template>
 
     <template #side_content>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium,
-      explicabo perferendis, repellat earum possimus harum atque dolorum fuga
-      tempora totam hic! Recusandae fugiat necessitatibus, esse hic ab provident
-      eligendi fuga.
+      <CreateSnippetSideBar />
     </template>
   </NuxtLayout>
 </template>

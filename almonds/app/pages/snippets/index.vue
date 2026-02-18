@@ -1,57 +1,55 @@
 <script setup lang="ts">
 definePageMeta({ layout: false });
 
-const snippets = [
-  {
-    title: "Vue Composable Template",
-    language: "TypeScript",
-    lines: 24,
-    date: "Feb 16, 2026",
-    preview:
-      "export function useCounter() {\n  const count = ref(0)\n  return { count }\n}",
-  },
-  {
-    title: "Tailwind Card Component",
-    language: "Vue",
-    lines: 18,
-    date: "Feb 15, 2026",
-    preview: '<div class="rounded-lg p-4 bg-white shadow">\n  <slot />\n</div>',
-  },
-  {
-    title: "Fetch API Wrapper",
-    language: "TypeScript",
-    lines: 32,
-    date: "Feb 14, 2026",
-    preview:
-      "async function fetchAPI<T>(url: string): Promise<T> {\n  const res = await fetch(url)\n  return res.json()\n}",
-  },
-  {
-    title: "CSS Grid Layout",
-    language: "CSS",
-    lines: 12,
-    date: "Feb 12, 2026",
-    preview:
-      ".grid-layout {\n  display: grid;\n  grid-template-columns: repeat(3, 1fr);\n}",
-  },
-];
-
-const languages = ["All", "TypeScript", "Vue", "CSS", "JavaScript"];
+const snippetStore = useSnippetStore();
 const activeLanguage = ref("All");
+
+const allLanguages = computed(() => ["All", ...snippetStore.languages]);
+
+const filteredSnippets = computed(() => {
+  if (activeLanguage.value === "All") return snippetStore.snippets;
+  return snippetStore.snippets.filter(
+    (s) => s.language === activeLanguage.value,
+  );
+});
+
+function formatDate(dateStr: string) {
+  return new Date(dateStr).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
+function lineCount(code: string) {
+  return code.split("\n").length;
+}
+
+onMounted(async () => {
+  await Promise.all([
+    snippetStore.fetchSnippets(),
+    snippetStore.fetchRecentSnippets(),
+  ]);
+});
 </script>
 
 <template>
-  <Script> hljs.highlightAll(); </Script>
   <NuxtLayout name="default">
     <template #main_content>
       <PrimaryCta
         label="New Snippet"
         icon="heroicons:plus"
         to="/snippets/create-snippets"
+        v-if="snippetStore.snippets.length !== 0"
       />
 
-      <div class="flex gap-2 mb-4">
+      <!-- Language filter tabs -->
+      <div
+        v-if="!snippetStore.loading && allLanguages.length > 1"
+        class="flex gap-2 mb-4 flex-wrap"
+      >
         <button
-          v-for="lang in languages"
+          v-for="lang in allLanguages"
           :key="lang"
           class="px-3 py-1 rounded-full text-xs font-medium transition-colors"
           :class="
@@ -65,88 +63,158 @@ const activeLanguage = ref("All");
         </button>
       </div>
 
-      <div class="flex flex-col gap-3">
-        <div
-          v-for="snippet in snippets"
-          :key="snippet.title"
-          class="bg-white dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700 hover:shadow-sm transition-shadow overflow-hidden"
-        >
-          <div class="p-4">
-            <div class="flex items-center justify-between mb-2">
-              <h3 class="text-sm font-medium text-gray-800 dark:text-gray-200">
-                {{ snippet.title }}
-              </h3>
-              <div class="flex items-center gap-3">
-                <span
-                  class="px-2 py-0.5 rounded bg-gray-100 dark:bg-gray-700 text-xs text-gray-500 dark:text-gray-400"
-                  >{{ snippet.language }}</span
-                >
-                <span class="text-xs text-gray-400"
-                  >{{ snippet.lines }} lines</span
-                >
-              </div>
-            </div>
-            <pre
-              class="bg-gray-900 text-gray-100 rounded-md p-3 text-xs overflow-x-auto"
-            ><code>{{ snippet.preview }}</code></pre>
-          </div>
-          <div
-            class="px-4 py-2 border-t border-gray-50 dark:border-gray-700 flex items-center justify-between"
-          >
-            <p class="text-xs text-gray-400">{{ snippet.date }}</p>
-            <div class="flex items-center gap-2">
-              <button
-                class="text-xs text-accent-600 dark:text-accent-400 hover:text-accent-700 font-medium"
-              >
-                Copy
-              </button>
-              <button
-                class="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-              >
-                Edit
-              </button>
-            </div>
-          </div>
+      <!-- Loading skeletons -->
+      <div v-if="snippetStore.loading" class="flex flex-col gap-3">
+        <USkeleton v-for="i in 3" :key="i" class="h-32 rounded-lg" />
+      </div>
+
+      <!-- Empty state: no snippets at all -->
+      <div
+        v-else-if="snippetStore.snippets.length === 0"
+        class="flex flex-col items-center justify-center py-20 text-center"
+      >
+        <div class="mb-4 p-2 flex justify-center items-center  rounded-full bg-gray-100 dark:bg-gray-800">
+          <UIcon
+            name="heroicons:code-bracket"
+            class="size-8 text-gray-400 dark:text-gray-500"
+          />
         </div>
+        <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          No snippets yet
+        </h3>
+        <p class="text-xs text-gray-400 dark:text-gray-500 mb-4">
+          Save your first code snippet to get started.
+        </p>
+        <NuxtLink
+          to="/snippets/create-snippets"
+          class="text-xs text-accent-500 hover:text-accent-600 font-medium"
+        >
+          Create snippet
+        </NuxtLink>
+      </div>
+
+      <!-- Empty state: filtered language has no results -->
+      <div
+        v-else-if="filteredSnippets.length === 0"
+        class="flex flex-col items-center justify-center py-20 text-center"
+      >
+        <div class="mb-4 p-4 rounded-full bg-gray-100 dark:bg-gray-800">
+          <UIcon
+            name="heroicons:funnel"
+            class="w-8 h-8 text-gray-400 dark:text-gray-500"
+          />
+        </div>
+        <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          No {{ activeLanguage }} snippets
+        </h3>
+        <p class="text-xs text-gray-400 dark:text-gray-500 mb-4">
+          Try selecting a different language.
+        </p>
+        <button
+          class="text-xs text-accent-500 hover:text-accent-600 font-medium"
+          @click="activeLanguage = 'All'"
+        >
+          Clear filter
+        </button>
+      </div>
+
+      <!-- Snippet list -->
+      <div v-else class="flex flex-col gap-3">
+        <SnippetCard
+          v-for="snippet in filteredSnippets"
+          :key="snippet.identifier"
+          :title="snippet.title ?? 'Untitled'"
+          :language="snippet.language ?? 'Unknown'"
+          :lines="lineCount(snippet.code)"
+          :date="formatDate(snippet.createdAt)"
+          :preview="snippet.code"
+        />
       </div>
     </template>
 
     <template #side_content>
+      <!-- Languages section -->
       <h2 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">
         Languages
       </h2>
-      <div class="flex flex-col gap-1">
+
+      <div v-if="snippetStore.loading" class="flex flex-col gap-1">
+        <USkeleton v-for="i in 4" :key="i" class="h-8 rounded-lg" />
+      </div>
+
+      <div
+        v-else-if="snippetStore.languages.length === 0"
+        class="flex flex-col items-center py-6 text-center"
+      >
+        <UIcon
+          name="heroicons:tag"
+          class="w-5 h-5 text-gray-300 dark:text-gray-600 mb-2"
+        />
+        <p class="text-xs text-gray-400 dark:text-gray-500">No languages yet</p>
+      </div>
+
+      <div v-else class="flex flex-col gap-1">
         <div
-          v-for="lang in languages"
+          v-for="lang in allLanguages"
           :key="lang"
-          class="flex items-center justify-between py-2 px-3 rounded-lg text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer"
+          class="flex items-center justify-between py-2 px-3 rounded-lg text-sm cursor-pointer transition-colors"
+          :class="
+            activeLanguage === lang
+              ? 'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200'
+              : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'
+          "
+          @click="activeLanguage = lang"
         >
           <span>{{ lang }}</span>
-          <span class="text-xs text-gray-400">{{
-            lang === "All"
-              ? snippets.length
-              : snippets.filter((s) => s.language === lang).length
-          }}</span>
+          <span class="text-xs text-gray-400">
+            {{
+              lang === "All"
+                ? snippetStore.snippets.length
+                : snippetStore.snippets.filter((s) => s.language === lang)
+                    .length
+            }}
+          </span>
         </div>
       </div>
 
       <USeparator class="my-4" />
 
+      <!-- Recent section -->
       <h2 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">
         Recent
       </h2>
-      <div class="flex flex-col gap-2">
+
+      <div v-if="snippetStore.recentLoading" class="flex flex-col gap-2">
+        <USkeleton v-for="i in 3" :key="i" class="h-12 rounded-lg" />
+      </div>
+
+      <div
+        v-else-if="snippetStore.recent.length === 0"
+        class="flex flex-col items-center py-6 text-center"
+      >
+        <UIcon
+          name="heroicons:clock"
+          class="w-5 h-5 text-gray-300 dark:text-gray-600 mb-2"
+        />
+        <p class="text-xs text-gray-400 dark:text-gray-500">
+          No recent snippets
+        </p>
+      </div>
+
+      <div v-else class="flex flex-col gap-2">
         <div
-          v-for="snippet in snippets.slice(0, 3)"
-          :key="snippet.title"
-          class="py-2 px-3 rounded-lg text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer"
+          v-for="snippet in snippetStore.recent"
+          :key="snippet.identifier"
+          class="py-2 px-3 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
         >
           <p
             class="font-medium text-gray-700 dark:text-gray-300 truncate text-xs"
           >
-            {{ snippet.title }}
+            {{ snippet.title ?? "Untitled" }}
           </p>
-          <p class="text-xs text-gray-400">{{ snippet.date }}</p>
+          <p class="text-xs text-gray-400 mt-0.5">
+            {{ formatDate(snippet.createdAt) }}
+          </p>
         </div>
       </div>
     </template>
