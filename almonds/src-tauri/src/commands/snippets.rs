@@ -5,7 +5,8 @@ use almond_kernel::{entities::snippets, repositories::snippets::SnippetRepositor
 
 use crate::{
     adapters::snippets::{CreateSnippet, UpdateSnippet},
-    errors::AppError, state::app::AppState,
+    errors::AppError,
+    state::app::AppState,
 };
 
 #[tauri::command]

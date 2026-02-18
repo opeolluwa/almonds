@@ -23,6 +23,7 @@ serde_json = "1.0"
 tauri = { version = "2.10.0", features = [] }
 tauri-plugin-clipboard-manager = "2"
 tauri-plugin-log = "2"
+tauri-plugin-notification = "2"
 tauri-plugin-sql = { version = "2", features = ["sqlite"] }
 thiserror = "2"
 ts-rs = "10.1.0"

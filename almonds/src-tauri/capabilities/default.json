@@ -8,6 +8,7 @@
   "permissions": [
     "core:default",
     "sql:default",
-    "clipboard-manager:default"
+    "clipboard-manager:default",
+    "notification:default"
   ]
 }
