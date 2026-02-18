@@ -1,6 +1,5 @@
-use serde::Deserialize;
-
 use almond_kernel::adapters::todo::TodoPriority;
+use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]

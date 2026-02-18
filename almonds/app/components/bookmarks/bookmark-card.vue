@@ -41,7 +41,9 @@ function formatDate(iso: string) {
     <p class="text-xs text-gray-400 shrink-0 hidden sm:block">
       {{ formatDate(bookmark.createdAt) }}
     </p>
-    <div class="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
+    <div
+      class="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1"
+    >
       <button
         class="text-gray-400 hover:text-accent-500 transition-colors"
         title="Preview"

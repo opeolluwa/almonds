@@ -32,15 +32,37 @@ function openPreview(bookmark: import("~/stores/bookmarks").Bookmark) {
   showPreview.value = true;
 }
 
-const filtered = computed(() =>
-  activeTag.value === "all"
-    ? bookmarkStore.bookmarks
-    : bookmarkStore.byTag(activeTag.value),
-);
+const filtered = computed(() => {
+  let list =
+    activeTag.value === "all"
+      ? bookmarkStore.bookmarks
+      : bookmarkStore.byTag(activeTag.value);
 
-onMounted(() => bookmarkStore.fetchBookmarks());
+  const q = searchQuery.value.trim().toLowerCase();
+  if (q) {
+    list = list.filter(
+      (b) =>
+        b.title.toLowerCase().includes(q) ||
+        b.url.toLowerCase().includes(q) ||
+        b.tag.toLowerCase().includes(q),
+    );
+  }
 
-async function handleCreate(payload: { title: string; url: string; tag: BookmarkTag }) {
+  return list;
+});
+
+onMounted(async () => {
+  setSearch({ placeholder: "Search bookmarks..." });
+  await bookmarkStore.fetchBookmarks();
+});
+
+onUnmounted(() => clearSearch());
+
+async function handleCreate(payload: {
+  title: string;
+  url: string;
+  tag: BookmarkTag;
+}) {
   await bookmarkStore.createBookmark(payload);
 }
 </script>
@@ -69,9 +91,9 @@ async function handleCreate(payload: { title: string; url: string; tag: Bookmark
         <span class="text-sm">Loading bookmarks…</span>
       </div>
 
-      <!-- Empty state -->
+      <!-- Empty state: no bookmarks at all -->
       <div
-        v-else-if="filtered.length === 0"
+        v-else-if="bookmarkStore.bookmarks.length === 0"
         class="flex flex-col items-center justify-center py-20 text-center gap-3"
       >
         <div
@@ -83,19 +105,48 @@ async function handleCreate(payload: { title: string; url: string; tag: Bookmark
           />
         </div>
         <p class="text-sm font-medium text-gray-600 dark:text-gray-400">
-          {{
-            activeTag === "all"
-              ? "No bookmarks yet"
-              : `No ${activeTag} bookmarks`
-          }}
+          No bookmarks yet
         </p>
         <p class="text-xs text-gray-400 dark:text-gray-500 max-w-xs">
-          {{
-            activeTag === "all"
-              ? 'Save links you want to revisit. Click "Add Bookmark" to get started.'
-              : "Try a different tag or add a new bookmark."
-          }}
+          Save links you want to revisit. Click "Add Bookmark" to get started.
         </p>
+      </div>
+
+      <!-- Empty state: search / tag filter has no results -->
+      <div
+        v-else-if="filtered.length === 0"
+        class="flex flex-col items-center justify-center py-20 text-center gap-3"
+      >
+        <div
+          class="size-14 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center"
+        >
+          <UIcon
+            name="heroicons:magnifying-glass"
+            class="size-7 text-gray-400 dark:text-gray-500"
+          />
+        </div>
+        <p class="text-sm font-medium text-gray-600 dark:text-gray-400">
+          No results found
+        </p>
+        <p class="text-xs text-gray-400 dark:text-gray-500 max-w-xs">
+          Try a different search term or tag.
+        </p>
+        <div class="flex gap-3">
+          <button
+            v-if="searchQuery"
+            class="text-xs text-accent-500 hover:text-accent-600 font-medium"
+            @click="searchQuery = ''"
+          >
+            Clear search
+          </button>
+          <button
+            v-if="activeTag !== 'all'"
+            class="text-xs text-gray-400 hover:text-gray-600 font-medium"
+            @click="activeTag = 'all'"
+          >
+            Clear filter
+          </button>
+        </div>
       </div>
 
       <!-- Bookmark list -->

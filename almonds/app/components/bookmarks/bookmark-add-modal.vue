@@ -9,7 +9,11 @@ const open = defineModel<boolean>("open", { required: true });
 
 const emit = defineEmits<{ create: [payload: CreateBookmarkPayload] }>();
 
-const form = reactive({ title: "", url: "", tag: "development" as BookmarkTag });
+const form = reactive({
+  title: "",
+  url: "",
+  tag: "development" as BookmarkTag,
+});
 const submitting = ref(false);
 
 async function handleSubmit() {
@@ -36,7 +40,9 @@ async function handleSubmit() {
     <template #body>
       <form class="flex flex-col gap-4" @submit.prevent="handleSubmit">
         <div class="flex flex-col gap-1">
-          <label class="text-xs font-medium text-gray-600 dark:text-gray-400">Title</label>
+          <label class="text-xs font-medium text-gray-600 dark:text-gray-400"
+            >Title</label
+          >
           <UInput
             v-model="form.title"
             placeholder="e.g. Vue.js Docs"
@@ -45,7 +51,9 @@ async function handleSubmit() {
           />
         </div>
         <div class="flex flex-col gap-1">
-          <label class="text-xs font-medium text-gray-600 dark:text-gray-400">URL</label>
+          <label class="text-xs font-medium text-gray-600 dark:text-gray-400"
+            >URL</label
+          >
           <UInput
             v-model="form.url"
             placeholder="https://example.com"
@@ -54,7 +62,9 @@ async function handleSubmit() {
           />
         </div>
         <div class="flex flex-col gap-1">
-          <label class="text-xs font-medium text-gray-600 dark:text-gray-400">Tag</label>
+          <label class="text-xs font-medium text-gray-600 dark:text-gray-400"
+            >Tag</label
+          >
           <USelectMenu
             v-model="form.tag"
             :items="tags.map((t) => ({ label: t.label, value: t.value }))"

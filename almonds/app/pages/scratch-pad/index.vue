@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({ layout: false });
-const { notify } = useAppNotification()
+const { notify } = useAppNotification();
 const content = ref("");
 
 const pads = [
@@ -41,7 +41,7 @@ const pads = [
 Start writing your thoughts here...
 
 This is a free-form space for quick notes, ideas, and brainstorming.`"
-        ></textarea>
+        />
       </div>
     </template>
 

@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import ollama from "ollama/browser";
 definePageMeta({ layout: false });
-import ollama from 'ollama/browser'
 
 interface Message {
   role: "user" | "assistant";

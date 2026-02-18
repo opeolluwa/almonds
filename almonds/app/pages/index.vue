@@ -3,7 +3,7 @@ import { useNoteStore } from "~/stores/notes";
 import { useBookmarkStore } from "~/stores/bookmarks";
 import { useTodoStore } from "~/stores/todo";
 
-definePageMeta({ layout: false, name: "Welcome back, Nick!" });
+definePageMeta({ layout: false });
 
 const noteStore = useNoteStore();
 const bookmarkStore = useBookmarkStore();
@@ -92,7 +92,10 @@ const priorityColor: Record<string, string> = {
 };
 
 function stripHtml(html: string) {
-  return html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+  return html
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 function formatDate(iso: string) {
@@ -103,24 +106,43 @@ function formatDate(iso: string) {
 }
 
 const quickActions = [
-  { label: "New note", icon: "heroicons:document-plus", href: "/notes/create-notes" },
-  { label: "Add bookmark", icon: "heroicons:bookmark-slash", href: "/bookmarks" },
-  { label: "New todo", icon: "heroicons:plus-circle", href: "/todo/create-todo" },
-  { label: "New snippet", icon: "heroicons:code-bracket-square", href: "/snippets/create-snippets" },
+  {
+    label: "New note",
+    icon: "heroicons:document-plus",
+    href: "/notes/create-notes",
+  },
+  {
+    label: "Add bookmark",
+    icon: "heroicons:bookmark-slash",
+    href: "/bookmarks",
+  },
+  {
+    label: "New todo",
+    icon: "heroicons:plus-circle",
+    href: "/todo/create-todo",
+  },
+  {
+    label: "New snippet",
+    icon: "heroicons:code-bracket-square",
+    href: "/snippets/create-snippets",
+  },
 ];
 </script>
 
 <template>
   <NuxtLayout name="default">
-    <template #main_content>
-      <!-- Greeting banner -->
-      <div class="mb-6">
-        <p class="text-xs text-gray-400 dark:text-gray-500 mb-0.5">{{ today }}</p>
-        <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100">
+    <template #page_title>
+      <div>
+        <p class="text-sm text-gray-400 dark:text-gray-500 mb-0.5">
+          {{ today }}
+        </p>
+        <h1 class="text-2xl font-semibold text-gray-800 dark:text-gray-100">
           {{ greeting }}, Nick 👋
-        </h2>
+        </h1>
       </div>
+    </template>
 
+    <template #main_content>
       <!-- Stats row -->
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
         <NuxtLink
@@ -136,7 +158,9 @@ const quickActions = [
             <UIcon :name="stat.icon" class="size-4.5" :class="stat.color" />
           </div>
           <div>
-            <p class="text-xl font-bold text-gray-800 dark:text-gray-100 leading-none">
+            <p
+              class="text-xl font-bold text-gray-800 dark:text-gray-100 leading-none"
+            >
               {{ stat.value }}
             </p>
             <p class="text-xs text-gray-400 mt-0.5">{{ stat.label }}</p>
@@ -147,7 +171,9 @@ const quickActions = [
       <!-- Recent notes -->
       <section class="mb-8">
         <div class="flex items-center justify-between mb-3">
-          <h2 class="text-sm font-medium text-gray-500 dark:text-gray-400 flex items-center gap-2">
+          <h2
+            class="text-sm font-medium text-gray-500 dark:text-gray-400 flex items-center gap-2"
+          >
             <UIcon name="heroicons:document-text" class="size-4" />
             Recent notes
           </h2>
@@ -205,7 +231,9 @@ const quickActions = [
       <!-- Recent bookmarks -->
       <section>
         <div class="flex items-center justify-between mb-3">
-          <h2 class="text-sm font-medium text-gray-500 dark:text-gray-400 flex items-center gap-2">
+          <h2
+            class="text-sm font-medium text-gray-500 dark:text-gray-400 flex items-center gap-2"
+          >
             <UIcon name="heroicons:bookmark" class="size-4" />
             Recent bookmarks
           </h2>
@@ -281,7 +309,9 @@ const quickActions = [
             class="flex flex-col items-center gap-1.5 py-3 px-2 rounded-xl bg-gray-50 dark:bg-gray-800 hover:bg-accent-50 dark:hover:bg-accent-950 hover:text-accent-600 dark:hover:text-accent-400 text-gray-500 dark:text-gray-400 transition-colors border border-transparent hover:border-accent-200 dark:hover:border-accent-800"
           >
             <UIcon :name="action.icon" class="size-5" />
-            <span class="text-xs font-medium text-center leading-tight">{{ action.label }}</span>
+            <span class="text-xs font-medium text-center leading-tight">{{
+              action.label
+            }}</span>
           </NuxtLink>
         </div>
       </section>
@@ -291,7 +321,9 @@ const quickActions = [
       <!-- Active todos -->
       <section class="mb-4">
         <div class="flex items-center justify-between mb-3">
-          <h2 class="text-sm font-medium text-gray-500 dark:text-gray-400 flex items-center gap-2">
+          <h2
+            class="text-sm font-medium text-gray-500 dark:text-gray-400 flex items-center gap-2"
+          >
             <UIcon name="heroicons:clipboard-document-check" class="size-4" />
             Todos
           </h2>
@@ -304,12 +336,17 @@ const quickActions = [
         </div>
 
         <!-- Progress bar -->
-        <div class="mb-3" v-if="todoStore.todos.length > 0">
+        <div v-if="todoStore.todos.length > 0" class="mb-3">
           <div class="flex justify-between text-xs text-gray-400 mb-1">
-            <span>{{ todoStore.completedTodos.length }} / {{ todoStore.todos.length }} complete</span>
+            <span
+              >{{ todoStore.completedTodos.length }} /
+              {{ todoStore.todos.length }} complete</span
+            >
             <span>{{ todoProgress }}%</span>
           </div>
-          <div class="h-1.5 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
+          <div
+            class="h-1.5 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden"
+          >
             <div
               class="h-full rounded-full bg-accent-500 transition-all duration-500"
               :style="{ width: `${todoProgress}%` }"
@@ -325,10 +362,7 @@ const quickActions = [
           Loading…
         </div>
 
-        <div
-          v-else-if="pendingTodos.length === 0"
-          class="py-4 text-center"
-        >
+        <div v-else-if="pendingTodos.length === 0" class="py-4 text-center">
           <UIcon
             name="heroicons:check-badge"
             class="size-8 text-emerald-400 mx-auto mb-1"

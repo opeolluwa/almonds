@@ -48,7 +48,7 @@ const notifications = ref<Notification[]>([
   {
     id: 5,
     title: "Note updated",
-    message: "\"Project Ideas\" was modified from another session.",
+    message: '"Project Ideas" was modified from another session.',
     category: "activity",
     read: true,
     time: new Date(Date.now() - 1000 * 60 * 60 * 6).toISOString(),
@@ -56,7 +56,7 @@ const notifications = ref<Notification[]>([
   {
     id: 6,
     title: "New bookmark added",
-    message: "\"Nuxt 4 Migration Guide\" was bookmarked.",
+    message: '"Nuxt 4 Migration Guide" was bookmarked.',
     category: "activity",
     read: true,
     time: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
@@ -121,13 +121,17 @@ const filtered = computed(() => {
   return list;
 });
 
-const unreadCount = computed(() => notifications.value.filter((n) => !n.read).length);
+const unreadCount = computed(
+  () => notifications.value.filter((n) => !n.read).length,
+);
 
 const categoryCounts = computed(() =>
-  (["activity", "system", "reminder", "alert"] as NotificationCategory[]).map((c) => ({
-    key: c,
-    count: notifications.value.filter((n) => n.category === c).length,
-  })),
+  (["activity", "system", "reminder", "alert"] as NotificationCategory[]).map(
+    (c) => ({
+      key: c,
+      count: notifications.value.filter((n) => n.category === c).length,
+    }),
+  ),
 );
 
 function markRead(id: number) {
@@ -266,7 +270,9 @@ function relativeTime(iso: string) {
                 {{ relativeTime(item.time) }}
               </span>
             </div>
-            <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5 leading-snug">
+            <p
+              class="text-xs text-gray-400 dark:text-gray-500 mt-0.5 leading-snug"
+            >
               {{ item.message }}
             </p>
           </div>
@@ -297,7 +303,9 @@ function relativeTime(iso: string) {
           <p class="text-[11px] text-gray-400 mt-0.5">Total</p>
         </div>
         <div class="bg-accent-50 dark:bg-accent-950 rounded-lg p-3 text-center">
-          <p class="text-2xl font-semibold text-accent-600 dark:text-accent-300">
+          <p
+            class="text-2xl font-semibold text-accent-600 dark:text-accent-300"
+          >
             {{ unreadCount }}
           </p>
           <p class="text-[11px] text-accent-400 mt-0.5">Unread</p>
@@ -340,7 +348,9 @@ function relativeTime(iso: string) {
             class="size-3.5 shrink-0"
             :class="categoryConfig[cat.key].color"
           />
-          <span class="flex-1 text-left">{{ categoryConfig[cat.key].label }}</span>
+          <span class="flex-1 text-left">{{
+            categoryConfig[cat.key].label
+          }}</span>
           <span class="text-xs text-gray-400">{{ cat.count }}</span>
         </button>
       </div>

@@ -17,7 +17,7 @@ const email = ref("nick.woods@gmail.com");
             src="https://i.pravatar.cc/150?u=nick-woods"
             class="size-16 rounded-full object-cover"
             alt="Avatar"
-          />
+          >
           <button
             class="absolute -bottom-1 -right-1 size-6 bg-accent-500 rounded-full flex items-center justify-center hover:bg-accent-600 transition-colors"
           >
@@ -41,7 +41,7 @@ const email = ref("nick.woods@gmail.com");
             v-model="displayName"
             type="text"
             class="w-full bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-600 outline-none focus:ring-2 focus:ring-accent-300 dark:focus:ring-accent-600 focus:border-transparent"
-          />
+          >
         </div>
         <div>
           <label
@@ -52,7 +52,7 @@ const email = ref("nick.woods@gmail.com");
             v-model="email"
             type="email"
             class="w-full bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-600 outline-none focus:ring-2 focus:ring-accent-300 dark:focus:ring-accent-600 focus:border-transparent"
-          />
+          >
         </div>
       </div>
       <div class="mt-5 flex justify-end">

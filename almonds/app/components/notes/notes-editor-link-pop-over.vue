@@ -1,89 +1,93 @@
 <script setup lang="ts">
-import type { Editor } from '@tiptap/vue-3'
+import type { Editor } from "@tiptap/vue-3";
 
 const props = defineProps<{
-  editor: Editor
-  autoOpen?: boolean
-}>()
+  editor: Editor;
+  autoOpen?: boolean;
+}>();
 
-const open = ref(false)
-const url = ref('')
+const open = ref(false);
+const url = ref("");
 
-const active = computed(() => props.editor.isActive('link'))
+const active = computed(() => props.editor.isActive("link"));
 const disabled = computed(() => {
-  if (!props.editor.isEditable) return true
-  const { selection } = props.editor.state
-  return selection.empty && !props.editor.isActive('link')
-})
+  if (!props.editor.isEditable) return true;
+  const { selection } = props.editor.state;
+  return selection.empty && !props.editor.isActive("link");
+});
 
-watch(() => props.editor, (editor, _, onCleanup) => {
-  if (!editor) return
+watch(
+  () => props.editor,
+  (editor, _, onCleanup) => {
+    if (!editor) return;
 
-  const updateUrl = () => {
-    const { href } = editor.getAttributes('link')
-    url.value = href || ''
-  }
+    const updateUrl = () => {
+      const { href } = editor.getAttributes("link");
+      url.value = href || "";
+    };
 
-  updateUrl()
-  editor.on('selectionUpdate', updateUrl)
+    updateUrl();
+    editor.on("selectionUpdate", updateUrl);
 
-  onCleanup(() => {
-    editor.off('selectionUpdate', updateUrl)
-  })
-}, { immediate: true })
+    onCleanup(() => {
+      editor.off("selectionUpdate", updateUrl);
+    });
+  },
+  { immediate: true },
+);
 
 watch(active, (isActive) => {
   if (isActive && props.autoOpen) {
-    open.value = true
+    open.value = true;
   }
-})
+});
 
 function setLink() {
-  if (!url.value) return
+  if (!url.value) return;
 
-  const { selection } = props.editor.state
-  const isEmpty = selection.empty
-  const hasCode = props.editor.isActive('code')
+  const { selection } = props.editor.state;
+  const isEmpty = selection.empty;
+  const hasCode = props.editor.isActive("code");
 
-  let chain = props.editor.chain().focus()
+  let chain = props.editor.chain().focus();
 
   // When linking code, extend the code mark range first to select the full code
   if (hasCode && !isEmpty) {
-    chain = chain.extendMarkRange('code').setLink({ href: url.value })
+    chain = chain.extendMarkRange("code").setLink({ href: url.value });
   } else {
-    chain = chain.extendMarkRange('link').setLink({ href: url.value })
+    chain = chain.extendMarkRange("link").setLink({ href: url.value });
 
     if (isEmpty) {
-      chain = chain.insertContent({ type: 'text', text: url.value })
+      chain = chain.insertContent({ type: "text", text: url.value });
     }
   }
 
-  chain.run()
-  open.value = false
+  chain.run();
+  open.value = false;
 }
 
 function removeLink() {
   props.editor
     .chain()
     .focus()
-    .extendMarkRange('link')
+    .extendMarkRange("link")
     .unsetLink()
-    .setMeta('preventAutolink', true)
-    .run()
+    .setMeta("preventAutolink", true)
+    .run();
 
-  url.value = ''
-  open.value = false
+  url.value = "";
+  open.value = false;
 }
 
 function openLink() {
-  if (!url.value) return
-  window.open(url.value, '_blank', 'noopener,noreferrer')
+  if (!url.value) return;
+  window.open(url.value, "_blank", "noopener,noreferrer");
 }
 
 function handleKeyDown(event: KeyboardEvent) {
-  if (event.key === 'Enter') {
-    event.preventDefault()
-    setLink()
+  if (event.key === "Enter") {
+    event.preventDefault();
+    setLink();
   }
 }
 </script>

@@ -59,7 +59,6 @@ onUnmounted(() => clearSearch());
     </template>
 
     <template #main_content>
-
       <!-- Filter tabs -->
       <div
         v-if="!todoStore.loading && todoStore.todos.length > 0"

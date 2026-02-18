@@ -114,8 +114,10 @@ function openInBrowser() {
               :src="faviconUrl"
               class="size-4 shrink-0 rounded-sm"
               alt=""
-              @error="($event.target as HTMLImageElement).style.display = 'none'"
-            />
+              @error="
+                ($event.target as HTMLImageElement).style.display = 'none'
+              "
+            >
             <UIcon
               v-else
               name="heroicons:globe-alt"
@@ -143,7 +145,9 @@ function openInBrowser() {
               size="xs"
               color="neutral"
               variant="ghost"
-              :icon="copied ? 'heroicons:check' : 'heroicons:clipboard-document'"
+              :icon="
+                copied ? 'heroicons:check' : 'heroicons:clipboard-document'
+              "
               :class="copied ? 'text-green-500' : ''"
               title="Copy URL"
               @click="copyUrl"
@@ -177,7 +181,9 @@ function openInBrowser() {
           >
             {{ bookmark.tag }}
           </span>
-          <span class="text-sm font-medium text-gray-800 dark:text-gray-200 truncate">
+          <span
+            class="text-sm font-medium text-gray-800 dark:text-gray-200 truncate"
+          >
             {{ bookmark.title }}
           </span>
           <span class="ml-auto text-xs text-gray-400 shrink-0">
@@ -186,7 +192,9 @@ function openInBrowser() {
         </div>
 
         <!-- WebView area -->
-        <div class="relative flex-1 overflow-hidden bg-gray-100 dark:bg-gray-950">
+        <div
+          class="relative flex-1 overflow-hidden bg-gray-100 dark:bg-gray-950"
+        >
           <!-- Loading overlay -->
           <Transition name="fade">
             <div
@@ -233,10 +241,14 @@ function openInBrowser() {
 
               <!-- Message -->
               <div class="flex flex-col gap-1.5">
-                <p class="text-base font-semibold text-gray-800 dark:text-gray-200">
+                <p
+                  class="text-base font-semibold text-gray-800 dark:text-gray-200"
+                >
                   Preview disabled
                 </p>
-                <p class="text-xs text-gray-400 dark:text-gray-500 max-w-65 leading-relaxed">
+                <p
+                  class="text-xs text-gray-400 dark:text-gray-500 max-w-65 leading-relaxed"
+                >
                   This site blocks embedded previews. Open it directly in your
                   default browser instead.
                 </p>
@@ -257,8 +269,13 @@ function openInBrowser() {
                   size="sm"
                   color="neutral"
                   variant="ghost"
-                  :icon="copied ? 'heroicons:check' : 'heroicons:clipboard-document'"
-                  :class="['w-full justify-center', copied ? 'text-green-500' : '']"
+                  :icon="
+                    copied ? 'heroicons:check' : 'heroicons:clipboard-document'
+                  "
+                  :class="[
+                    'w-full justify-center',
+                    copied ? 'text-green-500' : '',
+                  ]"
                   @click="copyUrl"
                 >
                   {{ copied ? "Copied!" : "Copy link" }}
@@ -271,8 +288,8 @@ function openInBrowser() {
           <iframe
             v-if="bookmark?.url"
             ref="iframeRef"
-            :src="bookmark.url"
             :key="bookmark.identifier"
+            :src="bookmark.url"
             class="w-full h-full border-none"
             sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
             @load="onLoad"

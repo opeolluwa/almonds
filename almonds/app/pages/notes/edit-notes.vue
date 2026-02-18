@@ -96,7 +96,9 @@ onMounted(async () => {
           size="xl"
           variant="none"
           class="mb-2 w-full"
-          :ui="{ base: 'text-3xl font-bold placeholder:font-normal placeholder:text-muted' }"
+          :ui="{
+            base: 'text-3xl font-bold placeholder:font-normal placeholder:text-muted',
+          }"
           :disabled="submitting"
         />
 

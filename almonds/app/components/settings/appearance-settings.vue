@@ -22,9 +22,7 @@ const accentOptions: { key: AccentKey; label: string; bg: string }[] = [
       <h2 class="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-4">
         Appearance
       </h2>
-      <div
-        class="flex flex-col divide-y divide-gray-100 dark:divide-gray-700"
-      >
+      <div class="flex flex-col divide-y divide-gray-100 dark:divide-gray-700">
         <div class="flex items-center justify-between py-3">
           <div>
             <p class="text-sm text-gray-700 dark:text-gray-200">Dark mode</p>
@@ -50,9 +48,7 @@ const accentOptions: { key: AccentKey; label: string; bg: string }[] = [
               Adjust text size across the app
             </p>
           </div>
-          <div
-            class="flex gap-1 bg-gray-100 dark:bg-gray-700 rounded-lg p-0.5"
-          >
+          <div class="flex gap-1 bg-gray-100 dark:bg-gray-700 rounded-lg p-0.5">
             <button
               v-for="sz in ['sm', 'md', 'lg'] as const"
               :key="sz"
@@ -70,9 +66,7 @@ const accentOptions: { key: AccentKey; label: string; bg: string }[] = [
         </div>
         <div class="flex items-center justify-between py-3">
           <div>
-            <p class="text-sm text-gray-700 dark:text-gray-200">
-              Accent color
-            </p>
+            <p class="text-sm text-gray-700 dark:text-gray-200">Accent color</p>
             <p class="text-xs text-gray-400 mt-0.5">Primary highlight color</p>
           </div>
           <div class="flex gap-2">

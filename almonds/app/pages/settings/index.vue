@@ -1,7 +1,13 @@
 <script setup lang="ts">
 definePageMeta({ layout: false });
 
-type Section = "profile" | "appearance" | "backup" | "ai" | "notifications" | "about";
+type Section =
+  | "profile"
+  | "appearance"
+  | "backup"
+  | "ai"
+  | "notifications"
+  | "about";
 
 const activeSection = ref<Section>("profile");
 
@@ -22,7 +28,9 @@ const navSections: { key: Section; label: string; icon: string }[] = [
       <SettingsAppearanceSettings v-else-if="activeSection === 'appearance'" />
       <SettingsBackupSettings v-else-if="activeSection === 'backup'" />
       <SettingsAiSettings v-else-if="activeSection === 'ai'" />
-      <SettingsNotificationsSettings v-else-if="activeSection === 'notifications'" />
+      <SettingsNotificationsSettings
+        v-else-if="activeSection === 'notifications'"
+      />
       <SettingsAboutSettings v-else-if="activeSection === 'about'" />
     </template>
 

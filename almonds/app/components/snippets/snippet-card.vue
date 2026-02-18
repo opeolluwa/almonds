@@ -146,7 +146,8 @@ async function copyCode() {
           Are you sure you want to delete
           <span class="font-medium text-gray-800 dark:text-gray-200">{{
             title
-          }}</span>? This action cannot be undone.
+          }}</span
+          >? This action cannot be undone.
         </p>
       </template>
       <template #footer>

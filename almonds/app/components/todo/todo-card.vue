@@ -32,9 +32,7 @@ function formatDueDate(dateStr: string | null) {
   >
     <button @click="emit('toggle', todo.identifier, !todo.done)">
       <UIcon
-        :name="
-          todo.done ? 'heroicons:check-circle-solid' : 'heroicons:circle'
-        "
+        :name="todo.done ? 'heroicons:check-circle-solid' : 'heroicons:circle'"
         class="size-5 transition-colors"
         :class="
           todo.done
@@ -55,10 +53,7 @@ function formatDueDate(dateStr: string | null) {
       >
         {{ todo.title }}
       </p>
-      <p
-        v-if="todo.description"
-        class="text-xs text-gray-400 truncate mt-0.5"
-      >
+      <p v-if="todo.description" class="text-xs text-gray-400 truncate mt-0.5">
         {{ todo.description }}
       </p>
     </div>

@@ -2,7 +2,8 @@ use tauri::State;
 use uuid::Uuid;
 
 use almond_kernel::{
-    adapters::bookmarks::BookmarkTag, entities::bookmark, repositories::bookmarks::BookmarkRepositoryExt,
+    adapters::bookmarks::BookmarkTag, entities::bookmark,
+    repositories::bookmarks::BookmarkRepositoryExt,
 };
 
 use crate::{
@@ -89,10 +90,7 @@ pub async fn update_bookmark(
 }
 
 #[tauri::command]
-pub async fn delete_bookmark(
-    state: State<'_, AppState>,
-    identifier: Uuid,
-) -> Result<(), AppError> {
+pub async fn delete_bookmark(state: State<'_, AppState>, identifier: Uuid) -> Result<(), AppError> {
     state
         .bookmark_repository
         .delete(&identifier)

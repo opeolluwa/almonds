@@ -6,7 +6,9 @@ defineProps<{
   modelValue: BookmarkTag | "all";
 }>();
 
-const emit = defineEmits<{ "update:modelValue": [value: BookmarkTag | "all"] }>();
+const emit = defineEmits<{
+  "update:modelValue": [value: BookmarkTag | "all"];
+}>();
 </script>
 
 <template>

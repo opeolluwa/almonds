@@ -9,7 +9,9 @@ defineProps<{
   tagCounts: Record<BookmarkTag, number>;
 }>();
 
-const emit = defineEmits<{ "update:modelValue": [value: BookmarkTag | "all"] }>();
+const emit = defineEmits<{
+  "update:modelValue": [value: BookmarkTag | "all"];
+}>();
 </script>
 
 <template>

@@ -65,7 +65,9 @@ const current = computed(() => config[notification.value?.type ?? "info"]);
           />
 
           <!-- message -->
-          <p class="flex-1 text-sm text-gray-800 dark:text-gray-100 leading-snug">
+          <p
+            class="flex-1 text-sm text-gray-800 dark:text-gray-100 leading-snug"
+          >
             {{ notification.message }}
           </p>
 
