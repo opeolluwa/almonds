@@ -8,8 +8,8 @@ const router = useRouter();
 const snippetStore = useSnippetStore();
 
 const id = computed(() => route.query.id as string | undefined);
-const snippet = computed(() =>
-  snippetStore.snippets.find((s) => s.identifier === id.value) ?? null,
+const snippet = computed(
+  () => snippetStore.snippets.find((s) => s.identifier === id.value) ?? null,
 );
 
 const copied = ref(false);
@@ -17,17 +17,49 @@ const deleting = ref(false);
 const showDeleteConfirm = ref(false);
 
 const hlLanguageMap: Record<string, string> = {
-  C: "c", "C++": "cpp", "C#": "csharp", Rust: "rust", Go: "go",
-  Python: "python", Ruby: "ruby", PHP: "php", JavaScript: "javascript",
-  TypeScript: "typescript", JSX: "javascript", TSX: "typescript",
-  HTML: "xml", CSS: "css", SCSS: "scss", Less: "less", Bash: "bash",
-  Zsh: "bash", PowerShell: "powershell", SQL: "sql", JSON: "json",
-  YAML: "yaml", XML: "xml", Markdown: "markdown", Java: "java",
-  Swift: "swift", Kotlin: "kotlin", Scala: "scala", Haskell: "haskell",
-  Erlang: "erlang", Elixir: "elixir", R: "r", "Objective-C": "objectivec",
-  GraphQL: "graphql", Docker: "dockerfile", "Docker Compose": "yaml",
-  Makefile: "makefile", Vue: "xml", Svelte: "xml", React: "javascript",
-  "Node.js": "javascript", Deno: "javascript", Bun: "javascript",
+  C: "c",
+  "C++": "cpp",
+  "C#": "csharp",
+  Rust: "rust",
+  Go: "go",
+  Python: "python",
+  Ruby: "ruby",
+  PHP: "php",
+  JavaScript: "javascript",
+  TypeScript: "typescript",
+  JSX: "javascript",
+  TSX: "typescript",
+  HTML: "xml",
+  CSS: "css",
+  SCSS: "scss",
+  Less: "less",
+  Bash: "bash",
+  Zsh: "bash",
+  PowerShell: "powershell",
+  SQL: "sql",
+  JSON: "json",
+  YAML: "yaml",
+  XML: "xml",
+  Markdown: "markdown",
+  Java: "java",
+  Swift: "swift",
+  Kotlin: "kotlin",
+  Scala: "scala",
+  Haskell: "haskell",
+  Erlang: "erlang",
+  Elixir: "elixir",
+  R: "r",
+  "Objective-C": "objectivec",
+  GraphQL: "graphql",
+  Docker: "dockerfile",
+  "Docker Compose": "yaml",
+  Makefile: "makefile",
+  Vue: "xml",
+  Svelte: "xml",
+  React: "javascript",
+  "Node.js": "javascript",
+  Deno: "javascript",
+  Bun: "javascript",
   Angular: "typescript",
 };
 
@@ -42,7 +74,9 @@ const highlighted = computed(() => {
 
 function formatDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString("en-US", {
-    month: "short", day: "numeric", year: "numeric",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
   });
 }
 
@@ -108,7 +142,9 @@ onMounted(async () => {
               size="xs"
               variant="ghost"
               icon="heroicons:pencil-square"
-              @click="router.push(`/snippets/edit-snippet?id=${snippet.identifier}`)"
+              @click="
+                router.push(`/snippets/edit-snippet?id=${snippet.identifier}`)
+              "
             >
               Edit
             </UButton>
@@ -127,7 +163,9 @@ onMounted(async () => {
 
         <!-- Title & meta -->
         <div class="mb-4">
-          <h1 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-1">
+          <h1
+            class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-1"
+          >
             {{ snippet.title ?? "Untitled" }}
           </h1>
           <div class="flex items-center gap-3">
@@ -158,7 +196,11 @@ onMounted(async () => {
           ><code v-html="highlighted"></code></pre>
           <button
             class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity px-2 py-1 rounded text-xs font-medium"
-            :class="copied ? 'bg-green-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'"
+            :class="
+              copied
+                ? 'bg-green-600 text-white'
+                : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+            "
             @click="copyCode"
           >
             {{ copied ? "Copied!" : "Copy" }}
@@ -244,7 +286,9 @@ onMounted(async () => {
             variant="outline"
             icon="heroicons:pencil-square"
             block
-            @click="router.push(`/snippets/edit-snippet?id=${snippet.identifier}`)"
+            @click="
+              router.push(`/snippets/edit-snippet?id=${snippet.identifier}`)
+            "
           >
             Edit snippet
           </UButton>

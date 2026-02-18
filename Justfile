@@ -19,3 +19,14 @@ watch target:
 
 build target:
 	just build-{{target}}
+
+lint target:
+	#!/usr/bin/env bash
+	if [ "{{target}}" = "all" ]; then
+		// just lint-almonds
+		// just lint-kernel
+		// just lint-orchard
+		just lint-tauri
+	else
+		just lint-{{target}}
+	fi

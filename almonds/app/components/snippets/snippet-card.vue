@@ -108,7 +108,11 @@ async function copyCode() {
       <div class="flex items-center gap-2" @click.stop>
         <button
           class="text-xs font-medium transition-colors"
-          :class="copied ? 'text-green-500' : 'text-accent-600 dark:text-accent-400 hover:text-accent-700'"
+          :class="
+            copied
+              ? 'text-green-500'
+              : 'text-accent-600 dark:text-accent-400 hover:text-accent-700'
+          "
           @click="copyCode"
         >
           {{ copied ? "Copied!" : "Copy" }}

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import SnippetCard from '~/components/snippets/snippet-card.vue';
+import SnippetCard from "~/components/snippets/snippet-card.vue";
+import { useSnippetStore } from "~/stores/snippets";
 
 definePageMeta({ layout: false });
 
@@ -93,7 +94,9 @@ onUnmounted(() => clearSearch());
         v-else-if="snippetStore.snippets.length === 0"
         class="flex flex-col items-center justify-center py-20 text-center"
       >
-        <div class="mb-4 p-2 flex justify-center items-center  rounded-full bg-gray-100 dark:bg-gray-800">
+        <div
+          class="mb-4 p-2 flex justify-center items-center rounded-full bg-gray-100 dark:bg-gray-800"
+        >
           <UIcon
             name="heroicons:code-bracket"
             class="size-8 text-gray-400 dark:text-gray-500"
