@@ -2,6 +2,7 @@
 definePageMeta({
   layout: false,
   name: "Welcome back, Nick!",
+
 });
 
 const projects = [

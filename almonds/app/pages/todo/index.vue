@@ -49,13 +49,16 @@ onUnmounted(() => clearSearch());
 
 <template>
   <NuxtLayout name="default">
-    <template #main_content>
+    <template #primary_cta>
       <PrimaryCta
         v-if="todoStore.todos.length !== 0"
         label="New Todo"
         icon="heroicons:plus"
         to="/todo/create-todo"
       />
+    </template>
+
+    <template #main_content>
 
       <!-- Filter tabs -->
       <div

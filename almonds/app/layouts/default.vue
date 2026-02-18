@@ -3,6 +3,7 @@ import _ from "lodash";
 import { primaryRoutes, secondaryRoutes } from "~/data/routes";
 
 const route = useRoute();
+const router = useRouter();
 const colorMode = useColorMode();
 
 const isDark = computed({
@@ -100,7 +101,7 @@ const pageTitle = computed(() => {
           </div>
 
           <!--TODO: enable when the project feature is done, the former class is flex before hidden-->
-          <div class="px-3 flex mb-3 max-w-9/12 ">
+          <div class="px-3 flex mb-3 max-w-9/12">
             <UButton
               color="error"
               variant="solid"
@@ -235,10 +236,24 @@ const pageTitle = computed(() => {
       <!-- Page content + inline aside (fullscreen mode) -->
       <div class="flex flex-1 overflow-hidden">
         <main class="flex-1 overflow-y-auto p-6 bg-gray-50 dark:bg-surface-950">
+          <div class="flex items-center gap-3 mb-1"></div>
           <h1 class="text-2xl font-semibold text-gray-800 dark:text-gray-100">
-            {{ pageTitle  }}
+            {{ pageTitle }} 
           </h1>
-          <slot name="primary_cta" />
+
+          <div class="flex items-center justify-between mt-5 align-center my-6">
+            <button
+              class="flex items-center gap-1.5 text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+              v-if="route.path != '/'"
+              @click="router.back()"
+            >
+              <UIcon name="heroicons:arrow-left" class="size-3.5" />
+              Back
+            </button>
+
+            <slot name="primary_cta" />
+          </div>
+
           <slot name="main_content" />
         </main>
 

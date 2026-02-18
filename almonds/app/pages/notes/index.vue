@@ -36,13 +36,16 @@ onUnmounted(() => clearSearch());
 
 <template>
   <NuxtLayout name="default">
-    <template #main_content>
+    <template #primary_cta>
       <PrimaryCta
         v-if="noteStore.notes.length !== 0"
         label="New Note"
         icon="heroicons:plus"
         to="/notes/create-notes"
       />
+    </template>
+
+    <template #main_content>
 
       <!-- Loading -->
       <div v-if="noteStore.loading" class="flex flex-col gap-3">
