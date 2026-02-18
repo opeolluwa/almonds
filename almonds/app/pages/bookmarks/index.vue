@@ -23,6 +23,14 @@ const TAG_ICONS: Record<BookmarkTag, string> = {
 const activeTag = ref<BookmarkTag | "all">("all");
 const showAddModal = ref(false);
 
+const previewBookmark = ref<import("~/stores/bookmarks").Bookmark | null>(null);
+const showPreview = ref(false);
+
+function openPreview(bookmark: import("~/stores/bookmarks").Bookmark) {
+  previewBookmark.value = bookmark;
+  showPreview.value = true;
+}
+
 const filtered = computed(() =>
   activeTag.value === "all"
     ? bookmarkStore.bookmarks
@@ -96,6 +104,7 @@ async function handleCreate(payload: { title: string; url: string; tag: Bookmark
           :key="bookmark.identifier"
           :bookmark="bookmark"
           @delete="bookmarkStore.deleteBookmark"
+          @preview="openPreview"
         />
       </div>
     </template>
@@ -115,5 +124,10 @@ async function handleCreate(payload: { title: string; url: string; tag: Bookmark
     v-model:open="showAddModal"
     :tags="TAGS.slice(1) as { label: string; value: BookmarkTag }[]"
     @create="handleCreate"
+  />
+
+  <BookmarksBookmarkPreview
+    v-model:open="showPreview"
+    :bookmark="previewBookmark"
   />
 </template>

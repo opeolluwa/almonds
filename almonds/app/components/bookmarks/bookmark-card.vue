@@ -3,7 +3,10 @@ import type { Bookmark } from "~/stores/bookmarks";
 
 defineProps<{ bookmark: Bookmark }>();
 
-const emit = defineEmits<{ delete: [identifier: string] }>();
+const emit = defineEmits<{
+  delete: [identifier: string];
+  preview: [bookmark: Bookmark];
+}>();
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString("en-US", {
@@ -38,11 +41,21 @@ function formatDate(iso: string) {
     <p class="text-xs text-gray-400 shrink-0 hidden sm:block">
       {{ formatDate(bookmark.createdAt) }}
     </p>
-    <button
-      class="opacity-0 group-hover:opacity-100 transition-opacity text-gray-400 hover:text-red-500"
-      @click="emit('delete', bookmark.identifier)"
-    >
-      <UIcon name="heroicons:trash" class="size-4" />
-    </button>
+    <div class="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
+      <button
+        class="text-gray-400 hover:text-accent-500 transition-colors"
+        title="Preview"
+        @click="emit('preview', bookmark)"
+      >
+        <UIcon name="heroicons:eye" class="size-4" />
+      </button>
+      <button
+        class="text-gray-400 hover:text-red-500 transition-colors"
+        title="Delete"
+        @click="emit('delete', bookmark.identifier)"
+      >
+        <UIcon name="heroicons:trash" class="size-4" />
+      </button>
+    </div>
   </div>
 </template>

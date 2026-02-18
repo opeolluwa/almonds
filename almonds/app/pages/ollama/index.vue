@@ -44,7 +44,7 @@ function sendMessage() {
 
       <div
         class="bg-white dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700 flex flex-col"
-        style="height: calc(100vh - 180px)"
+        style="height: calc(100vh - 380px)"
       >
         <div class="flex-1 overflow-y-auto p-4 flex flex-col gap-4">
           <div
