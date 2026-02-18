@@ -55,6 +55,7 @@ const props = defineProps<{
   lines: number;
   date: string;
   preview: string;
+  searchQuery?: string;
 }>();
 
 const router = useRouter();
@@ -80,6 +81,40 @@ const highlighted = computed(() => {
   return hljs.highlightAuto(previewCode.value).value;
 });
 
+// Find matching lines in code when a search query is active
+const codeMatchInfo = computed(() => {
+  const q = props.searchQuery?.trim().toLowerCase();
+  if (!q || !props.preview.toLowerCase().includes(q)) return null;
+
+  const codeLines = props.preview.split("\n");
+  const matchIdx = codeLines.findIndex((l) => l.toLowerCase().includes(q));
+  if (matchIdx === -1) return null;
+
+  const context = 2;
+  const start = Math.max(0, matchIdx - context);
+  const end = Math.min(codeLines.length - 1, matchIdx + context);
+
+  return { excerpt: codeLines.slice(start, end + 1), startLine: start + 1 };
+});
+
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+const codeMatchHtml = computed(() => {
+  if (!codeMatchInfo.value) return "";
+  const rawQ = props.searchQuery!.trim();
+  // escape both the HTML and the query so angle-bracket searches work correctly
+  const escapedQ = escapeHtml(rawQ).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const re = new RegExp(`(${escapedQ})`, "gi");
+  return codeMatchInfo.value.excerpt
+    .map((line) => escapeHtml(line).replace(re, "<mark>$1</mark>"))
+    .join("\n");
+});
+
 async function copyCode() {
   await navigator.clipboard.writeText(props.preview);
   copied.value = true;
@@ -99,13 +134,28 @@ async function copyCode() {
         </h3>
         <div class="flex items-center gap-3">
           <span
+            v-if="codeMatchInfo"
+            class="px-2 py-0.5 rounded bg-accent-100 dark:bg-accent-900 text-xs text-accent-600 dark:text-accent-400"
+          >code match</span>
+          <span
             class="px-2 py-0.5 rounded bg-gray-100 dark:bg-gray-700 text-xs text-gray-500 dark:text-gray-400"
             >{{ language }}</span
           >
           <span class="text-xs text-gray-400">{{ lines }} lines</span>
         </div>
       </div>
+
+      <!-- Match excerpt: centered on the first matching line -->
+      <div v-if="codeMatchInfo" class="bg-gray-900 rounded-md text-xs overflow-x-auto">
+        <div class="px-3 py-1 text-gray-500 border-b border-gray-700 text-xs font-mono">
+          line {{ codeMatchInfo.startLine }}
+        </div>
+        <pre class="p-3"><code v-html="codeMatchHtml" /></pre>
+      </div>
+
+      <!-- Normal syntax-highlighted preview -->
       <pre
+        v-else
         class="bg-gray-900 rounded-md p-3 text-xs overflow-x-auto"
       ><code v-html="highlighted"/></pre>
     </div>
@@ -178,5 +228,12 @@ async function copyCode() {
 pre :deep(code) {
   background: transparent;
   padding: 0;
+}
+
+pre :deep(mark) {
+  background: #facc15;
+  color: #111;
+  border-radius: 2px;
+  padding: 0 2px;
 }
 </style>

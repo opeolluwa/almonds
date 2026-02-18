@@ -23,7 +23,7 @@
 	export NDK_VERSION=$(ls -1 "$ANDROID_HOME/ndk" | tail -n 1)
 	export NDK_HOME="$ANDROID_HOME/ndk/$NDK_VERSION"
 	export NODE_ENV="development"
-	npm run tauri android dev 
+	npm run dev & npm run tauri android dev 
 
 
 [working-directory: 'almonds']

@@ -15,7 +15,7 @@ pub fn run() {
         .plugin(tauri_plugin_os::init())
         .plugin(tauri_plugin_notification::init())
         .plugin(tauri_plugin_clipboard_manager::init())
-        .plugin(tauri_plugin_single_instance::init(|_app, _args, _cwd| {}))
+        // .plugin(tauri_plugin_single_instance::init(|_app, _args, _cwd| {}))
         .plugin(tauri_plugin_sql::Builder::new().build())
         .setup(|app| {
             if cfg!(debug_assertions) {
