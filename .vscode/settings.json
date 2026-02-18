@@ -21,11 +21,34 @@
     "proto",
     "pswd",
     "reqwest",
+    "rustls",
     "singlepart",
     "smaple",
     "sqlx",
+    "tauri",
     "tbody",
     "tinytemplate",
-    "TOTP"
-  ]
+    "TOTP",
+    "wildalmonds"
+  ],
+  "workbench.colorCustomizations": {
+    "activityBar.activeBackground": "#004400",
+    "activityBar.background": "#004400",
+    "activityBar.foreground": "#e7e7e7",
+    "activityBar.inactiveForeground": "#e7e7e799",
+    "activityBarBadge.background": "#6060ff",
+    "activityBarBadge.foreground": "#e7e7e7",
+    "commandCenter.border": "#e7e7e799",
+    "sash.hoverBorder": "#004400",
+    "statusBar.background": "#001100",
+    "statusBar.foreground": "#e7e7e7",
+    "statusBarItem.hoverBackground": "#004400",
+    "statusBarItem.remoteBackground": "#001100",
+    "statusBarItem.remoteForeground": "#e7e7e7",
+    "titleBar.activeBackground": "#001100",
+    "titleBar.activeForeground": "#e7e7e7",
+    "titleBar.inactiveBackground": "#00110099",
+    "titleBar.inactiveForeground": "#e7e7e799"
+  },
+  "peacock.color": "#001100"
 }
