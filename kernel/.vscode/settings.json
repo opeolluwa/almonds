@@ -18,5 +18,8 @@
         "titleBar.inactiveBackground": "#11332499",
         "titleBar.inactiveForeground": "#e7e7e799"
     },
-    "peacock.color": "#113324"
+    "peacock.color": "#113324",
+    "cSpell.words": [
+        "ollama"
+    ]
 }

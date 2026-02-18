@@ -2,5 +2,8 @@
 
 pub mod prelude;
 
+pub mod ollama_conversation_history;
+pub mod ollama_conversation_prompt;
+pub mod ollama_conversation_response;
 pub mod snippets;
 pub mod sync_queue;

@@ -43,6 +43,20 @@ impl Into<entities::snippets::ActiveModel> for Snippet {
     }
 }
 
+impl Into<entities::snippets::ActiveModel> for CreateSnippet {
+    fn into(self) -> entities::snippets::ActiveModel {
+        ActiveModel {
+            identifier: Set(Uuid::new_v4()),
+            title: Set(self.title),
+            language: Set(self.language),
+            code: Set(self.code),
+            description: Set(self.description),
+            is_pinned: Set(self.is_pinned),
+            created_at: Set(self.created_at),
+            updated_at: Set(self.updated_at),
+        }
+    }
+}
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UpdateSnippet {
     pub title: Option<String>,
