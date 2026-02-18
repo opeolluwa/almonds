@@ -5,7 +5,7 @@ export default defineNuxtConfig({
   css: ["@/assets/css/main.css", "highlight.js/styles/atom-one-dark.css"],
   ssr: false,
   modules: [// "@nuxt/a11y",
-  "@nuxt/eslint", "@nuxt/hints", "@nuxt/image", "@nuxt/ui", "@nuxtjs/device", "@nuxtjs/google-fonts", "@nuxtjs/i18n", "@pinia/nuxt", "pinia-plugin-persistedstate/nuxt", "@vueuse/nuxt"],
+  "@nuxt/eslint", "@nuxt/hints", "@nuxt/image", "@nuxt/ui", "@nuxtjs/device", "@nuxtjs/google-fonts", "@nuxtjs/i18n", "@pinia/nuxt", "pinia-plugin-persistedstate/nuxt", "@vueuse/nuxt", "nuxt-tiptap-editor"],
   colorMode: {
     preference: "dark",
     fallback: "light",

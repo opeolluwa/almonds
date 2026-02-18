@@ -6,8 +6,12 @@
         "Nuxt",
         "nuxtjs",
         "Ollama",
+        "paleight",
+        "palenight",
+        "Shiki",
         "Slideover",
         "tauri",
+        "tiptap",
         "vueuse"
     ],
     "workbench.colorCustomizations": {
