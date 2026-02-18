@@ -57,7 +57,7 @@ function sendMessage() {
               class="size-8 rounded-full flex items-center justify-center shrink-0"
               :class="
                 msg.role === 'user'
-                  ? 'bg-primary-100 dark:bg-primary-900'
+                  ? 'bg-accent-100 dark:bg-accent-900'
                   : 'bg-gray-100 dark:bg-gray-700'
               "
             >
@@ -68,7 +68,7 @@ function sendMessage() {
                 class="size-4"
                 :class="
                   msg.role === 'user'
-                    ? 'text-primary-600 dark:text-primary-300'
+                    ? 'text-accent-600 dark:text-accent-300'
                     : 'text-gray-600 dark:text-gray-300'
                 "
               />
@@ -77,7 +77,7 @@ function sendMessage() {
               class="max-w-[75%] rounded-lg px-4 py-2.5 text-sm"
               :class="
                 msg.role === 'user'
-                  ? 'bg-primary-600 text-white'
+                  ? 'bg-accent-600 text-white'
                   : 'bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-200'
               "
             >
@@ -92,11 +92,11 @@ function sendMessage() {
               v-model="prompt"
               type="text"
               placeholder="Ask Ollama something..."
-              class="flex-1 bg-gray-50 dark:bg-gray-700 rounded-lg px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 border-none outline-none focus:ring-2 focus:ring-primary-300 dark:focus:ring-primary-600 placeholder-gray-400 dark:placeholder-gray-500"
+              class="flex-1 bg-gray-50 dark:bg-gray-700 rounded-lg px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 border-none outline-none focus:ring-2 focus:ring-accent-300 dark:focus:ring-accent-600 placeholder-gray-400 dark:placeholder-gray-500"
               @keydown.enter="sendMessage"
             >
             <button
-              class="p-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+              class="p-2.5 bg-accent-600 text-white rounded-lg hover:bg-accent-700 transition-colors"
               @click="sendMessage"
             >
               <UIcon name="heroicons:paper-airplane" class="size-4" />
@@ -117,7 +117,7 @@ function sendMessage() {
           class="flex items-center gap-3 py-2 px-3 rounded-lg text-sm transition-colors"
           :class="
             selectedModel === model
-              ? 'bg-primary-50 dark:bg-primary-950 text-primary-700 dark:text-primary-300 font-medium'
+              ? 'bg-accent-50 dark:bg-accent-950 text-accent-700 dark:text-accent-300 font-medium'
               : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'
           "
           @click="selectedModel = model"

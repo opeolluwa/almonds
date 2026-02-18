@@ -23,7 +23,7 @@ const pads = [
             <UIcon name="heroicons:arrow-path" class="size-4" />
           </button>
           <button
-            class="flex items-center gap-2 py-2 px-4 bg-primary text-white rounded-lg text-sm font-medium hover:bg-primary-600 transition-colors"
+            class="flex items-center gap-2 py-2 px-4 bg-primary text-white rounded-lg text-sm font-medium hover:bg-accent-600 transition-colors"
           >
             <UIcon name="heroicons:plus" class="size-4" />
             New Pad
@@ -54,7 +54,7 @@ const pads = [
           class="flex items-center gap-3 py-2.5 px-3 rounded-lg cursor-pointer transition-colors"
           :class="
             pad.active
-              ? 'bg-primary-50 dark:bg-primary-950 text-primary-700 dark:text-primary-300'
+              ? 'bg-accent-50 dark:bg-accent-950 text-accent-700 dark:text-accent-300'
               : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'
           "
         >
@@ -63,7 +63,7 @@ const pads = [
             <p class="text-sm font-medium">{{ pad.title }}</p>
             <p
               class="text-xs"
-              :class="pad.active ? 'text-primary-400' : 'text-gray-400'"
+              :class="pad.active ? 'text-accent-400' : 'text-gray-400'"
             >
               {{ pad.date }}
             </p>

@@ -266,7 +266,7 @@ const notifAppUpdates = ref(true);
                   class="flex items-center gap-3 py-2 px-3 rounded-lg text-sm transition-colors text-left"
                   :class="
                     defaultModel === m
-                      ? 'bg-primary-50 dark:bg-primary-950 text-primary-700 dark:text-primary-300 font-medium'
+                      ? 'bg-accent-50 dark:bg-accent-950 text-accent-700 dark:text-accent-300 font-medium'
                       : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'
                   "
                   @click="defaultModel = m"
@@ -276,7 +276,7 @@ const notifAppUpdates = ref(true);
                   <UIcon
                     v-if="defaultModel === m"
                     name="heroicons:check"
-                    class="size-4 ml-auto text-primary-500"
+                    class="size-4 ml-auto text-accent-500"
                   />
                 </button>
               </div>
