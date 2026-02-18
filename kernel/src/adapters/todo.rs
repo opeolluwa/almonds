@@ -1,8 +1,9 @@
-use chrono::Utc;
-use sea_orm::ActiveValue::Set;
-use sea_orm::prelude::Date;
-use serde::{Deserialize, Serialize};
 use std::fmt;
+
+use chrono::Utc;
+use sea_orm::prelude::Date;
+use sea_orm::ActiveValue::Set;
+use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
 use crate::entities::{self, todo::ActiveModel};

@@ -2,7 +2,7 @@
 import NotesEditor from "~/components/notes/notes-editor.vue";
 import { useNoteStore } from "~/stores/notes";
 
-definePageMeta({ layout: false, keepalive: true });
+definePageMeta({ layout: false, keepalive: true, name: "Edit notes" });
 
 const route = useRoute();
 const router = useRouter();
@@ -48,7 +48,9 @@ async function handleSave() {
 function downloadMarkdown() {
   if (!original.value) return;
   const filename = (title.value || "untitled").replace(/[^a-z0-9_\- ]/gi, "_");
-  const blob = new Blob([content.value], { type: "text/markdown;charset=utf-8" });
+  const blob = new Blob([content.value], {
+    type: "text/markdown;charset=utf-8",
+  });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement("a");
   anchor.href = url;
@@ -87,27 +89,21 @@ onMounted(async () => {
       </div>
 
       <template v-else-if="original">
-        <!-- Back -->
-        <button
-          class="flex items-center gap-1.5 text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors mb-5"
-          @click="router.push('/notes')"
-        >
-          <UIcon name="heroicons:arrow-left" class="size-3.5" />
-          Back
-        </button>
-
         <!-- Title -->
         <UInput
           v-model="title"
           placeholder="Note title…"
-          size="lg"
+          size="xl"
           variant="none"
-          class="mb-4 text-xl font-semibold w-full"
+          class="mb-2 w-full"
+          :ui="{ base: 'text-3xl font-bold placeholder:font-normal placeholder:text-muted' }"
           :disabled="submitting"
         />
 
         <!-- Editor -->
-        <div class="border border-gray-100 dark:border-gray-700 rounded-lg overflow-hidden">
+        <div
+          class="border border-gray-100 dark:border-gray-700 rounded-lg overflow-hidden"
+        >
           <NotesEditor v-model="content" />
         </div>
 
@@ -115,11 +111,7 @@ onMounted(async () => {
 
         <!-- Actions -->
         <div class="flex items-center gap-2 mt-4">
-          <UButton
-            size="sm"
-            :loading="submitting"
-            @click="handleSave"
-          >
+          <UButton size="sm" :loading="submitting" @click="handleSave">
             Save changes
           </UButton>
           <UButton

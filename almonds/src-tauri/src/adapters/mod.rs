@@ -1,3 +1,4 @@
+pub mod bookmarks;
 pub mod notes;
 pub mod ollama_conversations;
 pub mod snippets;

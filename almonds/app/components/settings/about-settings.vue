@@ -1,9 +1,19 @@
 <script setup lang="ts">
+import { platform } from "@tauri-apps/plugin-os";
+import { getName } from "@tauri-apps/api/app";
+import { getVersion } from "@tauri-apps/api/app";
+import { getTauriVersion } from "@tauri-apps/api/app";
+
+const tauriVersion = await getTauriVersion();
+const appVersion = await getVersion();
+const currentPlatform = platform();
+const appName = await getName();
+
 const info = [
-  { label: "Version", value: "0.1.0", mono: true },
-  { label: "Build", value: "2026.02", mono: true },
+  { label: "Version", value: appVersion, mono: true },
+  { label: "Build", value: tauriVersion, mono: true },
   { label: "License", value: "MIT", mono: false },
-  { label: "Platform", value: "macOS", mono: false },
+  { label: "Platform", value: currentPlatform, mono: false },
 ];
 </script>
 
@@ -23,7 +33,7 @@ const info = [
         </div>
         <div>
           <p class="text-sm font-semibold text-gray-800 dark:text-gray-100">
-            Almonds
+            {{ appName }}
           </p>
           <p class="text-xs text-gray-400">Your personal productivity suite</p>
         </div>

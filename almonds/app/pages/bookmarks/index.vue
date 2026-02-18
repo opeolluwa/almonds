@@ -1,35 +1,39 @@
 <script setup lang="ts">
+import { useBookmarkStore, type BookmarkTag } from "~/stores/bookmarks";
+
 definePageMeta({ layout: false });
 
-const bookmarks = [
-  {
-    title: "Vue.js Documentation",
-    url: "https://vuejs.org",
-    tag: "Development",
-    date: "Feb 15, 2026",
-  },
-  {
-    title: "Tailwind CSS Cheatsheet",
-    url: "https://tailwindcss.com",
-    tag: "Design",
-    date: "Feb 14, 2026",
-  },
-  {
-    title: "Nuxt 4 Migration Guide",
-    url: "https://nuxt.com",
-    tag: "Development",
-    date: "Feb 12, 2026",
-  },
-  {
-    title: "Figma Community Resources",
-    url: "https://figma.com",
-    tag: "Design",
-    date: "Feb 10, 2026",
-  },
+const bookmarkStore = useBookmarkStore();
+
+const TAGS: { label: string; value: BookmarkTag | "all" }[] = [
+  { label: "All", value: "all" },
+  { label: "Development", value: "development" },
+  { label: "Design", value: "design" },
+  { label: "Research", value: "research" },
+  { label: "Inspiration", value: "inspiration" },
 ];
 
-const tags = ["All", "Development", "Design", "Research", "Inspiration"];
-const activeTag = ref("All");
+const TAG_ICONS: Record<BookmarkTag, string> = {
+  development: "heroicons:code-bracket",
+  design: "heroicons:paint-brush",
+  research: "heroicons:magnifying-glass",
+  inspiration: "heroicons:light-bulb",
+};
+
+const activeTag = ref<BookmarkTag | "all">("all");
+const showAddModal = ref(false);
+
+const filtered = computed(() =>
+  activeTag.value === "all"
+    ? bookmarkStore.bookmarks
+    : bookmarkStore.byTag(activeTag.value),
+);
+
+onMounted(() => bookmarkStore.fetchBookmarks());
+
+async function handleCreate(payload: { title: string; url: string; tag: BookmarkTag }) {
+  await bookmarkStore.createBookmark(payload);
+}
 </script>
 
 <template>
@@ -37,6 +41,7 @@ const activeTag = ref("All");
     <template #primary_cta>
       <button
         class="flex items-center gap-2 py-2 px-4 bg-accent-500 text-white rounded-lg text-sm font-medium hover:bg-accent-600 transition-colors"
+        @click="showAddModal = true"
       >
         <UIcon name="heroicons:plus" class="size-4" />
         Add Bookmark
@@ -44,78 +49,71 @@ const activeTag = ref("All");
     </template>
 
     <template #main_content>
-      <div class="flex gap-2 mb-4">
-        <button
-          v-for="tag in tags"
-          :key="tag"
-          class="px-3 py-1 rounded-full text-xs font-medium transition-colors"
-          :class="
-            activeTag === tag
-              ? 'bg-accent-500 text-white'
-              : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
-          "
-          @click="activeTag = tag"
-        >
-          {{ tag }}
-        </button>
+      <BookmarksBookmarkTagFilters v-model="activeTag" :tags="TAGS" />
+
+      <!-- Loading -->
+      <div
+        v-if="bookmarkStore.loading"
+        class="flex items-center justify-center py-16 text-gray-400"
+      >
+        <UIcon name="heroicons:arrow-path" class="size-5 animate-spin mr-2" />
+        <span class="text-sm">Loading bookmarks…</span>
       </div>
 
-      <div class="flex flex-col gap-3">
+      <!-- Empty state -->
+      <div
+        v-else-if="filtered.length === 0"
+        class="flex flex-col items-center justify-center py-20 text-center gap-3"
+      >
         <div
-          v-for="bookmark in bookmarks"
-          :key="bookmark.title"
-          class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-100 dark:border-gray-700 hover:shadow-sm transition-shadow flex items-center gap-4"
+          class="size-14 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center"
         >
           <UIcon
-            name="heroicons:bookmark-solid"
-            class="size-5 text-accent-500 shrink-0"
-          />
-          <div class="flex-1 min-w-0">
-            <h3 class="text-sm font-medium text-gray-800 dark:text-gray-200">
-              {{ bookmark.title }}
-            </h3>
-            <p class="text-xs text-gray-400 truncate">{{ bookmark.url }}</p>
-          </div>
-          <span
-            class="px-2 py-1 rounded-full bg-accent-50 dark:bg-accent-950 text-accent-600 dark:text-accent-300 text-xs font-medium"
-            >{{ bookmark.tag }}</span
-          >
-          <p class="text-xs text-gray-400 shrink-0">{{ bookmark.date }}</p>
-          <UIcon
-            name="heroicons:ellipsis-vertical"
-            class="size-4 text-gray-400 cursor-pointer"
+            name="heroicons:bookmark"
+            class="size-7 text-gray-400 dark:text-gray-500"
           />
         </div>
+        <p class="text-sm font-medium text-gray-600 dark:text-gray-400">
+          {{
+            activeTag === "all"
+              ? "No bookmarks yet"
+              : `No ${activeTag} bookmarks`
+          }}
+        </p>
+        <p class="text-xs text-gray-400 dark:text-gray-500 max-w-xs">
+          {{
+            activeTag === "all"
+              ? 'Save links you want to revisit. Click "Add Bookmark" to get started.'
+              : "Try a different tag or add a new bookmark."
+          }}
+        </p>
+      </div>
+
+      <!-- Bookmark list -->
+      <div v-else class="flex flex-col gap-3">
+        <BookmarksBookmarkCard
+          v-for="bookmark in filtered"
+          :key="bookmark.identifier"
+          :bookmark="bookmark"
+          @delete="bookmarkStore.deleteBookmark"
+        />
       </div>
     </template>
 
     <template #side_content>
-      <h2 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">
-        Collections
-      </h2>
-      <div class="flex flex-col gap-2">
-        <div
-          class="flex items-center gap-3 py-2 px-3 rounded-lg bg-accent-50 dark:bg-accent-950 text-accent-700 dark:text-accent-300 text-sm font-medium"
-        >
-          <UIcon name="heroicons:folder-solid" class="size-4" />
-          <span>All Bookmarks</span>
-          <span class="ml-auto text-xs">{{ bookmarks.length }}</span>
-        </div>
-        <div
-          class="flex items-center gap-3 py-2 px-3 rounded-lg text-gray-600 dark:text-gray-400 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer"
-        >
-          <UIcon name="heroicons:code-bracket" class="size-4" />
-          <span>Development</span>
-          <span class="ml-auto text-xs text-gray-400">2</span>
-        </div>
-        <div
-          class="flex items-center gap-3 py-2 px-3 rounded-lg text-gray-600 dark:text-gray-400 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer"
-        >
-          <UIcon name="heroicons:paint-brush" class="size-4" />
-          <span>Design</span>
-          <span class="ml-auto text-xs text-gray-400">2</span>
-        </div>
-      </div>
+      <BookmarksBookmarkCollections
+        v-model="activeTag"
+        :tags="TAGS"
+        :tag-icons="TAG_ICONS"
+        :total-count="bookmarkStore.bookmarks.length"
+        :tag-counts="bookmarkStore.tagCounts"
+      />
     </template>
   </NuxtLayout>
+
+  <BookmarksBookmarkAddModal
+    v-model:open="showAddModal"
+    :tags="TAGS.slice(1) as { label: string; value: BookmarkTag }[]"
+    @create="handleCreate"
+  />
 </template>

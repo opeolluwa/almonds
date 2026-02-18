@@ -2,9 +2,7 @@ use tauri::State;
 use uuid::Uuid;
 
 use almond_kernel::{
-    adapters::todo::TodoPriority,
-    entities::todo,
-    repositories::todo::TodoRepositoryExt,
+    adapters::todo::TodoPriority, entities::todo, repositories::todo::TodoRepositoryExt,
 };
 
 use crate::{
@@ -38,14 +36,8 @@ pub async fn get_todo(
 }
 
 #[tauri::command]
-pub async fn get_all_todos(
-    state: State<'_, AppState>,
-) -> Result<Vec<todo::Model>, AppError> {
-    state
-        .todo_repository
-        .find_all()
-        .await
-        .map_err(Into::into)
+pub async fn get_all_todos(state: State<'_, AppState>) -> Result<Vec<todo::Model>, AppError> {
+    state.todo_repository.find_all().await.map_err(Into::into)
 }
 
 #[tauri::command]
@@ -62,10 +54,7 @@ pub async fn update_todo(
 }
 
 #[tauri::command]
-pub async fn delete_todo(
-    state: State<'_, AppState>,
-    identifier: Uuid,
-) -> Result<(), AppError> {
+pub async fn delete_todo(state: State<'_, AppState>, identifier: Uuid) -> Result<(), AppError> {
     state
         .todo_repository
         .delete(&identifier)
