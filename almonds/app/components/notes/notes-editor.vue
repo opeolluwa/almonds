@@ -38,19 +38,19 @@ const {
   isLoading: aiLoading,
 } = useEditorCompletion(editorRef);
 
-const extensions = shallowRef([
+const extensions = [
   Emoji,
-  TextAlign.configure({ types: ["heading", "paragraph"] }),
-  ImageUpload,
-  CodeBlockShiki.configure({
-    defaultTheme: "material-theme",
-    themes: {
-      light: "material-theme-lighter",
-      dark: "material-theme-palenight",
-    },
-  }),
-  completionExtension,
-]);
+//   TextAlign.configure({ types: ["heading", "paragraph"] }),
+//   ImageUpload,
+//   CodeBlockShiki.configure({
+//     defaultTheme: "material-theme",
+//     themes: {
+//       light: "material-theme-lighter",
+//       dark: "material-theme-palenight",
+//     },
+//   }),
+//   completionExtension,
+];
 
 const customHandlers = {
   imageUpload: {
