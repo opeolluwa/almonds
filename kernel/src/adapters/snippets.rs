@@ -6,7 +6,19 @@ use uuid::Uuid;
 use crate::entities::{self, snippets::ActiveModel};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[deprecated(since = "0.1.0", note = "use CreateSnippet ")]
 pub struct Snippet {
+    pub title: Option<String>,
+    pub language: Option<String>,
+    pub code: String,
+    pub description: Option<String>,
+    pub is_pinned: bool,
+    pub created_at: DateTimeWithTimeZone,
+    pub updated_at: DateTimeWithTimeZone,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CreateSnippet {
     pub title: Option<String>,
     pub language: Option<String>,
     pub code: String,
@@ -29,4 +41,13 @@ impl Into<entities::snippets::ActiveModel> for Snippet {
             updated_at: Set(self.updated_at),
         }
     }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct UpdateSnippet {
+    pub title: Option<String>,
+    pub language: Option<String>,
+    pub code: Option<String>,
+    pub description: Option<String>,
+    pub is_pinned: Option<bool>,
 }
