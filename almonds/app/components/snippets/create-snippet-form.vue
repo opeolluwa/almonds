@@ -61,7 +61,7 @@ async function handleSubmit() {
           >(optional)</span
         >
       </label>
-      <USelect
+      <USelectMenu
         v-model="language"
         placeholder="e.g. TypeScript"
         size="sm"
