@@ -2,6 +2,8 @@
 
 pub mod prelude;
 
+pub mod note_categories;
+pub mod notes;
 pub mod ollama_conversation_history;
 pub mod ollama_conversation_prompt;
 pub mod ollama_conversation_response;

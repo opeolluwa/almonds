@@ -6,8 +6,13 @@
         "Nuxt",
         "nuxtjs",
         "Ollama",
+        "paleight",
+        "palenight",
+        "Shiki",
         "Slideover",
-        "tauri"
+        "tauri",
+        "tiptap",
+        "vueuse"
     ],
     "workbench.colorCustomizations": {
         "activityBar.activeBackground": "#a20e59",

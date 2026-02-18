@@ -100,7 +100,7 @@ const pageTitle = computed(() => {
           </div>
 
           <!--TODO: enable when the project feature is done, the former class is flex before hidden-->
-          <div class="px-3 mb-3 max-w-9/12 flex">
+          <div class="px-3 flex mb-3 max-w-9/12 ">
             <UButton
               color="error"
               variant="solid"
@@ -111,7 +111,7 @@ const pageTitle = computed(() => {
             </UButton>
           </div>
 
-          <USeparator class="mx-3" />
+          <USeparator class="mx-3 max-w-9/12" />
         </div>
       </template>
 
