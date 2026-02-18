@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { invoke } from "@tauri-apps/api/core";
 import type { Snippet } from "~/composables/snippets/useGetSnippets";
+import type { CreateSnippetPayload } from "~/composables/snippets/useCreateSnippet";
 
 export const useSnippetStore = defineStore("snippets_store", {
   state: () => ({
@@ -37,6 +38,13 @@ export const useSnippetStore = defineStore("snippets_store", {
       } finally {
         this.recentLoading = false;
       }
+    },
+
+    async createSnippet(payload: CreateSnippetPayload): Promise<Snippet> {
+      const created = await invoke<Snippet>("create_snippet", { snippet: payload });
+      this.snippets.unshift(created);
+      await this.fetchRecentSnippets();
+      return created;
     },
 
     async deleteSnippet(identifier: string) {
