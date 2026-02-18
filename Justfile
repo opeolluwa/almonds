@@ -4,6 +4,8 @@ import 'scripts/almond.just'
 import 'scripts/lint.just'
 import 'scripts/build.just'
 import 'scripts/test.just'
+import 'scripts/clean.just'
+import 'scripts/android.just'
 
 
 alias w := watch
@@ -23,9 +25,9 @@ build target:
 lint target:
 	#!/usr/bin/env bash
 	if [ "{{target}}" = "all" ]; then
-		// just lint-almonds
-		// just lint-kernel
-		// just lint-orchard
+		just lint-almonds
+		just lint-kernel
+		just lint-orchard
 		just lint-tauri
 	else
 		just lint-{{target}}
