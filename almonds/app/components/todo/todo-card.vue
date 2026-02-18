@@ -69,7 +69,7 @@ function formatDueDate(dateStr: string | null) {
     </span>
 
     <div
-      class="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
+      class="flex items-center gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity"
     >
       <button
         v-if="!todo.done"

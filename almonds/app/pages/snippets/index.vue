@@ -163,6 +163,7 @@ onUnmounted(() => clearSearch());
           :lines="lineCount(snippet.code)"
           :date="formatDate(snippet.createdAt)"
           :preview="snippet.code"
+          :search-query="searchQuery"
         />
       </div>
     </template>

@@ -70,12 +70,23 @@ async function handleCreate(payload: {
 <template>
   <NuxtLayout name="default">
     <template #primary_cta>
+      <!-- Desktop: full label -->
+      <div class="hidden md:flex items-center justify-end">
+        <button
+          class="flex items-center gap-2 py-2 px-4 bg-accent-500 text-white rounded-lg text-sm font-medium hover:bg-accent-600 transition-colors"
+          @click="showAddModal = true"
+        >
+          <UIcon name="heroicons:plus" class="size-4" />
+          Add Bookmark
+        </button>
+      </div>
+      <!-- Mobile: icon-only round FAB -->
       <button
-        class="flex items-center gap-2 py-2 px-4 bg-accent-500 text-white rounded-lg text-sm font-medium hover:bg-accent-600 transition-colors"
+        class="md:hidden flex items-center justify-center w-14 h-14 bg-accent-500 text-white rounded-full shadow-xl active:scale-95 transition-transform"
+        aria-label="Add Bookmark"
         @click="showAddModal = true"
       >
-        <UIcon name="heroicons:plus" class="size-4" />
-        Add Bookmark
+        <UIcon name="heroicons:plus" class="size-6" />
       </button>
     </template>
 

@@ -30,7 +30,6 @@ const sidebarCollapsed = ref(false);
 const asideOpen = ref(false);
 const mobileNavOpen = ref(false);
 
-
 const { searchConfig, searchQuery } = useAppSearch();
 
 function onSearchInput(val: string) {
@@ -179,82 +178,85 @@ const pageTitle = computed(() => {
     <div class="flex flex-col flex-1 min-w-0 overflow-hidden">
       <!-- App header -->
       <header
-        class="flex items-center gap-3 h-14 px-4 shrink-0 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900"
+        class="shrink-0 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900"
+        style="padding-top: env(safe-area-inset-top)"
       >
-        <!-- Hamburger: mobile only -->
-        <UButton
-          class="flex md:hidden shrink-0"
-          size="sm"
-          color="neutral"
-          variant="ghost"
-          icon="heroicons:bars-3"
-          aria-label="Open navigation"
-          @click="mobileNavOpen = true"
-        />
-
-        <!-- Expand sidebar button (only shown when sidebar is collapsed) -->
-        <UDashboardSidebarCollapse
-          v-if="sidebarCollapsed"
-          size="sm"
-          color="neutral"
-          variant="ghost"
-          class="hidden md:flex shrink-0"
-        />
-
-        <!-- Search bar -->
-        <div class="flex-1 max-w-xl">
-          <UInput
-            :model-value="searchQuery"
-            :placeholder="searchConfig?.placeholder ?? 'Search...'"
-            :disabled="!searchConfig"
-            icon="heroicons:magnifying-glass"
-            size="sm"
-            variant="outline"
-            class="w-full"
-            @update:model-value="onSearchInput"
-          />
-        </div>
-
-        <!-- Right actions -->
-        <div class="flex items-center gap-1 ml-auto">
+        <div class="flex items-center gap-3 h-14 px-4">
+          <!-- Hamburger: mobile only -->
           <UButton
+            class="flex md:hidden shrink-0"
             size="sm"
             color="neutral"
             variant="ghost"
-            :icon="themeIcon"
-            :aria-label="themeLabel"
-            @click="toggleTheme"
+            icon="heroicons:bars-3"
+            aria-label="Open navigation"
+            @click="mobileNavOpen = true"
           />
-          <UButton
+
+          <!-- Expand sidebar button (only shown when sidebar is collapsed) -->
+          <UDashboardSidebarCollapse
+            v-if="sidebarCollapsed"
             size="sm"
             color="neutral"
             variant="ghost"
-            icon="heroicons:bell"
-            @click="navigateTo('/notifications')"
+            class="hidden md:flex shrink-0"
           />
-          <UButton
-            class="flex md:hidden"
-            size="sm"
-            color="neutral"
-            variant="ghost"
-            icon="heroicons:bars-3-bottom-right"
-            aria-label="Open panel"
-            @click="asideOpen = true"
-          />
+
+          <!-- Search bar -->
+          <div class="flex-1 max-w-xl">
+            <UInput
+              :model-value="searchQuery"
+              :placeholder="searchConfig?.placeholder ?? 'Search...'"
+              :disabled="!searchConfig"
+              icon="heroicons:magnifying-glass"
+              size="sm"
+              variant="outline"
+              class="w-full"
+              @update:model-value="onSearchInput"
+            />
+          </div>
+
+          <!-- Right actions -->
+          <div class="flex items-center gap-1 ml-auto">
+            <UButton
+              size="sm"
+              color="neutral"
+              variant="ghost"
+              :icon="themeIcon"
+              :aria-label="themeLabel"
+              @click="toggleTheme"
+            />
+            <UButton
+              size="sm"
+              color="neutral"
+              variant="ghost"
+              icon="heroicons:bell"
+              @click="navigateTo('/notifications')"
+            />
+            <UButton
+              class="flex md:hidden"
+              size="sm"
+              color="neutral"
+              variant="ghost"
+              icon="heroicons:bars-3-bottom-right"
+              aria-label="Open panel"
+              @click="asideOpen = true"
+            />
+          </div>
         </div>
       </header>
 
       <!-- Page content + inline aside (fullscreen mode) -->
       <div class="flex flex-1 overflow-hidden">
         <main class="flex-1 overflow-y-auto p-6 bg-gray-50 dark:bg-surface-950">
-          <div class="flex items-center gap-3 mb-1"/>
+          <div class="flex items-center gap-3 mb-1" />
           <slot name="page_title">
             <h1 class="text-2xl font-semibold text-gray-800 dark:text-gray-100">
               {{ pageTitle }}
             </h1>
           </slot>
 
-          <div class="flex items-center justify-between mt-5 align-center my-6">
+          <div class="hidden md:flex items-center justify-between mt-5 my-6">
             <button
               v-if="route.path != '/'"
               class="flex items-center gap-1.5 text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
@@ -267,8 +269,18 @@ const pageTitle = computed(() => {
             <slot name="primary_cta" />
           </div>
 
-          <slot name="main_content" />
+          <div class="mt-5">
+            <slot name="main_content" />
+          </div>
         </main>
+
+        <!-- Mobile FAB for primary_cta -->
+        <div
+          class="md:hidden fixed bottom-6 right-6 z-40"
+          style="padding-bottom: env(safe-area-inset-bottom)"
+        >
+          <slot name="primary_cta" />
+        </div>
 
         <!-- Inline aside: always visible on desktop -->
         <aside
@@ -277,7 +289,9 @@ const pageTitle = computed(() => {
           <div
             class="flex items-center justify-between px-4 py-3 shrink-0 border-b border-gray-200 dark:border-gray-800"
           >
-            <span class="font-semibold text-sm text-gray-900 dark:text-white">Panel</span>
+            <span class="font-semibold text-sm text-gray-900 dark:text-white"
+              >Panel</span
+            >
           </div>
           <div class="flex-1 overflow-y-auto p-4">
             <slot name="side_content" />
@@ -294,8 +308,12 @@ const pageTitle = computed(() => {
     >
       <template #content>
         <div class="flex flex-col h-full bg-white dark:bg-gray-900">
+          <!-- Safe-area spacer -->
+          <div class="shrink-0" style="height: env(safe-area-inset-top)" />
           <!-- Header -->
-          <div class="flex items-center justify-between px-4 py-4 border-b border-gray-200 dark:border-gray-800 shrink-0">
+          <div
+            class="flex items-center justify-between px-4 py-4 border-b border-gray-200 dark:border-gray-800 shrink-0"
+          >
             <UUser
               name="Nick Woods"
               description="nick.woods@gmail.com"
@@ -328,7 +346,10 @@ const pageTitle = computed(() => {
               "
               @click="mobileNavOpen = false"
             >
-              <UIcon :name="isActive(r.path) ? r.activeIcon : r.icon" class="size-4 shrink-0" />
+              <UIcon
+                :name="isActive(r.path) ? r.activeIcon : r.icon"
+                class="size-4 shrink-0"
+              />
               {{ r.name }}
             </NuxtLink>
           </nav>
@@ -355,7 +376,10 @@ const pageTitle = computed(() => {
               "
               @click="mobileNavOpen = false"
             >
-              <UIcon :name="isActive(r.path) ? r.activeIcon : r.icon" class="size-4 shrink-0" />
+              <UIcon
+                :name="isActive(r.path) ? r.activeIcon : r.icon"
+                class="size-4 shrink-0"
+              />
               {{ r.name }}
             </NuxtLink>
           </div>
@@ -370,25 +394,28 @@ const pageTitle = computed(() => {
       :ui="{ content: 'max-w-sm' }"
     >
       <template #content>
-        <div class="flex flex-col h-full p-5 bg-white dark:bg-gray-900">
-          <div class="flex items-center justify-between mb-4 shrink-0">
-            <span class="font-semibold text-sm text-gray-900 dark:text-white">
-              Panel
-            </span>
-            <UButton
-              size="sm"
-              color="neutral"
-              variant="ghost"
-              icon="heroicons:x-mark"
-              @click="asideOpen = false"
-            />
-          </div>
-          <div class="flex-1 overflow-y-auto">
-            <slot name="side_content" />
+        <div class="flex flex-col h-full bg-white dark:bg-gray-900">
+          <!-- Safe-area spacer -->
+          <div class="shrink-0" style="height: env(safe-area-inset-top)" />
+          <div class="flex flex-col flex-1 overflow-hidden p-5">
+            <div class="flex items-center justify-between mb-4 shrink-0">
+              <span class="font-semibold text-sm text-gray-900 dark:text-white">
+                Panel
+              </span>
+              <UButton
+                size="sm"
+                color="neutral"
+                variant="ghost"
+                icon="heroicons:x-mark"
+                @click="asideOpen = false"
+              />
+            </div>
+            <div class="flex-1 overflow-y-auto">
+              <slot name="side_content" />
+            </div>
           </div>
         </div>
       </template>
     </USlideover>
   </UDashboardGroup>
 </template>
-
