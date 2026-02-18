@@ -72,6 +72,11 @@ async function copyUrl() {
   copied.value = true;
   setTimeout(() => (copied.value = false), 1800);
 }
+
+function openInBrowser() {
+  if (!props.bookmark?.url) return;
+  window.open(props.bookmark.url, "_blank");
+}
 </script>
 
 <template>
@@ -129,11 +134,7 @@ async function copyUrl() {
               size="xs"
               color="neutral"
               variant="ghost"
-              :icon="
-                loading
-                  ? 'heroicons:arrow-path'
-                  : 'heroicons:arrow-path'
-              "
+              icon="heroicons:arrow-path"
               :class="loading ? 'animate-spin' : ''"
               title="Reload"
               @click="reload"
@@ -142,14 +143,18 @@ async function copyUrl() {
               size="xs"
               color="neutral"
               variant="ghost"
-              :icon="
-                copied
-                  ? 'heroicons:check'
-                  : 'heroicons:clipboard-document'
-              "
+              :icon="copied ? 'heroicons:check' : 'heroicons:clipboard-document'"
               :class="copied ? 'text-green-500' : ''"
               title="Copy URL"
               @click="copyUrl"
+            />
+            <UButton
+              size="xs"
+              color="neutral"
+              variant="ghost"
+              icon="heroicons:arrow-top-right-on-square"
+              title="Open in browser"
+              @click="openInBrowser"
             />
             <UButton
               size="xs"
@@ -204,35 +209,59 @@ async function copyUrl() {
           <Transition name="fade">
             <div
               v-if="!loading && blocked"
-              class="absolute inset-0 z-10 flex flex-col items-center justify-center gap-5 bg-white dark:bg-gray-900 px-8 text-center"
+              class="absolute inset-0 z-10 flex flex-col items-center justify-center gap-6 bg-white dark:bg-gray-900 px-10 text-center"
             >
-              <div
-                class="size-16 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center"
-              >
-                <UIcon
-                  name="heroicons:shield-exclamation"
-                  class="size-8 text-gray-400"
-                />
+              <!-- Icon cluster -->
+              <div class="relative">
+                <div
+                  class="size-20 rounded-2xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center"
+                >
+                  <UIcon
+                    name="heroicons:globe-alt"
+                    class="size-10 text-gray-300 dark:text-gray-600"
+                  />
+                </div>
+                <div
+                  class="absolute -bottom-2 -right-2 size-8 rounded-full bg-amber-100 dark:bg-amber-900 flex items-center justify-center ring-2 ring-white dark:ring-gray-900"
+                >
+                  <UIcon
+                    name="heroicons:no-symbol"
+                    class="size-4 text-amber-500"
+                  />
+                </div>
               </div>
-              <div class="flex flex-col gap-1">
-                <p class="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Preview blocked
+
+              <!-- Message -->
+              <div class="flex flex-col gap-1.5">
+                <p class="text-base font-semibold text-gray-800 dark:text-gray-200">
+                  Preview disabled
                 </p>
-                <p class="text-xs text-gray-400 max-w-xs">
-                  This site does not allow embedding in a preview panel. Copy
-                  the URL and open it in your browser instead.
+                <p class="text-xs text-gray-400 dark:text-gray-500 max-w-65 leading-relaxed">
+                  This site blocks embedded previews. Open it directly in your
+                  default browser instead.
                 </p>
               </div>
-              <div class="flex gap-2">
+
+              <!-- Actions -->
+              <div class="flex flex-col items-center gap-2 w-full max-w-50">
+                <UButton
+                  size="md"
+                  variant="solid"
+                  icon="heroicons:arrow-top-right-on-square"
+                  class="w-full justify-center"
+                  @click="openInBrowser"
+                >
+                  Open in browser
+                </UButton>
                 <UButton
                   size="sm"
                   color="neutral"
-                  variant="outline"
+                  variant="ghost"
                   :icon="copied ? 'heroicons:check' : 'heroicons:clipboard-document'"
-                  :class="copied ? 'text-green-500' : ''"
+                  :class="['w-full justify-center', copied ? 'text-green-500' : '']"
                   @click="copyUrl"
                 >
-                  {{ copied ? "Copied!" : "Copy URL" }}
+                  {{ copied ? "Copied!" : "Copy link" }}
                 </UButton>
               </div>
             </div>

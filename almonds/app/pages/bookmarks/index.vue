@@ -4,6 +4,7 @@ import { useBookmarkStore, type BookmarkTag } from "~/stores/bookmarks";
 definePageMeta({ layout: false });
 
 const bookmarkStore = useBookmarkStore();
+const { searchQuery, setSearch, clearSearch } = useAppSearch();
 
 const TAGS: { label: string; value: BookmarkTag | "all" }[] = [
   { label: "All", value: "all" },
