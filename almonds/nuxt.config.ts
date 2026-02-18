@@ -4,8 +4,31 @@ export default defineNuxtConfig({
   devtools: { enabled: false },
   css: ["@/assets/css/main.css", "highlight.js/styles/atom-one-dark.css"],
   ssr: false,
-  modules: [// "@nuxt/a11y",
-  "@nuxt/eslint", "@nuxt/hints", "@nuxt/image", "@nuxt/ui", "@nuxtjs/device", "@nuxtjs/google-fonts", "@nuxtjs/i18n", "@pinia/nuxt", "pinia-plugin-persistedstate/nuxt", "@vueuse/nuxt", "nuxt-tiptap-editor"],
+  modules: [
+    // "@nuxt/a11y",
+    "@nuxt/eslint",
+    "@nuxt/hints",
+    "@nuxt/image",
+    "@nuxt/ui",
+    "@nuxtjs/device",
+    "@nuxtjs/google-fonts",
+    "@nuxtjs/i18n",
+    "@pinia/nuxt",
+    "pinia-plugin-persistedstate/nuxt",
+    "@vueuse/nuxt",
+  ],
+
+  vite: {
+    optimizeDeps: {
+      include: [
+        "@nuxt/ui > prosemirror-state",
+        "@nuxt/ui > prosemirror-transform",
+        "@nuxt/ui > prosemirror-model",
+        "@nuxt/ui > prosemirror-view",
+        "@nuxt/ui > prosemirror-gapcursor",
+      ],
+    },
+  },
   colorMode: {
     preference: "dark",
     fallback: "light",
