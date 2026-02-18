@@ -4,15 +4,14 @@ use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq, Serialize, Deserialize)]
-#[sea_orm(table_name = "sync_queue")]
+#[sea_orm(table_name = "note_categories")]
 #[serde(rename_all = "camelCase")]
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false)]
     pub identifier: Uuid,
-    pub table_name: String,
-    pub record_identifier: String,
-    pub operation: String,
-    pub created_at: String,
+    pub label: String,
+    #[sea_orm(column_type = "Text", nullable)]
+    pub description: Option<String>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

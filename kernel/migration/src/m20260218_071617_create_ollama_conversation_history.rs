@@ -12,10 +12,7 @@ impl MigrationTrait for Migration {
                     .table(OllamaConversationHistory::Table)
                     .if_not_exists()
                     .col(pk_uuid(OllamaConversationHistory::Identifier))
-                    .col(
-                        boolean(OllamaConversationHistory::Bookmarked)
-                            .default(false),
-                    )
+                    .col(boolean(OllamaConversationHistory::Bookmarked).default(false))
                     .col(timestamp_with_time_zone(
                         OllamaConversationHistory::CreatedAt,
                     ))
