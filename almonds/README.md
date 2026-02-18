@@ -1,75 +1,115 @@
-# Nuxt Minimal Starter
+# Almonds
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+A personal productivity desktop app built with Tauri, Nuxt 4, and Vue 3. Almonds brings your notes, snippets, bookmarks, tasks, and AI conversations into one unified workspace.
 
-## Setup
+---
 
-Make sure to install dependencies:
+## Features
+
+- **Notes** — Create and manage personal notes
+- **Bookmarks** — Save and organize web links
+- **Snippets** — Store reusable code with syntax highlighting
+- **Todo** — Track tasks and to-dos
+- **Ollama** — Chat with local AI models via Ollama
+- **Scratch Pad** — A quick freeform writing space
+- **Moodboard** — Visual inspiration board
+- **Settings** — Customize the app to your preference
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Framework | Nuxt 4 + Vue 3 |
+| Desktop | Tauri v2 |
+| UI | @nuxt/ui + Tailwind CSS |
+| State | Pinia + persisted state |
+| Database | Tauri SQL plugin |
+| i18n | @nuxtjs/i18n |
+| Linting | ESLint + Prettier |
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) >= 18
+- [Rust](https://www.rust-lang.org/tools/install) (for Tauri)
+- [Ollama](https://ollama.com/) (optional, required for AI features)
+
+### Installation
 
 ```bash
-# npm
+# Clone the repository
+git clone https://github.com/opeolluwa/almonds.git
+cd almonds
+
+# Install dependencies
 npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
 ```
 
-## Development Server
-
-Start the development server on `http://localhost:3000`:
+### Development
 
 ```bash
-# npm
+# Start the Nuxt dev server (web only)
 npm run dev
 
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
+# Start the Tauri desktop app in dev mode
+npm run tauri dev
 ```
 
-## Production
-
-Build the application for production:
+### Build
 
 ```bash
-# npm
+# Build the Nuxt app
 npm run build
 
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
+# Build the Tauri desktop app
+npm run tauri build
 ```
 
-Locally preview production build:
+### Other Commands
 
 ```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
+npm run preview      # Preview production build
+npm run lint         # Run ESLint
+npm run lint:fix     # Auto-fix lint issues
+npm run format       # Format code with Prettier
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+---
+
+## Roadmap
+
+Planned features and improvements, based on the current navigation structure:
+
+### Core Modules
+
+- [ ] **Notes** — rich text editing, tagging, search
+- [ ] **Bookmarks** — import/export, folder organization, favicon fetch
+- [ ] **Snippets** — language detection, copy-to-clipboard, tagging
+- [ ] **Todo** — due dates, priorities, recurring tasks
+- [ ] **Scratch Pad** — auto-save, markdown preview
+- [ ] **Moodboard** — drag-and-drop image layout, image upload
+
+### AI / Ollama
+
+- [ ] Persistent conversation history
+- [ ] Multi-model support
+- [ ] Context-aware responses using workspace content
+
+### App-wide
+
+- [ ] Global search across all modules
+- [ ] Notifications centre
+- [ ] Data export (JSON / Markdown)
+- [ ] Sync across devices
+- [ ] Plugin/extension system
+
+---
+
+## License
+
+MIT License — see [LICENSE](LICENSE) for details.
