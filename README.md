@@ -71,6 +71,14 @@ just watch kernel     # Watch the kernel crate (cargo watch)
 just build almond     # Build the Tauri desktop app
 ```
 
+### Docs
+
+```bash
+just watch-docs     # Start the VitePress dev server
+just build-docs     # Build the docs site
+just preview-docs   # Preview the production build locally
+```
+
 ### Android
 
 ```bash

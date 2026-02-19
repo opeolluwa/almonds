@@ -3,6 +3,9 @@ name = "almond_kernel"
 version = "0.1.0"
 edition = "2024"
 
+[workspace]
+members = [".", "migration"]
+
 [dependencies]
 async-trait = "0.1.89"
 chrono = { version = "0.4", features = ["serde"] }
