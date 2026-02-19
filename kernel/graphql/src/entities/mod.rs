@@ -11,3 +11,15 @@ pub mod ollama_conversation_response;
 pub mod snippets;
 pub mod sync_queue;
 pub mod todo;
+
+seaography::register_entity_modules!([
+    bookmark,
+    note_categories,
+    notes,
+    ollama_conversation_history,
+    ollama_conversation_prompt,
+    ollama_conversation_response,
+    snippets,
+    sync_queue,
+    todo,
+]);

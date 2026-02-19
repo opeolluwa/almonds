@@ -13,7 +13,7 @@ pub struct Model {
     #[sea_orm(column_type = "Text", nullable)]
     pub description: Option<String>,
     pub due_date: Option<Date>,
-    #[sea_orm(column_type = "custom(\"enum_text\")")]
+    #[sea_orm(column_type = "Text")]
     pub priority: String,
     pub done: bool,
     pub created_at: DateTimeWithTimeZone,
@@ -22,8 +22,5 @@ pub struct Model {
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {}
-
-#[derive(Copy, Clone, Debug, EnumIter, DeriveRelatedEntity)]
-pub enum RelatedEntity {}
 
 impl ActiveModelBehavior for ActiveModel {}
