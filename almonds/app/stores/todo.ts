@@ -6,6 +6,7 @@ export interface Todo {
   title: string;
   description: string | null;
   dueDate: string | null;
+  time: string | null;
   priority: "high" | "medium" | "low";
   done: boolean;
   createdAt: string;
@@ -16,6 +17,7 @@ export interface CreateTodoPayload {
   title: string;
   description?: string;
   dueDate?: string;
+  time?: string;
   priority: "high" | "medium" | "low";
 }
 
