@@ -34,6 +34,8 @@ export default defineConfig({
       { text: 'Home', link: '/' },
       { text: 'Guide', link: '/markdown-examples' },
       { text: 'Blog', link: '/blog/' },
+      { text: 'Download', link: '/download/' },
+
     ],
 
     sidebar: [

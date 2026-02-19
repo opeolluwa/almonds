@@ -52,7 +52,7 @@ const features = [
       <div class="hp-actions">
         <a href="/markdown-examples" class="hp-btn hp-btn-primary">Get Started</a>
         <a
-          href="https://github.com/opeolluwa/daily"
+          href="https://github.com/opeolluwa/almonds"
           class="hp-btn hp-btn-alt"
           target="_blank"
           rel="noopener"
