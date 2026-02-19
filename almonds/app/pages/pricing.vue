@@ -112,7 +112,7 @@ const yearlyDiscount = 28;
         </div>
 
         <!-- Plan cards -->
-        <div class="grid grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div
             v-for="plan in plans"
             :key="plan.key"
@@ -207,7 +207,7 @@ const yearlyDiscount = 28;
 
         <!-- Self-hosted callout -->
         <div
-          class="mt-6 flex items-center justify-between rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 py-4 px-4"
+          class="mt-6 flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-0 justify-between rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 py-4 px-4"
         >
           <div class="flex items-center gap-3">
             <div
