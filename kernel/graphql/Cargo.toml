@@ -10,7 +10,6 @@ dotenv = "0.15.0"
 tokio = { version = "1.29.1", features = ["macros", "rt-multi-thread"] }
 tracing = { version = "0.1.37" }
 tracing-subscriber = { version = "0.3.17" }
-serde = { version = "1.0.228", features = ["derive"] }
 
 [dependencies.sea-orm]
 version = "~2.0.0-rc"
@@ -23,4 +22,5 @@ features = ["graphql-playground", "with-decimal", "with-chrono"]
 [dev-dependencies]
 serde_json = { version = "1.0.103" }
 
-
+[workspace]
+members = []

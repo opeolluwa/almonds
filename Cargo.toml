@@ -1,0 +1,9 @@
+[workspace]
+members = [
+    "kernel",
+    "kernel/graphql",
+    "kernel/migration",
+    "orchard",
+    "almonds/src-tauri",
+]
+resolver = "2"

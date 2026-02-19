@@ -3,9 +3,6 @@ name = "almond_kernel"
 version = "0.1.0"
 edition = "2024"
 
-[workspace]
-members = [".", "graphql", "migration"]
-
 [dependencies]
 async-trait = "0.1.89"
 chrono = { version = "0.4", features = ["serde"] }
@@ -17,7 +14,6 @@ sea-orm = { version = "2.0.0-rc", features = [
     "sqlx-mysql",
     "sqlx-postgres",
     "macros",
-    "seaography",
     "mock",
     "debug-print",
     "with-uuid",
