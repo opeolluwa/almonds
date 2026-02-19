@@ -976,6 +976,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "graphql"
+version = "0.1.0"
+
+[[package]]
 name = "hash32"
 version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
