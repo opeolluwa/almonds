@@ -1,4 +1,8 @@
 pub mod entities;
 pub use migration;
-pub mod kernel;
+pub mod adapters;
 pub mod error;
+pub mod kernel;
+pub mod repositories;
+
+pub use sea_orm;

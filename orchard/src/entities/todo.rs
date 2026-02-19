@@ -16,6 +16,7 @@ pub struct Model {
     pub done: bool,
     pub created_at: DateTimeWithTimeZone,
     pub updated_at: DateTimeWithTimeZone,
+    pub due_time: Option<Time>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
