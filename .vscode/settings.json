@@ -14,9 +14,11 @@
     "middlename",
     "Moodboard",
     "Nuxt",
+    "nuxtjs",
     "Ollama",
     "oneshot",
     "ormlite",
+    "persistedstate",
     "pkce",
     "proto",
     "pswd",
@@ -29,6 +31,7 @@
     "tbody",
     "tinytemplate",
     "TOTP",
+    "vueuse",
     "wildalmonds"
   ],
   "workbench.colorCustomizations": {
