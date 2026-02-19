@@ -4,7 +4,7 @@ use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel, Serialize, Deserialize)]
-#[sea_orm(table_name = "ollama_conversation_prompt")]
+#[sea_orm(table_name = "ollama_conversation_response")]
 #[serde(rename_all = "camelCase")]
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false)]
@@ -31,6 +31,12 @@ impl Related<super::ollama_conversation_history::Entity> for Entity {
     fn to() -> RelationDef {
         Relation::OllamaConversationHistory.def()
     }
+}
+
+#[derive(Copy, Clone, Debug, EnumIter, DeriveRelatedEntity)]
+pub enum RelatedEntity {
+    #[sea_orm(entity = "super::ollama_conversation_history::Entity")]
+    OllamaConversationHistory,
 }
 
 impl ActiveModelBehavior for ActiveModel {}
