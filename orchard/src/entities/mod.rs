@@ -2,4 +2,24 @@
 
 pub mod prelude;
 
-seaography::register_entity_modules!([]);
+pub mod bookmark;
+pub mod note_categories;
+pub mod notes;
+pub mod ollama_conversation_history;
+pub mod ollama_conversation_prompt;
+pub mod ollama_conversation_response;
+pub mod snippets;
+pub mod sync_queue;
+pub mod todo;
+
+seaography::register_entity_modules!([
+    bookmark,
+    note_categories,
+    notes,
+    ollama_conversation_history,
+    ollama_conversation_prompt,
+    ollama_conversation_response,
+    snippets,
+    sync_queue,
+    todo,
+]);
