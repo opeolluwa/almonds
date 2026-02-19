@@ -19,10 +19,27 @@ const priorityColor: Record<string, string> = {
 
 function formatDueDate(dateStr: string | null) {
   if (!dateStr) return null;
-  return new Date(dateStr).toLocaleDateString("en-US", {
+  const d = new Date(dateStr);
+  const datePart = d.toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
   });
+  const timePart = d.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+  });
+  return `${datePart} · ${timePart}`;
+}
+
+function isToday(dateStr: string | null) {
+  if (!dateStr) return false;
+  const d = new Date(dateStr);
+  const now = new Date();
+  return (
+    d.getFullYear() === now.getFullYear() &&
+    d.getMonth() === now.getMonth() &&
+    d.getDate() === now.getDate()
+  );
 }
 </script>
 
@@ -64,7 +81,15 @@ function formatDueDate(dateStr: string | null) {
       :class="priorityColor[todo.priority]"
     />
 
-    <span v-if="todo.dueDate" class="text-xs text-gray-400 shrink-0">
+    <span
+      v-if="todo.dueDate"
+      class="text-xs shrink-0 px-1.5 py-0.5 rounded-md"
+      :class="
+        isToday(todo.dueDate)
+          ? 'bg-accent-100 dark:bg-accent-950 text-accent-600 dark:text-accent-300 font-medium'
+          : 'text-gray-400'
+      "
+    >
       {{ formatDueDate(todo.dueDate) }}
     </span>
 
