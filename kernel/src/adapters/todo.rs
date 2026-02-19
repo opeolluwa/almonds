@@ -32,6 +32,7 @@ pub struct CreateTodo {
     pub title: String,
     pub description: Option<String>,
     pub due_date: Option<Date>,
+    // pub due_time: Option<Time>,//TODO
     pub priority: TodoPriority,
 }
 
@@ -46,6 +47,7 @@ impl Into<entities::todo::ActiveModel> for CreateTodo {
             done: Set(false),
             created_at: Set(Utc::now().fixed_offset()),
             updated_at: Set(Utc::now().fixed_offset()),
+            ..Default::default()
         }
     }
 }
