@@ -1,11 +1,2 @@
-pub mod adapters;
-pub mod config;
-pub mod controllers;
 pub mod entities;
-pub mod errors;
-pub mod middlewares;
-pub mod repositories;
-pub mod routes;
-pub mod services;
-pub mod shared;
-pub mod states;
+pub mod query_root;

@@ -10,6 +10,7 @@ watch-kernel:
 @migrate-init:
 	@sea-orm-cli migrate init
 
+
 [working-directory: 'kernel']
 @generate-entities url:
 	sea-orm-cli generate entity \
@@ -18,23 +19,11 @@ watch-kernel:
 		--model-extra-attributes 'serde(rename_all="camelCase")' \
 		-o src/entities
 
-[working-directory: 'kernel/graphql']
-@generate-graphql-bindings:
+[working-directory: 'orchard']
+@generate-graphql-bindings url:
 	sea-orm-cli generate entity \
-		--database-url sqlite://test.sqlite \
-		--with-serde both \
-		--model-extra-attributes 'serde(rename_all="camelCase")' \
+		--database-url {{url}} \
 		-o src/entities \
 		--seaography
-	seaography-cli \
-		--entities src/entities \
-		--database-url sqlite://test.sqlite \
-		kernel-graphql
-	cargo run
 
-[working-directory: 'kernel']
-db-pull:
-	DATABASE_URL=sqlite://test.sqlite sea-orm-cli migrate up
-	just generate-entities sqlite://test.sqlite
-	just generate-graphql-bindings
-	cargo test
+

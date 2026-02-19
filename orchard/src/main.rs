@@ -1,50 +1,73 @@
-#![warn(unused_extern_crates)]
+use almond_kernel::kernel;
 
-use uralium_lib::{errors, routes, shared};
-
-use errors::app_error::AppError;
-use routes::router::load_routes;
-use shared::extract_env::extract_env;
-use sqlx::migrate::Migrator;
-use sqlx::postgres::PgPoolOptions;
-use std::{
-    net::{Ipv4Addr, SocketAddr, SocketAddrV4},
-    path::Path,
+use async_graphql::{
+    dynamic::Schema,
+    http::{playground_source, GraphQLPlaygroundConfig},
 };
+use async_graphql_axum::{GraphQLRequest, GraphQLResponse};
+use axum::{
+    extract::State,
+    response::{self, IntoResponse},
+    routing::get,
+    Router,
+};
+use dotenv::dotenv;
+use sea_orm::Database;
+use seaography::{async_graphql, lazy_static::lazy_static};
+use std::env;
+use tokio::net::TcpListener;
+
+lazy_static! {
+    static ref URL: String = env::var("URL").unwrap_or("localhost:8000".into());
+    static ref ENDPOINT: String = env::var("ENDPOINT").unwrap_or("/".into());
+    static ref DATABASE_URL: String =
+        env::var("DATABASE_URL").expect("DATABASE_URL environment variable not set");
+    static ref DEPTH_LIMIT: Option<usize> = env::var("DEPTH_LIMIT").map_or(None, |data| Some(
+        data.parse().expect("DEPTH_LIMIT is not a number")
+    ));
+    static ref COMPLEXITY_LIMIT: Option<usize> = env::var("COMPLEXITY_LIMIT")
+        .map_or(None, |data| {
+            Some(data.parse().expect("COMPLEXITY_LIMIT is not a number"))
+        });
+}
+
+async fn graphql_playground() -> impl IntoResponse {
+    response::Html(playground_source(GraphQLPlaygroundConfig::new(&*ENDPOINT)))
+}
+
+async fn graphql_handler(State(schema): State<Schema>, req: GraphQLRequest) -> GraphQLResponse {
+    let req = req.into_inner();
+    schema.execute(req).await.into()
+}
 
 #[tokio::main]
-async fn main() -> Result<(), AppError> {
+async fn main() {
+    dotenv().ok();
     tracing_subscriber::fmt()
-        .with_max_level(tracing::Level::DEBUG)
+        .with_max_level(tracing::Level::INFO)
+        .with_test_writer()
         .init();
 
-    let database_url = extract_env::<String>("DATABASE_URL")?;
-    let pool = PgPoolOptions::new()
-        .max_connections(5)
-        .connect(&database_url)
+    let kernel = kernel::Kernel::new(&*DATABASE_URL)
         .await
-        .map_err(|err| AppError::StartupError(err.to_string()))?;
-    log::info!("Database initialized");
+        .expect("failed to initialize kernel");
 
-    let migrator = Migrator::new(Path::new("migrations"))
+    kernel
+        .run_migrations()
         .await
-        .map_err(|err| AppError::StartupError(err.to_string()))?;
-    migrator
-        .run(&pool)
-        .await
-        .map_err(|err| AppError::StartupError(err.to_string()))?;
+        .expect("failed to run migrations");
 
-    let app = load_routes(pool);
-    let port = extract_env::<u16>("PORT")?;
-    let ip_address = SocketAddr::V4(SocketAddrV4::new(Ipv4Addr::UNSPECIFIED, port));
-    log::info!("Application listening on http://{}", ip_address);
-
-    let listener = tokio::net::TcpListener::bind(ip_address)
+    let db = Database::connect(&*DATABASE_URL)
         .await
-        .map_err(|err| AppError::OperationFailed(err.to_string()))?;
-    axum::serve(listener, app)
-        .await
-        .map_err(|err| AppError::OperationFailed(err.to_string()))?;
+        .expect("Fail to initialize database connection");
 
-    Ok(())
+    let schema = orchard::query_root::schema(db, *DEPTH_LIMIT, *COMPLEXITY_LIMIT).unwrap();
+    let app = Router::new()
+        .route(&*ENDPOINT, get(graphql_playground).post(graphql_handler))
+        .with_state(schema);
+    println!("Visit GraphQL Playground at http://{}", *URL);
+    
+    axum::serve(TcpListener::bind(&*URL).await.unwrap(), app)
+        .await
+        .unwrap();
 }

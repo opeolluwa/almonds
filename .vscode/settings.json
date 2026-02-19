@@ -24,6 +24,8 @@
     "pswd",
     "reqwest",
     "rustls",
+    "seaography",
+    "serde",
     "singlepart",
     "smaple",
     "sqlx",
