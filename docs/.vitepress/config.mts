@@ -47,7 +47,7 @@ export default defineConfig({
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/opeolluwa/daily' }
+      { icon: 'github', link: 'https://github.com/opeolluwa/almonds' }
     ]
   }
 })
