@@ -7,7 +7,7 @@
 @android-build-apk:
 	#!/usr/bin/env sh
 	export ENVIRONMENT=production
-	npm run tauri android build -- --apk true --verbose
+	npm run tauri android build -- --apk  --verbose
 
 
 [working-directory: 'almonds']
