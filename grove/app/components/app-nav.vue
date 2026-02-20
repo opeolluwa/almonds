@@ -4,7 +4,7 @@
   >
     <div class="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
       <!-- Logo -->
-      <span class="text-xl font-bold tracking-tight gradient-text">almonds</span>
+      <NuxtLink to="/" class="text-xl font-bold tracking-tight gradient-text">almonds</NuxtLink>
 
       <!-- Nav links -->
       <div class="hidden md:flex items-center gap-8 text-sm text-slate-500 dark:text-slate-400">
