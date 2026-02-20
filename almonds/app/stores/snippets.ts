@@ -1,7 +1,23 @@
 import { defineStore } from "pinia";
 import { invoke } from "@tauri-apps/api/core";
-import type { Snippet } from "~/composables/snippets/useGetSnippets";
-import type { CreateSnippetPayload } from "~/composables/snippets/useCreateSnippet";
+
+export interface Snippet {
+  identifier: string;
+  title: string | null;
+  language: string | null;
+  code: string;
+  description: string | null;
+  isPinned: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateSnippetPayload {
+  title: string | null;
+  language: string | null;
+  code: string;
+  description: string | null;
+}
 
 export type UpdateSnippetPayload = Partial<CreateSnippetPayload>;
 

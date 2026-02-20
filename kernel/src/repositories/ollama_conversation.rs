@@ -12,7 +12,9 @@ use crate::{
         CreateConversationHistory, CreateConversationPrompt, CreateConversationResponse,
         UpdateConversationHistory,
     },
-    entities::{ollama_conversation_history, ollama_conversation_prompt, ollama_conversation_response},
+    entities::{
+        ollama_conversation_history, ollama_conversation_prompt, ollama_conversation_response,
+    },
     error::KernelError,
 };
 
@@ -104,7 +106,9 @@ impl OllamaConversationRepositoryExt for OllamaConversationRepository {
             .one(self.conn.as_ref())
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))?
-            .ok_or_else(|| KernelError::DbOperationError("conversation history not found".to_string()))?;
+            .ok_or_else(|| {
+                KernelError::DbOperationError("conversation history not found".to_string())
+            })?;
 
         let mut active_model = model.into_active_model();
 

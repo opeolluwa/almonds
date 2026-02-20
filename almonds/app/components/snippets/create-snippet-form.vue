@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { CreateSnippetPayload } from "~/composables/snippets/useCreateSnippet";
+import type { CreateSnippetPayload } from "~/stores/snippets";
 import { SNIPPET_LANGUAGES } from "~/data/languages";
 
 const snippetStore = useSnippetStore();
@@ -61,7 +61,7 @@ async function handleSubmit() {
           >(optional)</span
         >
       </label>
-      <USelect
+      <USelectMenu
         v-model="language"
         placeholder="e.g. TypeScript"
         size="sm"

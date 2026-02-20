@@ -9,10 +9,7 @@ const sizes: Record<FontSizeKey, string> = {
 };
 
 function applySize(key: FontSizeKey) {
-  document.documentElement.style.setProperty(
-    "--font-size-base",
-    sizes[key]
-  );
+  document.documentElement.style.setProperty("--font-size-base", sizes[key]);
 }
 
 export function useFontSize() {

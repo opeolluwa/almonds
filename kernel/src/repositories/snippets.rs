@@ -8,7 +8,11 @@ use sea_orm::{
 };
 use uuid::Uuid;
 
-use crate::{adapters::snippets::{CreateSnippet, UpdateSnippet}, entities::snippets, error::KernelError};
+use crate::{
+    adapters::snippets::{CreateSnippet, UpdateSnippet},
+    entities::snippets,
+    error::KernelError,
+};
 
 pub struct SnippetRepository {
     conn: Arc<DatabaseConnection>,

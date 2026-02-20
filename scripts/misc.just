@@ -1,18 +1,16 @@
 install-dependencies:
-	cargo install cargo-watch 
-	cargo install sea-orm-cli
-	cargo install cargo-sort 
-	cargo install cargo-group-imports 
-
-
+	cargo install cargo-watch
+	cargo install cargo-sort
+	cargo install cargo-group-imports
+	cargo install sea-orm-cli@^2.0.0-rc
+	cargo install seaography-cli@^2.0.0-rc
 
 generate-bindings:
-    cd server && cargo test 
-    cd app/src-tauri && cargo test 
-    rm -rf app/app/bindings 
-    cp -r server/bindings app/app/bindings 
-    cp -r app/src-tauri/bindings/* app/app/bindings
-
+	cd server && cargo test
+	cd app/src-tauri && cargo test
+	rm -rf app/app/bindings
+	cp -r server/bindings app/app/bindings
+	cp -r app/src-tauri/bindings/* app/app/bindings
 
 create-kernel-test-file:
-    touch kernel/test.sqlite
+	touch kernel/test.sqlite

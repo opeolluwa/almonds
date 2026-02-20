@@ -12,9 +12,10 @@ use crate::state::app::AppState;
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_os::init())
         .plugin(tauri_plugin_notification::init())
         .plugin(tauri_plugin_clipboard_manager::init())
-        .plugin(tauri_plugin_single_instance::init(|_app, _args, _cwd| {}))
+        // .plugin(tauri_plugin_single_instance::init(|_app, _args, _cwd| {}))
         .plugin(tauri_plugin_sql::Builder::new().build())
         .setup(|app| {
             if cfg!(debug_assertions) {
@@ -56,6 +57,19 @@ pub fn run() {
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
+            commands::bookmarks::create_bookmark,
+            commands::bookmarks::get_bookmark,
+            commands::bookmarks::get_all_bookmarks,
+            commands::bookmarks::get_bookmarks_by_tag,
+            commands::bookmarks::get_recently_added_bookmarks,
+            commands::bookmarks::update_bookmark,
+            commands::bookmarks::delete_bookmark,
+            commands::notes::create_note,
+            commands::notes::get_note,
+            commands::notes::get_all_notes,
+            commands::notes::delete_note,
+            commands::notes::update_note,
+            commands::notes::get_recently_added_notes,
             commands::snippets::create_snippet,
             commands::snippets::get_snippet,
             commands::snippets::get_all_snippets,
@@ -67,6 +81,14 @@ pub fn run() {
             commands::sync_queue::count_sync_queue_entries,
             commands::sync_queue::run_sync,
             commands::ollama::is_ollama_installed,
+            commands::todo::create_todo,
+            commands::todo::get_todo,
+            commands::todo::get_all_todos,
+            commands::todo::update_todo,
+            commands::todo::delete_todo,
+            commands::todo::mark_todo_done,
+            commands::todo::change_todo_priority,
+            commands::todo::update_todo_due_date,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

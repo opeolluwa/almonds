@@ -55,14 +55,16 @@ onUnmounted(() => clearSearch());
 
 <template>
   <NuxtLayout name="default">
-    <template #main_content>
+    <template #primary_cta>
       <PrimaryCta
         v-if="snippetStore.snippets.length !== 0"
         label="New Snippet"
         icon="heroicons:plus"
         to="/snippets/create-snippets"
       />
+    </template>
 
+    <template #main_content>
       <!-- Language filter tabs -->
       <div
         v-if="!snippetStore.loading && allLanguages.length > 1"
@@ -161,6 +163,7 @@ onUnmounted(() => clearSearch());
           :lines="lineCount(snippet.code)"
           :date="formatDate(snippet.createdAt)"
           :preview="snippet.code"
+          :search-query="searchQuery"
         />
       </div>
     </template>
