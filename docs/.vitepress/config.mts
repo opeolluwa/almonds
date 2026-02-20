@@ -2,6 +2,8 @@ import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
+   base: '/almonds/',
+   
   title: "Wild Almonds",
   description: "Organize daily workflow as a dev, todo, reminder, screentime and bookmarks ",
   head: [
