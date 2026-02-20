@@ -31,26 +31,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Detect package manager
-        id: detect-package-manager
-        run: |
-          if [ -f "${{ github.workspace }}/yarn.lock" ]; then
-            echo "manager=yarn" >> $GITHUB_OUTPUT
-            echo "command=install" >> $GITHUB_OUTPUT
-            exit 0
-          elif [ -f "${{ github.workspace }}/package.json" ]; then
-            echo "manager=npm" >> $GITHUB_OUTPUT
-            echo "command=ci" >> $GITHUB_OUTPUT
-            exit 0
-          else
-            echo "Unable to determine package manager"
-            exit 1
-          fi
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: ${{ steps.detect-package-manager.outputs.manager }}
+          cache: npm
       - name: Setup Pages
         uses: actions/configure-pages@v5
         with:
@@ -70,14 +55,14 @@ jobs:
             ${{ runner.os }}-nuxt-build-
       - name: Install dependencies
         working-directory: grove
-        run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
+        run: npm ci
       - name: Static HTML export with Nuxt
         working-directory: grove
-        run: ${{ steps.detect-package-manager.outputs.manager }} run generate
+        run: npm run generate
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./grove/dist
+          path: ./dist
 
   # Deployment job
   deploy:
