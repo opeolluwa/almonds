@@ -1,0 +1,81 @@
+name: 'Android Build and Release'
+
+on:
+  push:
+    branches:
+      - release # or other branch you want to trigger the build
+  workflow_dispatch:
+
+jobs:
+  publish-android:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Needed to create a GitHub release and upload artifacts
+    defaults:
+      run:
+        working-directory: almonds
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts      
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-linux-android, armv7-linux-androideabi, x86_64-linux-android # Specify Android targets
+
+      - name: Install frontend dependencies and build
+        run: npm install && npm run build # or your specific frontend build command
+
+      - name: Setup Android SDK and NDK
+        uses: android-actions/setup-android@v2
+        with:
+          api-level: 33 # Use a relevant API level
+          ndk-version: r25b # Use a compatible NDK version
+          
+      # Optional: Cache Rust build artifacts for faster subsequent builds
+      - name: Rust cache
+        uses: swatinem/rust-cache@v2
+
+      - name: Decode Keystore
+        # Decode the base64 encoded keystore file from a secret
+        run: echo "${{ secrets.ANDROID_RELEASE_KEYSTORE }}" | base64 --decode > android-release-key.keystore
+
+      - name: Configure Gradle for Signing
+        # This step edits the generated build.gradle.kts file to use the keystore
+        run: |
+          # Adjust paths as necessary for your project structure
+          GRADLE_FILE=src-tauri/gen/android/app/build.gradle.kts
+          # Add the signing configuration block to the build.gradle.kts file
+          cat <<EOF >> $GRADLE_FILE
+
+          android {
+              signingConfigs {
+                  release {
+                      storeFile file("android-release-key.keystore")
+                      storePassword "${{ secrets.ANDROID_RELEASE_PASSWORD }}"
+                      keyAlias "${{ secrets.ANDROID_RELEASE_KEY }}"
+                      keyPassword "${{ secrets.ANDROID_RELEASE_KEY_PASSWORD }}"
+                  }
+              }
+              buildTypes {
+                  release {
+                      signingConfig signingConfigs.release
+                  }
+              }
+          }
+          EOF
+
+      - name: Build Android APK
+        run: cargo tauri android build --release --target aarch64-linux-android # Build for specific target architecture
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Android-APK
+          path: almonds/src-tauri/gen/android/app/build/outputs/apk/release/*.apk

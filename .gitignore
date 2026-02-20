@@ -15,3 +15,5 @@ Cargo.lock
 
 
 test.sqlite
+
+almonds/src-tauri/gen/keystore.properties
