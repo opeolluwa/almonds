@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --color-accent-50: #fdf2f4;
   --color-accent-100: #fce7eb;
