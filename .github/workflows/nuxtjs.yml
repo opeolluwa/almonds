@@ -63,9 +63,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            dist
-            .nuxt
-          key: ${{ runner.os }}-nuxt-build-${{ hashFiles('dist') }}
+            grove/dist
+            grove/.nuxt
+          key: ${{ runner.os }}-nuxt-build-${{ hashFiles('grove/dist') }}
           restore-keys: |
             ${{ runner.os }}-nuxt-build-
       - name: Install dependencies
@@ -77,7 +77,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist
+          path: ./grove/dist
 
   # Deployment job
   deploy:
