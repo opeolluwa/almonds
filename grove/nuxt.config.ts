@@ -28,7 +28,10 @@ export default defineNuxtConfig({
       ],
     },
   },
-
+  site: {
+    url: "https://opeolluwa.github.io/almonds",
+    name: "Wild almond",
+  },
   modules: [
     '@nuxt/content',
     '@nuxt/eslint',
