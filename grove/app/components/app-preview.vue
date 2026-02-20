@@ -10,7 +10,7 @@
         />
         <div class="relative rounded-2xl overflow-hidden shadow-2xl ring-1 ring-black/10 dark:ring-white/5">
           <NuxtImg
-            :src="isDark ? '/app-screenshot-dark.png' : '/app-screenshot-light.png'"
+            :src="screenshot"
             alt="Almonds App Preview"
             class="w-full h-auto block"
           />
@@ -23,4 +23,5 @@
 <script setup lang="ts">
 const colorMode = useColorMode()
 const isDark = computed(() => colorMode.value === 'dark')
+const screenshot = computed(()=> isDark.value ? '/app-screenshot-dark.png' : '/app-screenshot-light.png')
 </script>
