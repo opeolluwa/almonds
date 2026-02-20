@@ -9,7 +9,7 @@
           aria-hidden="true"
         />
         <div class="relative rounded-2xl overflow-hidden shadow-2xl ring-1 ring-black/10 dark:ring-white/5">
-          <img
+          <NuxtImg
             :src="isDark ? '/app-screenshot-dark.png' : '/app-screenshot-light.png'"
             alt="Almonds App Preview"
             class="w-full h-auto block"
