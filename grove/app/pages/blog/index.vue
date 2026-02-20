@@ -20,10 +20,10 @@
       <div v-if="posts && posts.length" class="flex flex-col divide-y divide-slate-100 dark:divide-white/5">
         <article
           v-for="post in posts"
-          :key="post._path"
+          :key="post.path"
           class="py-8 group"
         >
-          <NuxtLink :to="post._path" class="block">
+          <NuxtLink :to="post.path" class="block">
             <div class="flex items-center gap-2 mb-2">
               <time class="text-xs text-slate-400" :datetime="post.date">
                 {{ formatDate(post.date) }}
@@ -68,7 +68,7 @@ useSeoMeta({
 })
 
 const { data: posts } = await useAsyncData('blog-posts', () =>
-  queryContent('blog').sort({ date: -1 }).find()
+  queryCollection('blog').order('date', 'DESC').all()
 )
 
 function formatDate(date: string) {
