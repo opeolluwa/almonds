@@ -10,7 +10,9 @@
       <div class="hidden md:flex items-center gap-8 text-sm text-slate-500 dark:text-slate-400">
         <a href="#features" class="hover:text-slate-900 dark:hover:text-white transition-colors duration-150">Features</a>
         <a href="#ai" class="hover:text-slate-900 dark:hover:text-white transition-colors duration-150">AI</a>
-        <a href="#stack" class="hover:text-slate-900 dark:hover:text-white transition-colors duration-150">Stack</a>
+        <a href="#developers" class="hover:text-slate-900 dark:hover:text-white transition-colors duration-150">Developers</a>
+        <a href="#pricing" class="hover:text-slate-900 dark:hover:text-white transition-colors duration-150">Pricing</a>
+        <NuxtLink to="/blog" class="hover:text-slate-900 dark:hover:text-white transition-colors duration-150">Blog</NuxtLink>
         <a href="#download" class="hover:text-slate-900 dark:hover:text-white transition-colors duration-150">Download</a>
         <a
           href="https://github.com/opeolluwa/almonds"

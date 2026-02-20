@@ -9,6 +9,24 @@
       </div>
 
       <div class="flex items-center gap-6 text-sm text-slate-400 dark:text-slate-600">
+        <NuxtLink
+          to="/blog"
+          class="hover:text-slate-900 dark:hover:text-white transition-colors"
+        >
+          Blog
+        </NuxtLink>
+        <a
+          href="#pricing"
+          class="hover:text-slate-900 dark:hover:text-white transition-colors"
+        >
+          Pricing
+        </a>
+        <a
+          href="#developers"
+          class="hover:text-slate-900 dark:hover:text-white transition-colors"
+        >
+          Developers
+        </a>
         <a
           href="https://github.com/opeolluwa/almonds"
           target="_blank"
