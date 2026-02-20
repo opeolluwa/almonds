@@ -15,8 +15,11 @@ export default defineNuxtConfig({
     storage: 'localStorage',
     storageKey: 'nuxt-color-mode',
   },
-
+nitro: {
+    preset: 'github-pages'
+  },
   app: {
+     baseURL: '/almonds/',
     head: {
       link: [
         { rel: 'preconnect', href: 'https://fonts.googleapis.com' },

@@ -47,9 +47,14 @@ html {
 
 body {
   font-family: "Inter", system-ui, -apple-system, sans-serif;
+  background-color: #ffffff;
+  color: #0f172a;
+  -webkit-font-smoothing: antialiased;
+}
+
+.dark body {
   background-color: #0d1220;
   color: #f1f5f9;
-  -webkit-font-smoothing: antialiased;
 }
 
 .gradient-text {
@@ -60,12 +65,20 @@ body {
 }
 
 .glow-accent {
+  box-shadow: 0 0 30px rgba(208, 39, 82, 0.2), 0 0 60px rgba(208, 39, 82, 0.08);
+}
+
+.dark .glow-accent {
   box-shadow: 0 0 40px rgba(208, 39, 82, 0.25), 0 0 80px rgba(208, 39, 82, 0.1);
 }
 
 .card-border {
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.07);
   transition: border-color 0.2s ease;
+}
+
+.dark .card-border {
+  border-color: rgba(255, 255, 255, 0.06);
 }
 
 .card-border:hover {
