@@ -5,6 +5,8 @@ export interface Route {
   activeIcon: string;
 }
 
+
+
 export const primaryRoutes: Route[] = [
   {
     path: "/",
@@ -31,6 +33,14 @@ export const primaryRoutes: Route[] = [
     icon: "heroicons:bookmark",
     activeIcon: "heroicons:bookmark-solid",
   },
+
+    {
+    path: "/reminders",
+    name: "Reminders",
+    icon: "heroicons:clock",
+    activeIcon: "heroicons:clock-solid",
+  },
+
   {
     path: "/ollama",
     name: "Ollama",
@@ -64,6 +74,12 @@ export const primaryRoutes: Route[] = [
 ];
 
 export const secondaryRoutes: Route[] = [
+  {
+    path: "/recycle-bin",
+    name: "Recycle Bin",
+    icon: "heroicons:trash",
+    activeIcon: "heroicons:trash-solid",
+  },
   {
     path: "/settings",
     name: "Settings",

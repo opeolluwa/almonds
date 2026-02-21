@@ -2,10 +2,13 @@
 const { init } = useAccentColor();
 const { init: initFontSize } = useFontSize();
 const { init: initDarkTheme } = useDarkTheme();
-onMounted(() => {
+const { setupRequired, checkSetup } = useUserSetup();
+
+onMounted(async () => {
   init();
   initFontSize();
   initDarkTheme();
+  await checkSetup();
 });
 </script>
 
@@ -15,5 +18,6 @@ onMounted(() => {
       <NuxtPage />
     </NuxtLayout>
     <AppNotification />
+    <UserSetupModal v-if="setupRequired" />
   </UApp>
 </template>

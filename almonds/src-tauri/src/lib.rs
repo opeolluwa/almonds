@@ -7,6 +7,7 @@ use std::sync::Arc;
 
 use tauri::Manager;
 
+use crate::state::alarm::AlarmState;
 use crate::state::app::AppState;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -52,11 +53,15 @@ pub fn run() {
                 let state = AppState::new(conn);
 
                 app_handle.manage(state);
+                app_handle.manage(AlarmState::new());
             });
 
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
+            commands::alarm::list_alarm_sounds,
+            commands::alarm::play_alarm_sound,
+            commands::alarm::stop_alarm_sound,
             commands::bookmarks::create_bookmark,
             commands::bookmarks::get_bookmark,
             commands::bookmarks::get_all_bookmarks,
@@ -81,6 +86,17 @@ pub fn run() {
             commands::sync_queue::count_sync_queue_entries,
             commands::sync_queue::run_sync,
             commands::ollama::is_ollama_installed,
+            commands::recycle_bin::create_recycle_bin_entry,
+            commands::recycle_bin::get_all_recycle_bin_entries,
+            commands::recycle_bin::get_recycle_bin_entry,
+            commands::recycle_bin::get_recycle_bin_entries_by_type,
+            commands::recycle_bin::purge_recycle_bin_entry,
+            commands::recycle_bin::purge_all_recycle_bin_entries,
+            commands::reminder::create_reminder,
+            commands::reminder::get_reminder,
+            commands::reminder::get_all_reminders,
+            commands::reminder::update_reminder,
+            commands::reminder::delete_reminder,
             commands::todo::create_todo,
             commands::todo::get_todo,
             commands::todo::get_all_todos,
@@ -89,6 +105,9 @@ pub fn run() {
             commands::todo::mark_todo_done,
             commands::todo::change_todo_priority,
             commands::todo::update_todo_due_date,
+            commands::user_preference::get_user_preference,
+            commands::user_preference::create_user_preference,
+            commands::user_preference::update_user_preference,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

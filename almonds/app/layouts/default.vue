@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import _ from "lodash";
 import { primaryRoutes, secondaryRoutes } from "~/data/routes";
+import { useUserPreferenceStore } from "~/stores/user-preference";
+
+const preferenceStore = useUserPreferenceStore();
 
 const route = useRoute();
 const router = useRouter();
@@ -26,7 +29,7 @@ function isActive(path: string): boolean {
   return route.path.startsWith(path);
 }
 
-const sidebarCollapsed = ref(false);
+const sidebarCollapsed = ref(true);
 const asideOpen = ref(false);
 const mobileNavOpen = ref(false);
 
@@ -55,9 +58,9 @@ const pageTitle = computed(() => {
       :collapsible="true"
       :collapsed-size="4"
       :default-size="15"
-      :resizable="false"
-      :min-size="12"
-      :max-size="32"
+      :resizable="true"
+      :min-size="18"
+      :max-size="42"
       :ui="{
         root: 'bg-white dark:bg-gray-900 transition-[width] duration-300 border-e border-gray-200 dark:border-gray-800',
         header: 'shrink-0 h-auto p-0',
@@ -74,12 +77,9 @@ const pageTitle = computed(() => {
           >
             <UUser
               v-if="!collapsed"
-              name="Nick Woods"
-              description="nick.woods@gmail.com"
-              :avatar="{
-                src: 'https://i.pravatar.cc/150?u=nick-woods',
-                icon: 'i-lucide-image',
-              }"
+              :name="preferenceStore.fullName"
+              :description="preferenceStore.preference?.email"
+              :avatar="{ icon: 'i-lucide-user' }"
               class="min-w-0 flex-1 truncate"
             />
 
@@ -92,7 +92,7 @@ const pageTitle = computed(() => {
 
             <UAvatar
               v-else
-              src="https://i.pravatar.cc/150?u=nick-woods"
+              icon="i-lucide-user"
               size="sm"
               class="shrink-0"
             />
@@ -212,6 +212,7 @@ const pageTitle = computed(() => {
               size="sm"
               variant="outline"
               class="w-full"
+              :ui="{root:'py-5'}"
               @update:model-value="onSearchInput"
             />
           </div>
@@ -315,12 +316,9 @@ const pageTitle = computed(() => {
             class="flex items-center justify-between px-4 py-4 border-b border-gray-200 dark:border-gray-800 shrink-0"
           >
             <UUser
-              name="Nick Woods"
-              description="nick.woods@gmail.com"
-              :avatar="{
-                src: 'https://i.pravatar.cc/150?u=nick-woods',
-                icon: 'i-lucide-image',
-              }"
+              :name="preferenceStore.fullName"
+              :description="preferenceStore.preference?.email"
+              :avatar="{ icon: 'i-lucide-user' }"
               class="min-w-0 flex-1 truncate"
             />
             <UButton
