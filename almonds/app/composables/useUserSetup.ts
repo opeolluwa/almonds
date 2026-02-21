@@ -2,6 +2,7 @@ import { useUserPreferenceStore } from "~/stores/user-preference";
 
 export function useUserSetup() {
   const store = useUserPreferenceStore();
+  const initializing = ref(true);
   const initialized = ref(false);
 
   const setupRequired = computed(
@@ -9,9 +10,13 @@ export function useUserSetup() {
   );
 
   async function checkSetup() {
-    await store.fetchPreference();
-    initialized.value = true;
+    try {
+      await store.fetchPreference();
+    } finally {
+      initialized.value = true;
+      initializing.value = false;
+    }
   }
 
-  return { setupRequired, checkSetup };
+  return { setupRequired, checkSetup, initializing };
 }
