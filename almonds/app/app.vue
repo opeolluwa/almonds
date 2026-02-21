@@ -1,8 +1,12 @@
 <script setup lang="ts">
+import { useAlarmScheduler } from "~/composables/useAlarmScheduler";
+
 const { init } = useAccentColor();
 const { init: initFontSize } = useFontSize();
 const { init: initDarkTheme } = useDarkTheme();
 const { setupRequired, checkSetup, initializing } = useUserSetup();
+
+useAlarmScheduler();
 
 onMounted(async () => {
   init();

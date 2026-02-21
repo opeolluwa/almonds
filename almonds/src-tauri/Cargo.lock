@@ -195,6 +195,7 @@ dependencies = [
  "tauri-plugin-single-instance",
  "tauri-plugin-sql",
  "thiserror 2.0.18",
+ "tokio",
  "ts-rs",
  "uuid",
  "validator",

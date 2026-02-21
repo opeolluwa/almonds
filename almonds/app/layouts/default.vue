@@ -29,7 +29,7 @@ function isActive(path: string): boolean {
   return route.path.startsWith(path);
 }
 
-const sidebarCollapsed = ref(true);
+const sidebarCollapsed = ref(false);
 const asideOpen = ref(false);
 const mobileNavOpen = ref(false);
 

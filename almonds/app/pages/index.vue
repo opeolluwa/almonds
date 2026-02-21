@@ -2,18 +2,21 @@
 import { useNoteStore } from "~/stores/notes";
 import { useBookmarkStore } from "~/stores/bookmarks";
 import { useTodoStore } from "~/stores/todo";
+import { useUserPreferenceStore } from "~/stores/user-preference";
 
 definePageMeta({ layout: false });
 
 const noteStore = useNoteStore();
 const bookmarkStore = useBookmarkStore();
 const todoStore = useTodoStore();
+const userPreferenceStore = useUserPreferenceStore();
 
 onMounted(async () => {
   await Promise.all([
     noteStore.fetchNotes(),
     bookmarkStore.fetchBookmarks(),
     todoStore.fetchTodos(),
+    userPreferenceStore.fetchPreference(),
   ]);
 });
 
@@ -105,6 +108,9 @@ function formatDate(iso: string) {
   });
 }
 
+const firstName = computed(
+  () => userPreferenceStore.preference?.firstName || "there",
+);
 const quickActions = [
   {
     label: "New note",
@@ -137,7 +143,7 @@ const quickActions = [
           {{ today }}
         </p>
         <h1 class="text-2xl font-semibold text-gray-800 dark:text-gray-100">
-          {{ greeting }}, Nick 👋
+          {{ greeting }}, {{ firstName }} 👋
         </h1>
       </div>
     </template>

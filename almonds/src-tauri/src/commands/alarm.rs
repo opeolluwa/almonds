@@ -6,7 +6,7 @@ use serde::Serialize;
 use tauri::{AppHandle, Manager, State};
 use ts_rs::TS;
 
-use crate::{errors::AppError, state::alarm::AlarmState};
+use crate::{errors::AppError, state::alarm::AlarmState, state::scheduler::SchedulerState};
 
 const SUPPORTED_EXTENSIONS: &[&str] = &["mp3", "wav", "ogg", "flac"];
 
@@ -121,4 +121,16 @@ pub fn play_alarm_sound(
 #[tauri::command]
 pub fn stop_alarm_sound(alarm_state: State<'_, AlarmState>) {
     alarm_state.stop();
+}
+
+/// Called by the frontend whenever alarm settings change so the Rust scheduler
+/// always uses the latest lead-time and default sound.
+#[tauri::command]
+pub fn set_alarm_settings(
+    scheduler_state: State<'_, SchedulerState>,
+    lead_time_minutes: i64,
+    default_sound: Option<String>,
+) {
+    *scheduler_state.lead_time_minutes.write().unwrap() = lead_time_minutes;
+    *scheduler_state.default_sound.write().unwrap() = default_sound;
 }

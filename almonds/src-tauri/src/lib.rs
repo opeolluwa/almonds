@@ -1,6 +1,7 @@
 mod adapters;
 mod commands;
 mod errors;
+mod scheduler;
 mod state;
 mod utils;
 use std::sync::Arc;
@@ -9,6 +10,7 @@ use tauri::Manager;
 
 use crate::state::alarm::AlarmState;
 use crate::state::app::AppState;
+use crate::state::scheduler::SchedulerState;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -54,6 +56,13 @@ pub fn run() {
 
                 app_handle.manage(state);
                 app_handle.manage(AlarmState::new());
+                app_handle.manage(SchedulerState::new());
+            });
+
+            // Spawn the cron-style reminder scheduler.
+            let scheduler_handle = app.handle().clone();
+            tauri::async_runtime::spawn(async move {
+                scheduler::run(scheduler_handle).await;
             });
 
             Ok(())
@@ -62,6 +71,7 @@ pub fn run() {
             commands::alarm::list_alarm_sounds,
             commands::alarm::play_alarm_sound,
             commands::alarm::stop_alarm_sound,
+            commands::alarm::set_alarm_settings,
             commands::bookmarks::create_bookmark,
             commands::bookmarks::get_bookmark,
             commands::bookmarks::get_all_bookmarks,
