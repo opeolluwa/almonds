@@ -8,6 +8,9 @@ mod m20260218_110353_create_note_category_table;
 mod m20260218_171131_create_todo_table;
 mod m20260218_204212_create_bookmarks_table;
 mod m20260219_214114_add_due_time_to_todo;
+mod m20260221_065202_create_reminder_table;
+mod m20260221_065819_create_recycle_bin;
+mod m20260221_065938_create_user_preference_table;
 
 pub use sea_orm_migration::prelude::*;
 
@@ -27,6 +30,9 @@ impl MigratorTrait for Migrator {
             Box::new(m20260218_171131_create_todo_table::Migration),
             Box::new(m20260218_204212_create_bookmarks_table::Migration),
             Box::new(m20260219_214114_add_due_time_to_todo::Migration),
+            Box::new(m20260221_065202_create_reminder_table::Migration),
+            Box::new(m20260221_065819_create_recycle_bin::Migration),
+            Box::new(m20260221_065938_create_user_preference_table::Migration),
         ]
     }
 }
