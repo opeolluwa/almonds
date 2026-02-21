@@ -2,18 +2,24 @@
 import { useNoteStore } from "~/stores/notes";
 import { useBookmarkStore } from "~/stores/bookmarks";
 import { useTodoStore } from "~/stores/todo";
+import { useUserPreferenceStore } from "~/stores/user-preference";
+import { useReminderStore } from "~/stores/reminder";
 
 definePageMeta({ layout: false });
 
 const noteStore = useNoteStore();
 const bookmarkStore = useBookmarkStore();
 const todoStore = useTodoStore();
+const userPreferenceStore = useUserPreferenceStore();
+const reminderStore = useReminderStore();
 
 onMounted(async () => {
   await Promise.all([
     noteStore.fetchNotes(),
     bookmarkStore.fetchBookmarks(),
     todoStore.fetchTodos(),
+    userPreferenceStore.fetchPreference(),
+    reminderStore.fetchReminders(),
   ]);
 });
 
@@ -60,14 +66,30 @@ const stats = computed(() => [
     href: "/todo",
   },
   {
-    label: "Done today",
-    value: todoStore.completedTodos.length,
-    icon: "heroicons:trophy-solid",
-    color: "text-amber-500",
-    bg: "bg-amber-50 dark:bg-amber-950",
-    href: "/todo",
+    label: "Upcoming reminders",
+    value: reminderStore.upcomingReminders.length,
+    icon: "heroicons:clock-solid",
+    color: "text-rose-500",
+    bg: "bg-rose-50 dark:bg-rose-950",
+    href: "/reminders",
   },
 ]);
+
+// Next 3 upcoming reminders sorted by soonest first
+const upcomingReminders = computed(() =>
+  [...reminderStore.upcomingReminders]
+    .sort((a, b) => new Date(a.remindAt).getTime() - new Date(b.remindAt).getTime())
+    .slice(0, 3),
+);
+
+function formatRemindAt(iso: string) {
+  return new Date(iso).toLocaleString("en-US", {
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  });
+}
 
 // Recent notes (latest 3)
 const recentNotes = computed(() => noteStore.notes.slice(0, 3));
@@ -105,6 +127,9 @@ function formatDate(iso: string) {
   });
 }
 
+const firstName = computed(
+  () => userPreferenceStore.preference?.firstName || "there",
+);
 const quickActions = [
   {
     label: "New note",
@@ -137,7 +162,7 @@ const quickActions = [
           {{ today }}
         </p>
         <h1 class="text-2xl font-semibold text-gray-800 dark:text-gray-100">
-          {{ greeting }}, Nick 👋
+          {{ greeting }}, {{ firstName }} 👋
         </h1>
       </div>
     </template>
@@ -224,6 +249,65 @@ const quickActions = [
             <p class="text-xs text-gray-300 dark:text-gray-600">
               {{ formatDate(note.updatedAt) }}
             </p>
+          </NuxtLink>
+        </div>
+      </section>
+
+      <!-- Upcoming reminders -->
+      <section class="mb-8">
+        <div class="flex items-center justify-between mb-3">
+          <h2
+            class="text-sm font-medium text-gray-500 dark:text-gray-400 flex items-center gap-2"
+          >
+            <UIcon name="heroicons:clock" class="size-4" />
+            Upcoming reminders
+          </h2>
+          <NuxtLink
+            to="/reminders"
+            class="text-xs text-accent-500 hover:text-accent-600 transition-colors"
+          >
+            View all
+          </NuxtLink>
+        </div>
+
+        <div
+          v-if="upcomingReminders.length === 0"
+          class="bg-white dark:bg-gray-800 rounded-xl border border-dashed border-gray-200 dark:border-gray-700 p-6 text-center"
+        >
+          <p class="text-sm text-gray-400">No upcoming reminders.</p>
+          <NuxtLink
+            to="/reminders/create-reminder"
+            class="text-xs text-accent-500 hover:underline mt-1 block"
+          >
+            Create a reminder
+          </NuxtLink>
+        </div>
+
+        <div v-else class="flex flex-col gap-2">
+          <NuxtLink
+            v-for="reminder in upcomingReminders"
+            :key="reminder.identifier"
+            to="/reminders"
+            class="group bg-white dark:bg-gray-800 rounded-xl px-4 py-3 border border-gray-100 dark:border-gray-700 hover:shadow-sm hover:border-rose-200 dark:hover:border-rose-800 transition-all flex items-center gap-3"
+          >
+            <div class="p-1.5 rounded-md bg-rose-50 dark:bg-rose-950 shrink-0">
+              <UIcon
+                :name="reminder.recurring ? 'heroicons:arrow-path' : 'heroicons:clock'"
+                class="size-4 text-rose-400"
+              />
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-medium text-gray-800 dark:text-gray-200 truncate group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors">
+                {{ reminder.title }}
+              </p>
+              <p class="text-xs text-gray-400 mt-0.5">{{ formatRemindAt(reminder.remindAt) }}</p>
+            </div>
+            <span
+              v-if="reminder.recurring"
+              class="text-xs px-2 py-0.5 rounded-full bg-violet-50 dark:bg-violet-950 text-violet-500 dark:text-violet-400 shrink-0"
+            >
+              Recurring
+            </span>
           </NuxtLink>
         </div>
       </section>

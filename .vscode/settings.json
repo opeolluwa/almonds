@@ -27,6 +27,7 @@
     "seaography",
     "serde",
     "singlepart",
+    "Slideover",
     "smaple",
     "sqlx",
     "tauri",
