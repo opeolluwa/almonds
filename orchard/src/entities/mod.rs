@@ -8,9 +8,12 @@ pub mod notes;
 pub mod ollama_conversation_history;
 pub mod ollama_conversation_prompt;
 pub mod ollama_conversation_response;
+pub mod recycle_bin;
+pub mod reminder;
 pub mod snippets;
 pub mod sync_queue;
 pub mod todo;
+pub mod user_preference;
 
 seaography::register_entity_modules!([
     bookmark,
@@ -19,7 +22,10 @@ seaography::register_entity_modules!([
     ollama_conversation_history,
     ollama_conversation_prompt,
     ollama_conversation_response,
+    recycle_bin,
+    reminder,
     snippets,
     sync_queue,
     todo,
+    user_preference,
 ]);
