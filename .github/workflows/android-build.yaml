@@ -22,7 +22,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: lts      
+          node-version: 24      
 
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
