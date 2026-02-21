@@ -1,74 +1,4 @@
-# name: 'publish'
-
-# on:
-#   workflow_dispatch:
-#   push:
-#     branches:
-#       - release
-
-# jobs:
-#   publish-tauri:
-#     permissions:
-#       contents: write
-#     strategy:
-#       fail-fast: false
-#       matrix:
-#         include:
-#           - platform: 'macos-latest' # for Arm based macs (M1 and above).
-#             args: '--target aarch64-apple-darwin'
-#           - platform: 'macos-latest' # for Intel based macs.
-#             args: '--target x86_64-apple-darwin'
-#           - platform: 'ubuntu-22.04'
-#             args: ''
-#           - platform: 'ubuntu-22.04-arm' # Only available in public repos.
-#             args: ''
-#           - platform: 'windows-latest'
-#             args: ''
-
-#     runs-on: ${{ matrix.platform }}
-#     steps:
-#       - uses: actions/checkout@v4
-
-#       - name: install dependencies (ubuntu only)
-#         if: startsWith(matrix.platform, 'ubuntu')
-#         run: |
-#           sudo apt-get update
-#           sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf libasound2-dev
-
-#       - name: setup node
-#         uses: actions/setup-node@v4
-#         with:
-#           node-version: lts/*
-#           cache: 'npm'
-#           cache-dependency-path: almonds/package-lock.json
-
-#       - name: install Rust stable
-#         uses: dtolnay/rust-toolchain@stable
-#         with:
-#           targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
-
-#       - name: Rust cache
-#         uses: swatinem/rust-cache@v2
-#         with:
-#           workspaces: './almonds/src-tauri -> target'
-
-#       - name: install frontend dependencies
-#         working-directory: almonds
-#         run: npm install
-
-#       - uses: tauri-apps/tauri-action@v0
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#         with:
-#           projectPath: almonds
-#           tagName: app-v__VERSION__
-#           releaseName: 'App v__VERSION__'
-#           releaseBody: 'See the assets to download this version and install.'
-#           releaseDraft: true
-#           prerelease: false
-#           args: ${{ matrix.args }}
-
-name: 'Publish Tauri (Auto Version)'
+name: 'publish'
 
 on:
   workflow_dispatch:
@@ -84,94 +14,56 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - platform: 'macos-latest'
+          - platform: 'macos-latest' # for Arm based macs (M1 and above).
             args: '--target aarch64-apple-darwin'
-          - platform: 'macos-latest'
+          - platform: 'macos-latest' # for Intel based macs.
             args: '--target x86_64-apple-darwin'
           - platform: 'ubuntu-22.04'
             args: ''
-          - platform: 'ubuntu-22.04-arm'
+          - platform: 'ubuntu-22.04-arm' # Only available in public repos.
             args: ''
           - platform: 'windows-latest'
             args: ''
 
     runs-on: ${{ matrix.platform }}
-    env:
-      NODE_VERSION: 20
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      # 1️⃣ Setup Node.js (needed for npm and package.json version bump)
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-          cache-dependency-path: almonds/package-lock.json
-
-      # 2️⃣ Install frontend dependencies (needed to modify package.json safely)
-      - name: Install frontend dependencies
-        working-directory: almonds
-        run: npm install
-
-      # 3️⃣ Determine next patch version automatically
-      - name: Compute next version
-        id: version
-        working-directory: almonds
-        run: |
-          git fetch --tags
-          LATEST_TAG=$(git describe --tags $(git rev-list --tags --max-count=1) 2>/dev/null || echo "v0.0.0")
-          echo "Latest tag: $LATEST_TAG"
-          # increment patch
-          NEXT_TAG=$(echo $LATEST_TAG | awk -F. -v OFS=. '{$NF++; print}')
-          echo "Next version: $NEXT_TAG"
-          # update package.json
-          npm version $NEXT_TAG --no-git-tag-version
-          echo "APP_VERSION=$NEXT_TAG" >> $GITHUB_ENV
-
-      # 4️⃣ Create Git tag for new version
-      - name: Create Git tag
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag v${{ env.APP_VERSION }}
-          git push origin v${{ env.APP_VERSION }}
-
-      # 5️⃣ Install Linux dependencies
-      - name: Install dependencies (Ubuntu only)
+      - name: install dependencies (ubuntu only)
         if: startsWith(matrix.platform, 'ubuntu')
         run: |
           sudo apt-get update
-          sudo apt-get install -y \
-            libwebkit2gtk-4.1-dev \
-            libappindicator3-dev \
-            librsvg2-dev \
-            patchelf \
-            libasound2-dev
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf libasound2-dev
 
-      # 6️⃣ Setup Rust
-      - name: Install Rust stable
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: 'npm'
+          cache-dependency-path: almonds/package-lock.json
+
+      - name: install Rust stable
         uses: dtolnay/rust-toolchain@stable
         with:
           targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
 
-      # 7️⃣ Rust cache
       - name: Rust cache
         uses: swatinem/rust-cache@v2
         with:
           workspaces: './almonds/src-tauri -> target'
 
-      # 8️⃣ Publish release via Tauri Action
+      - name: install frontend dependencies
+        working-directory: almonds
+        run: npm install
+
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           projectPath: almonds
-          tagName: v${{ env.APP_VERSION }}
-          releaseName: "App v${{ env.APP_VERSION }}"
+          tagName: app-v__VERSION__
+          releaseName: 'App v__VERSION__'
           releaseBody: 'See the assets to download this version and install.'
           releaseDraft: true
-          prerelease: false
+          prerelease: true
           args: ${{ matrix.args }}
