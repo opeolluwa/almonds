@@ -12,6 +12,7 @@ const form = reactive({
   title: "",
   description: "",
   dueDate: null as Date | null,
+  time: "",
   priority: "medium" as "high" | "medium" | "low",
 });
 
@@ -43,6 +44,7 @@ async function handleSubmit() {
       title: form.title.trim(),
       description: form.description.trim() || undefined,
       dueDate: toIsoDate(form.dueDate) ?? undefined,
+      time: form.time || undefined,
       priority: form.priority,
     });
     notify({ type: "success", message: "Todo created" });
@@ -119,6 +121,33 @@ async function handleSubmit() {
                 type="button"
                 class="p-2.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
                 @click="form.dueDate = null"
+              >
+                <UIcon name="heroicons:x-mark" class="size-4" />
+              </button>
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-1.5">
+            <label class="text-xs font-medium text-gray-500 dark:text-gray-400">
+              Time
+            </label>
+            <div class="flex items-center gap-2">
+              <div class="relative flex-1">
+                <UIcon
+                  name="heroicons:clock"
+                  class="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-gray-400 pointer-events-none"
+                />
+                <input
+                  v-model="form.time"
+                  type="time"
+                  class="w-full bg-white dark:bg-gray-800 rounded-lg pl-9 pr-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 outline-none focus:ring-2 focus:ring-accent-300 dark:focus:ring-accent-600 focus:border-transparent"
+                >
+              </div>
+              <button
+                v-if="form.time"
+                type="button"
+                class="p-2.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
+                @click="form.time = ''"
               >
                 <UIcon name="heroicons:x-mark" class="size-4" />
               </button>
