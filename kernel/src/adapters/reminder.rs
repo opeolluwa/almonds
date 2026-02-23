@@ -1,4 +1,4 @@
-use chrono::{Local, Utc};
+use chrono::Local;
 use sea_orm::ActiveValue::Set;
 use sea_orm::prelude::DateTimeWithTimeZone;
 use serde::{Deserialize, Serialize};
