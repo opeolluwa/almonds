@@ -23,5 +23,17 @@
 <script setup lang="ts">
 const colorMode = useColorMode()
 const isDark = computed(() => colorMode.value === 'dark')
-const screenshot = computed(()=> isDark.value ? '/app-screenshot-dark.png' : '/app-screenshot-light.png')
+// const screenshot = computed(()=> isDark.value ? '/app-screenshot-dark.png' : '/app-screenshot-light.png')
+const screenshot = ref('/app-screenshot-light.png')
+
+watch(
+  () => colorMode.value,
+  (val) => {
+    screenshot.value =
+      val === 'dark'
+        ? '/app-screenshot-dark.png'
+        : '/app-screenshot-light.png'
+  },
+  { immediate: true }
+)
 </script>
