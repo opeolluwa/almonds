@@ -90,12 +90,7 @@ const pageTitle = computed(() => {
               variant="ghost"
             />
 
-            <UAvatar
-              v-else
-              icon="i-lucide-user"
-              size="sm"
-              class="shrink-0"
-            />
+            <UAvatar v-else icon="i-lucide-user" size="sm" class="shrink-0" />
           </div>
 
           <!--TODO: enable when the project feature is done, the former class is flex before hidden-->
@@ -181,7 +176,7 @@ const pageTitle = computed(() => {
         class="shrink-0 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900"
         style="padding-top: env(safe-area-inset-top)"
       >
-        <div class="flex items-center gap-3 h-14 px-4">
+        <div class="flex justify-between items-center gap-3 h-14 px-4">
           <!-- Hamburger: mobile only -->
           <UButton
             class="flex md:hidden shrink-0"
@@ -202,8 +197,25 @@ const pageTitle = computed(() => {
             class="hidden md:flex shrink-0"
           />
 
+          <div class="flex items-center gap-1">
+            <UButton
+              size="sm"
+              color="neutral"
+              variant="ghost"
+              icon="heroicons:chevron-left"
+              @click="router.back()"
+            />
+            <UButton
+              size="sm"
+              color="neutral"
+              variant="ghost"
+              icon="heroicons:chevron-right"
+              @click="router.forward()"
+            />
+          </div>
+
           <!-- Search bar -->
-          <div class="flex-1 max-w-xl">
+          <div class="mx-auto w-6/12" v-if="searchConfig!=null">
             <UInput
               :model-value="searchQuery"
               :placeholder="searchConfig?.placeholder ?? 'Search...'"
@@ -211,8 +223,8 @@ const pageTitle = computed(() => {
               icon="heroicons:magnifying-glass"
               size="sm"
               variant="outline"
-              class="w-full"
-              :ui="{root:'py-5'}"
+              class="w-full placeholder:text-gray-400 dark:placeholder:text-gray-500"
+              :ui="{ root: 'bg-transparent'  }"
               @update:model-value="onSearchInput"
             />
           </div>
