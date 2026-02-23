@@ -13,12 +13,10 @@ use axum::{
     Router,
 };
 use dotenv::dotenv;
-use orchard::{errors::AppError, shutdown::shutdown_signal};
-use sea_orm::Database;
+use orchard_lib::{errors::AppError, shutdown::shutdown_signal};
 use seaography::{async_graphql, lazy_static::lazy_static};
 use std::{
     env,
-    f32::consts::E,
     net::{Ipv4Addr, SocketAddr, SocketAddrV4},
     time::Duration,
 };
@@ -29,7 +27,6 @@ use tower_http::{
 };
 
 lazy_static! {
-    static ref URL: String = env::var("URL").unwrap_or("localhost:8000".into());
     static ref ENDPOINT: String = env::var("ENDPOINT").unwrap_or("/".into());
     static ref DATABASE_URL: String =
         env::var("DATABASE_URL").expect("DATABASE_URL environment variable not set");
@@ -70,7 +67,7 @@ async fn main() -> Result<(), AppError> {
 
     let db = kernel.connection().to_owned();
 
-    let schema = orchard::query_root::schema(db, *DEPTH_LIMIT, *COMPLEXITY_LIMIT)
+    let schema = orchard_lib::query_root::schema(db, *DEPTH_LIMIT, *COMPLEXITY_LIMIT)
         .map_err(|err| AppError::GraphQLError(err.to_string()))?;
 
     let app = Router::new()
@@ -82,8 +79,8 @@ async fn main() -> Result<(), AppError> {
         ))
         .with_state(schema);
 
-    tracing::info!("Visit GraphQL Playground at http://{}", *URL);
     let ip_address = SocketAddr::V4(SocketAddrV4::new(Ipv4Addr::UNSPECIFIED, 8000));
+    tracing::info!("Visit GraphQL Playground at http://{}", ip_address);
 
     axum::serve(TcpListener::bind(ip_address).await.unwrap(), app)
         .with_graceful_shutdown(shutdown_signal())
