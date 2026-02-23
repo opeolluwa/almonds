@@ -8,6 +8,7 @@ import 'scripts/clean.just'
 import 'scripts/android.just'
 import 'scripts/orchard.just'
 import 'scripts/docs.just'
+import 'scripts/grove.just'
 
 
 DB_PATH := "sqlite:://../../test.sqlite?mode=rwc"
