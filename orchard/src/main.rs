@@ -7,15 +7,26 @@ use async_graphql::{
 use async_graphql_axum::{GraphQLRequest, GraphQLResponse};
 use axum::{
     extract::State,
+    http::StatusCode,
     response::{self, IntoResponse},
     routing::get,
     Router,
 };
 use dotenv::dotenv;
+use orchard::{errors::AppError, shutdown::shutdown_signal};
 use sea_orm::Database;
 use seaography::{async_graphql, lazy_static::lazy_static};
-use std::env;
+use std::{
+    env,
+    f32::consts::E,
+    net::{Ipv4Addr, SocketAddr, SocketAddrV4},
+    time::Duration,
+};
 use tokio::net::TcpListener;
+use tower_http::{
+    cors::{Any, CorsLayer},
+    timeout::TimeoutLayer,
+};
 
 lazy_static! {
     static ref URL: String = env::var("URL").unwrap_or("localhost:8000".into());
@@ -41,33 +52,43 @@ async fn graphql_handler(State(schema): State<Schema>, req: GraphQLRequest) -> G
 }
 
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<(), AppError> {
     dotenv().ok();
     tracing_subscriber::fmt()
         .with_max_level(tracing::Level::INFO)
         .with_test_writer()
         .init();
 
-    let kernel = kernel::Kernel::new(&*DATABASE_URL)
-        .await
-        .expect("failed to initialize kernel");
+    let cors = CorsLayer::new()
+        .allow_origin(Any)
+        .allow_methods(Any)
+        .allow_headers(Any);
 
-    kernel
-        .run_migrations()
-        .await
-        .expect("failed to run migrations");
+    let kernel = kernel::Kernel::new(&*DATABASE_URL).await?;
 
-    let db = Database::connect(&*DATABASE_URL)
-        .await
-        .expect("Fail to initialize database connection");
+    kernel.run_migrations().await?;
 
-    let schema = orchard::query_root::schema(db, *DEPTH_LIMIT, *COMPLEXITY_LIMIT).unwrap();
+    let db = kernel.connection().to_owned();
+
+    let schema = orchard::query_root::schema(db, *DEPTH_LIMIT, *COMPLEXITY_LIMIT)
+        .map_err(|err| AppError::GraphQLError(err.to_string()))?;
+
     let app = Router::new()
         .route(&*ENDPOINT, get(graphql_playground).post(graphql_handler))
+        .layer(cors)
+        .layer(TimeoutLayer::with_status_code(
+            StatusCode::REQUEST_TIMEOUT,
+            Duration::from_secs(25),
+        ))
         .with_state(schema);
-    println!("Visit GraphQL Playground at http://{}", *URL);
-    
-    axum::serve(TcpListener::bind(&*URL).await.unwrap(), app)
+
+    tracing::info!("Visit GraphQL Playground at http://{}", *URL);
+    let ip_address = SocketAddr::V4(SocketAddrV4::new(Ipv4Addr::UNSPECIFIED, 8000));
+
+    axum::serve(TcpListener::bind(ip_address).await.unwrap(), app)
+        .with_graceful_shutdown(shutdown_signal())
         .await
-        .unwrap();
+        .map_err(|err| AppError::InternalError(err.to_string()))?;
+
+    Ok(())
 }
