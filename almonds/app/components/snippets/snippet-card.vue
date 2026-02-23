@@ -98,10 +98,7 @@ const codeMatchInfo = computed(() => {
 });
 
 function escapeHtml(str: string): string {
-  return str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
+  return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
 const codeMatchHtml = computed(() => {
@@ -136,7 +133,8 @@ async function copyCode() {
           <span
             v-if="codeMatchInfo"
             class="px-2 py-0.5 rounded bg-accent-100 dark:bg-accent-900 text-xs text-accent-600 dark:text-accent-400"
-          >code match</span>
+            >code match</span
+          >
           <span
             class="px-2 py-0.5 rounded bg-gray-100 dark:bg-gray-700 text-xs text-gray-500 dark:text-gray-400"
             >{{ language }}</span
@@ -146,8 +144,13 @@ async function copyCode() {
       </div>
 
       <!-- Match excerpt: centered on the first matching line -->
-      <div v-if="codeMatchInfo" class="bg-gray-900 rounded-md text-xs overflow-x-auto">
-        <div class="px-3 py-1 text-gray-500 border-b border-gray-700 text-xs font-mono">
+      <div
+        v-if="codeMatchInfo"
+        class="bg-gray-900 rounded-md text-xs overflow-x-auto"
+      >
+        <div
+          class="px-3 py-1 text-gray-500 border-b border-gray-700 text-xs font-mono"
+        >
           line {{ codeMatchInfo.startLine }}
         </div>
         <pre class="p-3"><code v-html="codeMatchHtml" /></pre>

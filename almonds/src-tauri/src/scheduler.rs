@@ -14,7 +14,11 @@ use almond_kernel::repositories::reminder::ReminderRepositoryExt;
 /// any reminders whose adjusted fire time (remind_at − lead_time) falls in the
 /// current minute. Deduplicates via `SchedulerState::fired_keys`.
 pub async fn run(app: AppHandle) {
+        log::info!("[Scheduler] Checked reminders at {}", chrono::Utc::now());
+
     loop {
+        log::info!("[Scheduler] Checked reminders at {}", chrono::Utc::now());
+
         // Sleep until the start of the next minute.
         let now = chrono::Utc::now();
         let secs_into_minute = now.timestamp() % 60;
@@ -26,6 +30,7 @@ pub async fn run(app: AppHandle) {
         tokio::time::sleep(Duration::from_secs(secs_to_wait as u64)).await;
 
         check_and_fire(&app).await;
+        log::info!("[Scheduler] Checked reminders at {}", chrono::Utc::now());
     }
 }
 

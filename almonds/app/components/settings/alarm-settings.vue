@@ -67,11 +67,14 @@ const snoozeOptions: { value: number; label: string }[] = [
         Alarm
       </h2>
       <div class="flex flex-col divide-y divide-gray-100 dark:divide-gray-700">
-
         <!-- Default sound: list -->
         <div class="py-3">
-          <p class="text-sm text-gray-700 dark:text-gray-200 mb-0.5">Default sound</p>
-          <p class="text-xs text-gray-400 mb-3">Sound played when a reminder fires</p>
+          <p class="text-sm text-gray-700 dark:text-gray-200 mb-0.5">
+            Default sound
+          </p>
+          <p class="text-xs text-gray-400 mb-3">
+            Sound played when a reminder fires
+          </p>
 
           <div class="flex flex-col gap-1">
             <!-- None option -->
@@ -100,7 +103,8 @@ const snoozeOptions: { value: number; label: string }[] = [
                       ? 'text-accent-700 dark:text-accent-300 font-medium'
                       : 'text-gray-600 dark:text-gray-400'
                   "
-                >None</span>
+                  >None</span
+                >
               </div>
             </div>
 
@@ -132,7 +136,8 @@ const snoozeOptions: { value: number; label: string }[] = [
                       ? 'text-accent-700 dark:text-accent-300 font-medium'
                       : 'text-gray-600 dark:text-gray-400'
                   "
-                >{{ s.name }}</span>
+                  >{{ s.name }}</span
+                >
               </div>
 
               <button
@@ -145,7 +150,11 @@ const snoozeOptions: { value: number; label: string }[] = [
                 @click.stop="togglePreview(s.filename)"
               >
                 <UIcon
-                  :name="playingFilename === s.filename ? 'heroicons:stop' : 'heroicons:play'"
+                  :name="
+                    playingFilename === s.filename
+                      ? 'heroicons:stop'
+                      : 'heroicons:play'
+                  "
                   class="size-3.5"
                 />
               </button>
@@ -156,8 +165,12 @@ const snoozeOptions: { value: number; label: string }[] = [
         <!-- Lead time -->
         <div class="flex items-center justify-between py-3">
           <div>
-            <p class="text-sm text-gray-700 dark:text-gray-200">Remind me before</p>
-            <p class="text-xs text-gray-400 mt-0.5">How early to trigger the alarm</p>
+            <p class="text-sm text-gray-700 dark:text-gray-200">
+              Remind me before
+            </p>
+            <p class="text-xs text-gray-400 mt-0.5">
+              How early to trigger the alarm
+            </p>
           </div>
           <div class="flex gap-1 bg-gray-100 dark:bg-gray-700 rounded-lg p-0.5">
             <button
@@ -179,8 +192,12 @@ const snoozeOptions: { value: number; label: string }[] = [
         <!-- Snooze duration -->
         <div class="flex items-center justify-between py-3">
           <div>
-            <p class="text-sm text-gray-700 dark:text-gray-200">Snooze duration</p>
-            <p class="text-xs text-gray-400 mt-0.5">How long to snooze when dismissed</p>
+            <p class="text-sm text-gray-700 dark:text-gray-200">
+              Snooze duration
+            </p>
+            <p class="text-xs text-gray-400 mt-0.5">
+              How long to snooze when dismissed
+            </p>
           </div>
           <div class="flex gap-1 bg-gray-100 dark:bg-gray-700 rounded-lg p-0.5">
             <button
@@ -203,11 +220,17 @@ const snoozeOptions: { value: number; label: string }[] = [
         <div class="flex items-center justify-between py-3">
           <div>
             <p class="text-sm text-gray-700 dark:text-gray-200">Repeat alarm</p>
-            <p class="text-xs text-gray-400 mt-0.5">Keep alerting until manually dismissed</p>
+            <p class="text-xs text-gray-400 mt-0.5">
+              Keep alerting until manually dismissed
+            </p>
           </div>
           <button
             class="relative w-10 h-6 rounded-full transition-colors"
-            :class="settings.repeatAlarm ? 'bg-accent-500' : 'bg-gray-200 dark:bg-gray-600'"
+            :class="
+              settings.repeatAlarm
+                ? 'bg-accent-500'
+                : 'bg-gray-200 dark:bg-gray-600'
+            "
             @click="update({ repeatAlarm: !settings.repeatAlarm })"
           >
             <span
@@ -216,7 +239,6 @@ const snoozeOptions: { value: number; label: string }[] = [
             />
           </button>
         </div>
-
       </div>
     </div>
   </div>

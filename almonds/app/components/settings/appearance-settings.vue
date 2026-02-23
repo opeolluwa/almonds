@@ -6,7 +6,11 @@ const isDark = computed({
 });
 const { fontSize, setFontSize } = useFontSize();
 const { accent: selectedAccent, setAccent } = useAccentColor();
-const { darkTheme: selectedDarkTheme, themes: darkThemes, setDarkTheme } = useDarkTheme();
+const {
+  darkTheme: selectedDarkTheme,
+  themes: darkThemes,
+  setDarkTheme,
+} = useDarkTheme();
 const accentOptions: { key: AccentKey; label: string; bg: string }[] = [
   { key: "rose", label: "Rose", bg: "bg-rose-600" },
   { key: "emerald", label: "Emerald", bg: "bg-emerald-500" },
@@ -97,7 +101,9 @@ const accentOptions: { key: AccentKey; label: string; bg: string }[] = [
         <div class="flex items-center justify-between py-3">
           <div>
             <p class="text-sm text-gray-700 dark:text-gray-200">Dark theme</p>
-            <p class="text-xs text-gray-400 mt-0.5">Background tint in dark mode</p>
+            <p class="text-xs text-gray-400 mt-0.5">
+              Background tint in dark mode
+            </p>
           </div>
           <div class="flex gap-2">
             <div
