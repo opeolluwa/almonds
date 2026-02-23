@@ -6,7 +6,7 @@
     <AppFeatures />
     <AppAiSection />
     <AppTechStack />
-    <AppPricing />
+    <!-- <AppPricing /> -->
     <AppDownload />
     <AppFooter />
   </div>
