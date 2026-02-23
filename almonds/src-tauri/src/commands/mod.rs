@@ -1,6 +1,10 @@
+pub mod alarm;
 pub mod bookmarks;
 pub mod notes;
 pub mod ollama;
+pub mod recycle_bin;
+pub mod reminder;
 pub mod snippets;
 pub mod sync_queue;
 pub mod todo;
+pub mod user_preference;
