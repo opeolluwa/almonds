@@ -4,9 +4,8 @@ use almond_kernel::{
     repositories::prelude::*,
     repositories::{
         bookmarks::BookmarkRepository, notes::NotesRepository, recycle_bin::RecycleBinRepository,
-        reminder::ReminderRepository, snippets::SnippetRepository,
-        sync_queue::SyncQueueRepository, todo::TodoRepository,
-        user_preference::UserPreferenceRepository,
+        reminder::ReminderRepository, snippets::SnippetRepository, sync_queue::SyncQueueRepository,
+        todo::TodoRepository, user_preference::UserPreferenceRepository,
     },
     sea_orm::DatabaseConnection,
 };

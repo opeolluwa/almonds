@@ -78,7 +78,9 @@ const stats = computed(() => [
 // Next 3 upcoming reminders sorted by soonest first
 const upcomingReminders = computed(() =>
   [...reminderStore.upcomingReminders]
-    .sort((a, b) => new Date(a.remindAt).getTime() - new Date(b.remindAt).getTime())
+    .sort(
+      (a, b) => new Date(a.remindAt).getTime() - new Date(b.remindAt).getTime(),
+    )
     .slice(0, 3),
 );
 
@@ -101,7 +103,11 @@ const recentBookmarks = computed(() => bookmarkStore.bookmarks.slice(0, 3));
 const todoFilter = ref<"all" | "active" | "done">("active");
 const todoSort = ref<"priority" | "date">("priority");
 
-const priorityOrder: Record<"high" | "medium" | "low", number> = { high: 0, medium: 1, low: 2 };
+const priorityOrder: Record<"high" | "medium" | "low", number> = {
+  high: 0,
+  medium: 1,
+  low: 2,
+};
 
 const filteredSortedTodos = computed(() => {
   let list = todoStore.todos;
@@ -119,7 +125,6 @@ const filteredSortedTodos = computed(() => {
     })
     .slice(0, 5);
 });
-
 
 // Progress
 const todoProgress = computed(() => {
@@ -313,15 +318,23 @@ const quickActions = [
           >
             <div class="p-1.5 rounded-md bg-rose-50 dark:bg-rose-950 shrink-0">
               <UIcon
-                :name="reminder.recurring ? 'heroicons:arrow-path' : 'heroicons:clock'"
+                :name="
+                  reminder.recurring
+                    ? 'heroicons:arrow-path'
+                    : 'heroicons:clock'
+                "
                 class="size-4 text-rose-400"
               />
             </div>
             <div class="flex-1 min-w-0">
-              <p class="text-sm font-medium text-gray-800 dark:text-gray-200 truncate group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors">
+              <p
+                class="text-sm font-medium text-gray-800 dark:text-gray-200 truncate group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors"
+              >
                 {{ reminder.title }}
               </p>
-              <p class="text-xs text-gray-400 mt-0.5">{{ formatRemindAt(reminder.remindAt) }}</p>
+              <p class="text-xs text-gray-400 mt-0.5">
+                {{ formatRemindAt(reminder.remindAt) }}
+              </p>
             </div>
             <span
               v-if="reminder.recurring"
@@ -442,26 +455,48 @@ const quickActions = [
 
         <!-- Filter / Sort / Delete completed controls -->
         <div class="flex items-center gap-1.5 mb-3 flex-wrap">
-          <div class="flex rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 text-xs">
+          <div
+            class="flex rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 text-xs"
+          >
             <button
-              v-for="f in (['all', 'active', 'done'] as const)"
+              v-for="f in ['all', 'active', 'done'] as const"
               :key="f"
               class="px-2 py-0.5 capitalize transition-colors"
-              :class="todoFilter === f ? 'bg-accent-500 text-white' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'"
+              :class="
+                todoFilter === f
+                  ? 'bg-accent-500 text-white'
+                  : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
+              "
               @click="todoFilter = f"
-            >{{ f }}</button>
+            >
+              {{ f }}
+            </button>
           </div>
-          <div class="flex rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 text-xs">
+          <div
+            class="flex rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 text-xs"
+          >
             <button
               class="px-2 py-0.5 transition-colors"
-              :class="todoSort === 'priority' ? 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200' : 'text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'"
+              :class="
+                todoSort === 'priority'
+                  ? 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200'
+                  : 'text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'
+              "
               @click="todoSort = 'priority'"
-            >Priority</button>
+            >
+              Priority
+            </button>
             <button
               class="px-2 py-0.5 transition-colors"
-              :class="todoSort === 'date' ? 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200' : 'text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'"
+              :class="
+                todoSort === 'date'
+                  ? 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200'
+                  : 'text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'
+              "
               @click="todoSort = 'date'"
-            >Date</button>
+            >
+              Date
+            </button>
           </div>
         </div>
 
@@ -492,13 +527,16 @@ const quickActions = [
           Loading…
         </div>
 
-        <div v-else-if="filteredSortedTodos.length === 0" class="py-4 text-center">
+        <div
+          v-else-if="filteredSortedTodos.length === 0"
+          class="py-4 text-center"
+        >
           <UIcon
             name="heroicons:check-badge"
             class="size-8 text-emerald-400 mx-auto mb-1"
           />
           <p class="text-xs text-gray-400">
-            {{ todoFilter === 'active' ? 'All caught up!' : 'No todos found.' }}
+            {{ todoFilter === "active" ? "All caught up!" : "No todos found." }}
           </p>
         </div>
 

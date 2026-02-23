@@ -23,14 +23,20 @@ const submitting = ref(false);
 const notFound = ref(false);
 
 onMounted(async () => {
-  if (!id) { notFound.value = true; return; }
+  if (!id) {
+    notFound.value = true;
+    return;
+  }
 
   if (reminderStore.reminders.length === 0) {
     await reminderStore.fetchReminders();
   }
 
   const reminder = reminderStore.reminders.find((r) => r.identifier === id);
-  if (!reminder) { notFound.value = true; return; }
+  if (!reminder) {
+    notFound.value = true;
+    return;
+  }
 
   form.title = reminder.title;
   form.description = reminder.description ?? "";
@@ -66,10 +72,21 @@ async function handleSubmit() {
 <template>
   <NuxtLayout name="default">
     <template #main_content>
-      <div v-if="notFound" class="flex flex-col items-center justify-center py-20 text-center">
-        <UIcon name="heroicons:exclamation-circle" class="size-8 text-gray-400 mb-3" />
-        <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Reminder not found.</p>
-        <NuxtLink to="/reminders" class="text-xs text-accent-500 hover:text-accent-600 font-medium">
+      <div
+        v-if="notFound"
+        class="flex flex-col items-center justify-center py-20 text-center"
+      >
+        <UIcon
+          name="heroicons:exclamation-circle"
+          class="size-8 text-gray-400 mb-3"
+        />
+        <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+          Reminder not found.
+        </p>
+        <NuxtLink
+          to="/reminders"
+          class="text-xs text-accent-500 hover:text-accent-600 font-medium"
+        >
           Back to reminders
         </NuxtLink>
       </div>
@@ -122,7 +139,11 @@ async function handleSubmit() {
             <button
               type="button"
               class="relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 focus:outline-none"
-              :class="form.recurring ? 'bg-accent-500' : 'bg-gray-200 dark:bg-gray-700'"
+              :class="
+                form.recurring
+                  ? 'bg-accent-500'
+                  : 'bg-gray-200 dark:bg-gray-700'
+              "
               @click="form.recurring = !form.recurring"
             >
               <span
@@ -130,7 +151,10 @@ async function handleSubmit() {
                 :class="form.recurring ? 'translate-x-4' : 'translate-x-0'"
               />
             </button>
-            <label class="text-sm text-gray-600 dark:text-gray-400 cursor-pointer select-none" @click="form.recurring = !form.recurring">
+            <label
+              class="text-sm text-gray-600 dark:text-gray-400 cursor-pointer select-none"
+              @click="form.recurring = !form.recurring"
+            >
               Recurring reminder
             </label>
           </div>
@@ -172,15 +196,25 @@ async function handleSubmit() {
         Tips
       </h2>
       <div class="flex flex-col gap-3">
-        <div class="flex items-start gap-2 text-xs text-gray-500 dark:text-gray-400">
-          <UIcon name="heroicons:clock" class="size-4 text-accent-500 shrink-0 mt-px" />
+        <div
+          class="flex items-start gap-2 text-xs text-gray-500 dark:text-gray-400"
+        >
+          <UIcon
+            name="heroicons:clock"
+            class="size-4 text-accent-500 shrink-0 mt-px"
+          />
           <span>
             <strong class="text-gray-700 dark:text-gray-300">One-time</strong>
             — fires once at the scheduled time
           </span>
         </div>
-        <div class="flex items-start gap-2 text-xs text-gray-500 dark:text-gray-400">
-          <UIcon name="heroicons:arrow-path" class="size-4 text-violet-500 shrink-0 mt-px" />
+        <div
+          class="flex items-start gap-2 text-xs text-gray-500 dark:text-gray-400"
+        >
+          <UIcon
+            name="heroicons:arrow-path"
+            class="size-4 text-violet-500 shrink-0 mt-px"
+          />
           <span>
             <strong class="text-gray-700 dark:text-gray-300">Recurring</strong>
             — repeats on a schedule using an iCalendar recurrence rule

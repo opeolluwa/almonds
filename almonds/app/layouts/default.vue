@@ -215,7 +215,7 @@ const pageTitle = computed(() => {
           </div>
 
           <!-- Search bar -->
-          <div class="mx-auto w-6/12" v-if="searchConfig!=null">
+          <div v-if="searchConfig != null" class="mx-auto w-6/12">
             <UInput
               :model-value="searchQuery"
               :placeholder="searchConfig?.placeholder ?? 'Search...'"
@@ -224,7 +224,7 @@ const pageTitle = computed(() => {
               size="sm"
               variant="outline"
               class="w-full placeholder:text-gray-400 dark:placeholder:text-gray-500"
-              :ui="{ root: 'bg-transparent'  }"
+              :ui="{ root: 'bg-transparent' }"
               @update:model-value="onSearchInput"
             />
           </div>

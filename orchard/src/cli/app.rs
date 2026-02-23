@@ -1,6 +1,5 @@
 use clap::{Parser, Subcommand, ValueEnum};
 
-
 #[derive(Parser)]
 #[command(
     name = "Orchard CLI",
@@ -20,7 +19,7 @@ pub enum Commands {
     TriggerAction {
         #[arg(value_enum)]
         action: OrchardCommands,
-    }
+    },
 }
 
 #[derive(ValueEnum, Debug, Clone)]
@@ -30,8 +29,6 @@ pub enum OrchardCommands {
     GenerateKeyPair,
 }
 
-
-
 impl std::fmt::Display for OrchardCommands {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
@@ -39,5 +36,3 @@ impl std::fmt::Display for OrchardCommands {
         }
     }
 }
-
-

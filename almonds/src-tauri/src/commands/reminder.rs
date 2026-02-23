@@ -55,10 +55,7 @@ pub async fn update_reminder(
 }
 
 #[tauri::command]
-pub async fn delete_reminder(
-    state: State<'_, AppState>,
-    identifier: Uuid,
-) -> Result<(), AppError> {
+pub async fn delete_reminder(state: State<'_, AppState>, identifier: Uuid) -> Result<(), AppError> {
     state.reminder_repository.delete(&identifier).await?;
     Ok(())
 }

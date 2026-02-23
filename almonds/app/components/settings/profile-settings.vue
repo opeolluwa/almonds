@@ -45,7 +45,9 @@ async function handleSave() {
         Profile
       </h2>
       <div class="flex items-center gap-4 mb-6">
-        <div class="size-16 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center shrink-0">
+        <div
+          class="size-16 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center shrink-0"
+        >
           <UIcon name="i-lucide-user" class="size-8 text-gray-400" />
         </div>
         <div>

@@ -40,7 +40,7 @@ pub fn run() {
 
                 let db_path = app_data_dir.join("almond.db");
                 let db_url = format!("sqlite://{}?mode=rwc", db_path.display());
-dbg!("Database URL: {:?}", &db_path);
+                dbg!("Database URL: {:?}", &db_path);
                 let kernel = almond_kernel::kernel::Kernel::new(&db_url)
                     .await
                     .expect("failed to initialize kernel");

@@ -5,8 +5,6 @@ export interface Route {
   activeIcon: string;
 }
 
-
-
 export const primaryRoutes: Route[] = [
   {
     path: "/",
@@ -34,7 +32,7 @@ export const primaryRoutes: Route[] = [
     activeIcon: "heroicons:bookmark-solid",
   },
 
-    {
+  {
     path: "/reminders",
     name: "Reminders",
     icon: "heroicons:clock",
