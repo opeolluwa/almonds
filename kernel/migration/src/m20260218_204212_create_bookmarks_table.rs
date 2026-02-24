@@ -43,7 +43,7 @@ impl MigrationTrait for Migration {
 }
 
 #[derive(DeriveIden)]
-enum Bookmark {
+pub enum Bookmark {
     Table,
     Identifier,
     Title,

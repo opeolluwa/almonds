@@ -42,7 +42,7 @@ impl MigrationTrait for Migration {
 }
 
 #[derive(DeriveIden)]
-enum RecycleBin {
+pub enum RecycleBin {
     Table,
     Identifier,
     ItemId,
