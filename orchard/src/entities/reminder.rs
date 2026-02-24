@@ -5,16 +5,43 @@ use sea_orm::entity::prelude::*;
 #[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel)]
 #[sea_orm(table_name = "reminder")]
 pub struct Model {
-    #[sea_orm(primary_key, auto_increment = false)]
+    #[sea_orm(
+        primary_key,
+        auto_increment = false,
+        ignore,
+        column_type = "custom(\"UUID\")",
+        select_as = "text"
+    )]
     pub identifier: Uuid,
+    #[sea_orm(column_type = "Text")]
     pub title: String,
     #[sea_orm(column_type = "Text", nullable)]
     pub description: Option<String>,
     pub recurring: bool,
+    #[sea_orm(column_type = "Text", nullable)]
     pub recurrence_rule: Option<String>,
+    #[sea_orm(column_type = "Text", nullable)]
     pub alarm_sound: Option<String>,
+    #[sea_orm(
+        ignore,
+        column_type = "custom(\"TIMESTAMP WITH TIME ZONE\")",
+        select_as = "text",
+        nullable
+    )]
     pub remind_at: DateTimeWithTimeZone,
+    #[sea_orm(
+        ignore,
+        column_type = "custom(\"TIMESTAMP WITH TIME ZONE\")",
+        select_as = "text",
+        nullable
+    )]
     pub created_at: DateTimeWithTimeZone,
+    #[sea_orm(
+        ignore,
+        column_type = "custom(\"TIMESTAMP WITH TIME ZONE\")",
+        select_as = "text",
+        nullable
+    )]
     pub updated_at: DateTimeWithTimeZone,
 }
 

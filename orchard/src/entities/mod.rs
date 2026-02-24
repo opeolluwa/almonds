@@ -14,7 +14,7 @@ pub mod snippets;
 pub mod sync_queue;
 pub mod todo;
 pub mod user_preference;
-pub mod workspace;
+pub mod workspaces;
 
 seaography::register_entity_modules!([
     bookmark,
@@ -29,5 +29,5 @@ seaography::register_entity_modules!([
     sync_queue,
     todo,
     user_preference,
-    workspace,
+    workspaces,
 ]);

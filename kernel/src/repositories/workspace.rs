@@ -4,7 +4,7 @@ use async_trait::async_trait;
 use sea_orm::{ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter};
 use uuid::Uuid;
 
-use crate::{adapters::workspace::CreateWorkspace, entities::workspace, error::KernelError};
+use crate::{adapters::workspace::CreateWorkspace, entities::workspaces, error::KernelError};
 
 pub struct WorkspaceRepository {
     conn: Arc<DatabaseConnection>,
@@ -15,11 +15,11 @@ pub trait WorkspaceRepositoryExt {
     async fn create_workspace(
         &self,
         workspace: CreateWorkspace,
-    ) -> Result<workspace::Model, KernelError>;
+    ) -> Result<workspaces::Model, KernelError>;
 
-    async fn get_workspace_by_id(&self, id: Uuid) -> Result<workspace::Model, KernelError>;
+    async fn get_workspace_by_id(&self, id: Uuid) -> Result<workspaces::Model, KernelError>;
 
-    async fn list_workspaces(&self) -> Result<Vec<workspace::Model>, KernelError>;
+    async fn list_workspaces(&self) -> Result<Vec<workspaces::Model>, KernelError>;
 }
 
 #[async_trait]
@@ -27,17 +27,17 @@ impl WorkspaceRepositoryExt for WorkspaceRepository {
     async fn create_workspace(
         &self,
         workspace: CreateWorkspace,
-    ) -> Result<workspace::Model, KernelError> {
-        let active_model: workspace::ActiveModel = workspace.into();
+    ) -> Result<workspaces::Model, KernelError> {
+        let active_model: workspaces::ActiveModel = workspace.into();
         active_model
             .insert(self.conn.as_ref())
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))
     }
 
-    async fn get_workspace_by_id(&self, id: Uuid) -> Result<workspace::Model, KernelError> {
-        workspace::Entity::find()
-            .filter(workspace::Column::Identifier.eq(id))
+    async fn get_workspace_by_id(&self, id: Uuid) -> Result<workspaces::Model, KernelError> {
+        workspaces::Entity::find()
+            .filter(workspaces::Column::Identifier.eq(id))
             .one(self.conn.as_ref())
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))
@@ -48,8 +48,8 @@ impl WorkspaceRepositoryExt for WorkspaceRepository {
             })
     }
 
-    async fn list_workspaces(&self) -> Result<Vec<workspace::Model>, KernelError> {
-        workspace::Entity::find()
+    async fn list_workspaces(&self) -> Result<Vec<workspaces::Model>, KernelError> {
+        workspaces::Entity::find()
             .all(self.conn.as_ref())
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))

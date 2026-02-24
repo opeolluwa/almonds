@@ -1,6 +1,8 @@
-use sea_orm_migration::{prelude::*, schema::*};
+use sea_orm_migration::{prelude::*, sea_orm::DbBackend};
 
-use crate::{m20260221_065819_create_recycle_bin::RecycleBin, m20260224_214545_create_workspaces::Workspace};
+use crate::{
+    m20260221_065819_create_recycle_bin::RecycleBin, m20260224_214545_create_workspaces::Workspaces,
+};
 
 #[derive(DeriveMigrationName)]
 pub struct Migration;
@@ -8,7 +10,34 @@ pub struct Migration;
 #[async_trait::async_trait]
 impl MigrationTrait for Migration {
     async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
-          manager
+
+        let db_backend = manager.get_database_backend();
+        let db_connection = manager.get_connection();
+        if db_backend == DbBackend::Sqlite {
+            // For SQLite, we need to create a new table with the workspace_identifier column, copy the data, and then replace the old table
+            db_connection
+                .execute_unprepared(
+                    r#"
+                    CREATE TABLE IF NOT EXISTS "recycle_bin_new" (
+                        "identifier" TEXT PRIMARY KEY,
+                        "title" TEXT NOT NULL,
+                        "description" TEXT,
+                        "created_at" TIMESTAMP WITH TIME ZONE,
+                        "updated_at" TIMESTAMP WITH TIME ZONE,
+                        "workspace_identifier" UUID,
+                        FOREIGN KEY("workspace_identifier") REFERENCES "workspaces"("identifier") ON DELETE CASCADE
+                    );
+                    INSERT INTO "recycle_bin_new" ("identifier", "title", "description", "created_at", "updated_at")
+                    SELECT "identifier", "title", "description", "created_at", "updated_at" FROM "recycle_bin";
+                    DROP TABLE "recycle_bin";
+                    ALTER TABLE "recycle_bin_new" RENAME TO "recycle_bin";
+                    "#,
+                )
+                .await?;
+            return Ok(());
+        }
+        
+        manager
             .alter_table(
                 Table::alter()
                     .table(RecycleBin::Table)
@@ -22,7 +51,7 @@ impl MigrationTrait for Migration {
                 ForeignKey::create()
                     .name("fk_recycle_bin_workspace_identifier")
                     .from(RecycleBin::Table, "workspace_identifier")
-                    .to(Workspace::Table, "identifier")
+                    .to(Workspaces::Table, "identifier")
                     .on_delete(ForeignKeyAction::Cascade)
                     .to_owned(),
             )
