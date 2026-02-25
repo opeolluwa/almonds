@@ -11,6 +11,13 @@ mod m20260219_214114_add_due_time_to_todo;
 mod m20260221_065202_create_reminder_table;
 mod m20260221_065819_create_recycle_bin;
 mod m20260221_065938_create_user_preference_table;
+mod m20260224_214545_create_workspaces;
+mod m20260224_220314_add_workspace_id_to_snippet_entities;
+mod m20260224_221032_add_workspace_id_to_notes_entities;
+mod m20260224_221334_add_workspace_id_to_todo_entities;
+mod m20260224_221502_add_workspace_id_to_bookmark_entities;
+mod m20260224_221622_add_workspace_id_to_reminder_entities;
+mod m20260224_221707_add_workspace_id_to_recycle_bin_entities;
 
 pub use sea_orm_migration::prelude::*;
 
@@ -33,6 +40,13 @@ impl MigratorTrait for Migrator {
             Box::new(m20260221_065202_create_reminder_table::Migration),
             Box::new(m20260221_065819_create_recycle_bin::Migration),
             Box::new(m20260221_065938_create_user_preference_table::Migration),
+            Box::new(m20260224_214545_create_workspaces::Migration),
+            Box::new(m20260224_220314_add_workspace_id_to_snippet_entities::Migration),
+            Box::new(m20260224_221032_add_workspace_id_to_notes_entities::Migration),
+            Box::new(m20260224_221334_add_workspace_id_to_todo_entities::Migration),
+            Box::new(m20260224_221502_add_workspace_id_to_bookmark_entities::Migration),
+            Box::new(m20260224_221622_add_workspace_id_to_reminder_entities::Migration),
+            Box::new(m20260224_221707_add_workspace_id_to_recycle_bin_entities::Migration),
         ]
     }
 }

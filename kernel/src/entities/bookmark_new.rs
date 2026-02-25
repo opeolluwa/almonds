@@ -4,21 +4,18 @@ use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel, Serialize, Deserialize)]
-#[sea_orm(table_name = "snippets")]
+#[sea_orm(table_name = "bookmark_new")]
 #[serde(rename_all = "camelCase")]
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false)]
     pub identifier: Uuid,
-    pub title: Option<String>,
-    pub language: Option<String>,
+    pub title: String,
+    pub url: String,
     #[sea_orm(column_type = "Text")]
-    pub code: String,
-    #[sea_orm(column_type = "Text", nullable)]
-    pub description: Option<String>,
-    pub is_pinned: bool,
+    pub tag: String,
+    pub workspace_identifier: Option<Uuid>,
     pub created_at: DateTimeWithTimeZone,
     pub updated_at: DateTimeWithTimeZone,
-    pub workspace_identifier: Option<Uuid>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

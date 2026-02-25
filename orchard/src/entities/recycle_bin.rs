@@ -5,7 +5,13 @@ use sea_orm::entity::prelude::*;
 #[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel)]
 #[sea_orm(table_name = "recycle_bin")]
 pub struct Model {
-    #[sea_orm(primary_key, auto_increment = false)]
+    #[sea_orm(
+        primary_key,
+        auto_increment = false,
+        ignore,
+        column_type = "custom(\"UUID\")",
+        select_as = "text"
+    )]
     pub identifier: Uuid,
     pub item_id: Uuid,
     #[sea_orm(column_type = "Text")]

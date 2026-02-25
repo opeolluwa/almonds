@@ -9,14 +9,13 @@ impl MigrationTrait for Migration {
         manager
             .create_table(
                 Table::create()
-                    .table(Notes::Table)
+                    .table(Workspaces::Table)
                     .if_not_exists()
-                    .col(pk_uuid(Notes::Identifier))
-                    .col(string(Notes::Title))
-                    .col(text(Notes::Content))
-                    .col(json(Notes::Categories))
-                    .col(timestamp_with_time_zone(Notes::CreatedAt))
-                    .col(timestamp_with_time_zone(Notes::UpdatedAt))
+                    .col(pk_uuid(Workspaces::Identifier))
+                    .col(string(Workspaces::Name))
+                    .col(string(Workspaces::Description))
+                    .col(timestamp_with_time_zone(Workspaces::CreatedAt))
+                    .col(timestamp_with_time_zone(Workspaces::UpdatedAt))
                     .to_owned(),
             )
             .await
@@ -24,18 +23,17 @@ impl MigrationTrait for Migration {
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         manager
-            .drop_table(Table::drop().table(Notes::Table).to_owned())
+            .drop_table(Table::drop().table(Workspaces::Table).to_owned())
             .await
     }
 }
 
 #[derive(DeriveIden)]
-pub enum Notes {
+pub enum Workspaces {
     Table,
     Identifier,
-    Title,
-    Content,
-    Categories,
+    Name,
+    Description,
     CreatedAt,
     UpdatedAt,
 }

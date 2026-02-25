@@ -5,8 +5,15 @@ use sea_orm::entity::prelude::*;
 #[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel)]
 #[sea_orm(table_name = "todo")]
 pub struct Model {
-    #[sea_orm(primary_key, auto_increment = false)]
+    #[sea_orm(
+        primary_key,
+        auto_increment = false,
+        ignore,
+        column_type = "custom(\"UUID\")",
+        select_as = "text"
+    )]
     pub identifier: Uuid,
+    #[sea_orm(column_type = "Text")]
     pub title: String,
     #[sea_orm(column_type = "Text", nullable)]
     pub description: Option<String>,

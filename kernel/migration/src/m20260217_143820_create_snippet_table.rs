@@ -32,7 +32,7 @@ impl MigrationTrait for Migration {
 }
 
 #[derive(DeriveIden)]
-enum Snippets {
+pub enum Snippets {
     Table,
     Identifier,
     Title,
