@@ -53,12 +53,14 @@ async fn check_and_fire(app: &AppHandle) {
         }
     };
 
+    log::info!("[Scheduler] Fetched {} reminders", reminders.len());
+
     for reminder in reminders {
         // Convert to UTC timestamp for timezone-agnostic comparison.
         let fire_at_ts = reminder.remind_at.timestamp() - lead_duration.num_seconds();
         let fire_minute = fire_at_ts / 60;
 
-        if fire_minute != now_minute {
+        if fire_minute < now_minute {
             continue;
         }
 

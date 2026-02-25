@@ -41,7 +41,7 @@ function isActive(path: string): boolean {
   return route.path.startsWith(path);
 }
 
-const sidebarCollapsed = ref(false);
+const sidebarCollapsed = ref(true);
 const asideOpen = ref(false);
 const mobileNavOpen = ref(false);
 
@@ -283,14 +283,7 @@ const pageTitle = computed(() => {
           </slot>
 
           <div class="hidden md:flex items-center justify-between mt-5 my-6">
-            <button
-              v-if="route.path != '/'"
-              class="flex items-center gap-1.5 text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-              @click="router.back()"
-            >
-              <UIcon name="heroicons:arrow-left" class="size-3.5" />
-              Back
-            </button>
+          
 
             <slot name="primary_cta" />
           </div>
