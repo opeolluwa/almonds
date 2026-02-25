@@ -12,6 +12,8 @@ pub struct WorkspaceRepository {
 
 #[async_trait]
 pub trait WorkspaceRepositoryExt {
+    fn new(conn: Arc<DatabaseConnection>) -> Self;
+
     async fn create_workspace(
         &self,
         workspace: CreateWorkspace,
@@ -24,6 +26,10 @@ pub trait WorkspaceRepositoryExt {
 
 #[async_trait]
 impl WorkspaceRepositoryExt for WorkspaceRepository {
+    fn new(conn: Arc<DatabaseConnection>) -> Self {
+        Self { conn }
+    }
+
     async fn create_workspace(
         &self,
         workspace: CreateWorkspace,

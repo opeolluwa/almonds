@@ -5,31 +5,42 @@ use sea_orm::entity::prelude::*;
 #[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel)]
 #[sea_orm(table_name = "todo")]
 pub struct Model {
-    #[sea_orm(
-        primary_key,
-        auto_increment = false,
-        ignore,
-        column_type = "custom(\"UUID\")",
-        select_as = "text"
-    )]
+    #[sea_orm(primary_key, auto_increment = false)]
     pub identifier: Uuid,
-    #[sea_orm(column_type = "Text")]
     pub title: String,
     #[sea_orm(column_type = "Text", nullable)]
     pub description: Option<String>,
     pub due_date: Option<Date>,
     #[sea_orm(column_type = "Text")]
     pub priority: String,
-    pub done: bool,
     pub created_at: DateTimeWithTimeZone,
     pub updated_at: DateTimeWithTimeZone,
-    pub due_time: Option<Time>,
+    pub workspace_identifier: Option<Uuid>,
+    pub done: bool,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
-pub enum Relation {}
+pub enum Relation {
+    #[sea_orm(
+        belongs_to = "super::workspaces::Entity",
+        from = "Column::WorkspaceIdentifier",
+        to = "super::workspaces::Column::Identifier",
+        on_update = "NoAction",
+        on_delete = "Cascade"
+    )]
+    Workspaces,
+}
 
-#[derive(Copy, Clone, Debug, EnumIter, DeriveRelatedEntity)]
-pub enum RelatedEntity {}
+impl Related<super::workspaces::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Workspaces.def()
+    }
+}
 
 impl ActiveModelBehavior for ActiveModel {}
+
+#[derive(Copy, Clone, Debug, EnumIter, DeriveRelatedEntity)]
+pub enum RelatedEntity {
+    #[sea_orm(entity = "super::workspaces::Entity")]
+    Workspaces,
+}

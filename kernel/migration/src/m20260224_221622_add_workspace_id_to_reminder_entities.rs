@@ -40,7 +40,6 @@ impl MigrationTrait for Migration {
                 )
                 .await?;
 
-
             db_connection
                 .execute_unprepared(
                     r#"

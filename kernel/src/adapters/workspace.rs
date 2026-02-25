@@ -20,7 +20,7 @@ impl Into<entities::workspaces::ActiveModel> for CreateWorkspace {
             name: Set(self.name),
             description: Set(self.description),
             created_at: Set(Utc::now().fixed_offset()),
-            ..Default::default()
+            updated_at: Set(Utc::now().fixed_offset()),
         }
     }
 }

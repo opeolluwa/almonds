@@ -14,8 +14,6 @@ use almond_kernel::repositories::reminder::ReminderRepositoryExt;
 /// any reminders whose adjusted fire time (remind_at − lead_time) falls in the
 /// current minute. Deduplicates via `SchedulerState::fired_keys`.
 pub async fn run(app: AppHandle) {
-        log::info!("[Scheduler] Checked reminders at {}", chrono::Utc::now());
-
     loop {
         log::info!("[Scheduler] Checked reminders at {}", chrono::Utc::now());
 
@@ -55,12 +53,14 @@ async fn check_and_fire(app: &AppHandle) {
         }
     };
 
+    log::info!("[Scheduler] Fetched {} reminders", reminders.len());
+
     for reminder in reminders {
         // Convert to UTC timestamp for timezone-agnostic comparison.
         let fire_at_ts = reminder.remind_at.timestamp() - lead_duration.num_seconds();
         let fire_minute = fire_at_ts / 60;
 
-        if fire_minute != now_minute {
+        if fire_minute < now_minute {
             continue;
         }
 
