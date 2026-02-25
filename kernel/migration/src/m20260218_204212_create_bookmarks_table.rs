@@ -54,7 +54,7 @@ pub enum Bookmark {
 }
 
 #[derive(DeriveIden)]
-enum Tag {
+pub enum Tag {
     #[sea_orm(iden = "tag")]
     Type,
     Development,

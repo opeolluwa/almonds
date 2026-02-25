@@ -1,4 +1,4 @@
-use sea_orm_migration::{prelude::*, sea_orm::DbBackend};
+use sea_orm_migration::{prelude::*, sea_orm::DbBackend, schema::*};
 
 use crate::{
     m20260218_110352_create_note_table::Notes, m20260224_214545_create_workspaces::Workspaces,
@@ -14,19 +14,33 @@ impl MigrationTrait for Migration {
         let db_connection = manager.get_connection();
 
         if db_backend == DbBackend::Sqlite {
-            // For SQLite, we need to create a new table with the workspace_identifier column, copy the data, and then replace the old table
+             manager
+                .create_table(
+                    Table::create()
+                        .table("notes_new")
+                        .if_not_exists()
+                        .col(pk_uuid("identifier"))
+                        .col(string("title"))
+                        .col(text("content"))
+                        .col(json("categories"))
+                        .col(timestamp_with_time_zone("created_at"))
+                        .col(timestamp_with_time_zone("updated_at"))
+                        .col(ColumnDef::new("workspace_identifier").uuid())
+                        .foreign_key(
+                            ForeignKey::create()
+                                .name("fk_notes_workspace_identifier")
+                                .from(Notes::Table, "workspace_identifier")
+                                .to(Workspaces::Table, "identifier")
+                                .on_delete(ForeignKeyAction::Cascade),
+                        )
+                        .to_owned(),
+                )
+                .await?;
+
+
             db_connection
                 .execute_unprepared(
                     r#"
-                    CREATE TABLE IF NOT EXISTS "notes_new" (
-                        "identifier" TEXT PRIMARY KEY,
-                        "title" TEXT NOT NULL,
-                        "content" TEXT NOT NULL,
-                        "created_at" TIMESTAMP NOT NULL,
-                        "updated_at" TIMESTAMP NOT NULL,
-                        "workspace_identifier" UUID,
-                        FOREIGN KEY("workspace_identifier") REFERENCES "workspaces"("identifier") ON DELETE CASCADE
-                    );
                     INSERT INTO "notes_new" ("identifier", "title", "content", "created_at", "updated_at")
                     SELECT "identifier", "title", "content", "created_at", "updated_at" FROM "notes";
                     DROP TABLE "notes";

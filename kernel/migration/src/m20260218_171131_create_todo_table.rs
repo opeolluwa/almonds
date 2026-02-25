@@ -53,7 +53,7 @@ pub enum Todo {
 }
 
 #[derive(DeriveIden)]
-enum Priority {
+pub enum Priority {
     #[sea_orm(iden = "priority")]
     Type,
     High,
