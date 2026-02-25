@@ -1,4 +1,5 @@
 use serde::Deserialize;
+use uuid::Uuid;
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -6,6 +7,7 @@ pub struct CreateBookmark {
     pub title: String,
     pub url: String,
     pub tag: String,
+    pub workspace_identifier: Option<Uuid>,
 }
 
 impl From<CreateBookmark> for almond_kernel::adapters::bookmarks::CreateBookmark {
@@ -23,6 +25,7 @@ impl From<CreateBookmark> for almond_kernel::adapters::bookmarks::CreateBookmark
             title: b.title,
             url: b.url,
             tag,
+            workspace_identifier: b.workspace_identifier,
         }
     }
 }

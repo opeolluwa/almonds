@@ -1,5 +1,6 @@
 use almond_kernel::sea_orm::prelude::DateTimeWithTimeZone;
 use serde::Deserialize;
+use uuid::Uuid;
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -11,6 +12,7 @@ pub struct CreateReminder {
     pub recurrence_rule: Option<String>,
     pub alarm_sound: Option<String>,
     pub remind_at: DateTimeWithTimeZone,
+    pub workspace_identifier: Option<Uuid>,
 }
 
 impl From<CreateReminder> for almond_kernel::adapters::reminder::CreateReminder {
@@ -22,6 +24,7 @@ impl From<CreateReminder> for almond_kernel::adapters::reminder::CreateReminder 
             recurrence_rule: r.recurrence_rule,
             alarm_sound: r.alarm_sound,
             remind_at: r.remind_at,
+            workspace_identifier: r.workspace_identifier,
         }
     }
 }

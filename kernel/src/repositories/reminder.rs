@@ -125,6 +125,7 @@ impl ReminderRepositoryExt for ReminderRepository {
             .store(&CreateRecycleBinEntry {
                 item_id: model.identifier,
                 item_type: RecycleBinItemType::Reminder,
+                workspace_identifier: model.workspace_identifier,
                 payload,
             })
             .await?;

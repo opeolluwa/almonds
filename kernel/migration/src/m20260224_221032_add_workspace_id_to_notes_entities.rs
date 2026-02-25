@@ -1,4 +1,4 @@
-use sea_orm_migration::{prelude::*, sea_orm::DbBackend, schema::*};
+use sea_orm_migration::{prelude::*, schema::*, sea_orm::DbBackend};
 
 use crate::{
     m20260218_110352_create_note_table::Notes, m20260224_214545_create_workspaces::Workspaces,
@@ -14,7 +14,7 @@ impl MigrationTrait for Migration {
         let db_connection = manager.get_connection();
 
         if db_backend == DbBackend::Sqlite {
-             manager
+            manager
                 .create_table(
                     Table::create()
                         .table("notes_new")
@@ -22,7 +22,7 @@ impl MigrationTrait for Migration {
                         .col(pk_uuid("identifier"))
                         .col(string("title"))
                         .col(text("content"))
-                        .col(json("categories"))
+                        .col(json_null("categories"))
                         .col(timestamp_with_time_zone("created_at"))
                         .col(timestamp_with_time_zone("updated_at"))
                         .col(ColumnDef::new("workspace_identifier").uuid())
@@ -36,7 +36,6 @@ impl MigrationTrait for Migration {
                         .to_owned(),
                 )
                 .await?;
-
 
             db_connection
                 .execute_unprepared(

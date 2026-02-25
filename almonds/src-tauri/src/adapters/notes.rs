@@ -1,4 +1,5 @@
 use serde::Deserialize;
+use uuid::Uuid;
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -6,6 +7,7 @@ pub struct CreateNote {
     pub title: String,
     pub content: String,
     pub categories: Option<Vec<String>>,
+    pub workspace_identifier: Option<Uuid>,
 }
 
 impl From<CreateNote> for almond_kernel::adapters::notes::CreateNote {
@@ -14,6 +16,7 @@ impl From<CreateNote> for almond_kernel::adapters::notes::CreateNote {
             title: note.title,
             content: note.content,
             categories: note.categories,
+            workspace_identifier: note.workspace_identifier,
         }
     }
 }

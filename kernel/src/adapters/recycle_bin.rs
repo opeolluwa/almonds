@@ -35,6 +35,7 @@ pub struct CreateRecycleBinEntry {
     pub item_id: Uuid,
     pub item_type: RecycleBinItemType,
     pub payload: String,
+    pub workspace_identifier: Option<Uuid>,
 }
 
 impl Into<entities::recycle_bin::ActiveModel> for CreateRecycleBinEntry {
@@ -44,6 +45,7 @@ impl Into<entities::recycle_bin::ActiveModel> for CreateRecycleBinEntry {
             item_id: Set(self.item_id),
             item_type: Set(self.item_type.to_string()),
             payload: Set(self.payload),
+            workspace_identifier: Set(self.workspace_identifier),
             deleted_at: Set(Utc::now().fixed_offset()),
         }
     }

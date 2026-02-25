@@ -4,6 +4,18 @@ import { primaryRoutes, secondaryRoutes } from "~/data/routes";
 import { useUserPreferenceStore } from "~/stores/user-preference";
 
 const preferenceStore = useUserPreferenceStore();
+const workspaceStore = useWorkspacesStore();
+
+const workspaces = computed(() =>
+  workspaceStore.workspaces.map((w) => ({
+    label: w.name,
+    value: w.identifier,
+  })),
+);
+const workspace = ref({
+  label: workspaceStore.currentWorkspace?.name ?? "Select workspace",
+  value: workspaceStore.currentWorkspace?.identifier ?? "",
+});
 
 const route = useRoute();
 const router = useRouter();
@@ -90,20 +102,21 @@ const pageTitle = computed(() => {
               variant="ghost"
             />
 
-            <UAvatar v-else icon="i-lucide-user" size="sm" class="shrink-0" />
+            <!-- <UAvatar v-else icon="i-lucide-user" size="sm" class="shrink-0" /> -->
+            <!--TODO-->
+            <!-- <USelectMenu v-model="workspace" :items="workspaces" /> -->
           </div>
 
-          <!--TODO: enable when the project feature is done, the former class is flex before hidden-->
-          <!-- <div class="px-3 flex mb-3 max-w-9/12">
+          <div class="px-3 flex mb-3 max-w-9/12">
             <UButton
               color="error"
               variant="solid"
               class="flex-1 bg-accent-500 hover:bg-accent-600 justify-center"
             >
               <UIcon name="heroicons:plus" class="size-4 shrink-0" />
-              <span v-if="!collapsed">New Project</span>
+              <span v-if="!collapsed">New Workspace</span>
             </UButton>
-          </div> -->
+          </div>
 
           <USeparator class="mx-3 max-w-9/12" />
         </div>

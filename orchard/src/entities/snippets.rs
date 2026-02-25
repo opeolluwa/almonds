@@ -5,22 +5,18 @@ use sea_orm::entity::prelude::*;
 #[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel)]
 #[sea_orm(table_name = "snippets")]
 pub struct Model {
-    #[sea_orm(
-        primary_key,
-        auto_increment = false,
-        ignore,
-        column_type = "custom(\"UUID\")",
-        select_as = "text"
-    )]
-    pub identifier: String,
+    #[sea_orm(primary_key, auto_increment = false)]
+    pub identifier: Uuid,
+    pub title: Option<String>,
+    pub language: Option<String>,
     #[sea_orm(column_type = "Text")]
-    pub title: String,
-    #[sea_orm(column_type = "Text")]
-    pub content: String,
-    pub created_at: DateTimeUtc,
-    pub updated_at: DateTimeUtc,
-    #[sea_orm(ignore, column_type = "custom(\"UUID\")", select_as = "text", nullable)]
-    pub workspace_identifier: Option<String>,
+    pub code: String,
+    #[sea_orm(column_type = "Text", nullable)]
+    pub description: Option<String>,
+    pub is_pinned: bool,
+    pub created_at: DateTimeWithTimeZone,
+    pub updated_at: DateTimeWithTimeZone,
+    pub workspace_identifier: Option<Uuid>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
@@ -41,10 +37,10 @@ impl Related<super::workspaces::Entity> for Entity {
     }
 }
 
+impl ActiveModelBehavior for ActiveModel {}
+
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelatedEntity)]
 pub enum RelatedEntity {
     #[sea_orm(entity = "super::workspaces::Entity")]
     Workspaces,
 }
-
-impl ActiveModelBehavior for ActiveModel {}

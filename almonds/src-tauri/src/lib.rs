@@ -14,11 +14,28 @@ use crate::state::scheduler::SchedulerState;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    tauri::Builder::default()
+    let mut builder = tauri::Builder::default();
+
+    #[cfg(desktop)]
+    {
+        builder = builder.plugin(tauri_plugin_single_instance::init(|app, args, cwd| {
+            // let _ = app
+            //     .get_webview_window("main")
+            //     .expect("no main window")
+            //     .set_focus();
+
+            use tauri::Emitter;
+
+            use crate::adapters::app::Payload;
+
+            app.emit("single-instance", Payload { args, cwd }).unwrap();
+        }));
+    }
+
+    builder
         .plugin(tauri_plugin_os::init())
         .plugin(tauri_plugin_notification::init())
         .plugin(tauri_plugin_clipboard_manager::init())
-        // .plugin(tauri_plugin_single_instance::init(|_app, _args, _cwd| {}))
         .plugin(tauri_plugin_sql::Builder::new().build())
         .setup(|app| {
             if cfg!(debug_assertions) {
@@ -118,6 +135,9 @@ pub fn run() {
             commands::user_preference::get_user_preference,
             commands::user_preference::create_user_preference,
             commands::user_preference::update_user_preference,
+            commands::workspaces::create_workspace,
+            commands::workspaces::list_workspaces,
+            commands::workspaces::get_workspace_by_id,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

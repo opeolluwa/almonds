@@ -1,10 +1,16 @@
 <script setup lang="ts">
 import { useAlarmScheduler } from "~/composables/useAlarmScheduler";
+import { useWorkspaceSetup } from "./composables/useWorkspaceSetup";
 
 const { init } = useAccentColor();
 const { init: initFontSize } = useFontSize();
 const { init: initDarkTheme } = useDarkTheme();
 const { setupRequired, checkSetup, initializing } = useUserSetup();
+const {
+  setupRequired: workspaceSetupRequired,
+  checkSetup: checkWorkspaceSetup,
+  initializing: workspaceInitializing,
+} = useWorkspaceSetup();
 
 useAlarmScheduler();
 
@@ -13,6 +19,7 @@ onMounted(async () => {
   initFontSize();
   initDarkTheme();
   await checkSetup();
+  await checkWorkspaceSetup();
 });
 </script>
 
@@ -23,6 +30,7 @@ onMounted(async () => {
     </NuxtLayout>
     <AppNotification />
     <UserSetupModal v-if="setupRequired" />
+    <WorkspaceSetupModal v-if="workspaceSetupRequired" />
 
     <Transition
       enter-active-class="transition-opacity duration-200"
@@ -30,7 +38,7 @@ onMounted(async () => {
       enter-from-class="opacity-0"
       leave-to-class="opacity-0"
     >
-      <AppSplashScreen v-if="initializing" />
+      <AppSplashScreen v-if="initializing || workspaceInitializing" />
     </Transition>
   </UApp>
 </template>

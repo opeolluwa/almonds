@@ -128,6 +128,7 @@ impl TodoRepositoryExt for TodoRepository {
             .store(&CreateRecycleBinEntry {
                 item_id: model.identifier,
                 item_type: RecycleBinItemType::Todo,
+                workspace_identifier: model.workspace_identifier,
                 payload,
             })
             .await?;

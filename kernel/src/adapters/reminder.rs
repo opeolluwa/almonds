@@ -15,6 +15,7 @@ pub struct CreateReminder {
     pub recurrence_rule: Option<String>,
     pub alarm_sound: Option<String>,
     pub remind_at: DateTimeWithTimeZone,
+    pub workspace_identifier: Option<Uuid>,
 }
 
 impl Into<entities::reminder::ActiveModel> for CreateReminder {
@@ -29,6 +30,7 @@ impl Into<entities::reminder::ActiveModel> for CreateReminder {
             remind_at: Set(self.remind_at),
             created_at: Set(Local::now().fixed_offset()),
             updated_at: Set(Local::now().fixed_offset()),
+            workspace_identifier: Set(self.workspace_identifier),
         }
     }
 }

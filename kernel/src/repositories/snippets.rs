@@ -88,6 +88,7 @@ impl SnippetRepositoryExt for SnippetRepository {
             .store(&CreateRecycleBinEntry {
                 item_id: model.identifier,
                 item_type: RecycleBinItemType::Snippet,
+                workspace_identifier: model.workspace_identifier,
                 payload,
             })
             .await?;

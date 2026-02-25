@@ -14,8 +14,6 @@ use almond_kernel::repositories::reminder::ReminderRepositoryExt;
 /// any reminders whose adjusted fire time (remind_at − lead_time) falls in the
 /// current minute. Deduplicates via `SchedulerState::fired_keys`.
 pub async fn run(app: AppHandle) {
-        log::info!("[Scheduler] Checked reminders at {}", chrono::Utc::now());
-
     loop {
         log::info!("[Scheduler] Checked reminders at {}", chrono::Utc::now());
 
