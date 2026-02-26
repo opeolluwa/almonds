@@ -11,6 +11,12 @@ import 'scripts/docs.just'
 import 'scripts/grove.just'
 
 
+set dotenv-required := true
+set dotenv-load := true
+set dotenv-path := ".env"
+set export := true
+
+
 DB_PATH := "sqlite:://../../test.sqlite?mode=rwc"
 alias w := watch
 alias b := build

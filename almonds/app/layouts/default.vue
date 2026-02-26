@@ -41,7 +41,7 @@ function isActive(path: string): boolean {
   return route.path.startsWith(path);
 }
 
-const sidebarCollapsed = ref(true);
+const sidebarCollapsed = ref(false);
 const asideOpen = ref(false);
 const mobileNavOpen = ref(false);
 
@@ -107,7 +107,7 @@ const pageTitle = computed(() => {
             <!-- <USelectMenu v-model="workspace" :items="workspaces" /> -->
           </div>
 
-          <div class="px-3 flex mb-3 max-w-9/12">
+          <div class="px-3 flex mb-3 max-w-9/12 hidden">
             <UButton
               color="error"
               variant="solid"
@@ -229,14 +229,14 @@ const pageTitle = computed(() => {
 
           <!-- Search bar -->
           <div v-if="searchConfig != null" class="mx-auto w-6/12">
-            <UInput
+            <input
               :model-value="searchQuery"
               :placeholder="searchConfig?.placeholder ?? 'Search...'"
               :disabled="!searchConfig"
               icon="heroicons:magnifying-glass"
-              size="sm"
+              size="lg"
               variant="outline"
-              class="w-full placeholder:text-gray-400 dark:placeholder:text-gray-500"
+              class="almond_input_box w-full"
               :ui="{ root: 'bg-transparent' }"
               @update:model-value="onSearchInput"
             />
@@ -282,9 +282,7 @@ const pageTitle = computed(() => {
             </h1>
           </slot>
 
-          <div class="hidden md:flex items-center justify-between mt-5 my-6">
-          
-
+          <div class="hidden md:flex items-center justify-end mt-5 my-6">
             <slot name="primary_cta" />
           </div>
 

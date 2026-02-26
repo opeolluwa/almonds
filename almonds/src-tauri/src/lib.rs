@@ -55,7 +55,12 @@ pub fn run() {
 
                 std::fs::create_dir_all(&app_data_dir).expect("failed to create app data dir");
 
-                let db_path = app_data_dir.join("almond.db");
+
+                let db_path = match std::env::var("ALMONDS_DB_PATH") {
+                    Ok(path) => std::path::PathBuf::from(path),
+                    Err(_) => app_data_dir.join("almonds.db"),
+                };
+                
                 let db_url = format!("sqlite://{}?mode=rwc", db_path.display());
                 dbg!("Database URL: {:?}", &db_path);
                 let kernel = almond_kernel::kernel::Kernel::new(&db_url)
