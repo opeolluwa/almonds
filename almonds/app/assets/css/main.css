@@ -75,3 +75,8 @@ body {
   --color-gray-700: var(--color-surface-600);
   --color-gray-600: var(--color-surface-500);
 }
+
+
+.almond_input_box {
+  @apply w-full bg-white dark:bg-gray-800 rounded-lg px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 outline-none focus:ring-2 focus:ring-accent-300 dark:focus:ring-accent-600 focus:border-transparent placeholder-gray-400 dark:placeholder-gray-500;
+}

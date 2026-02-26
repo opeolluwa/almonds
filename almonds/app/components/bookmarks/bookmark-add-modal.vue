@@ -43,10 +43,11 @@ async function handleSubmit() {
           <label class="text-xs font-medium text-gray-600 dark:text-gray-400"
             >Title</label
           >
-          <UInput
+          <input
             v-model="form.title"
             placeholder="e.g. Vue.js Docs"
             size="sm"
+            class="almond_input_box"
             :disabled="submitting"
           />
         </div>
@@ -54,10 +55,10 @@ async function handleSubmit() {
           <label class="text-xs font-medium text-gray-600 dark:text-gray-400"
             >URL</label
           >
-          <UInput
+          <input
             v-model="form.url"
             placeholder="https://example.com"
-            size="sm"
+            class="almond_input_box"
             :disabled="submitting"
           />
         </div>
@@ -70,6 +71,7 @@ async function handleSubmit() {
             :items="tags.map((t) => ({ label: t.label, value: t.value }))"
             value-key="value"
             size="sm"
+            :ui="{ base: 'almond_input_box' }"
             :disabled="submitting"
           />
         </div>
