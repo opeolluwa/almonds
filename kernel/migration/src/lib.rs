@@ -19,6 +19,8 @@ mod m20260224_221502_add_workspace_id_to_bookmark_entities;
 mod m20260224_221622_add_workspace_id_to_reminder_entities;
 mod m20260224_221707_add_workspace_id_to_recycle_bin_entities;
 mod m20260225_221818_drop_notes_new;
+mod m20260226_063044_make_notes_categories_optional;
+mod m20260226_064924_drop_notes_new;
 
 pub use sea_orm_migration::prelude::*;
 
@@ -49,6 +51,8 @@ impl MigratorTrait for Migrator {
             Box::new(m20260224_221622_add_workspace_id_to_reminder_entities::Migration),
             Box::new(m20260224_221707_add_workspace_id_to_recycle_bin_entities::Migration),
             Box::new(m20260225_221818_drop_notes_new::Migration),
+            Box::new(m20260226_063044_make_notes_categories_optional::Migration),
+            Box::new(m20260226_064924_drop_notes_new::Migration),
         ]
     }
 }
