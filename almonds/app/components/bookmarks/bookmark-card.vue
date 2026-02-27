@@ -29,9 +29,9 @@ function formatDate(iso: string) {
       <h3 class="text-sm font-medium text-gray-800 dark:text-gray-200 truncate">
         {{ bookmark.title }}
       </h3>
-      <NuxtLink :to="bookmark.url" class="text-xs text-gray-400 truncate block"
-        >{{ bookmark.url }} <UIcon name="heroicons:link" />
-      </NuxtLink>
+      <div class="text-xs text-gray-400 truncate block">
+        {{ bookmark.url }} <UIcon name="heroicons:link" />
+      </div>
     </div>
     <span
       class="px-2 py-1 rounded-full bg-accent-50 dark:bg-accent-950 text-accent-600 dark:text-accent-300 text-xs font-medium capitalize shrink-0"
@@ -45,11 +45,11 @@ function formatDate(iso: string) {
       class="opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity flex items-center gap-1"
     >
       <button
-        class="text-gray-400 hover:text-accent-500 transition-colors"
+        class="text-gray-400 hover:text-accent-500 transition-colors hidden"
         title="Preview"
         @click="emit('preview', bookmark)"
       >
-        <UIcon name="heroicons:eye" class="size-4" />
+        <UIcon name="heroicons:pencil" class="size-4" />
       </button>
       <button
         class="text-gray-400 hover:text-red-500 transition-colors"

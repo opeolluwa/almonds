@@ -11,6 +11,7 @@
     "clipboard-manager:default",
     "notification:default",
     "os:default",
-    "core:app:allow-default-window-icon"
+    "core:app:allow-default-window-icon",
+    "opener:default"
   ]
 }

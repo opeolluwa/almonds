@@ -239,7 +239,7 @@ const pageTitle = computed(() => {
               class="almond_input_box w-full"
               :ui="{ root: 'bg-transparent' }"
               @update:model-value="onSearchInput"
-            />
+            >
           </div>
 
           <!-- Right actions -->
