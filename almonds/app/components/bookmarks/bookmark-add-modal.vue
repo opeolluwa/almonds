@@ -49,7 +49,7 @@ async function handleSubmit() {
             size="sm"
             class="almond_input_box"
             :disabled="submitting"
-          />
+          >
         </div>
         <div class="flex flex-col gap-1">
           <label class="text-xs font-medium text-gray-600 dark:text-gray-400"
@@ -60,7 +60,7 @@ async function handleSubmit() {
             placeholder="https://example.com"
             class="almond_input_box"
             :disabled="submitting"
-          />
+          >
         </div>
         <div class="flex flex-col gap-1">
           <label class="text-xs font-medium text-gray-600 dark:text-gray-400"

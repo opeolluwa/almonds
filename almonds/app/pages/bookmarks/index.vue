@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useBookmarkStore, type BookmarkTag } from "~/stores/bookmarks";
+import { openUrl } from "@tauri-apps/plugin-opener";
 
 definePageMeta({ layout: false });
 
@@ -27,9 +28,11 @@ const showAddModal = ref(false);
 const previewBookmark = ref<import("~/stores/bookmarks").Bookmark | null>(null);
 const showPreview = ref(false);
 
-function openPreview(bookmark: import("~/stores/bookmarks").Bookmark) {
-  previewBookmark.value = bookmark;
-  showPreview.value = true;
+async function openPreview(bookmark: import("~/stores/bookmarks").Bookmark) {
+  // previewBookmark.value = bookmark;
+  // showPreview.value = true;
+
+  await openUrl(bookmark.url);
 }
 
 const filtered = computed(() => {
@@ -167,7 +170,7 @@ async function handleCreate(payload: {
           :key="bookmark.identifier"
           :bookmark="bookmark"
           @delete="bookmarkStore.deleteBookmark"
-          @preview="openPreview"
+          @click="openUrl(bookmark.url)"
         />
       </div>
     </template>
@@ -187,10 +190,5 @@ async function handleCreate(payload: {
     v-model:open="showAddModal"
     :tags="TAGS.slice(1) as { label: string; value: BookmarkTag }[]"
     @create="handleCreate"
-  />
-
-  <BookmarksBookmarkPreview
-    v-model:open="showPreview"
-    :bookmark="previewBookmark"
   />
 </template>
