@@ -9,9 +9,13 @@ use sea_orm::{
 use uuid::Uuid;
 
 use crate::{
-    adapters::notes::{CreateNote, UpdateNote},
+    adapters::{
+        notes::{CreateNote, UpdateNote},
+        recycle_bin::{CreateRecycleBinEntry, RecycleBinItemType},
+    },
     entities::notes,
     error::KernelError,
+    repositories::recycle_bin::{RecycleBinRepository, RecycleBinRepositoryExt},
 };
 
 pub struct NotesRepository {
@@ -70,6 +74,25 @@ impl NotesRepositoryExt for NotesRepository {
     }
 
     async fn delete(&self, identifier: &Uuid) -> Result<(), KernelError> {
+        let model = notes::Entity::find()
+            .filter(notes::Column::Identifier.eq(*identifier))
+            .one(self.conn.as_ref())
+            .await
+            .map_err(|err| KernelError::DbOperationError(err.to_string()))?
+            .ok_or_else(|| KernelError::DbOperationError("note not found".to_string()))?;
+
+        let payload = serde_json::to_string(&model)
+            .map_err(|err| KernelError::DbOperationError(err.to_string()))?;
+
+        RecycleBinRepository::new(self.conn.clone())
+            .store(&CreateRecycleBinEntry {
+                item_id: model.identifier,
+                item_type: RecycleBinItemType::Note,
+                payload,
+                workspace_identifier: model.workspace_identifier,
+            })
+            .await?;
+
         notes::Entity::delete_many()
             .filter(notes::Column::Identifier.eq(*identifier))
             .exec(self.conn.as_ref())

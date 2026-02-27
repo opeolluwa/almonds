@@ -1,6 +1,21 @@
 <script setup lang="ts">
 import _ from "lodash";
 import { primaryRoutes, secondaryRoutes } from "~/data/routes";
+import { useUserPreferenceStore } from "~/stores/user-preference";
+
+const preferenceStore = useUserPreferenceStore();
+const workspaceStore = useWorkspacesStore();
+
+const workspaces = computed(() =>
+  workspaceStore.workspaces.map((w) => ({
+    label: w.name,
+    value: w.identifier,
+  })),
+);
+const workspace = ref({
+  label: workspaceStore.currentWorkspace?.name ?? "Select workspace",
+  value: workspaceStore.currentWorkspace?.identifier ?? "",
+});
 
 const route = useRoute();
 const router = useRouter();
@@ -55,9 +70,9 @@ const pageTitle = computed(() => {
       :collapsible="true"
       :collapsed-size="4"
       :default-size="15"
-      :resizable="false"
-      :min-size="12"
-      :max-size="32"
+      :resizable="true"
+      :min-size="18"
+      :max-size="42"
       :ui="{
         root: 'bg-white dark:bg-gray-900 transition-[width] duration-300 border-e border-gray-200 dark:border-gray-800',
         header: 'shrink-0 h-auto p-0',
@@ -74,12 +89,9 @@ const pageTitle = computed(() => {
           >
             <UUser
               v-if="!collapsed"
-              name="Nick Woods"
-              description="nick.woods@gmail.com"
-              :avatar="{
-                src: 'https://i.pravatar.cc/150?u=nick-woods',
-                icon: 'i-lucide-image',
-              }"
+              :name="preferenceStore.fullName"
+              :description="preferenceStore.preference?.email"
+              :avatar="{ icon: 'i-lucide-user' }"
               class="min-w-0 flex-1 truncate"
             />
 
@@ -90,25 +102,21 @@ const pageTitle = computed(() => {
               variant="ghost"
             />
 
-            <UAvatar
-              v-else
-              src="https://i.pravatar.cc/150?u=nick-woods"
-              size="sm"
-              class="shrink-0"
-            />
+            <!-- <UAvatar v-else icon="i-lucide-user" size="sm" class="shrink-0" /> -->
+            <!--TODO-->
+            <!-- <USelectMenu v-model="workspace" :items="workspaces" /> -->
           </div>
 
-          <!--TODO: enable when the project feature is done, the former class is flex before hidden-->
-          <!-- <div class="px-3 flex mb-3 max-w-9/12">
+          <div class="px-3 flex mb-3 max-w-9/12 hidden">
             <UButton
               color="error"
               variant="solid"
               class="flex-1 bg-accent-500 hover:bg-accent-600 justify-center"
             >
               <UIcon name="heroicons:plus" class="size-4 shrink-0" />
-              <span v-if="!collapsed">New Project</span>
+              <span v-if="!collapsed">New Workspace</span>
             </UButton>
-          </div> -->
+          </div>
 
           <USeparator class="mx-3 max-w-9/12" />
         </div>
@@ -181,7 +189,7 @@ const pageTitle = computed(() => {
         class="shrink-0 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900"
         style="padding-top: env(safe-area-inset-top)"
       >
-        <div class="flex items-center gap-3 h-14 px-4">
+        <div class="flex justify-between items-center gap-3 h-14 px-4">
           <!-- Hamburger: mobile only -->
           <UButton
             class="flex md:hidden shrink-0"
@@ -202,16 +210,34 @@ const pageTitle = computed(() => {
             class="hidden md:flex shrink-0"
           />
 
+          <div class="flex items-center gap-1">
+            <UButton
+              size="sm"
+              color="neutral"
+              variant="ghost"
+              icon="heroicons:chevron-left"
+              @click="router.back()"
+            />
+            <UButton
+              size="sm"
+              color="neutral"
+              variant="ghost"
+              icon="heroicons:chevron-right"
+              @click="router.forward()"
+            />
+          </div>
+
           <!-- Search bar -->
-          <div class="flex-1 max-w-xl">
-            <UInput
+          <div v-if="searchConfig != null" class="mx-auto w-6/12">
+            <input
               :model-value="searchQuery"
               :placeholder="searchConfig?.placeholder ?? 'Search...'"
               :disabled="!searchConfig"
               icon="heroicons:magnifying-glass"
-              size="sm"
+              size="lg"
               variant="outline"
-              class="w-full"
+              class="almond_input_box w-full"
+              :ui="{ root: 'bg-transparent' }"
               @update:model-value="onSearchInput"
             />
           </div>
@@ -256,16 +282,7 @@ const pageTitle = computed(() => {
             </h1>
           </slot>
 
-          <div class="hidden md:flex items-center justify-between mt-5 my-6">
-            <button
-              v-if="route.path != '/'"
-              class="flex items-center gap-1.5 text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-              @click="router.back()"
-            >
-              <UIcon name="heroicons:arrow-left" class="size-3.5" />
-              Back
-            </button>
-
+          <div class="hidden md:flex items-center justify-end mt-5 my-6">
             <slot name="primary_cta" />
           </div>
 
@@ -315,12 +332,9 @@ const pageTitle = computed(() => {
             class="flex items-center justify-between px-4 py-4 border-b border-gray-200 dark:border-gray-800 shrink-0"
           >
             <UUser
-              name="Nick Woods"
-              description="nick.woods@gmail.com"
-              :avatar="{
-                src: 'https://i.pravatar.cc/150?u=nick-woods',
-                icon: 'i-lucide-image',
-              }"
+              :name="preferenceStore.fullName"
+              :description="preferenceStore.preference?.email"
+              :avatar="{ icon: 'i-lucide-user' }"
               class="min-w-0 flex-1 truncate"
             />
             <UButton

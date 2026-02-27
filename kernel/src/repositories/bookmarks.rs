@@ -9,9 +9,13 @@ use sea_orm::{
 use uuid::Uuid;
 
 use crate::{
-    adapters::bookmarks::{BookmarkTag, CreateBookmark, UpdateBookmark},
+    adapters::{
+        bookmarks::{BookmarkTag, CreateBookmark, UpdateBookmark},
+        recycle_bin::{CreateRecycleBinEntry, RecycleBinItemType},
+    },
     entities::bookmark,
     error::KernelError,
+    repositories::recycle_bin::{RecycleBinRepository, RecycleBinRepositoryExt},
 };
 
 pub struct BookmarkRepository {
@@ -119,6 +123,25 @@ impl BookmarkRepositoryExt for BookmarkRepository {
     }
 
     async fn delete(&self, identifier: &Uuid) -> Result<(), KernelError> {
+        let model = bookmark::Entity::find()
+            .filter(bookmark::Column::Identifier.eq(*identifier))
+            .one(self.conn.as_ref())
+            .await
+            .map_err(|err| KernelError::DbOperationError(err.to_string()))?
+            .ok_or_else(|| KernelError::DbOperationError("bookmark not found".to_string()))?;
+
+        let payload = serde_json::to_string(&model)
+            .map_err(|err| KernelError::DbOperationError(err.to_string()))?;
+
+        RecycleBinRepository::new(self.conn.clone())
+            .store(&CreateRecycleBinEntry {
+                item_id: model.identifier,
+                item_type: RecycleBinItemType::Bookmark,
+                workspace_identifier: model.workspace_identifier,
+                payload,
+            })
+            .await?;
+
         bookmark::Entity::delete_many()
             .filter(bookmark::Column::Identifier.eq(*identifier))
             .exec(self.conn.as_ref())

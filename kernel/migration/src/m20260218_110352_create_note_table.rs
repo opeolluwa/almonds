@@ -30,7 +30,7 @@ impl MigrationTrait for Migration {
 }
 
 #[derive(DeriveIden)]
-enum Notes {
+pub enum Notes {
     Table,
     Identifier,
     Title,

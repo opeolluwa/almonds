@@ -2,7 +2,7 @@
 import DatePicker from "~/components/ui/date-picker.vue";
 import { useTodoStore } from "~/stores/todo";
 
-definePageMeta({ layout: false });
+definePageMeta({ layout: false, name: "Edit Todo" });
 
 const todoStore = useTodoStore();
 const router = useRouter();
@@ -118,18 +118,6 @@ async function handleDelete() {
   <NuxtLayout name="default">
     <template #main_content>
       <div class="max-w-lg">
-        <div class="flex items-center gap-3 mb-6">
-          <button
-            class="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-            @click="router.back()"
-          >
-            <UIcon name="heroicons:arrow-left" class="size-4" />
-          </button>
-          <h1 class="text-sm font-semibold text-gray-800 dark:text-gray-100">
-            Edit Todo
-          </h1>
-        </div>
-
         <div v-if="loading" class="flex flex-col gap-4">
           <USkeleton v-for="i in 4" :key="i" class="h-10 rounded-lg" />
         </div>

@@ -77,6 +77,10 @@ function openInBrowser() {
   if (!props.bookmark?.url) return;
   window.open(props.bookmark.url, "_blank");
 }
+
+function goBack() {
+  iframeRef.value?.contentWindow?.history.back();
+}
 </script>
 
 <template>
@@ -104,6 +108,16 @@ function openInBrowser() {
             <span class="size-3 rounded-full bg-yellow-400" />
             <span class="size-3 rounded-full bg-green-400" />
           </div>
+
+          <!-- Back button -->
+          <UButton
+            size="xs"
+            color="neutral"
+            variant="ghost"
+            icon="heroicons:arrow-left"
+            title="Go back"
+            @click="goBack"
+          />
 
           <!-- Favicon + URL bar -->
           <div

@@ -26,6 +26,7 @@ pub struct CreateSnippet {
     pub is_pinned: bool,
     pub created_at: DateTimeWithTimeZone,
     pub updated_at: DateTimeWithTimeZone,
+    pub workspace_identifier: Option<Uuid>,
 }
 
 impl Into<entities::snippets::ActiveModel> for CreateSnippet {
@@ -39,6 +40,7 @@ impl Into<entities::snippets::ActiveModel> for CreateSnippet {
             is_pinned: Set(self.is_pinned),
             created_at: Set(self.created_at),
             updated_at: Set(self.updated_at),
+            workspace_identifier: Set(self.workspace_identifier),
         }
     }
 }

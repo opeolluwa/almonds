@@ -29,7 +29,7 @@ function formatDate(iso: string) {
       <h3 class="text-sm font-medium text-gray-800 dark:text-gray-200 truncate">
         {{ bookmark.title }}
       </h3>
-      <NuxtLink :to="bookmark.url" class="text-xs text-gray-400 truncate"
+      <NuxtLink :to="bookmark.url" class="text-xs text-gray-400 truncate block"
         >{{ bookmark.url }} <UIcon name="heroicons:link" />
       </NuxtLink>
     </div>

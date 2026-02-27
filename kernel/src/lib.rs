@@ -5,3 +5,5 @@ pub mod kernel;
 pub mod repositories;
 
 pub use sea_orm;
+
+pub use migration;

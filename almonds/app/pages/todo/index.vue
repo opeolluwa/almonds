@@ -35,6 +35,12 @@ async function handleDelete(identifier: string) {
   await todoStore.deleteTodo(identifier);
 }
 
+async function deleteCompleted() {
+  await Promise.all(
+    todoStore.completedTodos.map((t) => todoStore.deleteTodo(t.identifier)),
+  );
+}
+
 function handleEdit(identifier: string) {
   router.push(`/todo/edit-todo?id=${identifier}`);
 }
@@ -62,20 +68,30 @@ onUnmounted(() => clearSearch());
       <!-- Filter tabs -->
       <div
         v-if="!todoStore.loading && todoStore.todos.length > 0"
-        class="flex gap-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-0.5 mb-4 w-fit"
+        class="flex items-center gap-2 mb-4"
       >
+        <div class="flex gap-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-0.5">
+          <button
+            v-for="f in ['all', 'active', 'completed'] as const"
+            :key="f"
+            class="px-3 py-1.5 rounded-md text-xs font-medium transition-colors capitalize"
+            :class="
+              filter === f
+                ? 'bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 shadow-sm'
+                : 'text-gray-500 dark:text-gray-400'
+            "
+            @click="filter = f"
+          >
+            {{ f }}
+          </button>
+        </div>
         <button
-          v-for="f in ['all', 'active', 'completed'] as const"
-          :key="f"
-          class="px-3 py-1.5 rounded-md text-xs font-medium transition-colors capitalize"
-          :class="
-            filter === f
-              ? 'bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 shadow-sm'
-              : 'text-gray-500 dark:text-gray-400'
-          "
-          @click="filter = f"
+          v-if="todoStore.completedTodos.length > 0"
+          class="ml-auto flex items-center gap-1.5 text-xs text-red-400 hover:text-red-500 transition-colors"
+          @click="deleteCompleted"
         >
-          {{ f }}
+          <UIcon name="heroicons:trash" class="size-3.5" />
+          Clear done ({{ todoStore.completedTodos.length }})
         </button>
       </div>
 

@@ -1,30 +1,56 @@
 [package]
-name = "uranium"
+edition = "2021"
+name = "orchard"
 version = "0.1.0"
-edition = "2024"
+default-run = "orchard"
+
+[workspace]
+members = []
 
 [lib]
-name = "uralium_lib"
+name = "orchard_lib"
 path = "src/lib.rs"
 
 [dependencies]
-axum = { version = "0.8.3", features = ["tracing"] }
-axum-extra = { version = "0.10.1", features = ["typed-header"] }
-bcrypt = "0.17.0"
-chrono = { version = "0.4.41", features = ["serde"] }
-jsonwebtoken = "9.3.1"
-log = "0.4.27"
-serde = { version = "1.0.219", features = ["derive"] }
-serde_json = "1.0.140"
-sqlx = { version = "0.8", features = ["runtime-tokio", "sqlite", "postgres", "macros", "uuid", "migrate"] }
-thiserror = "2.0.12"
-tokio = { version = "1.44.2", features = ["full"] }
-tower-http = { version = "0.6.1", features = ["trace"] }
-tracing = "0.1"
-tracing-subscriber = { version = "0.3", features = ["env-filter"] }
-uuid = { version = "1.16.0", features = ["serde", "v4"] }
-validator = { version = "0.20.0", features = ["derive"] }
+almond_kernel = { version = "0.1.0", path = "../kernel" }
+async-graphql-axum = { version = "7.0" }
+axum = { version = "0.8" }
+clap = "4.5.60"
+console = "0.16.2"
+dialoguer = "0.12.0"
+dotenv = "0.15.0"
+log = "0.4.29"
+serde = { version = "1.0.228", features = ["derive"] }
+thiserror = "2.0.18"
+tokio = { version = "1.29.1", features = ["full"] }
+tower-http = { version = "0.6.8", features = [
+    "limit",
+    "trace",
+    "cors",
+    "timeout",
+    "sensitive-headers",
+] }
+tracing = { version = "0.1.37" }
+tracing-subscriber = { version = "0.3.17" }
+
+[dependencies.sea-orm]
+version = "~2.0.0-rc"
+features = [
+    "sqlx-sqlite",
+    "sqlx-mysql",
+    "sqlx-postgres",
+    "macros",
+    "mock",
+    "debug-print",
+    "with-uuid",
+    "with-chrono",
+    "runtime-tokio-rustls",
+    "seaography",
+]
+
+[dependencies.seaography]
+version = "~2.0.0-rc.8"                                                       # seaography version
+features = ["graphql-playground", "with-decimal", "with-chrono", "with-uuid"]
 
 [dev-dependencies]
-axum = { version = "0.8.3", features = ["macros"] }
-axum-test = "17.3.0"
+serde_json = { version = "1.0.103" }

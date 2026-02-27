@@ -2219,7 +2219,6 @@ dependencies = [
  "heck 0.5.0",
  "itertools",
  "pluralizer",
- "proc-macro-crate",
  "proc-macro2",
  "quote",
  "sea-bae",

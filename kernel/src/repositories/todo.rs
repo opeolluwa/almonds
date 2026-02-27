@@ -10,9 +10,13 @@ use sea_orm::{
 use uuid::Uuid;
 
 use crate::{
-    adapters::todo::{CreateTodo, TodoPriority, UpdateTodo},
+    adapters::{
+        recycle_bin::{CreateRecycleBinEntry, RecycleBinItemType},
+        todo::{CreateTodo, TodoPriority, UpdateTodo},
+    },
     entities::todo,
     error::KernelError,
+    repositories::recycle_bin::{RecycleBinRepository, RecycleBinRepositoryExt},
 };
 
 pub struct TodoRepository {
@@ -110,6 +114,25 @@ impl TodoRepositoryExt for TodoRepository {
     }
 
     async fn delete(&self, identifier: &Uuid) -> Result<(), KernelError> {
+        let model = todo::Entity::find()
+            .filter(todo::Column::Identifier.eq(*identifier))
+            .one(self.conn.as_ref())
+            .await
+            .map_err(|err| KernelError::DbOperationError(err.to_string()))?
+            .ok_or_else(|| KernelError::DbOperationError("todo not found".to_string()))?;
+
+        let payload = serde_json::to_string(&model)
+            .map_err(|err| KernelError::DbOperationError(err.to_string()))?;
+
+        RecycleBinRepository::new(self.conn.clone())
+            .store(&CreateRecycleBinEntry {
+                item_id: model.identifier,
+                item_type: RecycleBinItemType::Todo,
+                workspace_identifier: model.workspace_identifier,
+                payload,
+            })
+            .await?;
+
         todo::Entity::delete_many()
             .filter(todo::Column::Identifier.eq(*identifier))
             .exec(self.conn.as_ref())

@@ -40,7 +40,7 @@ impl MigrationTrait for Migration {
 }
 
 #[derive(DeriveIden)]
-enum Todo {
+pub enum Todo {
     Table,
     Identifier,
     Title,
@@ -53,7 +53,7 @@ enum Todo {
 }
 
 #[derive(DeriveIden)]
-enum Priority {
+pub enum Priority {
     #[sea_orm(iden = "priority")]
     Type,
     High,

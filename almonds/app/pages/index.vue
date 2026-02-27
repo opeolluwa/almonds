@@ -2,18 +2,24 @@
 import { useNoteStore } from "~/stores/notes";
 import { useBookmarkStore } from "~/stores/bookmarks";
 import { useTodoStore } from "~/stores/todo";
+import { useUserPreferenceStore } from "~/stores/user-preference";
+import { useReminderStore } from "~/stores/reminder";
 
 definePageMeta({ layout: false });
 
 const noteStore = useNoteStore();
 const bookmarkStore = useBookmarkStore();
 const todoStore = useTodoStore();
+const userPreferenceStore = useUserPreferenceStore();
+const reminderStore = useReminderStore();
 
 onMounted(async () => {
   await Promise.all([
     noteStore.fetchNotes(),
     bookmarkStore.fetchBookmarks(),
     todoStore.fetchTodos(),
+    userPreferenceStore.fetchPreference(),
+    reminderStore.fetchReminders(),
   ]);
 });
 
@@ -60,14 +66,32 @@ const stats = computed(() => [
     href: "/todo",
   },
   {
-    label: "Done today",
-    value: todoStore.completedTodos.length,
-    icon: "heroicons:trophy-solid",
-    color: "text-amber-500",
-    bg: "bg-amber-50 dark:bg-amber-950",
-    href: "/todo",
+    label: "Upcoming reminders",
+    value: upcomingReminders.value.length,
+    icon: "heroicons:clock-solid",
+    color: "text-rose-500",
+    bg: "bg-rose-50 dark:bg-rose-950",
+    href: "/reminders",
   },
 ]);
+
+// Next 3 upcoming reminders sorted by soonest first
+const upcomingReminders = computed(() =>
+  [...reminderStore.upcomingReminders]
+    .sort(
+      (a, b) => new Date(a.remindAt).getTime() - new Date(b.remindAt).getTime(),
+    )
+    .slice(0, 3),
+);
+
+function formatRemindAt(iso: string) {
+  return new Date(iso).toLocaleString("en-US", {
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  });
+}
 
 // Recent notes (latest 3)
 const recentNotes = computed(() => noteStore.notes.slice(0, 3));
@@ -75,8 +99,32 @@ const recentNotes = computed(() => noteStore.notes.slice(0, 3));
 // Recent bookmarks (latest 3)
 const recentBookmarks = computed(() => bookmarkStore.bookmarks.slice(0, 3));
 
-// Top active todos (latest 5)
-const pendingTodos = computed(() => todoStore.activeTodos.slice(0, 5));
+// Todo filter / sort
+const todoFilter = ref<"all" | "active" | "done">("active");
+const todoSort = ref<"priority" | "date">("priority");
+
+const priorityOrder: Record<"high" | "medium" | "low", number> = {
+  high: 0,
+  medium: 1,
+  low: 2,
+};
+
+const filteredSortedTodos = computed(() => {
+  let list = todoStore.todos;
+  if (todoFilter.value === "active") list = list.filter((t) => !t.done);
+  else if (todoFilter.value === "done") list = list.filter((t) => t.done);
+  return [...list]
+    .sort((a, b) => {
+      if (todoSort.value === "priority") {
+        return priorityOrder[a.priority] - priorityOrder[b.priority];
+      }
+      if (!a.dueDate && !b.dueDate) return 0;
+      if (!a.dueDate) return 1;
+      if (!b.dueDate) return -1;
+      return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
+    })
+    .slice(0, 5);
+});
 
 // Progress
 const todoProgress = computed(() => {
@@ -105,6 +153,9 @@ function formatDate(iso: string) {
   });
 }
 
+const firstName = computed(
+  () => userPreferenceStore.preference?.firstName || "there",
+);
 const quickActions = [
   {
     label: "New note",
@@ -137,7 +188,7 @@ const quickActions = [
           {{ today }}
         </p>
         <h1 class="text-2xl font-semibold text-gray-800 dark:text-gray-100">
-          {{ greeting }}, Nick 👋
+          {{ greeting }}, {{ firstName }} 👋
         </h1>
       </div>
     </template>
@@ -224,6 +275,73 @@ const quickActions = [
             <p class="text-xs text-gray-300 dark:text-gray-600">
               {{ formatDate(note.updatedAt) }}
             </p>
+          </NuxtLink>
+        </div>
+      </section>
+
+      <!-- Upcoming reminders -->
+      <section class="mb-8">
+        <div class="flex items-center justify-between mb-3">
+          <h2
+            class="text-sm font-medium text-gray-500 dark:text-gray-400 flex items-center gap-2"
+          >
+            <UIcon name="heroicons:clock" class="size-4" />
+            Upcoming reminders
+          </h2>
+          <NuxtLink
+            to="/reminders"
+            class="text-xs text-accent-500 hover:text-accent-600 transition-colors"
+          >
+            View all
+          </NuxtLink>
+        </div>
+
+        <div
+          v-if="upcomingReminders.length === 0"
+          class="bg-white dark:bg-gray-800 rounded-xl border border-dashed border-gray-200 dark:border-gray-700 p-6 text-center"
+        >
+          <p class="text-sm text-gray-400">No upcoming reminders.</p>
+          <NuxtLink
+            to="/reminders/create-reminder"
+            class="text-xs text-accent-500 hover:underline mt-1 block"
+          >
+            Create a reminder
+          </NuxtLink>
+        </div>
+
+        <div v-else class="flex flex-col gap-2">
+          <NuxtLink
+            v-for="reminder in upcomingReminders"
+            :key="reminder.identifier"
+            to="/reminders"
+            class="group bg-white dark:bg-gray-800 rounded-xl px-4 py-3 border border-gray-100 dark:border-gray-700 hover:shadow-sm hover:border-rose-200 dark:hover:border-rose-800 transition-all flex items-center gap-3"
+          >
+            <div class="p-1.5 rounded-md bg-rose-50 dark:bg-rose-950 shrink-0">
+              <UIcon
+                :name="
+                  reminder.recurring
+                    ? 'heroicons:arrow-path'
+                    : 'heroicons:clock'
+                "
+                class="size-4 text-rose-400"
+              />
+            </div>
+            <div class="flex-1 min-w-0">
+              <p
+                class="text-sm font-medium text-gray-800 dark:text-gray-200 truncate group-hover:text-rose-600 dark:group-hover:text-rose-400 transition-colors"
+              >
+                {{ reminder.title }}
+              </p>
+              <p class="text-xs text-gray-400 mt-0.5">
+                {{ formatRemindAt(reminder.remindAt) }}
+              </p>
+            </div>
+            <span
+              v-if="reminder.recurring"
+              class="text-xs px-2 py-0.5 rounded-full bg-violet-50 dark:bg-violet-950 text-violet-500 dark:text-violet-400 shrink-0"
+            >
+              Recurring
+            </span>
           </NuxtLink>
         </div>
       </section>
@@ -335,6 +453,53 @@ const quickActions = [
           </NuxtLink>
         </div>
 
+        <!-- Filter / Sort / Delete completed controls -->
+        <div class="flex items-center gap-1.5 mb-3 flex-wrap">
+          <div
+            class="flex rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 text-xs"
+          >
+            <button
+              v-for="f in ['all', 'active', 'done'] as const"
+              :key="f"
+              class="px-2 py-0.5 capitalize transition-colors"
+              :class="
+                todoFilter === f
+                  ? 'bg-accent-500 text-white'
+                  : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
+              "
+              @click="todoFilter = f"
+            >
+              {{ f }}
+            </button>
+          </div>
+          <div
+            class="flex rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 text-xs"
+          >
+            <button
+              class="px-2 py-0.5 transition-colors"
+              :class="
+                todoSort === 'priority'
+                  ? 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200'
+                  : 'text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'
+              "
+              @click="todoSort = 'priority'"
+            >
+              Priority
+            </button>
+            <button
+              class="px-2 py-0.5 transition-colors"
+              :class="
+                todoSort === 'date'
+                  ? 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200'
+                  : 'text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'
+              "
+              @click="todoSort = 'date'"
+            >
+              Date
+            </button>
+          </div>
+        </div>
+
         <!-- Progress bar -->
         <div v-if="todoStore.todos.length > 0" class="mb-3">
           <div class="flex justify-between text-xs text-gray-400 mb-1">
@@ -362,19 +527,24 @@ const quickActions = [
           Loading…
         </div>
 
-        <div v-else-if="pendingTodos.length === 0" class="py-4 text-center">
+        <div
+          v-else-if="filteredSortedTodos.length === 0"
+          class="py-4 text-center"
+        >
           <UIcon
             name="heroicons:check-badge"
             class="size-8 text-emerald-400 mx-auto mb-1"
           />
-          <p class="text-xs text-gray-400">All caught up!</p>
+          <p class="text-xs text-gray-400">
+            {{ todoFilter === "active" ? "All caught up!" : "No todos found." }}
+          </p>
         </div>
 
         <div v-else class="flex flex-col gap-1.5">
           <div
-            v-for="todo in pendingTodos"
+            v-for="todo in filteredSortedTodos"
             :key="todo.identifier"
-            class="flex items-start gap-2.5 py-1.5"
+            class="group flex items-start gap-2.5 py-1.5"
           >
             <UIcon
               name="heroicons:circle-stack"
@@ -394,6 +564,12 @@ const quickActions = [
             >
               {{ todo.priority }}
             </span>
+            <button
+              class="opacity-0 group-hover:opacity-100 transition-opacity shrink-0 mt-0.5 text-gray-300 hover:text-red-500 dark:text-gray-600 dark:hover:text-red-400"
+              @click="todoStore.deleteTodo(todo.identifier)"
+            >
+              <UIcon name="heroicons:trash" class="size-3.5" />
+            </button>
           </div>
         </div>
       </section>

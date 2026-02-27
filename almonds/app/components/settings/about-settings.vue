@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { platform } from "@tauri-apps/plugin-os";
-import { getName, getVersion , getTauriVersion  } from "@tauri-apps/api/app";
+import { getName, getVersion, getTauriVersion } from "@tauri-apps/api/app";
 
 const tauriVersion = await getTauriVersion();
 const appVersion = await getVersion();
