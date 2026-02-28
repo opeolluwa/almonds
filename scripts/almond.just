@@ -17,3 +17,8 @@ watch-almond:
 [working-directory:'almonds']
 build-almond:
     npm run tauri build
+
+
+[working-directory:'almonds']
+install-frontend-dependencies:
+    npm install
