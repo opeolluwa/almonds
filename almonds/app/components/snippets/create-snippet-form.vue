@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { CreateSnippetPayload } from "~/stores/snippets";
 import { SNIPPET_LANGUAGES } from "~/data/languages";
+import AppInput from "../forms/app-input.vue";
+import AppSelect from "../forms/app-select.vue";
 
 const snippetStore = useSnippetStore();
 const router = useRouter();
@@ -37,38 +39,28 @@ async function handleSubmit() {
 
 <template>
   <form class="flex flex-col gap-5" @submit.prevent="handleSubmit">
-    <!-- Title -->
     <div class="flex flex-col gap-1">
-      <label class="text-xs font-medium text-gray-600 dark:text-gray-400">
-        Title
-        <span class="text-gray-400 dark:text-gray-600 font-normal ml-1"
-          >(optional)</span
-        >
-      </label>
-      <UInput
+      <AppInput
         v-model="title"
+        hint="(optional)"
         placeholder="My snippet"
-        size="sm"
+        label="Title"
+        name="snippet title"
         :disabled="submitting"
       />
     </div>
 
     <!-- Language -->
-    <div class="flex flex-col gap-1">
-      <label class="text-xs font-medium text-gray-600 dark:text-gray-400">
-        Language
-        <span class="text-gray-400 dark:text-gray-600 font-normal ml-1"
-          >(optional)</span
-        >
-      </label>
-      <USelectMenu
-        v-model="language"
-        placeholder="e.g. TypeScript"
-        size="sm"
-        :items="SNIPPET_LANGUAGES"
-        :disabled="submitting"
-      />
-    </div>
+
+    <AppSelect
+      v-model="language"
+      name="language"
+      label="Language"
+      hint="optional"
+      placeholder="e.g. TypeScript"
+      :items="SNIPPET_LANGUAGES"
+      :disabled="submitting"
+    />
 
     <!-- Code -->
     <div class="flex flex-col gap-1">

@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { useAlarmScheduler } from "~/composables/useAlarmScheduler";
-import { useWorkspaceSetup } from "./composables/useWorkspaceSetup";
 import {
   isPermissionGranted,
-  requestPermission,
-  sendNotification,
+  requestPermission
 } from "@tauri-apps/plugin-notification";
+import { useAlarmScheduler } from "~/composables/useAlarmScheduler";
+import { useWorkspaceSetup } from "./composables/useWorkspaceSetup";
 
 const { init } = useAccentColor();
 const { init: initFontSize } = useFontSize();

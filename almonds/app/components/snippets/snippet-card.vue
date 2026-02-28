@@ -1,5 +1,11 @@
 <script setup lang="ts">
 import hljs from "highlight.js/lib/common";
+import "highlight.js/styles/github.css"; // light
+import "highlight.js/styles/github-dark.css"; // dark
+
+const highlightTheme = computed(() =>
+  colorMode.value === "dark" ? "github-dark" : "github",
+);
 
 const hlLanguageMap: Record<string, string> = {
   C: "c",
@@ -48,6 +54,7 @@ const hlLanguageMap: Record<string, string> = {
   Angular: "typescript",
 };
 
+const colorMode = useColorMode();
 const props = defineProps<{
   identifier: string;
   title: string;
@@ -117,6 +124,12 @@ async function copyCode() {
   copied.value = true;
   setTimeout(() => (copied.value = false), 1500);
 }
+
+const codeThemeClass = computed(() =>
+  colorMode.value === "dark"
+    ? "bg-gray-900 text-gray-100"
+    : "bg-gray-50 text-gray-800 border border-gray-200"
+)
 </script>
 
 <template>
@@ -159,7 +172,7 @@ async function copyCode() {
       <!-- Normal syntax-highlighted preview -->
       <pre
         v-else
-        class="bg-gray-900 rounded-md p-3 text-xs overflow-x-auto"
+        :class="[codeThemeClass, 'rounded-md p-3 text-xs overflow-x-auto']"
       ><code v-html="highlighted"/></pre>
     </div>
     <div

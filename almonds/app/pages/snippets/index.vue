@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import SnippetCard from "~/components/snippets/snippet-card.vue";
 import { useSnippetStore } from "~/stores/snippets";
-
+import SnippetCard from "~/components/snippets/snippet-card.vue";
 definePageMeta({ layout: false });
 
 const snippetStore = useSnippetStore();
@@ -56,12 +55,26 @@ onUnmounted(() => clearSearch());
 <template>
   <NuxtLayout name="default">
     <template #primary_cta>
-      <PrimaryCta
+      <!-- Desktop: full label -->
+      <div
+        class="hidden md:flex items-center justify-end"
         v-if="snippetStore.snippets.length !== 0"
-        label="New Snippet"
-        icon="heroicons:plus"
-        to="/snippets/create-snippets"
-      />
+        @click="navigateTo('/snippets/create-snippets')"
+      >
+        <button
+          class="flex items-center gap-2 py-2 px-4 bg-accent-500 text-white rounded-lg text-sm font-medium hover:bg-accent-600 transition-colors"
+        >
+          <UIcon name="heroicons:plus" class="size-4" />
+          Add Snippet
+        </button>
+      </div>
+      <!-- Mobile: icon-only round FAB -->
+      <button
+        class="md:hidden flex items-center justify-center w-14 h-14 bg-accent-500 text-white rounded-full shadow-xl active:scale-95 transition-transform"
+        aria-label="Add Bookmark"
+      >
+        <UIcon name="heroicons:plus" class="size-6" />
+      </button>
     </template>
 
     <template #main_content>
