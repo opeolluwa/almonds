@@ -32,9 +32,3 @@ just watch kernel     # watch the kernel crate
 just android init     # initialize Android project
 just android watch    # run on device/emulator
 ```
-
-## Docs
-
-```bash
-just watch-docs
-```
