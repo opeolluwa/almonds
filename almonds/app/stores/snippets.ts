@@ -1,7 +1,23 @@
 import { defineStore } from "pinia";
 import { invoke } from "@tauri-apps/api/core";
-import type { Snippet } from "~/composables/snippets/useGetSnippets";
-import type { CreateSnippetPayload } from "~/composables/snippets/useCreateSnippet";
+
+export interface Snippet {
+  identifier: string;
+  title: string | null;
+  language: string | null;
+  code: string;
+  description: string | null;
+  isPinned: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateSnippetPayload {
+  title: string | null;
+  language: string | null;
+  code: string;
+  description: string | null;
+}
 
 export type UpdateSnippetPayload = Partial<CreateSnippetPayload>;
 
@@ -43,14 +59,22 @@ export const useSnippetStore = defineStore("snippets_store", {
     },
 
     async createSnippet(payload: CreateSnippetPayload): Promise<Snippet> {
-      const created = await invoke<Snippet>("create_snippet", { snippet: payload });
+      const created = await invoke<Snippet>("create_snippet", {
+        snippet: payload,
+      });
       this.snippets.unshift(created);
       await this.fetchRecentSnippets();
       return created;
     },
 
-    async updateSnippet(identifier: string, payload: UpdateSnippetPayload): Promise<Snippet> {
-      const updated = await invoke<Snippet>("update_snippet", { identifier, snippet: payload });
+    async updateSnippet(
+      identifier: string,
+      payload: UpdateSnippetPayload,
+    ): Promise<Snippet> {
+      const updated = await invoke<Snippet>("update_snippet", {
+        identifier,
+        snippet: payload,
+      });
       const idx = this.snippets.findIndex((s) => s.identifier === identifier);
       if (idx !== -1) this.snippets[idx] = updated;
       return updated;

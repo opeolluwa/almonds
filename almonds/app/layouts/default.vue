@@ -1,14 +1,24 @@
 <script setup lang="ts">
 import _ from "lodash";
+import { primaryRoutes, secondaryRoutes } from "~/data/routes";
+import { useUserPreferenceStore } from "~/stores/user-preference";
 
-interface Route {
-  path: string;
-  name: string;
-  icon: string;
-  activeIcon: string;
-}
+const preferenceStore = useUserPreferenceStore();
+const workspaceStore = useWorkspacesStore();
+
+const workspaces = computed(() =>
+  workspaceStore.workspaces.map((w) => ({
+    label: w.name,
+    value: w.identifier,
+  })),
+);
+const workspace = ref({
+  label: workspaceStore.currentWorkspace?.name ?? "Select workspace",
+  value: workspaceStore.currentWorkspace?.identifier ?? "",
+});
 
 const route = useRoute();
+const router = useRouter();
 const colorMode = useColorMode();
 
 const isDark = computed({
@@ -26,77 +36,14 @@ const themeIcon = computed(() =>
 
 const themeLabel = computed(() => (isDark.value ? "Light mode" : "Dark mode"));
 
-const primaryRoutes: Route[] = [
-  {
-    path: "/",
-    name: "Home",
-    icon: "heroicons:home",
-    activeIcon: "heroicons:home-solid",
-  },
-  {
-    path: "/notes",
-    name: "Notes",
-    icon: "heroicons:document-text",
-    activeIcon: "heroicons:document-text-solid",
-  },
-  {
-    path: "/bookmarks",
-    name: "Bookmarks",
-    icon: "heroicons:bookmark",
-    activeIcon: "heroicons:bookmark-solid",
-  },
-  {
-    path: "/ollama",
-    name: "Ollama",
-    icon: "heroicons:cpu-chip",
-    activeIcon: "heroicons:cpu-chip-solid",
-  },
-  {
-    path: "/snippets",
-    name: "Snippets",
-    icon: "heroicons:code-bracket",
-    activeIcon: "heroicons:code-bracket-solid",
-  },
-  {
-    path: "/todo",
-    name: "Todo",
-    icon: "heroicons:check-circle",
-    activeIcon: "heroicons:check-circle-solid",
-  },
-  {
-    path: "/moodboard",
-    name: "Moodboard",
-    icon: "heroicons:squares-2x2",
-    activeIcon: "heroicons:squares-2x2-solid",
-  },
-  {
-    path: "/scratch-pad",
-    name: "Scratch Pad",
-    icon: "heroicons:pencil-square",
-    activeIcon: "heroicons:pencil-square-solid",
-  },
-];
-
-const secondaryRoutes: Route[] = [
-  {
-    path: "/settings",
-    name: "Settings",
-    icon: "heroicons:cog-6-tooth",
-    activeIcon: "heroicons:cog-6-tooth-solid",
-  },
-];
-
 function isActive(path: string): boolean {
   if (path === "/") return route.path === "/";
   return route.path.startsWith(path);
 }
 
 const sidebarCollapsed = ref(false);
-const asideOpen = ref(true);
-
-watch(sidebarCollapsed, () => {
-  asideOpen.value = false;
-});
+const asideOpen = ref(false);
+const mobileNavOpen = ref(false);
 
 const { searchConfig, searchQuery } = useAppSearch();
 
@@ -119,12 +66,13 @@ const pageTitle = computed(() => {
     <!-- Sidebar: icons-only strip when collapsed -->
     <UDashboardSidebar
       v-model:collapsed="sidebarCollapsed"
+      class="hidden md:flex"
       :collapsible="true"
       :collapsed-size="4"
       :default-size="15"
       :resizable="true"
-      :min-size="12"
-      :max-size="32"
+      :min-size="18"
+      :max-size="42"
       :ui="{
         root: 'bg-white dark:bg-gray-900 transition-[width] duration-300 border-e border-gray-200 dark:border-gray-800',
         header: 'shrink-0 h-auto p-0',
@@ -141,12 +89,9 @@ const pageTitle = computed(() => {
           >
             <UUser
               v-if="!collapsed"
-              name="Nick Woods"
-              description="nick.woods@gmail.com"
-              :avatar="{
-                src: 'https://i.pravatar.cc/150?u=nick-woods',
-                icon: 'i-lucide-image',
-              }"
+              :name="preferenceStore.fullName"
+              :description="preferenceStore.preference?.email"
+              :avatar="{ icon: 'i-lucide-user' }"
               class="min-w-0 flex-1 truncate"
             />
 
@@ -157,26 +102,23 @@ const pageTitle = computed(() => {
               variant="ghost"
             />
 
-            <UAvatar
-              v-else
-              src="https://i.pravatar.cc/150?u=nick-woods"
-              size="sm"
-              class="shrink-0"
-            />
+            <!-- <UAvatar v-else icon="i-lucide-user" size="sm" class="shrink-0" /> -->
+            <!--TODO-->
+            <!-- <USelectMenu v-model="workspace" :items="workspaces" /> -->
           </div>
 
-          <div class="px-3 mb-3 flex max-w-9/12">
+          <div class="px-3 flex mb-3 max-w-9/12 hidden">
             <UButton
               color="error"
               variant="solid"
               class="flex-1 bg-accent-500 hover:bg-accent-600 justify-center"
             >
               <UIcon name="heroicons:plus" class="size-4 shrink-0" />
-              <span v-if="!collapsed">New Project</span>
+              <span v-if="!collapsed">New Workspace</span>
             </UButton>
           </div>
 
-          <USeparator class="mx-3" />
+          <USeparator class="mx-3 max-w-9/12" />
         </div>
       </template>
 
@@ -210,9 +152,9 @@ const pageTitle = computed(() => {
           <USeparator class="mx-1 mb-2" />
 
           <button
-            @click="toggleTheme"
             class="flex items-center py-2 px-3 text-sm cursor-pointer rounded-lg transition-colors text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 w-full"
             :class="collapsed ? 'justify-center' : 'gap-3'"
+            @click="toggleTheme"
           >
             <UIcon :name="themeIcon" class="size-4 shrink-0" />
             <span v-if="!collapsed">{{ themeLabel }}</span>
@@ -244,81 +186,236 @@ const pageTitle = computed(() => {
     <div class="flex flex-col flex-1 min-w-0 overflow-hidden">
       <!-- App header -->
       <header
-        class="flex items-center gap-3 h-14 px-4 shrink-0 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900"
+        class="shrink-0 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900"
+        style="padding-top: env(safe-area-inset-top)"
       >
-        <!-- Expand sidebar button (only shown when sidebar is collapsed) -->
-        <UDashboardSidebarCollapse
-          v-if="sidebarCollapsed"
-          size="sm"
-          color="neutral"
-          variant="ghost"
-          class="shrink-0"
-        />
+        <div class="flex justify-between items-center gap-3 h-14 px-4">
+          <!-- Hamburger: mobile only -->
+          <UButton
+            class="flex md:hidden shrink-0"
+            size="sm"
+            color="neutral"
+            variant="ghost"
+            icon="heroicons:bars-3"
+            aria-label="Open navigation"
+            @click="mobileNavOpen = true"
+          />
 
-        <!-- Search bar -->
-        <div class="flex-1 max-w-xl">
-          <UInput
-            :model-value="searchQuery"
-            :placeholder="searchConfig?.placeholder ?? 'Search...'"
-            :disabled="!searchConfig"
-            icon="heroicons:magnifying-glass"
+          <!-- Expand sidebar button (only shown when sidebar is collapsed) -->
+          <UDashboardSidebarCollapse
+            v-if="sidebarCollapsed"
             size="sm"
-            variant="outline"
-            class="w-full"
-            @update:model-value="onSearchInput"
+            color="neutral"
+            variant="ghost"
+            class="hidden md:flex shrink-0"
           />
-        </div>
 
-        <!-- Right actions -->
-        <div class="flex items-center gap-1 ml-auto">
-          <UButton
-            size="sm"
-            color="neutral"
-            variant="ghost"
-            :icon="themeIcon"
-            :aria-label="themeLabel"
-            @click="toggleTheme"
-          />
-          <UButton
-            size="sm"
-            color="neutral"
-            variant="ghost"
-            icon="heroicons:bell"
-            @click="navigateTo('/notifications')"
-          />
-          <UButton
-            size="sm"
-            color="neutral"
-            variant="ghost"
-            icon="heroicons:bars-3-bottom-right"
-            aria-label="Open panel"
-            @click="asideOpen = true"
-          />
+          <div class="flex items-center gap-1">
+            <UButton
+              size="sm"
+              color="neutral"
+              variant="ghost"
+              icon="heroicons:chevron-left"
+              @click="router.back()"
+            />
+            <UButton
+              size="sm"
+              color="neutral"
+              variant="ghost"
+              icon="heroicons:chevron-right"
+              @click="router.forward()"
+            />
+          </div>
+
+          <!-- Search bar -->
+          <div v-if="searchConfig != null" class="mx-auto w-6/12">
+            <input
+              :model-value="searchQuery"
+              :placeholder="searchConfig?.placeholder ?? 'Search...'"
+              :disabled="!searchConfig"
+              icon="heroicons:magnifying-glass"
+              size="lg"
+              variant="outline"
+              class="almond_input_box w-full"
+              :ui="{ root: 'bg-transparent' }"
+              @update:model-value="onSearchInput"
+            >
+          </div>
+
+          <!-- Right actions -->
+          <div class="flex items-center gap-1 ml-auto">
+            <UButton
+              size="sm"
+              color="neutral"
+              variant="ghost"
+              :icon="themeIcon"
+              :aria-label="themeLabel"
+              @click="toggleTheme"
+            />
+            <UButton
+              size="sm"
+              color="neutral"
+              variant="ghost"
+              icon="heroicons:bell"
+              @click="navigateTo('/notifications')"
+            />
+            <UButton
+              class="flex md:hidden"
+              size="sm"
+              color="neutral"
+              variant="ghost"
+              icon="heroicons:bars-3-bottom-right"
+              aria-label="Open panel"
+              @click="asideOpen = true"
+            />
+          </div>
         </div>
       </header>
 
       <!-- Page content + inline aside (fullscreen mode) -->
       <div class="flex flex-1 overflow-hidden">
         <main class="flex-1 overflow-y-auto p-6 bg-gray-50 dark:bg-surface-950">
-          <h1 class="text-2xl font-semibold text-gray-800 dark:text-gray-100">
-            {{ pageTitle }}
-          </h1>
-          <slot name="primary_cta" />
-          <slot name="main_content" />
+          <div class="flex items-center gap-3 mb-1" />
+          <slot name="page_title">
+            <h1 class="text-2xl font-semibold text-gray-800 dark:text-gray-100">
+              {{ pageTitle }}
+            </h1>
+          </slot>
+
+          <div class="hidden md:flex items-center justify-end mt-5 my-6">
+            <slot name="primary_cta" />
+          </div>
+
+          <div class="mt-5">
+            <slot name="main_content" />
+          </div>
         </main>
 
-        <!-- Inline aside: only when sidebar is expanded -->
-        <Transition name="aside-slide">
-          <aside
-            v-if="!sidebarCollapsed && asideOpen"
-            class="w-72 shrink-0 flex flex-col border-l border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 overflow-hidden"
+        <!-- Mobile FAB for primary_cta -->
+        <div
+          class="md:hidden fixed bottom-6 right-6 z-40"
+          style="padding-bottom: env(safe-area-inset-bottom)"
+        >
+          <slot name="primary_cta" />
+        </div>
+
+        <!-- Inline aside: always visible on desktop -->
+        <aside
+          class="hidden md:flex flex-col w-72 shrink-0 border-l border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 overflow-hidden"
+        >
+          <div
+            class="flex items-center justify-between px-4 py-3 shrink-0 border-b border-gray-200 dark:border-gray-800"
           >
-            <div
-              class="flex items-center justify-between px-4 py-3 shrink-0 border-b border-gray-200 dark:border-gray-800"
+            <span class="font-semibold text-sm text-gray-900 dark:text-white"
+              >Panel</span
             >
-              <span class="font-semibold text-sm text-gray-900 dark:text-white"
-                >Panel</span
-              >
+          </div>
+          <div class="flex-1 overflow-y-auto p-4">
+            <slot name="side_content" />
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <!-- Mobile nav drawer -->
+    <USlideover
+      v-model:open="mobileNavOpen"
+      side="left"
+      :ui="{ content: 'max-w-64' }"
+    >
+      <template #content>
+        <div class="flex flex-col h-full bg-white dark:bg-gray-900">
+          <!-- Safe-area spacer -->
+          <div class="shrink-0" style="height: env(safe-area-inset-top)" />
+          <!-- Header -->
+          <div
+            class="flex items-center justify-between px-4 py-4 border-b border-gray-200 dark:border-gray-800 shrink-0"
+          >
+            <UUser
+              :name="preferenceStore.fullName"
+              :description="preferenceStore.preference?.email"
+              :avatar="{ icon: 'i-lucide-user' }"
+              class="min-w-0 flex-1 truncate"
+            />
+            <UButton
+              size="sm"
+              color="neutral"
+              variant="ghost"
+              icon="heroicons:x-mark"
+              @click="mobileNavOpen = false"
+            />
+          </div>
+
+          <!-- Primary nav -->
+          <nav class="flex flex-col gap-0.5 px-2 py-2 flex-1 overflow-y-auto">
+            <NuxtLink
+              v-for="r in primaryRoutes"
+              :key="r.name"
+              :to="r.path"
+              class="flex items-center gap-3 py-2 px-3 text-sm cursor-pointer rounded-lg transition-colors"
+              :class="
+                isActive(r.path)
+                  ? 'bg-accent-50 dark:bg-accent-950 text-accent-700 dark:text-accent-300 font-medium'
+                  : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+              "
+              @click="mobileNavOpen = false"
+            >
+              <UIcon
+                :name="isActive(r.path) ? r.activeIcon : r.icon"
+                class="size-4 shrink-0"
+              />
+              {{ r.name }}
+            </NuxtLink>
+          </nav>
+
+          <!-- Footer -->
+          <div class="flex flex-col gap-0.5 px-2 pb-4 shrink-0">
+            <USeparator class="mx-1 mb-2" />
+            <button
+              class="flex items-center gap-3 py-2 px-3 text-sm cursor-pointer rounded-lg transition-colors text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 w-full"
+              @click="toggleTheme"
+            >
+              <UIcon :name="themeIcon" class="size-4 shrink-0" />
+              {{ themeLabel }}
+            </button>
+            <NuxtLink
+              v-for="r in secondaryRoutes"
+              :key="r.name"
+              :to="r.path"
+              class="flex items-center gap-3 py-2 px-3 text-sm cursor-pointer rounded-lg transition-colors"
+              :class="
+                isActive(r.path)
+                  ? 'bg-accent-50 dark:bg-accent-950 text-accent-700 dark:text-accent-300 font-medium'
+                  : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+              "
+              @click="mobileNavOpen = false"
+            >
+              <UIcon
+                :name="isActive(r.path) ? r.activeIcon : r.icon"
+                class="size-4 shrink-0"
+              />
+              {{ r.name }}
+            </NuxtLink>
+          </div>
+        </div>
+      </template>
+    </USlideover>
+
+    <!-- Right panel drawer: mobile only -->
+    <USlideover
+      v-model:open="asideOpen"
+      side="right"
+      :ui="{ content: 'max-w-sm' }"
+    >
+      <template #content>
+        <div class="flex flex-col h-full bg-white dark:bg-gray-900">
+          <!-- Safe-area spacer -->
+          <div class="shrink-0" style="height: env(safe-area-inset-top)" />
+          <div class="flex flex-col flex-1 overflow-hidden p-5">
+            <div class="flex items-center justify-between mb-4 shrink-0">
+              <span class="font-semibold text-sm text-gray-900 dark:text-white">
+                Panel
+              </span>
               <UButton
                 size="sm"
                 color="neutral"
@@ -327,60 +424,12 @@ const pageTitle = computed(() => {
                 @click="asideOpen = false"
               />
             </div>
-            <div class="flex-1 overflow-y-auto p-4">
+            <div class="flex-1 overflow-y-auto">
               <slot name="side_content" />
             </div>
-          </aside>
-        </Transition>
-      </div>
-    </div>
-
-    <!-- Drawer aside: only when sidebar is collapsed (minimized mode) -->
-    <USlideover
-      v-if="sidebarCollapsed"
-      v-model:open="asideOpen"
-      side="right"
-      :ui="{ content: 'max-w-sm' }"
-    >
-      <template #content>
-        <div class="flex flex-col h-full p-5 bg-white dark:bg-gray-900">
-          <div class="flex items-center justify-between mb-4 shrink-0">
-            <span class="font-semibold text-sm text-gray-900 dark:text-white">
-              Panel
-            </span>
-            <UButton
-              size="sm"
-              color="neutral"
-              variant="ghost"
-              icon="heroicons:x-mark"
-              @click="asideOpen = false"
-            />
-          </div>
-          <div class="flex-1 overflow-y-auto">
-            <slot name="side_content" />
           </div>
         </div>
       </template>
     </USlideover>
   </UDashboardGroup>
 </template>
-
-<style scoped>
-.aside-slide-enter-active,
-.aside-slide-leave-active {
-  transition:
-    width 0.25s ease,
-    opacity 0.25s ease;
-  overflow: hidden;
-}
-.aside-slide-enter-from,
-.aside-slide-leave-to {
-  width: 0;
-  opacity: 0;
-}
-.aside-slide-enter-to,
-.aside-slide-leave-from {
-  width: 18rem; /* matches w-72 */
-  opacity: 1;
-}
-</style>

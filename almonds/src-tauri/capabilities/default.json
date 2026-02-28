@@ -8,6 +8,10 @@
   "permissions": [
     "core:default",
     "sql:default",
-    "clipboard-manager:default"
+    "clipboard-manager:default",
+    "notification:default",
+    "os:default",
+    "core:app:allow-default-window-icon",
+    "opener:default"
   ]
 }

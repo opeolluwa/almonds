@@ -3,7 +3,7 @@ use uuid::Uuid;
 
 use almond_kernel::{entities::sync_queue, repositories::sync_queue::SyncQueueRepositoryExt};
 
-use crate::{adapters::sync_queue::AddSyncQueueEntry, errors::AppError, state::AppState};
+use crate::{adapters::sync_queue::AddSyncQueueEntry, errors::AppError, state::app::AppState};
 
 #[tauri::command]
 pub async fn add_sync_queue_entry(

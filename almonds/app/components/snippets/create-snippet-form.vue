@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { CreateSnippetPayload } from "~/composables/snippets/useCreateSnippet";
+import type { CreateSnippetPayload } from "~/stores/snippets";
 import { SNIPPET_LANGUAGES } from "~/data/languages";
 
 const snippetStore = useSnippetStore();
@@ -36,7 +36,7 @@ async function handleSubmit() {
 </script>
 
 <template>
-  <form @submit.prevent="handleSubmit" class="flex flex-col gap-5">
+  <form class="flex flex-col gap-5" @submit.prevent="handleSubmit">
     <!-- Title -->
     <div class="flex flex-col gap-1">
       <label class="text-xs font-medium text-gray-600 dark:text-gray-400">
@@ -61,7 +61,7 @@ async function handleSubmit() {
           >(optional)</span
         >
       </label>
-      <USelect
+      <USelectMenu
         v-model="language"
         placeholder="e.g. TypeScript"
         size="sm"

@@ -1,25 +1,62 @@
 <script setup lang="ts">
-definePageMeta({
-  layout: false,
-});
+definePageMeta({ layout: false });
+
+type Section =
+  | "profile"
+  | "appearance"
+  | "backup"
+  | "ai"
+  | "notifications"
+  | "alarm"
+  | "about";
+
+const activeSection = ref<Section>("profile");
+
+const navSections: { key: Section; label: string; icon: string }[] = [
+  { key: "profile", label: "Profile", icon: "heroicons:user-circle" },
+  { key: "appearance", label: "Appearance", icon: "heroicons:paint-brush" },
+  { key: "backup", label: "Backup & Sync", icon: "heroicons:cloud-arrow-up" },
+  { key: "ai", label: "AI & Ollama", icon: "heroicons:cpu-chip" },
+  { key: "notifications", label: "Notifications", icon: "heroicons:inbox" },
+  { key: "alarm", label: "Alarm", icon: "heroicons:bell-alert" },
+  { key: "about", label: "About", icon: "heroicons:information-circle" },
+];
 </script>
 
 <template>
   <NuxtLayout name="default">
     <template #main_content>
-            <h1 class="text-2xl font-semibold text-gray-800 dark:text-gray-100">Settings</h1>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat,
-      temporibus beatae ea illum sapiente ut repellendus incidunt aliquid
-      laudantium aperiam ducimus est repellat commodi numquam? Nesciunt tenetur
-      excepturi neque dolores?
+      <SettingsProfileSettings v-if="activeSection === 'profile'" />
+      <SettingsAppearanceSettings v-else-if="activeSection === 'appearance'" />
+      <SettingsBackupSettings v-else-if="activeSection === 'backup'" />
+      <SettingsAiSettings v-else-if="activeSection === 'ai'" />
+      <SettingsNotificationsSettings
+        v-else-if="activeSection === 'notifications'"
+      />
+      <SettingsAlarmSettings v-else-if="activeSection === 'alarm'" />
+      <SettingsAboutSettings v-else-if="activeSection === 'about'" />
     </template>
 
-
-     <template #side_content>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat,
-      temporibus beatae ea illum sapiente ut repellendus incidunt aliquid
-      laudantium aperiam ducimus est repellat commodi numquam? Nesciunt tenetur
-      excepturi neque dolores?
+    <template #side_content>
+      <h2 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">
+        Preferences
+      </h2>
+      <div class="flex flex-col gap-1">
+        <button
+          v-for="s in navSections"
+          :key="s.key"
+          class="flex items-center gap-3 py-2 px-3 rounded-lg text-sm transition-colors w-full text-left"
+          :class="
+            activeSection === s.key
+              ? 'bg-accent-50 dark:bg-accent-950 text-accent-700 dark:text-accent-300 font-medium'
+              : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'
+          "
+          @click="activeSection = s.key"
+        >
+          <UIcon :name="s.icon" class="size-4 shrink-0" />
+          {{ s.label }}
+        </button>
+      </div>
     </template>
   </NuxtLayout>
 </template>

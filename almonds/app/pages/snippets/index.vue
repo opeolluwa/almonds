@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import SnippetCard from '~/components/snippets/snippet-card.vue';
+import SnippetCard from "~/components/snippets/snippet-card.vue";
+import { useSnippetStore } from "~/stores/snippets";
 
 definePageMeta({ layout: false });
 
@@ -26,7 +27,6 @@ const filteredSnippets = computed(() => {
         s.code.toLowerCase().includes(q),
     );
   }
-
   return list;
 });
 
@@ -55,14 +55,16 @@ onUnmounted(() => clearSearch());
 
 <template>
   <NuxtLayout name="default">
-    <template #main_content>
+    <template #primary_cta>
       <PrimaryCta
+        v-if="snippetStore.snippets.length !== 0"
         label="New Snippet"
         icon="heroicons:plus"
         to="/snippets/create-snippets"
-        v-if="snippetStore.snippets.length !== 0"
       />
+    </template>
 
+    <template #main_content>
       <!-- Language filter tabs -->
       <div
         v-if="!snippetStore.loading && allLanguages.length > 1"
@@ -93,7 +95,9 @@ onUnmounted(() => clearSearch());
         v-else-if="snippetStore.snippets.length === 0"
         class="flex flex-col items-center justify-center py-20 text-center"
       >
-        <div class="mb-4 p-2 flex justify-center items-center  rounded-full bg-gray-100 dark:bg-gray-800">
+        <div
+          class="mb-4 p-2 flex justify-center items-center rounded-full bg-gray-100 dark:bg-gray-800"
+        >
           <UIcon
             name="heroicons:code-bracket"
             class="size-8 text-gray-400 dark:text-gray-500"
@@ -159,6 +163,7 @@ onUnmounted(() => clearSearch());
           :lines="lineCount(snippet.code)"
           :date="formatDate(snippet.createdAt)"
           :preview="snippet.code"
+          :search-query="searchQuery"
         />
       </div>
     </template>
