@@ -10,14 +10,13 @@ import 'scripts/orchard.just'
 import 'scripts/docs.just'
 import 'scripts/grove.just'
 
+DB_PATH := "sqlite:://../../test.sqlite?mode=rwc"
 
 set dotenv-required := true
 set dotenv-load := true
 set dotenv-path := ".env"
 set export := true
 
-
-DB_PATH := "sqlite:://../../test.sqlite?mode=rwc"
 alias w := watch
 alias b := build
 alias cfg := configure
@@ -25,6 +24,7 @@ alias cfg := configure
 configure:
 	just install-dependencies
 	just create-kernel-test-file
+	just install-frontend-dependencies
 
 watch target:
 	just watch-{{target}}
