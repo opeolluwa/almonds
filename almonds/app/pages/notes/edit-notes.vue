@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import NotesEditor from "~/components/notes/notes-editor.vue";
-import { useNoteStore } from "~/stores/notes";
-
 definePageMeta({ layout: false, keepalive: true, name: "Edit notes" });
 
 const route = useRoute();
