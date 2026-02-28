@@ -2,7 +2,7 @@
 
 A personal productivity desktop app built with Tauri, Nuxt 4, and Vue 3. Brings notes, snippets, bookmarks, tasks, and AI conversations into one workspace.
 
-![screenshot](./almonds.png)
+![screenshot](./screenshot.png)
 
 ## Features
 
