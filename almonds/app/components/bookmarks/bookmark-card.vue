@@ -45,11 +45,11 @@ function formatDate(iso: string) {
       class="opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity flex items-center gap-1"
     >
       <button
-        class="text-gray-400 hover:text-accent-500 transition-colors hidden"
+        class="text-gray-400 hover:text-accent-500 transition-colors"
         title="Preview"
         @click="emit('preview', bookmark)"
       >
-        <UIcon name="heroicons:pencil" class="size-4" />
+        <UIcon name="heroicons:eye" class="size-4" />
       </button>
       <button
         class="text-gray-400 hover:text-red-500 transition-colors"

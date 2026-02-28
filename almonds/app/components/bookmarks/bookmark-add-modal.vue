@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import type { BookmarkTag, CreateBookmarkPayload } from "~/stores/bookmarks";
+import AppInput from "../forms/app-input.vue";
+import AppSelect from "../forms/app-select.vue";
+import _ from "lodash";
 
 defineProps<{
   tags: { label: string; value: BookmarkTag }[];
@@ -39,42 +42,34 @@ async function handleSubmit() {
   <UModal v-model:open="open" title="Add Bookmark">
     <template #body>
       <form class="flex flex-col gap-4" @submit.prevent="handleSubmit">
-        <div class="flex flex-col gap-1">
-          <label class="text-xs font-medium text-gray-600 dark:text-gray-400"
-            >Title</label
-          >
-          <input
-            v-model="form.title"
-            placeholder="e.g. Vue.js Docs"
-            size="sm"
-            class="almond_input_box"
-            :disabled="submitting"
-          >
-        </div>
-        <div class="flex flex-col gap-1">
-          <label class="text-xs font-medium text-gray-600 dark:text-gray-400"
-            >URL</label
-          >
-          <input
-            v-model="form.url"
-            placeholder="https://example.com"
-            class="almond_input_box"
-            :disabled="submitting"
-          >
-        </div>
-        <div class="flex flex-col gap-1">
-          <label class="text-xs font-medium text-gray-600 dark:text-gray-400"
-            >Tag</label
-          >
-          <USelectMenu
-            v-model="form.tag"
-            :items="tags.map((t) => ({ label: t.label, value: t.value }))"
-            value-key="value"
-            size="sm"
-            :ui="{ base: 'almond_input_box' }"
-            :disabled="submitting"
-          />
-        </div>
+        <AppInput
+          v-model="form.title"
+          placeholder="Bookmark title"
+          label="Title"
+          name="bookmark title"
+          :disabled="submitting"
+        />
+
+        <AppInput
+          v-model="form.url"
+          label="URL"
+          name="bookmark url"
+          placeholder="https://example.com"
+          :disabled="submitting"
+        />
+
+        <AppSelect
+          v-model="form.tag"
+          :items="
+            tags.map((t) => ({ label: _.capitalize(t.label), value: t.value }))
+          "
+          value-key="value"
+          label="Tag"
+          name="bookmark tag"
+          :ui="{ base: 'almond_input_box' }"
+          :disabled="submitting"
+        />
+
         <div class="flex gap-2">
           <UButton
             type="submit"

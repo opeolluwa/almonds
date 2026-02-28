@@ -27,11 +27,12 @@ const model = defineModel<string>();
     <USelectMenu
       v-model="model"
       :items="items"
+      value-key="value"
       :disabled="disabled"
       :placeholder="placeholder"
       :ui="{ base: 'py-4 pl-4 lowercase' }"
       :class="[
-        'w-full transition-colors',
+        'w-full transition-colors capitalize',
         error
           ? 'border-red-500 focus:border-red-500'
           : 'border-gray-300 focus:border-black',

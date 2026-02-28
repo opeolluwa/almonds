@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useUserPreferenceStore } from "~/stores/user-preference";
-
+import AppInput from "../forms/app-input.vue";
 const store = useUserPreferenceStore();
 
 const form = reactive({
@@ -59,40 +59,29 @@ async function handleSave() {
       </div>
       <div class="flex flex-col gap-4">
         <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label
-              class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5"
-              >First Name</label
-            >
-            <input
-              v-model="form.firstName"
-              type="text"
-              class="w-full bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-600 outline-none focus:ring-2 focus:ring-accent-300 dark:focus:ring-accent-600 focus:border-transparent"
-            >
-          </div>
-          <div>
-            <label
-              class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5"
-              >Last Name</label
-            >
-            <input
-              v-model="form.lastName"
-              type="text"
-              class="w-full bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-600 outline-none focus:ring-2 focus:ring-accent-300 dark:focus:ring-accent-600 focus:border-transparent"
-            >
-          </div>
+          <AppInput
+            v-model="form.firstName"
+            type="text"
+            placeholder="John"
+            label="First Name"
+            name="first name"
+          />
+
+          <AppInput
+            v-model="form.lastName"
+            type="text"
+            placeholder="Doe"
+            label="Last Name"
+            name="last name"
+          />
         </div>
-        <div>
-          <label
-            class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5"
-            >Email</label
-          >
-          <input
-            v-model="form.email"
-            type="email"
-            class="w-full bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-600 outline-none focus:ring-2 focus:ring-accent-300 dark:focus:ring-accent-600 focus:border-transparent"
-          >
-        </div>
+        <AppInput
+          v-model="form.email"
+          type="email"
+          placeholder="john@example.com"
+          label="Email"
+          name="email"
+        />
       </div>
       <div class="mt-5 flex justify-end">
         <button

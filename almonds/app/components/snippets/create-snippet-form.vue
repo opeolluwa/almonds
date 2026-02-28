@@ -46,7 +46,6 @@ async function handleSubmit() {
         placeholder="My snippet"
         label="Title"
         name="snippet title"
-        size="sm"
         :disabled="submitting"
       />
     </div>

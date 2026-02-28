@@ -7,6 +7,7 @@ use almond_kernel::{
     sea_orm::DatabaseConnection,
 };
 
+#[allow(dead_code)]
 pub struct OllamaState {
     pub ollama_repository: OllamaConversationRepository,
 }

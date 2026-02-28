@@ -161,7 +161,7 @@ async function handleCreate(payload: {
           :key="bookmark.identifier"
           :bookmark="bookmark"
           @delete="bookmarkStore.deleteBookmark"
-          @click="openUrl(bookmark.url)"
+          @preview="openUrl(bookmark.url)"
         />
       </div>
     </template>
