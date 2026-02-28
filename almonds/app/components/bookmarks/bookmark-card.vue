@@ -30,7 +30,7 @@ function formatDate(iso: string) {
         {{ bookmark.title }}
       </h3>
       <div class="text-xs text-gray-400 truncate block">
-        {{ bookmark.url }} <UIcon name="heroicons:link" />
+        {{ bookmark.url }}
       </div>
     </div>
     <span

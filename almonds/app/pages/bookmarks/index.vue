@@ -25,16 +25,6 @@ const TAG_ICONS: Record<BookmarkTag, string> = {
 const activeTag = ref<BookmarkTag | "all">("all");
 const showAddModal = ref(false);
 
-const previewBookmark = ref<import("~/stores/bookmarks").Bookmark | null>(null);
-const showPreview = ref(false);
-
-async function openPreview(bookmark: import("~/stores/bookmarks").Bookmark) {
-  // previewBookmark.value = bookmark;
-  // showPreview.value = true;
-
-  await openUrl(bookmark.url);
-}
-
 const filtered = computed(() => {
   let list =
     activeTag.value === "all"
@@ -55,8 +45,9 @@ const filtered = computed(() => {
 });
 
 onMounted(async () => {
-  setSearch({ placeholder: "Search bookmarks..." });
   await bookmarkStore.fetchBookmarks();
+
+  setSearch({ placeholder: "Search bookmarks..." });
 });
 
 onUnmounted(() => clearSearch());
