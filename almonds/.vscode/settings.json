@@ -1,9 +1,24 @@
 {
     "cSpell.words": [
+        "codellama",
         "heroicons",
+        "moodboard",
+        "notif",
         "Nuxt",
+<<<<<<< HEAD
         "Slideover",
         "tauri"
+=======
+        "nuxtjs",
+        "Ollama",
+        "paleight",
+        "palenight",
+        "Shiki",
+        "Slideover",
+        "tauri",
+        "tiptap",
+        "vueuse"
+>>>>>>> 5944656d484bfd922aeb83962638954bd5c8dbfb
     ],
     "workbench.colorCustomizations": {
         "activityBar.activeBackground": "#a20e59",

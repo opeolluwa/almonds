@@ -8,8 +8,8 @@ const router = useRouter();
 const snippetStore = useSnippetStore();
 
 const id = computed(() => route.query.id as string | undefined);
-const original = computed(() =>
-  snippetStore.snippets.find((s) => s.identifier === id.value) ?? null,
+const original = computed(
+  () => snippetStore.snippets.find((s) => s.identifier === id.value) ?? null,
 );
 
 const title = ref("");
@@ -83,19 +83,25 @@ onMounted(async () => {
         <!-- Back -->
         <button
           class="flex items-center gap-1.5 text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors mb-5"
-          @click="router.push(`/snippets/view-snippet?id=${original.identifier}`)"
+          @click="
+            router.push(`/snippets/view-snippet?id=${original.identifier}`)
+          "
         >
           <UIcon name="heroicons:arrow-left" class="size-3.5" />
           Back
         </button>
 
         <div class="max-w-2xl">
-          <form @submit.prevent="handleSubmit" class="flex flex-col gap-5">
+          <form class="flex flex-col gap-5" @submit.prevent="handleSubmit">
             <!-- Title -->
             <div class="flex flex-col gap-1">
-              <label class="text-xs font-medium text-gray-600 dark:text-gray-400">
+              <label
+                class="text-xs font-medium text-gray-600 dark:text-gray-400"
+              >
                 Title
-                <span class="text-gray-400 dark:text-gray-600 font-normal ml-1">(optional)</span>
+                <span class="text-gray-400 dark:text-gray-600 font-normal ml-1"
+                  >(optional)</span
+                >
               </label>
               <UInput
                 v-model="title"
@@ -107,9 +113,13 @@ onMounted(async () => {
 
             <!-- Language -->
             <div class="flex flex-col gap-1">
-              <label class="text-xs font-medium text-gray-600 dark:text-gray-400">
+              <label
+                class="text-xs font-medium text-gray-600 dark:text-gray-400"
+              >
                 Language
-                <span class="text-gray-400 dark:text-gray-600 font-normal ml-1">(optional)</span>
+                <span class="text-gray-400 dark:text-gray-600 font-normal ml-1"
+                  >(optional)</span
+                >
               </label>
               <USelect
                 v-model="language"
@@ -122,7 +132,9 @@ onMounted(async () => {
 
             <!-- Code -->
             <div class="flex flex-col gap-1">
-              <label class="text-xs font-medium text-gray-600 dark:text-gray-400">
+              <label
+                class="text-xs font-medium text-gray-600 dark:text-gray-400"
+              >
                 Code
                 <span class="text-red-400 ml-0.5">*</span>
               </label>
@@ -137,9 +149,13 @@ onMounted(async () => {
 
             <!-- Description -->
             <div class="flex flex-col gap-1">
-              <label class="text-xs font-medium text-gray-600 dark:text-gray-400">
+              <label
+                class="text-xs font-medium text-gray-600 dark:text-gray-400"
+              >
                 Description
-                <span class="text-gray-400 dark:text-gray-600 font-normal ml-1">(optional)</span>
+                <span class="text-gray-400 dark:text-gray-600 font-normal ml-1"
+                  >(optional)</span
+                >
               </label>
               <UTextarea
                 v-model="description"
@@ -167,7 +183,11 @@ onMounted(async () => {
                 variant="ghost"
                 size="sm"
                 :disabled="submitting"
-                @click="router.push(`/snippets/view-snippet?id=${original.identifier}`)"
+                @click="
+                  router.push(
+                    `/snippets/view-snippet?id=${original.identifier}`,
+                  )
+                "
               >
                 Cancel
               </UButton>

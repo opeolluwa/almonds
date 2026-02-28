@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import SnippetCard from '~/components/snippets/snippet-card.vue';
-
+import { useSnippetStore } from "~/stores/snippets";
+import SnippetCard from "~/components/snippets/snippet-card.vue";
 definePageMeta({ layout: false });
 
 const snippetStore = useSnippetStore();
@@ -26,7 +26,6 @@ const filteredSnippets = computed(() => {
         s.code.toLowerCase().includes(q),
     );
   }
-
   return list;
 });
 
@@ -55,14 +54,30 @@ onUnmounted(() => clearSearch());
 
 <template>
   <NuxtLayout name="default">
-    <template #main_content>
-      <PrimaryCta
-        label="New Snippet"
-        icon="heroicons:plus"
-        to="/snippets/create-snippets"
+    <template #primary_cta>
+      <!-- Desktop: full label -->
+      <div
+        class="hidden md:flex items-center justify-end"
         v-if="snippetStore.snippets.length !== 0"
-      />
+        @click="navigateTo('/snippets/create-snippets')"
+      >
+        <button
+          class="flex items-center gap-2 py-2 px-4 bg-accent-500 text-white rounded-lg text-sm font-medium hover:bg-accent-600 transition-colors"
+        >
+          <UIcon name="heroicons:plus" class="size-4" />
+          Add Snippet
+        </button>
+      </div>
+      <!-- Mobile: icon-only round FAB -->
+      <button
+        class="md:hidden flex items-center justify-center w-14 h-14 bg-accent-500 text-white rounded-full shadow-xl active:scale-95 transition-transform"
+        aria-label="Add Bookmark"
+      >
+        <UIcon name="heroicons:plus" class="size-6" />
+      </button>
+    </template>
 
+    <template #main_content>
       <!-- Language filter tabs -->
       <div
         v-if="!snippetStore.loading && allLanguages.length > 1"
@@ -93,7 +108,9 @@ onUnmounted(() => clearSearch());
         v-else-if="snippetStore.snippets.length === 0"
         class="flex flex-col items-center justify-center py-20 text-center"
       >
-        <div class="mb-4 p-2 flex justify-center items-center  rounded-full bg-gray-100 dark:bg-gray-800">
+        <div
+          class="mb-4 p-2 flex justify-center items-center rounded-full bg-gray-100 dark:bg-gray-800"
+        >
           <UIcon
             name="heroicons:code-bracket"
             class="size-8 text-gray-400 dark:text-gray-500"
@@ -159,6 +176,7 @@ onUnmounted(() => clearSearch());
           :lines="lineCount(snippet.code)"
           :date="formatDate(snippet.createdAt)"
           :preview="snippet.code"
+          :search-query="searchQuery"
         />
       </div>
     </template>

@@ -1,3 +1,11 @@
+pub mod bookmarks;
+pub mod notes;
+pub mod ollama_conversation;
 pub mod prelude;
+pub mod recycle_bin;
+pub mod reminder;
 pub mod snippets;
 pub mod sync_queue;
+pub mod todo;
+pub mod user_preference;
+pub mod workspace;

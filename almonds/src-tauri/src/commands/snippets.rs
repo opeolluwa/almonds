@@ -3,7 +3,11 @@ use uuid::Uuid;
 
 use almond_kernel::{entities::snippets, repositories::snippets::SnippetRepositoryExt};
 
-use crate::{adapters::snippets::CreateSnippet, errors::AppError, state::AppState};
+use crate::{
+    adapters::snippets::{CreateSnippet, UpdateSnippet},
+    errors::AppError,
+    state::app::AppState,
+};
 
 #[tauri::command]
 pub async fn create_snippet(
@@ -41,6 +45,19 @@ pub async fn get_all_snippets(
 pub async fn delete_snippet(state: State<'_, AppState>, identifier: Uuid) -> Result<(), AppError> {
     state.snippet_repository.delete(&identifier).await?;
     Ok(())
+}
+
+#[tauri::command]
+pub async fn update_snippet(
+    state: State<'_, AppState>,
+    identifier: Uuid,
+    snippet: UpdateSnippet,
+) -> Result<snippets::Model, AppError> {
+    let updated = state
+        .snippet_repository
+        .update(&identifier, &snippet.into())
+        .await?;
+    Ok(updated)
 }
 
 #[tauri::command]

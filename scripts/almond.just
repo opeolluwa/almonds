@@ -10,10 +10,15 @@ watch-tauri:
     npm run tauri dev
 
 [working-directory:'almonds']
-watch-desktop:
+watch-almond:
     npm run dev & npm run tauri dev
 
 
 [working-directory:'almonds']
-build-desktop:
+build-almond:
     npm run tauri build
+
+
+[working-directory:'almonds']
+install-frontend-dependencies:
+    npm install
