@@ -1,5 +1,19 @@
 <script setup lang="ts">
 import hljs from "highlight.js/lib/common";
+import "highlight.js/styles/github.css"; // light
+import "highlight.js/styles/github-dark.css"; // dark
+
+const colorMode = useColorMode();
+
+const codeThemeClass = computed(() =>
+  colorMode.value === "dark"
+    ? "bg-gray-900 text-gray-100"
+    : "bg-gray-50 text-gray-800 border border-gray-200",
+);
+
+const highlightTheme = computed(() =>
+  colorMode.value === "dark" ? "github-dark" : "github",
+);
 
 definePageMeta({ layout: false, name: "Snippets" });
 
@@ -186,8 +200,10 @@ onMounted(async () => {
         <div class="relative group">
           <!-- eslint-disable-next-line vue/no-v-html — safe: content is hljs-escaped -->
           <pre
-            class="bg-gray-900 rounded-lg p-4 text-xs overflow-x-auto"
-          ><code v-html="highlighted"/></pre>
+            :class="[codeThemeClass, 'rounded-md p-3 text-xs overflow-x-auto']"
+          >
+          
+          <code v-html="highlighted"/></pre>
           <button
             class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity px-2 py-1 rounded text-xs font-medium"
             :class="

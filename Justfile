@@ -6,7 +6,16 @@ import 'scripts/build.just'
 import 'scripts/test.just'
 import 'scripts/clean.just'
 import 'scripts/android.just'
+import 'scripts/orchard.just'
+import 'scripts/docs.just'
+import 'scripts/grove.just'
 
+DB_PATH := "sqlite:://../../test.sqlite?mode=rwc"
+
+set dotenv-required := true
+set dotenv-load := true
+set dotenv-path := ".env"
+set export := true
 
 alias w := watch
 alias b := build
@@ -15,6 +24,7 @@ alias cfg := configure
 configure:
 	just install-dependencies
 	just create-kernel-test-file
+	just install-frontend-dependencies
 
 watch target:
 	just watch-{{target}}
@@ -32,3 +42,13 @@ lint target:
 	else
 		just lint-{{target}}
 	fi
+
+
+[working-directory:'kernel']
+@migrate-run:
+	DATABASE_URL={{DB_PATH}} sea-orm-cli  migrate up
+
+db-pull:
+	just migrate-run
+	just generate-entities {{DB_PATH}}
+	just generate-graphql-bindings {{DB_PATH}}

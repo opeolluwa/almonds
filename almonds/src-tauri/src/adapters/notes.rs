@@ -1,4 +1,7 @@
 use serde::Deserialize;
+use uuid::Uuid;
+
+use crate::adapters::common::RequestMeta;
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -6,6 +9,8 @@ pub struct CreateNote {
     pub title: String,
     pub content: String,
     pub categories: Option<Vec<String>>,
+    pub workspace_identifier: Option<Uuid>,
+    pub meta: Option<RequestMeta>,
 }
 
 impl From<CreateNote> for almond_kernel::adapters::notes::CreateNote {
@@ -14,6 +19,7 @@ impl From<CreateNote> for almond_kernel::adapters::notes::CreateNote {
             title: note.title,
             content: note.content,
             categories: note.categories,
+            workspace_identifier: note.workspace_identifier,
         }
     }
 }
@@ -24,6 +30,7 @@ pub struct UpdateNote {
     pub title: Option<String>,
     pub content: Option<String>,
     pub categories: Option<Vec<String>>,
+    pub meta: Option<RequestMeta>,
 }
 
 impl From<UpdateNote> for almond_kernel::adapters::notes::UpdateNote {

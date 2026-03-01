@@ -43,7 +43,7 @@ impl MigrationTrait for Migration {
 }
 
 #[derive(DeriveIden)]
-enum Bookmark {
+pub enum Bookmark {
     Table,
     Identifier,
     Title,
@@ -54,7 +54,7 @@ enum Bookmark {
 }
 
 #[derive(DeriveIden)]
-enum Tag {
+pub enum Tag {
     #[sea_orm(iden = "tag")]
     Type,
     Development,

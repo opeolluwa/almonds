@@ -1,5 +1,11 @@
 <script setup lang="ts">
 import hljs from "highlight.js/lib/common";
+import "highlight.js/styles/github.css"; // light
+import "highlight.js/styles/github-dark.css"; // dark
+
+const highlightTheme = computed(() =>
+  colorMode.value === "dark" ? "github-dark" : "github",
+);
 
 const hlLanguageMap: Record<string, string> = {
   C: "c",
@@ -48,6 +54,7 @@ const hlLanguageMap: Record<string, string> = {
   Angular: "typescript",
 };
 
+const colorMode = useColorMode();
 const props = defineProps<{
   identifier: string;
   title: string;
@@ -98,10 +105,7 @@ const codeMatchInfo = computed(() => {
 });
 
 function escapeHtml(str: string): string {
-  return str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
+  return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
 const codeMatchHtml = computed(() => {
@@ -120,6 +124,12 @@ async function copyCode() {
   copied.value = true;
   setTimeout(() => (copied.value = false), 1500);
 }
+
+const codeThemeClass = computed(() =>
+  colorMode.value === "dark"
+    ? "bg-gray-900 text-gray-100"
+    : "bg-gray-50 text-gray-800 border border-gray-200"
+)
 </script>
 
 <template>
@@ -136,7 +146,8 @@ async function copyCode() {
           <span
             v-if="codeMatchInfo"
             class="px-2 py-0.5 rounded bg-accent-100 dark:bg-accent-900 text-xs text-accent-600 dark:text-accent-400"
-          >code match</span>
+            >code match</span
+          >
           <span
             class="px-2 py-0.5 rounded bg-gray-100 dark:bg-gray-700 text-xs text-gray-500 dark:text-gray-400"
             >{{ language }}</span
@@ -146,8 +157,13 @@ async function copyCode() {
       </div>
 
       <!-- Match excerpt: centered on the first matching line -->
-      <div v-if="codeMatchInfo" class="bg-gray-900 rounded-md text-xs overflow-x-auto">
-        <div class="px-3 py-1 text-gray-500 border-b border-gray-700 text-xs font-mono">
+      <div
+        v-if="codeMatchInfo"
+        class="bg-gray-900 rounded-md text-xs overflow-x-auto"
+      >
+        <div
+          class="px-3 py-1 text-gray-500 border-b border-gray-700 text-xs font-mono"
+        >
           line {{ codeMatchInfo.startLine }}
         </div>
         <pre class="p-3"><code v-html="codeMatchHtml" /></pre>
@@ -156,7 +172,7 @@ async function copyCode() {
       <!-- Normal syntax-highlighted preview -->
       <pre
         v-else
-        class="bg-gray-900 rounded-md p-3 text-xs overflow-x-auto"
+        :class="[codeThemeClass, 'rounded-md p-3 text-xs overflow-x-auto']"
       ><code v-html="highlighted"/></pre>
     </div>
     <div

@@ -9,9 +9,13 @@ use sea_orm::{
 use uuid::Uuid;
 
 use crate::{
-    adapters::snippets::{CreateSnippet, UpdateSnippet},
+    adapters::{
+        recycle_bin::{CreateRecycleBinEntry, RecycleBinItemType},
+        snippets::{CreateSnippet, UpdateSnippet},
+    },
     entities::snippets,
     error::KernelError,
+    repositories::recycle_bin::{RecycleBinRepository, RecycleBinRepositoryExt},
 };
 
 pub struct SnippetRepository {
@@ -70,6 +74,25 @@ impl SnippetRepositoryExt for SnippetRepository {
     }
 
     async fn delete(&self, identifier: &Uuid) -> Result<(), KernelError> {
+        let model = snippets::Entity::find()
+            .filter(snippets::Column::Identifier.eq(*identifier))
+            .one(self.conn.as_ref())
+            .await
+            .map_err(|err| KernelError::DbOperationError(err.to_string()))?
+            .ok_or_else(|| KernelError::DbOperationError("snippet not found".to_string()))?;
+
+        let payload = serde_json::to_string(&model)
+            .map_err(|err| KernelError::DbOperationError(err.to_string()))?;
+
+        RecycleBinRepository::new(self.conn.clone())
+            .store(&CreateRecycleBinEntry {
+                item_id: model.identifier,
+                item_type: RecycleBinItemType::Snippet,
+                workspace_identifier: model.workspace_identifier,
+                payload,
+            })
+            .await?;
+
         snippets::Entity::delete_many()
             .filter(snippets::Column::Identifier.eq(*identifier))
             .exec(self.conn.as_ref())

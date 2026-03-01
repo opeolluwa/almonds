@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import NotesEditor from "~/components/notes/notes-editor.vue";
-import { useNoteStore } from "~/stores/notes";
-
 definePageMeta({ layout: false, name: "Create note", keepalive: true });
 
 const router = useRouter();
@@ -34,6 +31,10 @@ async function handleSave() {
     submitting.value = false;
   }
 }
+
+onBeforeUnmount(async () => {
+  await handleSave();
+});
 </script>
 
 <template>

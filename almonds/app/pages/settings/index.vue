@@ -7,6 +7,7 @@ type Section =
   | "backup"
   | "ai"
   | "notifications"
+  | "alarm"
   | "about";
 
 const activeSection = ref<Section>("profile");
@@ -16,7 +17,8 @@ const navSections: { key: Section; label: string; icon: string }[] = [
   { key: "appearance", label: "Appearance", icon: "heroicons:paint-brush" },
   { key: "backup", label: "Backup & Sync", icon: "heroicons:cloud-arrow-up" },
   { key: "ai", label: "AI & Ollama", icon: "heroicons:cpu-chip" },
-  { key: "notifications", label: "Notifications", icon: "heroicons:bell" },
+  { key: "notifications", label: "Notifications", icon: "heroicons:inbox" },
+  { key: "alarm", label: "Alarm", icon: "heroicons:bell-alert" },
   { key: "about", label: "About", icon: "heroicons:information-circle" },
 ];
 </script>
@@ -31,6 +33,7 @@ const navSections: { key: Section; label: string; icon: string }[] = [
       <SettingsNotificationsSettings
         v-else-if="activeSection === 'notifications'"
       />
+      <SettingsAlarmSettings v-else-if="activeSection === 'alarm'" />
       <SettingsAboutSettings v-else-if="activeSection === 'about'" />
     </template>
 
