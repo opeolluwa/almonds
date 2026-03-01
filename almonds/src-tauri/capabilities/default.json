@@ -7,7 +7,6 @@
   ],
   "permissions": [
     "core:default",
-    "sql:default",
     "clipboard-manager:default",
     "notification:default",
     "os:default",
