@@ -1,11 +1,15 @@
 use serde::Deserialize;
 
+use crate::adapters::common::RequestMeta;
+
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CreateUserPreference {
     pub first_name: String,
     pub last_name: String,
     pub email: String,
+    pub meta: Option<RequestMeta>,
+
 }
 
 impl From<CreateUserPreference> for almond_kernel::adapters::user_preference::CreateUserPreference {
@@ -24,6 +28,7 @@ pub struct UpdateUserPreference {
     pub first_name: Option<String>,
     pub last_name: Option<String>,
     pub email: Option<String>,
+    pub meta: Option<RequestMeta>,
 }
 
 impl From<UpdateUserPreference> for almond_kernel::adapters::user_preference::UpdateUserPreference {

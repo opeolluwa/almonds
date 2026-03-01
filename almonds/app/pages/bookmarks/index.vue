@@ -85,7 +85,7 @@ async function handleCreate(payload: {
     </template>
 
     <template #main_content>
-      <BookmarksBookmarkTagFilters v-model="activeTag" :tags="TAGS" />
+      <BookmarkTagFilters v-model="activeTag" :tags="TAGS" />
 
       <!-- Loading -->
       <div
@@ -156,7 +156,7 @@ async function handleCreate(payload: {
 
       <!-- Bookmark list -->
       <div v-else class="flex flex-col gap-3">
-        <BookmarksBookmarkCard
+        <BookmarkCard
           v-for="bookmark in filtered"
           :key="bookmark.identifier"
           :bookmark="bookmark"
@@ -167,7 +167,7 @@ async function handleCreate(payload: {
     </template>
 
     <template #side_content>
-      <BookmarksBookmarkCollections
+      <BookmarkCollections
         v-model="activeTag"
         :tags="TAGS"
         :tag-icons="TAG_ICONS"
@@ -177,7 +177,7 @@ async function handleCreate(payload: {
     </template>
   </NuxtLayout>
 
-  <BookmarksBookmarkAddModal
+  <BookmarkAddModal
     v-model:open="showAddModal"
     :tags="TAGS.slice(1) as { label: string; value: BookmarkTag }[]"
     @create="handleCreate"

@@ -2,6 +2,8 @@ use almond_kernel::sea_orm::sea_query::prelude::Local;
 use serde::Deserialize;
 use uuid::Uuid;
 
+use crate::adapters::common::RequestMeta;
+
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CreateSnippet {
@@ -16,6 +18,7 @@ pub struct CreateSnippet {
     #[serde(default)]
     pub updated_at: String,
     pub workspace_identifier: Option<Uuid>,
+    pub meta: Option<RequestMeta>,
 }
 
 impl From<CreateSnippet> for almond_kernel::adapters::snippets::CreateSnippet {
@@ -40,6 +43,7 @@ pub struct UpdateSnippet {
     pub language: Option<String>,
     pub code: Option<String>,
     pub description: Option<String>,
+    pub meta: Option<RequestMeta>,
 }
 
 impl From<UpdateSnippet> for almond_kernel::adapters::snippets::UpdateSnippet {

@@ -2,6 +2,8 @@ use almond_kernel::adapters::recycle_bin::RecycleBinItemType;
 use serde::Deserialize;
 use uuid::Uuid;
 
+use crate::adapters::common::RequestMeta;
+
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CreateRecycleBinEntry {
@@ -9,6 +11,7 @@ pub struct CreateRecycleBinEntry {
     pub item_type: RecycleBinItemType,
     pub payload: String,
     pub workspace_identifier: Option<Uuid>,
+    pub meta: Option<RequestMeta>,
 }
 
 impl From<CreateRecycleBinEntry> for almond_kernel::adapters::recycle_bin::CreateRecycleBinEntry {
