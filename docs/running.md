@@ -12,6 +12,7 @@
 ```bash
 git clone https://github.com/opeolluwa/almonds.git
 cd almonds
+cp .env.example .env
 just configure
 ```
 
