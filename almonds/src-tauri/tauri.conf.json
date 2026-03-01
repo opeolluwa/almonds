@@ -3,7 +3,6 @@
   "productName": "Wild almonds",
   "version": "0.1.0",
   "identifier": "com.wildalmonds.app",
-  
   "build": {
     "frontendDist": "../dist",
     "devUrl": "http://localhost:3000",
@@ -13,8 +12,8 @@
     "windows": [
       {
         "title": "Wild almonds",
-        "width": 800,
-        "height": 600,
+        "width": 1000,
+        "height": 800,
         "resizable": true,
         "fullscreen": true
       }

@@ -42,7 +42,7 @@ impl MigrationTrait for Migration {
 }
 
 #[derive(DeriveIden)]
-enum RecycleBin {
+pub enum RecycleBin {
     Table,
     Identifier,
     ItemId,
@@ -52,7 +52,7 @@ enum RecycleBin {
 }
 
 #[derive(DeriveIden)]
-enum ItemType {
+pub enum ItemType {
     #[sea_orm(iden = "item_type")]
     Type,
     Todo,

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useBookmarkStore, type BookmarkTag } from "~/stores/bookmarks";
+import { openUrl } from "@tauri-apps/plugin-opener";
 
 definePageMeta({ layout: false });
 
@@ -24,14 +25,6 @@ const TAG_ICONS: Record<BookmarkTag, string> = {
 const activeTag = ref<BookmarkTag | "all">("all");
 const showAddModal = ref(false);
 
-const previewBookmark = ref<import("~/stores/bookmarks").Bookmark | null>(null);
-const showPreview = ref(false);
-
-function openPreview(bookmark: import("~/stores/bookmarks").Bookmark) {
-  previewBookmark.value = bookmark;
-  showPreview.value = true;
-}
-
 const filtered = computed(() => {
   let list =
     activeTag.value === "all"
@@ -52,8 +45,9 @@ const filtered = computed(() => {
 });
 
 onMounted(async () => {
-  setSearch({ placeholder: "Search bookmarks..." });
   await bookmarkStore.fetchBookmarks();
+
+  setSearch({ placeholder: "Search bookmarks..." });
 });
 
 onUnmounted(() => clearSearch());
@@ -91,7 +85,7 @@ async function handleCreate(payload: {
     </template>
 
     <template #main_content>
-      <BookmarksBookmarkTagFilters v-model="activeTag" :tags="TAGS" />
+      <BookmarkTagFilters v-model="activeTag" :tags="TAGS" />
 
       <!-- Loading -->
       <div
@@ -162,18 +156,18 @@ async function handleCreate(payload: {
 
       <!-- Bookmark list -->
       <div v-else class="flex flex-col gap-3">
-        <BookmarksBookmarkCard
+        <BookmarkCard
           v-for="bookmark in filtered"
           :key="bookmark.identifier"
           :bookmark="bookmark"
           @delete="bookmarkStore.deleteBookmark"
-          @preview="openPreview"
+          @preview="openUrl(bookmark.url)"
         />
       </div>
     </template>
 
     <template #side_content>
-      <BookmarksBookmarkCollections
+      <BookmarkCollections
         v-model="activeTag"
         :tags="TAGS"
         :tag-icons="TAG_ICONS"
@@ -183,14 +177,9 @@ async function handleCreate(payload: {
     </template>
   </NuxtLayout>
 
-  <BookmarksBookmarkAddModal
+  <BookmarkAddModal
     v-model:open="showAddModal"
     :tags="TAGS.slice(1) as { label: string; value: BookmarkTag }[]"
     @create="handleCreate"
-  />
-
-  <BookmarksBookmarkPreview
-    v-model:open="showPreview"
-    :bookmark="previewBookmark"
   />
 </template>

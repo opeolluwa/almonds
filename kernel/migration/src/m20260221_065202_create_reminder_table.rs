@@ -33,7 +33,7 @@ impl MigrationTrait for Migration {
 }
 
 #[derive(DeriveIden)]
-enum Reminder {
+pub enum Reminder {
     Table,
     Identifier,
     Title,

@@ -167,7 +167,9 @@ onUnmounted(() => clearSearch());
             "
           >
             <UIcon
-              :name="reminder.recurring ? 'heroicons:arrow-path' : 'heroicons:clock'"
+              :name="
+                reminder.recurring ? 'heroicons:arrow-path' : 'heroicons:clock'
+              "
               class="size-4"
               :class="
                 reminder.recurring
@@ -178,7 +180,9 @@ onUnmounted(() => clearSearch());
           </div>
 
           <div class="flex-1 min-w-0">
-            <p class="text-sm font-medium text-gray-800 dark:text-gray-100 truncate">
+            <p
+              class="text-sm font-medium text-gray-800 dark:text-gray-100 truncate"
+            >
               {{ reminder.title }}
             </p>
             <p
@@ -216,20 +220,20 @@ onUnmounted(() => clearSearch());
       </h2>
       <div class="flex flex-col gap-3 mb-6">
         <div class="bg-accent-50 dark:bg-accent-950 rounded-lg p-3">
-          <p class="text-2xl font-semibold text-accent-700 dark:text-accent-300">
+          <p
+            class="text-2xl font-semibold text-accent-700 dark:text-accent-300"
+          >
             {{ reminderStore.upcomingReminders.length }}
           </p>
-          <p class="text-xs text-accent-500 dark:text-accent-400">
-            Upcoming
-          </p>
+          <p class="text-xs text-accent-500 dark:text-accent-400">Upcoming</p>
         </div>
         <div class="bg-violet-50 dark:bg-violet-950 rounded-lg p-3">
-          <p class="text-2xl font-semibold text-violet-700 dark:text-violet-300">
+          <p
+            class="text-2xl font-semibold text-violet-700 dark:text-violet-300"
+          >
             {{ reminderStore.recurringReminders.length }}
           </p>
-          <p class="text-xs text-violet-500 dark:text-violet-400">
-            Recurring
-          </p>
+          <p class="text-xs text-violet-500 dark:text-violet-400">Recurring</p>
         </div>
       </div>
 

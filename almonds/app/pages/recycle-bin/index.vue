@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import { useRecycleBinStore, type RecycleBinItemType } from "~/stores/recycle-bin";
+import {
+  useRecycleBinStore,
+  type RecycleBinItemType,
+} from "~/stores/recycle-bin";
 
 definePageMeta({ layout: false });
 
@@ -10,7 +13,10 @@ const { notify } = useAppNotification();
 const typeFilter = ref<RecycleBinItemType | "all">("all");
 const confirmPurgeAll = ref(false);
 
-const itemTypeOptions: Array<{ label: string; value: RecycleBinItemType | "all" }> = [
+const itemTypeOptions: Array<{
+  label: string;
+  value: RecycleBinItemType | "all";
+}> = [
   { label: "All", value: "all" },
   { label: "Notes", value: "note" },
   { label: "Todos", value: "todo" },
@@ -208,7 +214,9 @@ onUnmounted(() => {
           </div>
 
           <div class="flex-1 min-w-0">
-            <p class="text-xs font-medium text-gray-500 dark:text-gray-400 capitalize">
+            <p
+              class="text-xs font-medium text-gray-500 dark:text-gray-400 capitalize"
+            >
               {{ entry.itemType }}
             </p>
             <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
@@ -254,7 +262,9 @@ onUnmounted(() => {
               :name="itemTypeIcon(opt.value as RecycleBinItemType)"
               class="size-4 text-gray-400"
             />
-            <span class="text-gray-600 dark:text-gray-400 capitalize">{{ opt.label }}</span>
+            <span class="text-gray-600 dark:text-gray-400 capitalize">{{
+              opt.label
+            }}</span>
           </div>
           <span class="text-xs text-gray-400">
             {{ recycleBinStore.typeCounts[opt.value] ?? 0 }}

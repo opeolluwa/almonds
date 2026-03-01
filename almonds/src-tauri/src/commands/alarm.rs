@@ -1,6 +1,6 @@
 use std::io::BufReader;
-use std::time::Duration;
 use std::sync::atomic::Ordering;
+use std::time::Duration;
 
 use serde::Serialize;
 use tauri::{AppHandle, Manager, State};
@@ -34,17 +34,9 @@ pub fn list_alarm_sounds(app: AppHandle) -> Result<Vec<AlarmSound>, AppError> {
             .unwrap_or(false);
 
         if is_audio {
-            let filename = path
-                .file_name()
-                .unwrap()
-                .to_string_lossy()
-                .to_string();
+            let filename = path.file_name().unwrap().to_string_lossy().to_string();
 
-            let name = path
-                .file_stem()
-                .unwrap()
-                .to_string_lossy()
-                .to_string();
+            let name = path.file_stem().unwrap().to_string_lossy().to_string();
 
             sounds.push(AlarmSound { name, filename });
         }

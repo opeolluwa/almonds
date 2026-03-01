@@ -17,3 +17,10 @@ Cargo.lock
 test.sqlite
 
 almonds/src-tauri/gen/keystore.properties
+
+.env
+
+test.sqlite
+
+
+almonds/src-tauri/almond.dev.db

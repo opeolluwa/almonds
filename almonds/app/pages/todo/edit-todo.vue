@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import DatePicker from "~/components/ui/date-picker.vue";
 import { useTodoStore } from "~/stores/todo";
 
 definePageMeta({ layout: false, name: "Edit Todo" });
@@ -132,7 +131,7 @@ async function handleDelete() {
               type="text"
               placeholder="What needs to be done?"
               class="w-full bg-white dark:bg-gray-800 rounded-lg px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 outline-none focus:ring-2 focus:ring-accent-300 dark:focus:ring-accent-600 focus:border-transparent placeholder-gray-400 dark:placeholder-gray-500"
-            />
+            >
           </div>
 
           <div class="flex flex-col gap-1.5">

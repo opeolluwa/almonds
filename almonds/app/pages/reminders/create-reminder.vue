@@ -54,7 +54,7 @@ async function handleSubmit() {
               type="text"
               placeholder="What should I remind you about?"
               autofocus
-              class="w-full bg-white dark:bg-gray-800 rounded-lg px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 outline-none focus:ring-2 focus:ring-accent-300 dark:focus:ring-accent-600 focus:border-transparent placeholder-gray-400 dark:placeholder-gray-500"
+              class="almond_input_box"
             >
           </div>
 
@@ -65,7 +65,7 @@ async function handleSubmit() {
             <textarea
               v-model="form.description"
               placeholder="Add more details..."
-              rows="3"
+              rows="5"
               class="w-full bg-white dark:bg-gray-800 rounded-lg px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 outline-none focus:ring-2 focus:ring-accent-300 dark:focus:ring-accent-600 focus:border-transparent placeholder-gray-400 dark:placeholder-gray-500 resize-none"
             />
           </div>
@@ -91,7 +91,11 @@ async function handleSubmit() {
             <button
               type="button"
               class="relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 focus:outline-none"
-              :class="form.recurring ? 'bg-accent-500' : 'bg-gray-200 dark:bg-gray-700'"
+              :class="
+                form.recurring
+                  ? 'bg-accent-500'
+                  : 'bg-gray-200 dark:bg-gray-700'
+              "
               @click="form.recurring = !form.recurring"
             >
               <span
@@ -99,7 +103,10 @@ async function handleSubmit() {
                 :class="form.recurring ? 'translate-x-4' : 'translate-x-0'"
               />
             </button>
-            <label class="text-sm text-gray-600 dark:text-gray-400 cursor-pointer select-none" @click="form.recurring = !form.recurring">
+            <label
+              class="text-sm text-gray-600 dark:text-gray-400 cursor-pointer select-none"
+              @click="form.recurring = !form.recurring"
+            >
               Recurring reminder
             </label>
           </div>
@@ -141,15 +148,25 @@ async function handleSubmit() {
         Tips
       </h2>
       <div class="flex flex-col gap-3">
-        <div class="flex items-start gap-2 text-xs text-gray-500 dark:text-gray-400">
-          <UIcon name="heroicons:clock" class="size-4 text-accent-500 shrink-0 mt-px" />
+        <div
+          class="flex items-start gap-2 text-xs text-gray-500 dark:text-gray-400"
+        >
+          <UIcon
+            name="heroicons:clock"
+            class="size-4 text-accent-500 shrink-0 mt-px"
+          />
           <span>
             <strong class="text-gray-700 dark:text-gray-300">One-time</strong>
             — fires once at the scheduled time
           </span>
         </div>
-        <div class="flex items-start gap-2 text-xs text-gray-500 dark:text-gray-400">
-          <UIcon name="heroicons:arrow-path" class="size-4 text-violet-500 shrink-0 mt-px" />
+        <div
+          class="flex items-start gap-2 text-xs text-gray-500 dark:text-gray-400"
+        >
+          <UIcon
+            name="heroicons:arrow-path"
+            class="size-4 text-violet-500 shrink-0 mt-px"
+          />
           <span>
             <strong class="text-gray-700 dark:text-gray-300">Recurring</strong>
             — repeats on a schedule using an iCalendar recurrence rule

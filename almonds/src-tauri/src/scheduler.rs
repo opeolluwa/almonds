@@ -15,6 +15,8 @@ use almond_kernel::repositories::reminder::ReminderRepositoryExt;
 /// current minute. Deduplicates via `SchedulerState::fired_keys`.
 pub async fn run(app: AppHandle) {
     loop {
+        log::info!("[Scheduler] Checked reminders at {}", chrono::Utc::now());
+
         // Sleep until the start of the next minute.
         let now = chrono::Utc::now();
         let secs_into_minute = now.timestamp() % 60;
@@ -26,6 +28,7 @@ pub async fn run(app: AppHandle) {
         tokio::time::sleep(Duration::from_secs(secs_to_wait as u64)).await;
 
         check_and_fire(&app).await;
+        log::info!("[Scheduler] Checked reminders at {}", chrono::Utc::now());
     }
 }
 
@@ -50,12 +53,14 @@ async fn check_and_fire(app: &AppHandle) {
         }
     };
 
+    log::info!("[Scheduler] Fetched {} reminders", reminders.len());
+
     for reminder in reminders {
         // Convert to UTC timestamp for timezone-agnostic comparison.
         let fire_at_ts = reminder.remind_at.timestamp() - lead_duration.num_seconds();
         let fire_minute = fire_at_ts / 60;
 
-        if fire_minute != now_minute {
+        if fire_minute < now_minute {
             continue;
         }
 

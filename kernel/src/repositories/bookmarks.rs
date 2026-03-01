@@ -137,6 +137,7 @@ impl BookmarkRepositoryExt for BookmarkRepository {
             .store(&CreateRecycleBinEntry {
                 item_id: model.identifier,
                 item_type: RecycleBinItemType::Bookmark,
+                workspace_identifier: model.workspace_identifier,
                 payload,
             })
             .await?;

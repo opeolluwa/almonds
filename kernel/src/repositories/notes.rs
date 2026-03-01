@@ -89,6 +89,7 @@ impl NotesRepositoryExt for NotesRepository {
                 item_id: model.identifier,
                 item_type: RecycleBinItemType::Note,
                 payload,
+                workspace_identifier: model.workspace_identifier,
             })
             .await?;
 

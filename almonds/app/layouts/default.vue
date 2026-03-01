@@ -4,6 +4,18 @@ import { primaryRoutes, secondaryRoutes } from "~/data/routes";
 import { useUserPreferenceStore } from "~/stores/user-preference";
 
 const preferenceStore = useUserPreferenceStore();
+const workspaceStore = useWorkspacesStore();
+
+const workspaces = computed(() =>
+  workspaceStore.workspaces.map((w) => ({
+    label: w.name,
+    value: w.identifier,
+  })),
+);
+const workspace = ref({
+  label: workspaceStore.currentWorkspace?.name ?? "Select workspace",
+  value: workspaceStore.currentWorkspace?.identifier ?? "",
+});
 
 const route = useRoute();
 const router = useRouter();
@@ -90,25 +102,21 @@ const pageTitle = computed(() => {
               variant="ghost"
             />
 
-            <UAvatar
-              v-else
-              icon="i-lucide-user"
-              size="sm"
-              class="shrink-0"
-            />
+            <!-- <UAvatar v-else icon="i-lucide-user" size="sm" class="shrink-0" /> -->
+            <!--TODO-->
+            <!-- <USelectMenu v-model="workspace" :items="workspaces" /> -->
           </div>
 
-          <!--TODO: enable when the project feature is done, the former class is flex before hidden-->
-          <!-- <div class="px-3 flex mb-3 max-w-9/12">
+          <div class="px-3 flex mb-3 max-w-9/12 hidden">
             <UButton
               color="error"
               variant="solid"
               class="flex-1 bg-accent-500 hover:bg-accent-600 justify-center"
             >
               <UIcon name="heroicons:plus" class="size-4 shrink-0" />
-              <span v-if="!collapsed">New Project</span>
+              <span v-if="!collapsed">New Workspace</span>
             </UButton>
-          </div> -->
+          </div>
 
           <USeparator class="mx-3 max-w-9/12" />
         </div>
@@ -181,7 +189,7 @@ const pageTitle = computed(() => {
         class="shrink-0 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900"
         style="padding-top: env(safe-area-inset-top)"
       >
-        <div class="flex items-center gap-3 h-14 px-4">
+        <div class="flex justify-between items-center gap-3 h-14 px-4">
           <!-- Hamburger: mobile only -->
           <UButton
             class="flex md:hidden shrink-0"
@@ -202,19 +210,36 @@ const pageTitle = computed(() => {
             class="hidden md:flex shrink-0"
           />
 
+          <div class="flex items-center gap-1">
+            <UButton
+              size="sm"
+              color="neutral"
+              variant="ghost"
+              icon="heroicons:chevron-left"
+              @click="router.back()"
+            />
+            <UButton
+              size="sm"
+              color="neutral"
+              variant="ghost"
+              icon="heroicons:chevron-right"
+              @click="router.forward()"
+            />
+          </div>
+
           <!-- Search bar -->
-          <div class="flex-1 max-w-xl">
-            <UInput
+          <div v-if="searchConfig != null" class="mx-auto w-6/12">
+            <input
               :model-value="searchQuery"
               :placeholder="searchConfig?.placeholder ?? 'Search...'"
               :disabled="!searchConfig"
               icon="heroicons:magnifying-glass"
-              size="sm"
+              size="lg"
               variant="outline"
-              class="w-full"
-              :ui="{root:'py-5'}"
+              class="almond_input_box w-full"
+              :ui="{ root: 'bg-transparent' }"
               @update:model-value="onSearchInput"
-            />
+            >
           </div>
 
           <!-- Right actions -->
@@ -257,16 +282,7 @@ const pageTitle = computed(() => {
             </h1>
           </slot>
 
-          <div class="hidden md:flex items-center justify-between mt-5 my-6">
-            <button
-              v-if="route.path != '/'"
-              class="flex items-center gap-1.5 text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
-              @click="router.back()"
-            >
-              <UIcon name="heroicons:arrow-left" class="size-3.5" />
-              Back
-            </button>
-
+          <div class="hidden md:flex items-center justify-end mt-5 my-6">
             <slot name="primary_cta" />
           </div>
 

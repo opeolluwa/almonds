@@ -14,11 +14,28 @@ use crate::state::scheduler::SchedulerState;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    tauri::Builder::default()
+    let mut builder = tauri::Builder::default().plugin(tauri_plugin_opener::init());
+
+    #[cfg(desktop)]
+    {
+        builder = builder.plugin(tauri_plugin_single_instance::init(|app, args, cwd| {
+            // let _ = app
+            //     .get_webview_window("main")
+            //     .expect("no main window")
+            //     .set_focus();
+
+            use tauri::Emitter;
+
+            use crate::adapters::app::Payload;
+
+            app.emit("single-instance", Payload { args, cwd }).unwrap();
+        }));
+    }
+
+    builder
         .plugin(tauri_plugin_os::init())
         .plugin(tauri_plugin_notification::init())
         .plugin(tauri_plugin_clipboard_manager::init())
-        // .plugin(tauri_plugin_single_instance::init(|_app, _args, _cwd| {}))
         .plugin(tauri_plugin_sql::Builder::new().build())
         .setup(|app| {
             if cfg!(debug_assertions) {
@@ -38,9 +55,13 @@ pub fn run() {
 
                 std::fs::create_dir_all(&app_data_dir).expect("failed to create app data dir");
 
-                let db_path = app_data_dir.join("almond.db");
+                let db_path = match std::env::var("ALMONDS_DB_PATH") {
+                    Ok(path) => std::path::PathBuf::from(path),
+                    Err(_) => app_data_dir.join("almonds.db"),
+                };
+
                 let db_url = format!("sqlite://{}?mode=rwc", db_path.display());
-dbg!("Database URL: {:?}", &db_path);
+                dbg!("Database URL: {:?}", &db_path);
                 let kernel = almond_kernel::kernel::Kernel::new(&db_url)
                     .await
                     .expect("failed to initialize kernel");
@@ -118,6 +139,9 @@ dbg!("Database URL: {:?}", &db_path);
             commands::user_preference::get_user_preference,
             commands::user_preference::create_user_preference,
             commands::user_preference::update_user_preference,
+            commands::workspaces::create_workspace,
+            commands::workspaces::list_workspaces,
+            commands::workspaces::get_workspace_by_id,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

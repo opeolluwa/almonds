@@ -5,6 +5,10 @@
         "moodboard",
         "notif",
         "Nuxt",
+<<<<<<< HEAD
+        "Slideover",
+        "tauri"
+=======
         "nuxtjs",
         "Ollama",
         "paleight",
@@ -14,6 +18,7 @@
         "tauri",
         "tiptap",
         "vueuse"
+>>>>>>> 5944656d484bfd922aeb83962638954bd5c8dbfb
     ],
     "workbench.colorCustomizations": {
         "activityBar.activeBackground": "#a20e59",

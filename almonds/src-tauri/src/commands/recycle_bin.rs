@@ -2,16 +2,11 @@ use tauri::State;
 use uuid::Uuid;
 
 use almond_kernel::{
-    adapters::recycle_bin::RecycleBinItemType,
-    entities::recycle_bin,
+    adapters::recycle_bin::RecycleBinItemType, entities::recycle_bin,
     repositories::recycle_bin::RecycleBinRepositoryExt,
 };
 
-use crate::{
-    adapters::recycle_bin::CreateRecycleBinEntry,
-    errors::AppError,
-    state::app::AppState,
-};
+use crate::{adapters::recycle_bin::CreateRecycleBinEntry, errors::AppError, state::app::AppState};
 
 #[tauri::command]
 pub async fn create_recycle_bin_entry(
@@ -73,9 +68,7 @@ pub async fn purge_recycle_bin_entry(
 }
 
 #[tauri::command]
-pub async fn purge_all_recycle_bin_entries(
-    state: State<'_, AppState>,
-) -> Result<(), AppError> {
+pub async fn purge_all_recycle_bin_entries(state: State<'_, AppState>) -> Result<(), AppError> {
     state
         .recycle_bin_repository
         .purge_all()
