@@ -194,7 +194,6 @@ dependencies = [
  "tauri-plugin-opener",
  "tauri-plugin-os",
  "tauri-plugin-single-instance",
- "tauri-plugin-sql",
  "thiserror 2.0.18",
  "tokio",
  "ts-rs",
@@ -6070,26 +6069,6 @@ dependencies = [
  "tracing",
  "windows-sys 0.60.2",
  "zbus",
-]
-
-[[package]]
-name = "tauri-plugin-sql"
-version = "2.3.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "27454a5476feb6ea78d74d0f07085fc8a5e97565d7ae825373011fd27ec30303"
-dependencies = [
- "futures-core",
- "indexmap 2.13.0",
- "log",
- "serde",
- "serde_json",
- "sqlx",
- "tauri",
- "tauri-plugin",
- "thiserror 2.0.18",
- "time",
- "tokio",
- "uuid",
 ]
 
 [[package]]
