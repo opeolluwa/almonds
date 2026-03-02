@@ -56,7 +56,7 @@ git commit -m "release: v$NEW_VERSION"
 git tag "$TAG"
 
 # Push
-git push origin master
+# git push origin release
 git push origin "$TAG"
 
 echo "Release $TAG created 🚀"
