@@ -41,7 +41,7 @@ function isActive(path: string): boolean {
   return route.path.startsWith(path);
 }
 
-const sidebarCollapsed = ref(false);
+const sidebarCollapsed = ref(true);
 const asideOpen = ref(false);
 const mobileNavOpen = ref(false);
 
