@@ -9,6 +9,8 @@ import 'scripts/android.just'
 import 'scripts/orchard.just'
 import 'scripts/docs.just'
 import 'scripts/grove.just'
+import 'scripts/release.just'
+
 
 DB_PATH := "sqlite:://../../test.sqlite?mode=rwc"
 
@@ -25,6 +27,7 @@ configure:
 	just install-dependencies
 	just create-kernel-test-file
 	just install-frontend-dependencies
+	chmod +x scripts/release.sh
 
 watch target:
 	just watch-{{target}}
@@ -52,3 +55,7 @@ db-pull:
 	just migrate-run
 	just generate-entities {{DB_PATH}}
 	just generate-graphql-bindings {{DB_PATH}}
+
+[working-directory:'.']
+release target:
+	@just release-{{target}}
