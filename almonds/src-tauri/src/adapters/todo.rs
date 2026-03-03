@@ -1,7 +1,6 @@
-use almond_kernel::adapters::todo::TodoPriority;
+use almond_kernel::adapters::{meta::RequestMeta, todo::TodoPriority};
 use serde::Deserialize;
 
-use crate::adapters::common::RequestMeta;
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]

@@ -2,7 +2,8 @@ use tauri::State;
 use uuid::Uuid;
 
 use almond_kernel::{
-    adapters::bookmarks::BookmarkTag, entities::bookmark,
+    adapters::{bookmarks::BookmarkTag, meta::RequestMeta},
+    entities::bookmark,
     repositories::bookmarks::BookmarkRepositoryExt,
 };
 
@@ -16,10 +17,11 @@ use crate::{
 pub async fn create_bookmark(
     state: State<'_, AppState>,
     bookmark: CreateBookmark,
+    meta: Option<RequestMeta>,
 ) -> Result<bookmark::Model, AppError> {
     state
         .bookmark_repository
-        .create(&bookmark.into())
+        .create(&bookmark.into(), &meta)
         .await
         .map_err(Into::into)
 }
@@ -28,10 +30,11 @@ pub async fn create_bookmark(
 pub async fn get_bookmark(
     state: State<'_, AppState>,
     identifier: Uuid,
+    meta: Option<RequestMeta>,
 ) -> Result<Option<bookmark::Model>, AppError> {
     state
         .bookmark_repository
-        .find_by_id(&identifier)
+        .find_by_id(&identifier, &meta)
         .await
         .map_err(Into::into)
 }
@@ -39,10 +42,11 @@ pub async fn get_bookmark(
 #[tauri::command]
 pub async fn get_all_bookmarks(
     state: State<'_, AppState>,
+    meta: Option<RequestMeta>,
 ) -> Result<Vec<bookmark::Model>, AppError> {
     state
         .bookmark_repository
-        .find_all()
+        .find_all(&meta)
         .await
         .map_err(Into::into)
 }
@@ -51,6 +55,7 @@ pub async fn get_all_bookmarks(
 pub async fn get_bookmarks_by_tag(
     state: State<'_, AppState>,
     tag: String,
+    meta: Option<RequestMeta>,
 ) -> Result<Vec<bookmark::Model>, AppError> {
     let tag = match tag.as_str() {
         "development" => BookmarkTag::Development,
@@ -60,7 +65,7 @@ pub async fn get_bookmarks_by_tag(
     };
     state
         .bookmark_repository
-        .find_by_tag(&tag)
+        .find_by_tag(&tag, &meta)
         .await
         .map_err(Into::into)
 }
@@ -68,10 +73,11 @@ pub async fn get_bookmarks_by_tag(
 #[tauri::command]
 pub async fn get_recently_added_bookmarks(
     state: State<'_, AppState>,
+    meta: Option<RequestMeta>,
 ) -> Result<Vec<bookmark::Model>, AppError> {
     state
         .bookmark_repository
-        .recently_added()
+        .recently_added(&meta)
         .await
         .map_err(Into::into)
 }
@@ -81,19 +87,24 @@ pub async fn update_bookmark(
     state: State<'_, AppState>,
     identifier: Uuid,
     bookmark: UpdateBookmark,
+    meta: Option<RequestMeta>,
 ) -> Result<bookmark::Model, AppError> {
     state
         .bookmark_repository
-        .update(&identifier, &bookmark.into())
+        .update(&identifier, &bookmark.into(), &meta)
         .await
         .map_err(Into::into)
 }
 
 #[tauri::command]
-pub async fn delete_bookmark(state: State<'_, AppState>, identifier: Uuid) -> Result<(), AppError> {
+pub async fn delete_bookmark(
+    state: State<'_, AppState>,
+    identifier: Uuid,
+    meta: Option<RequestMeta>,
+) -> Result<(), AppError> {
     state
         .bookmark_repository
-        .delete(&identifier)
+        .delete(&identifier, &meta)
         .await
         .map_err(Into::into)
 }

@@ -1,8 +1,7 @@
-use almond_kernel::sea_orm::sea_query::prelude::Local;
+use almond_kernel::{adapters::meta::RequestMeta, sea_orm::sea_query::prelude::Local};
 use serde::Deserialize;
 use uuid::Uuid;
 
-use crate::adapters::common::RequestMeta;
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]

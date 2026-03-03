@@ -32,7 +32,7 @@ pub trait BookmarkRepositoryExt {
     async fn create(
         &self,
         payload: &CreateBookmark,
-        meta: Option<RequestMeta>,
+        meta: &Option<RequestMeta>,
     ) -> Result<bookmark::Model, KernelError>;
 
     async fn find_by_id(
@@ -80,17 +80,19 @@ impl BookmarkRepositoryExt for BookmarkRepository {
     async fn create(
         &self,
         payload: &CreateBookmark,
-        meta: Option<RequestMeta>,
+        meta: &Option<RequestMeta>,
     ) -> Result<bookmark::Model, KernelError> {
         let mut active_model: bookmark::ActiveModel = payload.to_owned().into();
 
         if let Some(meta) = meta {
             active_model.workspace_identifier = Set(Some(meta.workspace_identifier));
-        } else {
-            return Err(KernelError::DbOperationError(
-                "workspace identifier is required".into(),
-            ));
         };
+        //TODO: activate
+        // else {
+        //     return Err(KernelError::DbOperationError(
+        //         "workspace identifier is required".into(),
+        //     ));
+        // };
 
         active_model
             .insert(self.conn.as_ref())

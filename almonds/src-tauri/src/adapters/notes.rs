@@ -1,7 +1,7 @@
+use almond_kernel::adapters::meta::RequestMeta;
 use serde::Deserialize;
 use uuid::Uuid;
 
-use crate::adapters::common::RequestMeta;
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]

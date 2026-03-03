@@ -1,7 +1,6 @@
-use crate::adapters::common::RequestMeta;
+use almond_kernel::adapters::meta::RequestMeta;
 use sanitizer::prelude::*;
 use serde::Deserialize;
-use uuid::Uuid;
 use validator::Validate;
 
 #[derive(Debug, Deserialize, Sanitizer, Validate)]
@@ -14,7 +13,6 @@ pub struct CreateBookmark {
     pub url: String,
     #[sanitizer(trim)]
     pub tag: String,
-    pub workspace_identifier: Option<Uuid>,
     pub meta: Option<RequestMeta>,
 }
 
@@ -33,7 +31,6 @@ impl From<CreateBookmark> for almond_kernel::adapters::bookmarks::CreateBookmark
             title: b.title,
             url: b.url,
             tag,
-            workspace_identifier: b.workspace_identifier,
         }
     }
 }
