@@ -53,25 +53,11 @@ export const useBookmarkStore = defineStore("bookmark_store", {
   },
 
   actions: {
-    async getMeta(): Promise<RequestMeta> {
-      const workspaceStore = useWorkspacesStore();
-      await workspaceStore.fetchWorkspaces();
-      const workspace = workspaceStore.currentWorkspace;
-
-      if (!workspace) {
-        throw new Error("No active workspace");
-      }
-
-      return {
-        workspaceIdentifier: workspace.identifier,
-      };
-    },
-
     async fetchBookmarks() {
       this.loading = true;
       try {
         this.bookmarks = await invoke<Bookmark[]>("get_all_bookmarks", {
-          meta: await this.getMeta(),
+          meta: await getWorkspaceMeta(),
         });
       } finally {
         this.loading = false;
@@ -81,7 +67,7 @@ export const useBookmarkStore = defineStore("bookmark_store", {
     async createBookmark(payload: CreateBookmarkPayload): Promise<Bookmark> {
       const created = await invoke<Bookmark>("create_bookmark", {
         bookmark: payload,
-        meta: await this.getMeta(),
+        meta: await getWorkspaceMeta(),
       });
 
       this.bookmarks.unshift(created);
@@ -96,7 +82,7 @@ export const useBookmarkStore = defineStore("bookmark_store", {
       const updated = await invoke<Bookmark>("update_bookmark", {
         identifier,
         bookmark: payload,
-        meta: await this.getMeta(),
+        meta: await getWorkspaceMeta(),
       });
 
       const idx = this.bookmarks.findIndex((b) => b.identifier === identifier);
@@ -109,7 +95,7 @@ export const useBookmarkStore = defineStore("bookmark_store", {
     async deleteBookmark(identifier: string) {
       await invoke("delete_bookmark", {
         identifier,
-        meta: await  this.getMeta(),
+        meta: await getWorkspaceMeta(),
       });
 
       this.bookmarks = this.bookmarks.filter(

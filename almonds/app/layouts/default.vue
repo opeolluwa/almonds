@@ -112,7 +112,6 @@ const pageTitle = computed(() => {
               :placeholder="searchConfig?.placeholder ?? 'Search...'"
               :disabled="!searchConfig"
               icon="heroicons:magnifying-glass"
-              size="lg"
               variant="outline"
               :ui="{ root: 'bg-transparent' }"
               @update:model-value="onSearchInput"
