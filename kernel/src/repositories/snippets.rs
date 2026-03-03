@@ -18,6 +18,7 @@ use crate::{
     repositories::recycle_bin::{RecycleBinRepository, RecycleBinRepositoryExt},
 };
 
+#[derive(Debug, Clone)]
 pub struct SnippetRepository {
     conn: Arc<DatabaseConnection>,
 }

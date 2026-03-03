@@ -86,13 +86,11 @@ impl BookmarkRepositoryExt for BookmarkRepository {
 
         if let Some(meta) = meta {
             active_model.workspace_identifier = Set(Some(meta.workspace_identifier));
+        } else {
+            return Err(KernelError::DbOperationError(
+                "workspace identifier is required".into(),
+            ));
         };
-        //TODO: activate
-        // else {
-        //     return Err(KernelError::DbOperationError(
-        //         "workspace identifier is required".into(),
-        //     ));
-        // };
 
         active_model
             .insert(self.conn.as_ref())

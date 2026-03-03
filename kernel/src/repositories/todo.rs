@@ -19,6 +19,7 @@ use crate::{
     repositories::recycle_bin::{RecycleBinRepository, RecycleBinRepositoryExt},
 };
 
+#[derive(Debug, Clone)]
 pub struct TodoRepository {
     conn: Arc<DatabaseConnection>,
 }

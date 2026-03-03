@@ -57,34 +57,25 @@ async function handleSubmit() {
     <template #body>
       <form class="flex flex-col gap-4" @submit.prevent="handleSubmit">
         <div class="grid grid-cols-2 gap-3">
-          <div class="flex flex-col gap-1">
-            <label class="text-xs font-medium text-gray-500 dark:text-gray-400"
-              >Name</label
-            >
-            <UInput
-              v-model="form.name"
-              placeholder="My Workspace"
-              :disabled="loading"
-              :ui="{ root: errors.name ? 'ring-1 ring-red-500' : '' }"
-            />
-            <p v-if="errors.name" class="text-xs text-red-500">
-              {{ errors.name }}
-            </p>
-          </div>
-          <div class="flex flex-col gap-1">
-            <label class="text-xs font-medium text-gray-500 dark:text-gray-400"
-              >Description</label
-            >
-            <UInput
-              v-model="form.description"
-              placeholder="My Workspace Description"
-              :disabled="loading"
-              :ui="{ root: errors.description ? 'ring-1 ring-red-500' : '' }"
-            />
-            <p v-if="errors.description" class="text-xs text-red-500">
-              {{ errors.description }}
-            </p>
-          </div>
+          <AppInput
+            label="Name"
+            hint="required"
+            type="text"
+            name="workspace"
+            placeholder="Almonds"
+            :disabled="loading"
+            v-model="form.name"
+          />
+
+          <AppInput
+            label="Description"
+            hint="required"
+            type="text"
+            name="description"
+            placeholder="organize files and tasks"
+            :disabled="loading"
+            v-model="form.description"
+          />
         </div>
 
         <div class="flex justify-end pt-1">

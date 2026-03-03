@@ -12,10 +12,11 @@
     "windows": [
       {
         "title": "Wild almonds",
-        "width": 1000,
+        "width": 1200,
         "height": 800,
         "resizable": true,
-        "fullscreen": false
+        "fullscreen": false,
+        "decorations": true
       }
     ],
     "security": {

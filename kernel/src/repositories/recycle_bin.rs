@@ -12,6 +12,7 @@ use crate::{
     error::KernelError,
 };
 
+#[derive(Debug, Clone)]
 pub struct RecycleBinRepository {
     conn: Arc<DatabaseConnection>,
 }

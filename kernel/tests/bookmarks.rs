@@ -1,8 +1,6 @@
 mod shared;
 mod workspace;
 
-use std::sync::Arc;
-
 use almond_kernel::{
     adapters::{
         bookmarks::{BookmarkTag, CreateBookmark, UpdateBookmark},
@@ -26,9 +24,6 @@ use fake::{
 };
 
 use shared::*;
-
-use tokio::sync::OnceCell;
-
 
 
 async fn setup_workspace() -> Result<(RequestMeta, BookmarkRepository), KernelError> {
@@ -60,7 +55,7 @@ async fn test_create_without_workspace_bookmarks() -> Result<(), KernelError> {
         tag: BookmarkTag::Design,
     };
 
-    let resp = repo.create(&payload, None).await;
+    let resp = repo.create(&payload, &None::<RequestMeta>).await;
 
     assert!(resp.is_err());
 
@@ -77,7 +72,7 @@ async fn test_create_with_workspace_bookmarks() -> Result<(), KernelError> {
         tag: BookmarkTag::Design,
     };
 
-    let bookmark = repo.create(&payload, Some(meta.clone())).await?;
+    let bookmark = repo.create(&payload, &Some(meta.clone())).await?;
 
     assert_eq!(bookmark.title, payload.title);
     assert_eq!(
@@ -98,7 +93,7 @@ async fn test_find_by_id() -> Result<(), KernelError> {
         tag: BookmarkTag::Design,
     };
 
-    let created = repo.create(&payload, Some(meta.clone())).await?;
+    let created = repo.create(&payload, &Some(meta.clone())).await?;
 
     let found = repo
         .find_by_id(&created.identifier, &Some(meta.clone()))
@@ -121,7 +116,7 @@ async fn test_find_all() -> Result<(), KernelError> {
             tag: BookmarkTag::Design,
         };
 
-        repo.create(&payload, Some(meta.clone())).await?;
+        repo.create(&payload, &Some(meta.clone())).await?;
     }
 
     let results = repo.find_all(&Some(meta.clone())).await?;
@@ -141,7 +136,7 @@ async fn test_find_by_tag() -> Result<(), KernelError> {
         tag: BookmarkTag::Design,
     };
 
-    repo.create(&payload, Some(meta.clone())).await?;
+    repo.create(&payload, &Some(meta.clone())).await?;
 
     let results = repo
         .find_by_tag(&BookmarkTag::Design, &Some(meta.clone()))
@@ -163,7 +158,7 @@ async fn test_recently_added() -> Result<(), KernelError> {
             tag: BookmarkTag::Design,
         };
 
-        repo.create(&payload, Some(meta.clone())).await?;
+        repo.create(&payload, &Some(meta.clone())).await?;
     }
 
     let results = repo.recently_added(&Some(meta.clone())).await?;
@@ -183,7 +178,7 @@ async fn test_update_bookmark() -> Result<(), KernelError> {
         tag: BookmarkTag::Design,
     };
 
-    let created = repo.create(&payload, Some(meta.clone())).await?;
+    let created = repo.create(&payload, &Some(meta.clone())).await?;
 
     let update = UpdateBookmark {
         title: Some("Updated Title".to_string()),
@@ -210,7 +205,7 @@ async fn test_delete_bookmark() -> Result<(), KernelError> {
         tag: BookmarkTag::Design,
     };
 
-    let created = repo.create(&payload, Some(meta.clone())).await?;
+    let created = repo.create(&payload, &Some(meta.clone())).await?;
 
     repo.delete(&created.identifier, &Some(meta.clone()))
         .await?;

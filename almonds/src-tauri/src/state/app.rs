@@ -12,6 +12,7 @@ use almond_kernel::{
 
 use crate::state::ollama::OllamaState;
 
+#[allow(unused)]
 pub struct AppState {
     pub bookmark_repository: BookmarkRepository,
     pub notes_repository: NotesRepository,
