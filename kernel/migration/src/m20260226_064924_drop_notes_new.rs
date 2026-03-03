@@ -1,6 +1,8 @@
 use sea_orm_migration::{prelude::*, schema::*};
 
-use crate::{m20260218_110352_create_note_table::Notes, m20260224_214545_create_workspaces::Workspaces};
+use crate::{
+    m20260218_110352_create_note_table::Notes, m20260224_214545_create_workspaces::Workspaces,
+};
 
 #[derive(DeriveMigrationName)]
 pub struct Migration;

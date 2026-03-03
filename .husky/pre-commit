@@ -1,0 +1,11 @@
+# #!/bin/sh
+# # Pre-commit hook: run lint before committing
+
+# echo "Running lint..."
+# just lint all
+# if [ $? -ne 0 ]; then
+#   echo "❌ Lint failed. Commit aborted."
+#   exit 1
+# fi
+
+# echo "✅ Lint passed."

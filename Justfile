@@ -47,6 +47,17 @@ lint target:
 	fi
 
 
+test target:
+	#!/usr/bin/env bash
+	if [ "{{target}}" = "all" ]; then
+		just test-almonds
+		just test-kernel
+		just test-orchard
+		just test-tauri
+	else
+		just test-{{target}}
+	fi
+
 [working-directory:'kernel']
 @migrate-run:
 	DATABASE_URL={{DB_PATH}} sea-orm-cli  migrate up

@@ -18,7 +18,6 @@ const model = defineModel<string>();
     :hint="hint"
     :name="name"
     :ui="{
-
       error: 'text-red-500 mt-1',
       label: 'text-xs font-medium text-gray-600 dark:text-gray-400',
       hint: 'mr-auto text-gray-400 dark:text-gray-600 font-normal ml-1',

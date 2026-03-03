@@ -2,7 +2,6 @@ use almond_kernel::{adapters::meta::RequestMeta, sea_orm::sea_query::prelude::Lo
 use serde::Deserialize;
 use uuid::Uuid;
 
-
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CreateSnippet {

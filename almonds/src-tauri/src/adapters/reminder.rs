@@ -2,7 +2,6 @@ use almond_kernel::{adapters::meta::RequestMeta, sea_orm::prelude::DateTimeWithT
 use serde::Deserialize;
 use uuid::Uuid;
 
-
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CreateReminder {
@@ -15,7 +14,6 @@ pub struct CreateReminder {
     pub remind_at: DateTimeWithTimeZone,
     pub workspace_identifier: Option<Uuid>,
     pub meta: Option<RequestMeta>,
-
 }
 
 impl From<CreateReminder> for almond_kernel::adapters::reminder::CreateReminder {

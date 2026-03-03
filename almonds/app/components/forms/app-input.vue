@@ -5,7 +5,7 @@ defineProps<{
   placeholder?: string;
   hint?: string;
   disabled?: boolean;
-  type?:string
+  type?: string;
 }>();
 
 const model = defineModel<string>();

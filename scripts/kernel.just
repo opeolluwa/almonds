@@ -27,3 +27,6 @@ watch-kernel:
 		--seaography
 
 
+[working-directory:'kernel']
+test-kernel:
+    cargo test

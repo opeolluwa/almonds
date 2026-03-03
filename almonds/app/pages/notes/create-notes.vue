@@ -34,7 +34,6 @@ async function handleSave() {
   }
 }
 
-
 onBeforeRouteLeave(async () => {
   if (!title.value.trim() && !content.value.trim()) return;
 
@@ -47,7 +46,6 @@ onBeforeRouteLeave(async () => {
     console.error(e);
   }
 });
-
 </script>
 
 <template>

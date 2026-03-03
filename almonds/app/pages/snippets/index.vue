@@ -57,8 +57,8 @@ onUnmounted(() => clearSearch());
     <template #primary_cta>
       <!-- Desktop: full label -->
       <div
-        class="hidden md:flex items-center justify-end"
         v-if="snippetStore.snippets.length !== 0"
+        class="hidden md:flex items-center justify-end"
         @click="navigateTo('/snippets/create-snippets')"
       >
         <button

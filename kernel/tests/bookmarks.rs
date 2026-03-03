@@ -25,7 +25,6 @@ use fake::{
 
 use shared::*;
 
-
 async fn setup_workspace() -> Result<(RequestMeta, BookmarkRepository), KernelError> {
     let repo = get_bookmark_repository().await.clone();
     let workspace_repo = get_workspace_repository().await;

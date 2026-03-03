@@ -90,7 +90,7 @@ const sidebarCollapsed = ref(false);
           </UButton>
         </div>
 
-        <USeparator class="mx-3 " />
+        <USeparator class="mx-3" />
       </div>
     </template>
 

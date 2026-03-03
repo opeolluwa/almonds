@@ -128,8 +128,8 @@ async function copyCode() {
 const codeThemeClass = computed(() =>
   colorMode.value === "dark"
     ? "bg-gray-900 text-gray-100"
-    : "bg-gray-50 text-gray-800 border border-gray-200"
-)
+    : "bg-gray-50 text-gray-800 border border-gray-200",
+);
 </script>
 
 <template>

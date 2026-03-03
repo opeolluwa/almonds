@@ -58,23 +58,23 @@ async function handleSubmit() {
       <form class="flex flex-col gap-4" @submit.prevent="handleSubmit">
         <div class="grid grid-cols-2 gap-3">
           <AppInput
+            v-model="form.name"
             label="Name"
             hint="required"
             type="text"
             name="workspace"
             placeholder="Almonds"
             :disabled="loading"
-            v-model="form.name"
           />
 
           <AppInput
+            v-model="form.description"
             label="Description"
             hint="required"
             type="text"
             name="description"
             placeholder="organize files and tasks"
             :disabled="loading"
-            v-model="form.description"
           />
         </div>
 

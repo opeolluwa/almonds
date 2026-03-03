@@ -62,34 +62,34 @@ async function handleSubmit() {
       <form class="flex flex-col gap-4" @submit.prevent="handleSubmit">
         <div class="grid grid-cols-2 gap-3">
           <AppInput
+            v-model="form.firstName"
             label="First name"
             hint="required"
             type="text"
             name="email"
             placeholder="Jane"
             :disabled="loading"
-            v-model="form.firstName"
           />
 
           <AppInput
+            v-model="form.lastName"
             label="Last name"
             hint="required"
             type="text"
             name="lastName"
             placeholder="Doe"
             :disabled="loading"
-            v-model="form.lastName"
           />
         </div>
 
         <AppInput
+          v-model="form.email"
           label="Email"
           hint="required"
           type="email"
           name="email"
           placeholder="jane@example.com"
           :disabled="loading"
-          v-model="form.email"
         />
 
         <div class="flex justify-end pt-1">

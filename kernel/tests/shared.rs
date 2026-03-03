@@ -17,10 +17,10 @@ use fake::Fake;
 use fake::faker::lorem::en::{Paragraph, Word};
 use sea_orm::DatabaseConnection;
 use std::fs;
+use std::future::Future;
 use std::path::Path;
 use std::sync::Arc;
 use tokio::sync::OnceCell;
-use std::future::Future;
 
 pub fn _remove_test_db() -> std::io::Result<()> {
     let path = Path::new("almond.dev.test.db");
@@ -145,9 +145,6 @@ pub async fn get_snippets_repository() -> &'static SnippetRepository {
         })
         .await
 }
-
-
-
 
 pub async fn setup_workspace<R, F, Fut>(repo_getter: F) -> Result<(RequestMeta, R), KernelError>
 where

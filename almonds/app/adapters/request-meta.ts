@@ -1,3 +1,3 @@
 export interface RequestMeta {
-  workspaceIdentifier: string
+  workspaceIdentifier: string;
 }

@@ -26,3 +26,14 @@ build-almond:
 [working-directory:'almonds']
 install-frontend-dependencies:
     npm install
+
+
+[working-directory:'almonds']
+test-almonds:
+    echo "TBD"
+
+
+
+[working-directory:'almonds/src-tauri']
+test-tauri:
+    echo "TBD"
