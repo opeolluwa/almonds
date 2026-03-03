@@ -1,5 +1,7 @@
 import { defineStore } from "pinia";
 import { invoke } from "@tauri-apps/api/core";
+import { useWorkspacesStore } from "@/stores/workspaces";
+import type { RequestMeta } from "~/adapters/request-meta";
 
 export type BookmarkTag = "development" | "design" | "research" | "inspiration";
 
@@ -33,6 +35,7 @@ export const useBookmarkStore = defineStore("bookmark_store", {
   getters: {
     byTag: (state) => (tag: BookmarkTag) =>
       state.bookmarks.filter((b) => b.tag === tag),
+
     tagCounts: (state) => {
       const counts: Record<BookmarkTag, number> = {
         development: 0,
@@ -40,18 +43,36 @@ export const useBookmarkStore = defineStore("bookmark_store", {
         research: 0,
         inspiration: 0,
       };
+
       for (const b of state.bookmarks) {
         counts[b.tag] = (counts[b.tag] ?? 0) + 1;
       }
+
       return counts;
     },
   },
 
   actions: {
+    async getMeta(): Promise<RequestMeta> {
+      const workspaceStore = useWorkspacesStore();
+      await workspaceStore.fetchWorkspaces();
+      const workspace = workspaceStore.currentWorkspace;
+
+      if (!workspace) {
+        throw new Error("No active workspace");
+      }
+
+      return {
+        workspaceIdentifier: workspace.identifier,
+      };
+    },
+
     async fetchBookmarks() {
       this.loading = true;
       try {
-        this.bookmarks = await invoke<Bookmark[]>("get_all_bookmarks");
+        this.bookmarks = await invoke<Bookmark[]>("get_all_bookmarks", {
+          meta: await this.getMeta(),
+        });
       } finally {
         this.loading = false;
       }
@@ -60,8 +81,11 @@ export const useBookmarkStore = defineStore("bookmark_store", {
     async createBookmark(payload: CreateBookmarkPayload): Promise<Bookmark> {
       const created = await invoke<Bookmark>("create_bookmark", {
         bookmark: payload,
+        meta: await this.getMeta(),
       });
+
       this.bookmarks.unshift(created);
+
       return created;
     },
 
@@ -72,14 +96,22 @@ export const useBookmarkStore = defineStore("bookmark_store", {
       const updated = await invoke<Bookmark>("update_bookmark", {
         identifier,
         bookmark: payload,
+        meta: await this.getMeta(),
       });
+
       const idx = this.bookmarks.findIndex((b) => b.identifier === identifier);
+
       if (idx !== -1) this.bookmarks[idx] = updated;
+
       return updated;
     },
 
     async deleteBookmark(identifier: string) {
-      await invoke("delete_bookmark", { identifier });
+      await invoke("delete_bookmark", {
+        identifier,
+        meta: await  this.getMeta(),
+      });
+
       this.bookmarks = this.bookmarks.filter(
         (b) => b.identifier !== identifier,
       );

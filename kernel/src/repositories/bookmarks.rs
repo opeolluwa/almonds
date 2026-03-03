@@ -11,13 +11,16 @@ use uuid::Uuid;
 use crate::{
     adapters::{
         bookmarks::{BookmarkTag, CreateBookmark, UpdateBookmark},
+        meta::RequestMeta,
         recycle_bin::{CreateRecycleBinEntry, RecycleBinItemType},
     },
     entities::bookmark,
     error::KernelError,
     repositories::recycle_bin::{RecycleBinRepository, RecycleBinRepositoryExt},
+    utils::extract_req_meta,
 };
 
+#[derive(Debug, Clone)]
 pub struct BookmarkRepository {
     conn: Arc<DatabaseConnection>,
 }
@@ -26,23 +29,46 @@ pub struct BookmarkRepository {
 pub trait BookmarkRepositoryExt {
     fn new(conn: Arc<DatabaseConnection>) -> Self;
 
-    async fn create(&self, payload: &CreateBookmark) -> Result<bookmark::Model, KernelError>;
+    async fn create(
+        &self,
+        payload: &CreateBookmark,
+        meta: &Option<RequestMeta>,
+    ) -> Result<bookmark::Model, KernelError>;
 
-    async fn find_by_id(&self, identifier: &Uuid) -> Result<Option<bookmark::Model>, KernelError>;
+    async fn find_by_id(
+        &self,
+        identifier: &Uuid,
+        meta: &Option<RequestMeta>,
+    ) -> Result<Option<bookmark::Model>, KernelError>;
 
-    async fn find_all(&self) -> Result<Vec<bookmark::Model>, KernelError>;
+    async fn find_all(
+        &self,
+        meta: &Option<RequestMeta>,
+    ) -> Result<Vec<bookmark::Model>, KernelError>;
 
-    async fn find_by_tag(&self, tag: &BookmarkTag) -> Result<Vec<bookmark::Model>, KernelError>;
+    async fn find_by_tag(
+        &self,
+        tag: &BookmarkTag,
+        meta: &Option<RequestMeta>,
+    ) -> Result<Vec<bookmark::Model>, KernelError>;
 
-    async fn recently_added(&self) -> Result<Vec<bookmark::Model>, KernelError>;
+    async fn recently_added(
+        &self,
+        meta: &Option<RequestMeta>,
+    ) -> Result<Vec<bookmark::Model>, KernelError>;
 
     async fn update(
         &self,
         identifier: &Uuid,
         payload: &UpdateBookmark,
+        meta: &Option<RequestMeta>,
     ) -> Result<bookmark::Model, KernelError>;
 
-    async fn delete(&self, identifier: &Uuid) -> Result<(), KernelError>;
+    async fn delete(
+        &self,
+        identifier: &Uuid,
+        meta: &Option<RequestMeta>,
+    ) -> Result<(), KernelError>;
 }
 
 #[async_trait]
@@ -51,39 +77,80 @@ impl BookmarkRepositoryExt for BookmarkRepository {
         Self { conn }
     }
 
-    async fn create(&self, payload: &CreateBookmark) -> Result<bookmark::Model, KernelError> {
-        let active_model: bookmark::ActiveModel = payload.to_owned().into();
+    async fn create(
+        &self,
+        payload: &CreateBookmark,
+        meta: &Option<RequestMeta>,
+    ) -> Result<bookmark::Model, KernelError> {
+        let mut active_model: bookmark::ActiveModel = payload.to_owned().into();
+
+        if let Some(meta) = meta {
+            active_model.workspace_identifier = Set(Some(meta.workspace_identifier));
+        };
+        //TODO: activate
+        // else {
+        //     return Err(KernelError::DbOperationError(
+        //         "workspace identifier is required".into(),
+        //     ));
+        // };
+
         active_model
             .insert(self.conn.as_ref())
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))
     }
 
-    async fn find_by_id(&self, identifier: &Uuid) -> Result<Option<bookmark::Model>, KernelError> {
+    async fn find_by_id(
+        &self,
+        identifier: &Uuid,
+        meta: &Option<RequestMeta>,
+    ) -> Result<Option<bookmark::Model>, KernelError> {
+        let meta = extract_req_meta(meta)?;
+
         bookmark::Entity::find()
             .filter(bookmark::Column::Identifier.eq(*identifier))
+            .filter(bookmark::Column::WorkspaceIdentifier.eq(meta.workspace_identifier))
             .one(self.conn.as_ref())
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))
     }
 
-    async fn find_all(&self) -> Result<Vec<bookmark::Model>, KernelError> {
+    async fn find_all(
+        &self,
+        meta: &Option<RequestMeta>,
+    ) -> Result<Vec<bookmark::Model>, KernelError> {
+        let meta = extract_req_meta(meta)?;
+
         bookmark::Entity::find()
+            .filter(bookmark::Column::WorkspaceIdentifier.eq(meta.workspace_identifier))
             .all(self.conn.as_ref())
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))
     }
 
-    async fn find_by_tag(&self, tag: &BookmarkTag) -> Result<Vec<bookmark::Model>, KernelError> {
+    async fn find_by_tag(
+        &self,
+        tag: &BookmarkTag,
+        meta: &Option<RequestMeta>,
+    ) -> Result<Vec<bookmark::Model>, KernelError> {
+        let meta = extract_req_meta(meta)?;
+
         bookmark::Entity::find()
             .filter(bookmark::Column::Tag.eq(tag.to_string()))
+            .filter(bookmark::Column::WorkspaceIdentifier.eq(meta.workspace_identifier))
             .all(self.conn.as_ref())
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))
     }
 
-    async fn recently_added(&self) -> Result<Vec<bookmark::Model>, KernelError> {
+    async fn recently_added(
+        &self,
+        meta: &Option<RequestMeta>,
+    ) -> Result<Vec<bookmark::Model>, KernelError> {
+        let meta = extract_req_meta(meta)?;
+
         bookmark::Entity::find()
+            .filter(bookmark::Column::WorkspaceIdentifier.eq(meta.workspace_identifier))
             .limit(10)
             .order_by_desc(bookmark::Column::CreatedAt)
             .all(self.conn.as_ref())
@@ -95,9 +162,13 @@ impl BookmarkRepositoryExt for BookmarkRepository {
         &self,
         identifier: &Uuid,
         payload: &UpdateBookmark,
+        meta: &Option<RequestMeta>,
     ) -> Result<bookmark::Model, KernelError> {
+        let meta = extract_req_meta(meta)?;
+
         let model = bookmark::Entity::find()
             .filter(bookmark::Column::Identifier.eq(*identifier))
+            .filter(bookmark::Column::WorkspaceIdentifier.eq(meta.workspace_identifier))
             .one(self.conn.as_ref())
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))?
@@ -122,9 +193,16 @@ impl BookmarkRepositoryExt for BookmarkRepository {
             .map_err(|err| KernelError::DbOperationError(err.to_string()))
     }
 
-    async fn delete(&self, identifier: &Uuid) -> Result<(), KernelError> {
+    async fn delete(
+        &self,
+        identifier: &Uuid,
+        meta: &Option<RequestMeta>,
+    ) -> Result<(), KernelError> {
+        let meta = extract_req_meta(meta)?;
+
         let model = bookmark::Entity::find()
             .filter(bookmark::Column::Identifier.eq(*identifier))
+            .filter(bookmark::Column::WorkspaceIdentifier.eq(meta.workspace_identifier))
             .one(self.conn.as_ref())
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))?
@@ -144,6 +222,7 @@ impl BookmarkRepositoryExt for BookmarkRepository {
 
         bookmark::Entity::delete_many()
             .filter(bookmark::Column::Identifier.eq(*identifier))
+            .filter(bookmark::Column::WorkspaceIdentifier.eq(meta.workspace_identifier))
             .exec(self.conn.as_ref())
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))?;

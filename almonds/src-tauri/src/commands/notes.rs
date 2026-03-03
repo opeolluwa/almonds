@@ -2,7 +2,6 @@ use tauri::State;
 use uuid::Uuid;
 
 use almond_kernel::{entities::notes, repositories::notes::NotesRepositoryExt};
-
 use crate::{
     adapters::notes::{CreateNote, UpdateNote},
     errors::AppError,

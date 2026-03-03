@@ -1,8 +1,7 @@
-use almond_kernel::adapters::recycle_bin::RecycleBinItemType;
+use almond_kernel::adapters::{meta::RequestMeta, recycle_bin::RecycleBinItemType};
 use serde::Deserialize;
 use uuid::Uuid;
 
-use crate::adapters::common::RequestMeta;
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]

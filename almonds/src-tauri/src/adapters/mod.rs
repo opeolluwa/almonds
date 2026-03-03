@@ -8,5 +8,4 @@ pub mod sync_queue;
 pub mod todo;
 pub mod user_preference;
 pub mod workspaces;
-pub mod common;
 pub mod app;

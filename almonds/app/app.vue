@@ -25,6 +25,9 @@ onMounted(async () => {
   await checkSetup();
   await checkWorkspaceSetup();
 
+  const workspaceStore = useWorkspacesStore();
+  await workspaceStore.fetchWorkspaces();
+
   let permissionGranted = await isPermissionGranted();
 
   if (!permissionGranted) {
