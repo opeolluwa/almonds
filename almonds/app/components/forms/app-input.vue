@@ -5,6 +5,7 @@ defineProps<{
   placeholder?: string;
   hint?: string;
   disabled?: boolean;
+  type?:string
 }>();
 
 const model = defineModel<string>();
@@ -26,7 +27,8 @@ const model = defineModel<string>();
       v-model="model"
       :disabled="disabled"
       :placeholder="placeholder"
-      :ui="{ base: 'py-4 pl-4 lowercase' }"
+      :type="type"
+      :ui="{ base: 'py-3 pl-4 capitalize dark:bg-gray-700' }"
       :class="[
         'w-full transition-colors capitalize',
         error

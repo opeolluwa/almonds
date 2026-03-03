@@ -455,7 +455,7 @@ const quickActions = [
         </div>
 
         <!-- Filter / Sort / Delete completed controls -->
-        <div class="flex items-center gap-1.5 mb-3 flex-wrap">
+        <div class="flex items-center gap-1.5 mb-3 flex-wrap hidden">
           <div
             class="flex rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 text-xs"
           >

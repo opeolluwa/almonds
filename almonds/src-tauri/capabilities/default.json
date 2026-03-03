@@ -2,15 +2,15 @@
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "default",
   "description": "enables the default permissions",
-  "windows": [
-    "main"
-  ],
+  "windows": ["main"],
   "permissions": [
     "core:default",
     "clipboard-manager:default",
     "notification:default",
     "os:default",
     "core:app:allow-default-window-icon",
-    "opener:default"
+    "opener:default",
+    "core:window:default",
+    "core:window:allow-start-dragging"
   ]
 }

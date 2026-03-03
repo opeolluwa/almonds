@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import _ from "lodash";
+import SideNavigation from "~/components/app/side-navigation.vue";
 import { primaryRoutes, secondaryRoutes } from "~/data/routes";
 import { useUserPreferenceStore } from "~/stores/user-preference";
 
@@ -41,7 +42,7 @@ function isActive(path: string): boolean {
   return route.path.startsWith(path);
 }
 
-const sidebarCollapsed = ref(true);
+const sidebarCollapsed = ref(false);
 const asideOpen = ref(false);
 const mobileNavOpen = ref(false);
 
@@ -64,123 +65,7 @@ const pageTitle = computed(() => {
 <template>
   <UDashboardGroup id="wild_almonds_app" as="div">
     <!-- Sidebar: icons-only strip when collapsed -->
-    <UDashboardSidebar
-      v-model:collapsed="sidebarCollapsed"
-      class="hidden md:flex"
-      :collapsible="true"
-      :collapsed-size="4"
-      :default-size="15"
-      :resizable="true"
-      :min-size="18"
-      :max-size="42"
-      :ui="{
-        root: 'bg-white dark:bg-gray-900 transition-[width] duration-300 border-e border-gray-200 dark:border-gray-800',
-        header: 'shrink-0 h-auto p-0',
-        body: 'flex-1 overflow-y-auto p-0 gap-0',
-        footer: 'shrink-0 h-auto p-0',
-      }"
-    >
-      <!-- Sidebar header: user info + collapse button -->
-      <template #header="{ collapsed }">
-        <div class="flex flex-col pt-4">
-          <div
-            class="flex items-center px-4 pb-3 gap-2"
-            :class="collapsed ? 'justify-center flex-col' : 'justify-between'"
-          >
-            <UUser
-              v-if="!collapsed"
-              :name="preferenceStore.fullName"
-              :description="preferenceStore.preference?.email"
-              :avatar="{ icon: 'i-lucide-user' }"
-              class="min-w-0 flex-1 truncate"
-            />
-
-            <UDashboardSidebarCollapse
-              v-if="!collapsed"
-              size="sm"
-              color="neutral"
-              variant="ghost"
-            />
-
-            <!-- <UAvatar v-else icon="i-lucide-user" size="sm" class="shrink-0" /> -->
-            <!--TODO-->
-            <!-- <USelectMenu v-model="workspace" :items="workspaces" /> -->
-          </div>
-
-          <div class="px-3 flex mb-3 max-w-9/12 hidden">
-            <UButton
-              color="error"
-              variant="solid"
-              class="flex-1 bg-accent-500 hover:bg-accent-600 justify-center"
-            >
-              <UIcon name="heroicons:plus" class="size-4 shrink-0" />
-              <span v-if="!collapsed">New Workspace</span>
-            </UButton>
-          </div>
-
-          <USeparator class="mx-3 max-w-9/12" />
-        </div>
-      </template>
-
-      <!-- Sidebar body: primary nav -->
-      <template #default="{ collapsed }">
-        <div class="flex flex-col gap-0.5 px-2 py-2">
-          <NuxtLink
-            v-for="r in primaryRoutes"
-            :key="r.name"
-            :to="r.path"
-            class="flex items-center py-2 px-3 text-sm cursor-pointer rounded-lg transition-colors"
-            :class="[
-              collapsed ? 'justify-center' : 'gap-3',
-              isActive(r.path)
-                ? 'bg-accent-50 dark:bg-accent-950 text-accent-700 dark:text-accent-300 font-medium'
-                : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800',
-            ]"
-          >
-            <UIcon
-              :name="isActive(r.path) ? r.activeIcon : r.icon"
-              class="size-4 shrink-0"
-            />
-            <span v-if="!collapsed">{{ r.name }}</span>
-          </NuxtLink>
-        </div>
-      </template>
-
-      <!-- Sidebar footer: theme + secondary nav -->
-      <template #footer="{ collapsed }">
-        <div class="flex flex-col gap-0.5 px-2 pb-4">
-          <USeparator class="mx-1 mb-2" />
-
-          <button
-            class="flex items-center py-2 px-3 text-sm cursor-pointer rounded-lg transition-colors text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 w-full"
-            :class="collapsed ? 'justify-center' : 'gap-3'"
-            @click="toggleTheme"
-          >
-            <UIcon :name="themeIcon" class="size-4 shrink-0" />
-            <span v-if="!collapsed">{{ themeLabel }}</span>
-          </button>
-
-          <NuxtLink
-            v-for="r in secondaryRoutes"
-            :key="r.name"
-            :to="r.path"
-            class="flex items-center py-2 px-3 text-sm cursor-pointer rounded-lg transition-colors"
-            :class="[
-              collapsed ? 'justify-center' : 'gap-3',
-              isActive(r.path)
-                ? 'bg-accent-50 dark:bg-accent-950 text-accent-700 dark:text-accent-300 font-medium'
-                : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800',
-            ]"
-          >
-            <UIcon
-              :name="isActive(r.path) ? r.activeIcon : r.icon"
-              class="size-4 shrink-0"
-            />
-            <span v-if="!collapsed">{{ r.name }}</span>
-          </NuxtLink>
-        </div>
-      </template>
-    </UDashboardSidebar>
+    <SideNavigation />
 
     <!-- Right column: header + main content -->
     <div class="flex flex-col flex-1 min-w-0 overflow-hidden">
@@ -218,17 +103,10 @@ const pageTitle = computed(() => {
               icon="heroicons:chevron-left"
               @click="router.back()"
             />
-            <UButton
-              size="sm"
-              color="neutral"
-              variant="ghost"
-              icon="heroicons:chevron-right"
-              @click="router.forward()"
-            />
           </div>
 
           <!-- Search bar -->
-          <div v-if="searchConfig != null" class="mx-auto w-6/12">
+          <div class="mx-auto w-6/12">
             <input
               :model-value="searchQuery"
               :placeholder="searchConfig?.placeholder ?? 'Search...'"
@@ -236,10 +114,9 @@ const pageTitle = computed(() => {
               icon="heroicons:magnifying-glass"
               size="lg"
               variant="outline"
-              class="almond_input_box w-full"
               :ui="{ root: 'bg-transparent' }"
               @update:model-value="onSearchInput"
-            >
+            />
           </div>
 
           <!-- Right actions -->

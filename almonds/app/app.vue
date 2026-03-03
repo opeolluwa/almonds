@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {
   isPermissionGranted,
-  requestPermission
+  requestPermission,
 } from "@tauri-apps/plugin-notification";
 import { useAlarmScheduler } from "~/composables/useAlarmScheduler";
 import { useWorkspaceSetup } from "./composables/useWorkspaceSetup";
