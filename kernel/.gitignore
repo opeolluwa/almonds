@@ -14,3 +14,5 @@ Cargo.lock
 *.pdb
 
 test.sqlite
+
+almond.dev.test.db

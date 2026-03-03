@@ -11,7 +11,7 @@ async-trait = "0.1.89"
 chrono = { version = "0.4", features = ["serde"] }
 log = "0.4.29"
 migration = { path = "migration" }
-sanitizer = "1.0.0"
+sanitizer = { version = "1.0.0", features = ["derive"] }
 sea-orm = { version = "2.0.0-rc", features = [
     "sqlx-sqlite",
     "sqlx-mysql",
@@ -27,3 +27,9 @@ serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.149"
 thiserror = "2.0.18"
 uuid = { version = "1.21.0", features = ["v4"] }
+validator = { version = "0.20.0", features = ["derive"] }
+
+[dev-dependencies]
+tokio = { version = "1.50.0", features = ["full"] }
+lazy_static = "1.5.0"
+fake = "4.4.0"

@@ -33,7 +33,6 @@ pub struct CreateBookmark {
     pub title: String,
     pub url: String,
     pub tag: BookmarkTag,
-    pub workspace_identifier: Option<Uuid>,
 }
 
 impl Into<entities::bookmark::ActiveModel> for CreateBookmark {
@@ -43,9 +42,9 @@ impl Into<entities::bookmark::ActiveModel> for CreateBookmark {
             title: Set(self.title),
             url: Set(self.url),
             tag: Set(self.tag.to_string()),
-            workspace_identifier: Set(self.workspace_identifier),
             created_at: Set(Utc::now().fixed_offset()),
             updated_at: Set(Utc::now().fixed_offset()),
+            ..Default::default()
         }
     }
 }
