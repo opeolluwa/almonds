@@ -12,7 +12,7 @@ pub struct Model {
     pub title: String,
     #[sea_orm(column_type = "Text")]
     pub content: String,
-    pub categories: Json,
+    pub categories: Option<Json>,
     pub created_at: DateTimeWithTimeZone,
     pub updated_at: DateTimeWithTimeZone,
     pub workspace_identifier: Option<Uuid>,

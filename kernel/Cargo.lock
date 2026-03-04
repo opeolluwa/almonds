@@ -1452,7 +1452,9 @@ name = "migration"
 version = "0.1.0"
 dependencies = [
  "async-std",
+ "hex",
  "sea-orm-migration",
+ "uuid",
 ]
 
 [[package]]

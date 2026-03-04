@@ -8,9 +8,9 @@ pub struct Model {
     #[sea_orm(primary_key, auto_increment = false)]
     pub identifier: Uuid,
     pub title: String,
-    #[sea_orm(column_type = "Text", nullable)]
+    #[sea_orm(column_type = "Text")]
     pub content: String,
-    pub categories: Json,
+    pub categories: Option<Json>,
     pub created_at: DateTimeWithTimeZone,
     pub updated_at: DateTimeWithTimeZone,
     pub workspace_identifier: Option<Uuid>,
@@ -34,10 +34,10 @@ impl Related<super::workspaces::Entity> for Entity {
     }
 }
 
+impl ActiveModelBehavior for ActiveModel {}
+
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelatedEntity)]
 pub enum RelatedEntity {
     #[sea_orm(entity = "super::workspaces::Entity")]
     Workspaces,
 }
-
-impl ActiveModelBehavior for ActiveModel {}

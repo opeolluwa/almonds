@@ -190,7 +190,7 @@ impl NotesRepositoryExt for NotesRepository {
             active_model.content = Set(content.clone());
         }
         if let Some(categories) = &payload.categories {
-            active_model.categories = Set(serde_json::json!(categories));
+            active_model.categories = Set(serde_json::json!(categories).into());
         }
         active_model.updated_at = Set(Utc::now().fixed_offset());
 

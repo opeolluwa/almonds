@@ -65,6 +65,8 @@ impl Related<super::todo::Entity> for Entity {
     }
 }
 
+impl ActiveModelBehavior for ActiveModel {}
+
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelatedEntity)]
 pub enum RelatedEntity {
     #[sea_orm(entity = "super::bookmark::Entity")]
@@ -80,5 +82,3 @@ pub enum RelatedEntity {
     #[sea_orm(entity = "super::todo::Entity")]
     Todo,
 }
-
-impl ActiveModelBehavior for ActiveModel {}

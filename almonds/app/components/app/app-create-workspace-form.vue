@@ -2,7 +2,6 @@
 import { reactive, ref } from "vue";
 import { useWorkspacesStore } from "~/stores/workspaces";
 
-
 const store = useWorkspacesStore();
 
 // Emit to parent

@@ -110,7 +110,7 @@ function onSearchInput(val: string) {
           variant="outline"
           :ui="{ root: 'bg-transparent' }"
           @update:model-value="onSearchInput"
-        />
+        >
       </div>
 
       <!-- Right actions -->
