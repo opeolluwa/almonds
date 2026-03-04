@@ -80,9 +80,9 @@ pub fn run() {
             });
 
             // Spawn the cron-style reminder scheduler.
-            let scheduler_handle = app.handle().clone();
+            let _scheduler_handle = app.handle().clone();
             tauri::async_runtime::spawn(async move {
-                scheduler::run(scheduler_handle).await;
+                // scheduler::run(scheduler_handle).await; //TODO:
             });
 
             Ok(())
