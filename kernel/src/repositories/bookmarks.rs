@@ -210,12 +210,15 @@ impl BookmarkRepositoryExt for BookmarkRepository {
             .map_err(|err| KernelError::DbOperationError(err.to_string()))?;
 
         RecycleBinRepository::new(self.conn.clone())
-            .store(&CreateRecycleBinEntry {
-                item_id: model.identifier,
-                item_type: RecycleBinItemType::Bookmark,
-                workspace_identifier: model.workspace_identifier,
-                payload,
-            })
+            .store(
+                &CreateRecycleBinEntry {
+                    item_id: model.identifier,
+                    item_type: RecycleBinItemType::Bookmark,
+                    workspace_identifier: model.workspace_identifier,
+                    payload,
+                },
+                &Some(meta.clone()),
+            )
             .await?;
 
         bookmark::Entity::delete_many()

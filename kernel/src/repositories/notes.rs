@@ -133,12 +133,15 @@ impl NotesRepositoryExt for NotesRepository {
             .map_err(|err| KernelError::DbOperationError(err.to_string()))?;
 
         RecycleBinRepository::new(self.conn.clone())
-            .store(&CreateRecycleBinEntry {
-                item_id: model.identifier,
-                item_type: RecycleBinItemType::Note,
-                payload,
-                workspace_identifier: model.workspace_identifier,
-            })
+            .store(
+                &CreateRecycleBinEntry {
+                    item_id: model.identifier,
+                    item_type: RecycleBinItemType::Note,
+                    payload,
+                    workspace_identifier: model.workspace_identifier,
+                },
+                &Some(meta.clone()),
+            )
             .await?;
 
         notes::Entity::delete_many()

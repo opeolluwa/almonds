@@ -1,110 +1,175 @@
-use std::sync::Arc;
-
-use async_trait::async_trait;
-use sea_orm::{
-    ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter, QueryOrder,
-};
-use uuid::Uuid;
+mod shared;
+mod workspace;
 
 use almond_kernel::{
-    adapters::recycle_bin::{CreateRecycleBinEntry, RecycleBinItemType},
-    entities::recycle_bin,
+    adapters::{
+        meta::RequestMeta,
+        recycle_bin::{CreateRecycleBinEntry, RecycleBinItemType},
+    },
     error::KernelError,
+    repositories::prelude::RecycleBinRepositoryExt,
 };
 
-#[derive(Debug, Clone)]
-pub struct RecycleBinRepository {
-    conn: Arc<DatabaseConnection>,
+use fake::{
+    Fake,
+    faker::lorem::en::Paragraph,
+};
+
+use uuid::Uuid;
+
+use shared::*;
+
+#[tokio::test]
+async fn test_store_without_workspace_recycle_bin() -> Result<(), KernelError> {
+    let repo = get_recycle_bin_repository().await;
+
+    let payload = CreateRecycleBinEntry {
+        item_id: Uuid::new_v4(),
+        item_type: RecycleBinItemType::Note,
+        payload: Paragraph(1..2).fake(),
+        workspace_identifier: None,
+    };
+
+    let resp = repo.store(&payload, &None::<RequestMeta>).await;
+
+    assert!(resp.is_err());
+
+    Ok(())
 }
 
-#[async_trait]
-pub trait RecycleBinRepositoryExt {
-    fn new(conn: Arc<DatabaseConnection>) -> Self;
+#[tokio::test]
+async fn test_store_with_workspace_recycle_bin() -> Result<(), KernelError> {
+    let (meta, repo) = setup_workspace(get_recycle_bin_repository).await?;
 
-    async fn store(
-        &self,
-        payload: &CreateRecycleBinEntry,
-    ) -> Result<recycle_bin::Model, KernelError>;
+    let payload = CreateRecycleBinEntry {
+        item_id: Uuid::new_v4(),
+        item_type: RecycleBinItemType::Note,
+        payload: Paragraph(1..2).fake(),
+        workspace_identifier: Some(meta.workspace_identifier),
+    };
 
-    async fn find_all(&self) -> Result<Vec<recycle_bin::Model>, KernelError>;
+    let entry = repo.store(&payload, &Some(meta.clone())).await?;
 
-    async fn find_by_id(
-        &self,
-        identifier: &Uuid,
-    ) -> Result<Option<recycle_bin::Model>, KernelError>;
+    assert_eq!(entry.item_id, payload.item_id);
+    assert_eq!(entry.workspace_identifier, Some(meta.workspace_identifier));
 
-    async fn find_by_item_type(
-        &self,
-        item_type: &RecycleBinItemType,
-    ) -> Result<Vec<recycle_bin::Model>, KernelError>;
-
-    async fn purge(&self, identifier: &Uuid) -> Result<(), KernelError>;
-
-    async fn purge_all(&self) -> Result<(), KernelError>;
+    Ok(())
 }
 
-#[async_trait]
-impl RecycleBinRepositoryExt for RecycleBinRepository {
-    fn new(conn: Arc<DatabaseConnection>) -> Self {
-        Self { conn }
+#[tokio::test]
+async fn test_find_by_id_recycle_bin() -> Result<(), KernelError> {
+    let (meta, repo) = setup_workspace(get_recycle_bin_repository).await?;
+
+    let payload = CreateRecycleBinEntry {
+        item_id: Uuid::new_v4(),
+        item_type: RecycleBinItemType::Note,
+        payload: Paragraph(1..2).fake(),
+        workspace_identifier: Some(meta.workspace_identifier),
+    };
+
+    let created = repo.store(&payload, &Some(meta.clone())).await?;
+
+    let found = repo
+        .find_by_id(&created.identifier, &Some(meta.clone()))
+        .await?;
+
+    assert!(found.is_some());
+    assert_eq!(found.unwrap().identifier, created.identifier);
+
+    Ok(())
+}
+
+#[tokio::test]
+async fn test_find_all_recycle_bin() -> Result<(), KernelError> {
+    let (meta, repo) = setup_workspace(get_recycle_bin_repository).await?;
+
+    for _ in 0..3 {
+        let payload = CreateRecycleBinEntry {
+            item_id: Uuid::new_v4(),
+            item_type: RecycleBinItemType::Note,
+            payload: Paragraph(1..2).fake(),
+            workspace_identifier: Some(meta.workspace_identifier),
+        };
+
+        repo.store(&payload, &Some(meta.clone())).await?;
     }
 
-    async fn store(
-        &self,
-        payload: &CreateRecycleBinEntry,
-    ) -> Result<recycle_bin::Model, KernelError> {
-        let active_model: recycle_bin::ActiveModel = payload.to_owned().into();
-        active_model
-            .insert(self.conn.as_ref())
-            .await
-            .map_err(|err| KernelError::DbOperationError(err.to_string()))
+    let results = repo.find_all(&Some(meta.clone())).await?;
+
+    assert!(results.len() >= 3);
+
+    Ok(())
+}
+
+#[tokio::test]
+async fn test_find_by_item_type_recycle_bin() -> Result<(), KernelError> {
+    let (meta, repo) = setup_workspace(get_recycle_bin_repository).await?;
+
+    for _ in 0..3 {
+        let payload = CreateRecycleBinEntry {
+            item_id: Uuid::new_v4(),
+            item_type: RecycleBinItemType::Note,
+            payload: Paragraph(1..2).fake(),
+            workspace_identifier: Some(meta.workspace_identifier),
+        };
+
+        repo.store(&payload, &Some(meta.clone())).await?;
     }
 
-    async fn find_all(&self) -> Result<Vec<recycle_bin::Model>, KernelError> {
-        recycle_bin::Entity::find()
-            .order_by_desc(recycle_bin::Column::DeletedAt)
-            .all(self.conn.as_ref())
-            .await
-            .map_err(|err| KernelError::DbOperationError(err.to_string()))
+    let results = repo
+        .find_by_item_type(&RecycleBinItemType::Note, &Some(meta.clone()))
+        .await?;
+
+    assert!(results.len() >= 3);
+
+    Ok(())
+}
+
+#[tokio::test]
+async fn test_purge_recycle_bin() -> Result<(), KernelError> {
+    let (meta, repo) = setup_workspace(get_recycle_bin_repository).await?;
+
+    let payload = CreateRecycleBinEntry {
+        item_id: Uuid::new_v4(),
+        item_type: RecycleBinItemType::Note,
+        payload: Paragraph(1..2).fake(),
+        workspace_identifier: Some(meta.workspace_identifier),
+    };
+
+    let created = repo.store(&payload, &Some(meta.clone())).await?;
+
+    repo.purge(&created.identifier, &Some(meta.clone()))
+        .await?;
+
+    let found = repo
+        .find_by_id(&created.identifier, &Some(meta.clone()))
+        .await?;
+
+    assert!(found.is_none());
+
+    Ok(())
+}
+
+#[tokio::test]
+async fn test_purge_all_recycle_bin() -> Result<(), KernelError> {
+    let (meta, repo) = setup_workspace(get_recycle_bin_repository).await?;
+
+    for _ in 0..3 {
+        let payload = CreateRecycleBinEntry {
+            item_id: Uuid::new_v4(),
+            item_type: RecycleBinItemType::Note,
+            payload: Paragraph(1..2).fake(),
+            workspace_identifier: Some(meta.workspace_identifier),
+        };
+
+        repo.store(&payload, &Some(meta.clone())).await?;
     }
 
-    async fn find_by_id(
-        &self,
-        identifier: &Uuid,
-    ) -> Result<Option<recycle_bin::Model>, KernelError> {
-        recycle_bin::Entity::find()
-            .filter(recycle_bin::Column::Identifier.eq(*identifier))
-            .one(self.conn.as_ref())
-            .await
-            .map_err(|err| KernelError::DbOperationError(err.to_string()))
-    }
+    repo.purge_all(&Some(meta.clone())).await?;
 
-    async fn find_by_item_type(
-        &self,
-        item_type: &RecycleBinItemType,
-    ) -> Result<Vec<recycle_bin::Model>, KernelError> {
-        recycle_bin::Entity::find()
-            .filter(recycle_bin::Column::ItemType.eq(item_type.to_string()))
-            .order_by_desc(recycle_bin::Column::DeletedAt)
-            .all(self.conn.as_ref())
-            .await
-            .map_err(|err| KernelError::DbOperationError(err.to_string()))
-    }
+    let results = repo.find_all(&Some(meta.clone())).await?;
 
-    async fn purge(&self, identifier: &Uuid) -> Result<(), KernelError> {
-        recycle_bin::Entity::delete_many()
-            .filter(recycle_bin::Column::Identifier.eq(*identifier))
-            .exec(self.conn.as_ref())
-            .await
-            .map_err(|err| KernelError::DbOperationError(err.to_string()))?;
-        Ok(())
-    }
+    assert!(results.is_empty());
 
-    async fn purge_all(&self) -> Result<(), KernelError> {
-        recycle_bin::Entity::delete_many()
-            .exec(self.conn.as_ref())
-            .await
-            .map_err(|err| KernelError::DbOperationError(err.to_string()))?;
-        Ok(())
-    }
+    Ok(())
 }
