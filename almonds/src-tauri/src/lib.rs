@@ -60,7 +60,7 @@ pub fn run() {
 
 				// Set window level
 				// NSWindowLevel: https://developer.apple.com/documentation/appkit/nswindowlevel
-				main_window.set_window_level(25).unwrap();
+				// main_window.set_window_level(25).unwrap();
 			}
 
             let app_handle = app.handle().clone();
