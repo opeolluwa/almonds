@@ -11,7 +11,7 @@ pub async fn create_workspace(
     state: State<'_, AppState>,
     workspace: CreateWorkspace,
 ) -> Result<almond_kernel::entities::workspaces::Model, AppError> {
-  let workspace =   state
+    let workspace = state
         .workspace_repository
         .create_workspace(workspace)
         .await?;

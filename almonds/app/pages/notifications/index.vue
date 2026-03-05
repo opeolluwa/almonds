@@ -12,8 +12,7 @@ interface Notification {
   time: string; // ISO string
 }
 
-const notifications =ref<Notification[]>([])
-
+const notifications = ref<Notification[]>([]);
 
 const test = ref<Notification[]>([
   {
