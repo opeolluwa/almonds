@@ -1,14 +1,13 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
   "productName": "Wild almonds",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "identifier": "com.wildalmonds.app",
   "build": {
     "frontendDist": "../dist",
     "devUrl": "http://localhost:3000",
     "beforeBuildCommand": "npm run generate"
   },
-
   "app": {
     "windows": [
       {
@@ -20,9 +19,7 @@
         "decorations": true
       }
     ],
-
     "withGlobalTauri": true,
-    
     "security": {
       "csp": null
     }
