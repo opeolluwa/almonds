@@ -90,7 +90,6 @@ onMounted(async () => {
         <UInput
           v-model="title"
           placeholder="Note title…"
-
           variant="none"
           class="mb-2 w-full"
           :ui="{

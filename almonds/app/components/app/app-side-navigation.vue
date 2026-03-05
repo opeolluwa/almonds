@@ -43,7 +43,7 @@ const sidebarCollapsed = ref(false);
     :ui="{
       root: 'bg-white dark:bg-gray-900 transition-[width] duration-300 border-e border-gray-200 dark:border-gray-800',
       header: 'shrink-0 h-auto p-0',
-      body: 'flex-1 overflow-y-auto scrollbar-config p-0 gap-0 ',
+      body: 'flex-1 overflow-y-scroll scrollbar-config p-0 gap-0 ',
       footer: 'shrink-0 h-auto p-0',
     }"
   >

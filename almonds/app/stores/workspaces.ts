@@ -73,6 +73,8 @@ export const useWorkspacesStore = defineStore("workspaces_store", {
           identifier,
           meta: await getWorkspaceMeta(),
         });
+
+        await this.fetchWorkspaces();
         notify({
           message: "Workspace deleted",
           type: "success",

@@ -46,7 +46,7 @@ function sendMessage() {
       <div
         class="bg-white dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700 flex flex-col h-[calc(100svh-220px)] md:h-[calc(100svh-310px)]"
       >
-        <div class="flex-1 overflow-y-auto    p-4 flex flex-col gap-4">
+        <div class="flex-1 overflow-y-auto p-4 flex flex-col gap-4">
           <div
             v-for="(msg, i) in messages"
             :key="i"

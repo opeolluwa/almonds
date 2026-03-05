@@ -10,12 +10,12 @@ use crate::{errors::AppError, state::app::AppState};
 pub async fn create_workspace(
     state: State<'_, AppState>,
     workspace: CreateWorkspace,
-) -> Result<(), AppError> {
-    state
+) -> Result<almond_kernel::entities::workspaces::Model, AppError> {
+    let workspace = state
         .workspace_repository
         .create_workspace(workspace)
         .await?;
-    Ok(())
+    Ok(workspace)
 }
 
 #[tauri::command]
