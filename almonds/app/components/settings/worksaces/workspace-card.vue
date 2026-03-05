@@ -21,10 +21,7 @@ function formatDate(iso: string) {
   <div
     class="group bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-100 dark:border-gray-700 hover:shadow-sm transition-shadow flex items-center gap-4"
   >
-    <UIcon
-      name="heroicons:briefcase"
-      class="size-5 text-accent-500 shrink-0"
-    />
+    <UIcon name="heroicons:briefcase" class="size-5 text-accent-500 shrink-0" />
     <div class="flex-1 min-w-0">
       <h3 class="text-sm font-medium text-gray-800 dark:text-gray-200 truncate">
         {{ workspace.name }}

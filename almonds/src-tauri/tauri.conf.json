@@ -8,6 +8,7 @@
     "devUrl": "http://localhost:3000",
     "beforeBuildCommand": "npm run generate"
   },
+
   "app": {
     "windows": [
       {
@@ -19,6 +20,9 @@
         "decorations": true
       }
     ],
+
+    "withGlobalTauri": true,
+    
     "security": {
       "csp": null
     }

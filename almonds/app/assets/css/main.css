@@ -1,5 +1,10 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
+/* @plugin 'tailwind-scrollbar'; */
+
+@plugin 'tailwind-scrollbar' {
+  nocompatible: true;
+}
 
 @theme {
   --color-accent-50: #fdf2f4;
@@ -91,9 +96,11 @@ body {
   left: 0;
   right: 0;
 }
-.titlebar > .controls {
+
+.titlebar>.controls {
   display: flex;
 }
+
 .titlebar button {
   appearance: none;
   padding: 0;
@@ -105,6 +112,12 @@ body {
   width: 30px;
   background-color: transparent;
 }
+
 .titlebar button:hover {
   background: #5bbec3;
+}
+
+
+.scrollbar-config {
+  @apply scrollbar-thumb-rounded-full scrollbar-w-0.5  scrollbar-corner-accent-400 scrollbar-h-6 scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-accent-600 scrollbar-track-transparent;
 }

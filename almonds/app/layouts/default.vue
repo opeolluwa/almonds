@@ -52,7 +52,7 @@ const pageTitle = computed(() => {
       <AppHeader />
       <!-- Page content + inline aside (fullscreen mode) -->
       <div class="flex flex-1 overflow-hidden">
-        <main class="flex-1 overflow-y-auto p-6 bg-gray-50 dark:bg-surface-950">
+        <main class="flex-1 overflow-y-auto  p-6 bg-gray-50 dark:bg-surface-950">
           <div class="flex items-center gap-3 mb-1" />
           <slot name="page_title">
             <h1 class="text-2xl font-semibold text-gray-800 dark:text-gray-100">
@@ -88,7 +88,7 @@ const pageTitle = computed(() => {
               >Panel</span
             >
           </div>
-          <div class="flex-1 overflow-y-auto p-4">
+          <div class="flex-1 overflow-y-auto  p-4">
             <slot name="side_content" />
           </div>
         </aside>

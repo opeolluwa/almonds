@@ -50,6 +50,6 @@ pub async fn delete_workspace(
         .workspace_repository
         .delete_workspace(&uuid, &meta)
         .await?;
-    
+
     Ok(())
 }

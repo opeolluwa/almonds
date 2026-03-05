@@ -90,11 +90,11 @@ onMounted(async () => {
         <UInput
           v-model="title"
           placeholder="Note title…"
-          size="xl"
+
           variant="none"
           class="mb-2 w-full"
           :ui="{
-            base: 'text-3xl font-bold placeholder:font-normal placeholder:text-muted',
+            base: 'text-xl font-bold placeholder:font-normal placeholder:text-muted',
           }"
           :disabled="submitting"
         />

@@ -31,7 +31,9 @@ const isValidSection = (s: any): s is Section =>
   navSections.some((n) => n.key === s);
 
 const activeSection = ref<Section>(
-  isValidSection(route.query.section) ? (route.query.section as Section) : "profile"
+  isValidSection(route.query.section)
+    ? (route.query.section as Section)
+    : "profile",
 );
 
 function setSection(section: Section) {
@@ -42,7 +44,6 @@ function setSection(section: Section) {
   });
 }
 </script>
-
 
 <template>
   <NuxtLayout name="default">

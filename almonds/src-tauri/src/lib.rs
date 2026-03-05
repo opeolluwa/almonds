@@ -11,6 +11,7 @@ use tauri::Manager;
 use crate::state::alarm::AlarmState;
 use crate::state::app::AppState;
 use crate::state::scheduler::SchedulerState;
+use tauri_plugin_decorum::WebviewWindowExt; 
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -35,6 +36,7 @@ pub fn run() {
     builder
         .plugin(tauri_plugin_os::init())
         .plugin(tauri_plugin_notification::init())
+        .plugin(tauri_plugin_decorum::init())
         .plugin(tauri_plugin_clipboard_manager::init())
         .setup(|app| {
             if cfg!(debug_assertions) {
@@ -44,6 +46,22 @@ pub fn run() {
                         .build(),
                 )?;
             }
+
+            let main_window = app.get_webview_window("main").unwrap();
+			main_window.create_overlay_titlebar().unwrap();
+
+			// Some macOS-specific helpers
+			#[cfg(target_os = "macos")] {
+				// Set a custom inset to the traffic lights
+				main_window.set_traffic_lights_inset(12.0, 16.0).unwrap();
+
+				// Make window transparent without privateApi
+				main_window.make_transparent().unwrap();
+
+				// Set window level
+				// NSWindowLevel: https://developer.apple.com/documentation/appkit/nswindowlevel
+				main_window.set_window_level(25).unwrap();
+			}
 
             let app_handle = app.handle().clone();
             tauri::async_runtime::block_on(async move {

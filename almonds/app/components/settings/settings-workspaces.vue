@@ -39,8 +39,8 @@ const refreshWorkspace = async () => {
 
     <div v-for="(workspace, index) in workspaces">
       <WorkspaceCard
-        :workspace="workspace"
         :key="index"
+        :workspace="workspace"
         @delete="handleDelete"
       />
     </div>

@@ -19,8 +19,6 @@ export interface UpdateWorkspacePayload {
   description?: string;
 }
 
-
-
 export const useWorkspacesStore = defineStore("workspaces_store", {
   state: () => ({
     workspaces: [] as Workspace[],
@@ -68,7 +66,7 @@ export const useWorkspacesStore = defineStore("workspaces_store", {
       return created;
     },
 
-    async deleteWorkspace(identifier: String): Promise<void> {
+    async deleteWorkspace(identifier: string): Promise<void> {
       const { notify } = useAppNotification();
       try {
         await invoke<Workspace>("delete_workspace", {
