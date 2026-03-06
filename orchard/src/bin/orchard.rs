@@ -1,5 +1,10 @@
-use almond_kernel::kernel;
+use std::{
+    env,
+    net::{Ipv4Addr, SocketAddr, SocketAddrV4},
+    time::Duration,
+};
 
+use almond_kernel::kernel;
 use async_graphql::{
     dynamic::Schema,
     http::{playground_source, GraphQLPlaygroundConfig},
@@ -15,11 +20,6 @@ use axum::{
 use dotenv::dotenv;
 use orchard_lib::{errors::AppError, shutdown::shutdown_signal};
 use seaography::{async_graphql, lazy_static::lazy_static};
-use std::{
-    env,
-    net::{Ipv4Addr, SocketAddr, SocketAddrV4},
-    time::Duration,
-};
 use tokio::net::TcpListener;
 use tower_http::{
     cors::{Any, CorsLayer},

@@ -62,7 +62,6 @@ async function handleCreate(payload: {
 </script>
 
 <template>
-
   <NuxtLayout name="default">
     <template #primary_cta>
       <!-- Desktop: full label -->
