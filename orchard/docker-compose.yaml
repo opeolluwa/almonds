@@ -3,7 +3,7 @@ services:
     container_name: orchard
     build:
       context: .
-      dockerfile: docker/dev/Dockerfile
+      dockerfile: docker/dev/Dockerfile.app
       args:
         - CARGO_TARGET_DIR=/cargo-target
     ports:
