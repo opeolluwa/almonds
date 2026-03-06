@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@ai-sdk/vue": "^3.0.90",
+    "@highlightjs/vue-plugin": "^2.1.0",
     "@nuxt/a11y": "^1.0.0-alpha.1",
     "@nuxt/eslint": "^1.15.1",
     "@nuxt/hints": "^1.0.0-alpha.6",

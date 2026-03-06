@@ -1,38 +1,4 @@
-<script setup lang="ts">
-import { useWorkspacesStore } from "~/stores/workspaces";
-
-const store = useWorkspacesStore();
-
-const form = reactive({
-  name: "",
-  description: "",
-});
-
-const loading = ref(false);
-const errors = reactive({
-  name: "",
-  description: "",
-});
-
-function validate(): boolean {
-  errors.name = form.name.trim() ? "" : "Name is required";
-  errors.description = form.description.trim() ? "" : "Description is required";
-  return !errors.name && !errors.description;
-}
-
-async function handleSubmit() {
-  if (!validate()) return;
-  loading.value = true;
-  try {
-    await store.createWorkspace({
-      name: form.name.trim() || "default",
-      description: form.description.trim() || "default",
-    });
-  } finally {
-    loading.value = false;
-  }
-}
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <UModal

@@ -90,12 +90,26 @@ export const useWorkspacesStore = defineStore("workspaces_store", {
       }
     },
 
-    setActiveWorkspace(identifier: string) {
+    async setActiveWorkspace(identifier: string) {
       if (this.workspaces.find((w) => w.identifier === identifier)) {
         this.activeWorkspaceId = identifier;
       } else {
         console.warn("Workspace not found:", identifier);
       }
+
+      const todoStore = useTodoStore();
+      const bookmarksStore = useBookmarkStore();
+      const recycleBinStore = useRecycleBinStore();
+      const reminderStore = useReminderStore();
+      const userPreferenceStore = useUserPreferenceStore();
+      const snippetsStore = useSnippetStore();
+
+      await todoStore.fetchTodos();
+      await bookmarksStore.fetchBookmarks();
+      await recycleBinStore.fetchEntries();
+      await reminderStore.fetchReminders();
+      await userPreferenceStore.fetchPreference();
+      await snippetsStore.fetchSnippets();
     },
   },
   persist: true,

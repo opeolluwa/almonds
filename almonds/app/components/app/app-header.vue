@@ -2,13 +2,11 @@
 import type { DropdownMenuItem } from "@nuxt/ui";
 import { reactive, ref, computed } from "vue";
 
-// ── Stores & router ────────────────────────────────────────────────
 const workspaceStore = useWorkspacesStore();
 const router = useRouter();
 const colorMode = useColorMode();
 const { searchConfig, searchQuery } = useAppSearch();
 
-// ── Theme ──────────────────────────────────────────────────────────
 const isDark = computed({
   get: () => colorMode.value === "dark",
   set: (v) => (colorMode.preference = v ? "dark" : "light"),
@@ -18,7 +16,6 @@ const themeIcon = computed(() =>
 );
 const themeLabel = computed(() => (isDark.value ? "Light mode" : "Dark mode"));
 
-// ── Layout state ───────────────────────────────────────────────────
 const sidebarCollapsed = ref(false);
 const asideOpen = ref(false);
 const mobileNavOpen = ref(false);

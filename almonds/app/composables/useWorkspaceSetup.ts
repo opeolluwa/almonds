@@ -11,7 +11,7 @@ export function useWorkspaceSetup() {
 
   async function checkSetup() {
     try {
-      const workspaces = await store.fetchWorkspaces();
+      await store.fetchWorkspaces();
     } finally {
       initialized.value = true;
       initializing.value = false;

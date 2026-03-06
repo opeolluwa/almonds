@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useRoute, useRouter } from "#imports";
+import { useRoute } from "#imports";
 
 definePageMeta({ layout: false });
 
@@ -14,7 +14,6 @@ type Section =
   | "workspaces";
 
 const route = useRoute();
-const router = useRouter();
 
 const navSections: { key: Section; label: string; icon: string }[] = [
   { key: "profile", label: "Profile", icon: "heroicons:user-circle" },
@@ -35,14 +34,6 @@ const activeSection = ref<Section>(
     ? (route.query.section as Section)
     : "profile",
 );
-
-function setSection(section: Section) {
-  activeSection.value = section;
-
-  router.replace({
-    query: { ...route.query, section },
-  });
-}
 </script>
 
 <template>
