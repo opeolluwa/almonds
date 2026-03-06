@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import type { DropdownMenuItem } from "@nuxt/ui";
 import { reactive, ref, computed } from "vue";
+import { useOnline } from "@vueuse/core";
 
+const online = useOnline();
 const workspaceStore = useWorkspacesStore();
 const router = useRouter();
 const colorMode = useColorMode();
@@ -15,7 +17,11 @@ const themeIcon = computed(() =>
   isDark.value ? "heroicons:sun" : "heroicons:moon",
 );
 const themeLabel = computed(() => (isDark.value ? "Light mode" : "Dark mode"));
+const internetStatusColor = computed(() =>
+  online.value ? "success" : "error",
+);
 
+const internetLabel = computed(() => (online.value ? "Online" : "Offline"));
 const sidebarCollapsed = ref(false);
 const asideOpen = ref(false);
 const mobileNavOpen = ref(false);
@@ -132,31 +138,27 @@ async function handleSubmit() {
           :disabled="!searchConfig"
           class="w-full bg-transparent outline-none text-sm text-gray-700 dark:text-gray-300 placeholder-gray-400"
           @input="onSearchInput(($event.target as HTMLInputElement).value)"
-        >
+        />
       </div>
 
       <!-- Right actions -->
       <div class="flex items-center gap-1 ml-auto">
         <!-- Workspace switcher -->
-        <UTooltip text="Change workspaces">
-          <UDropdownMenu
-            :items="workspaces"
-            size="sm"
-            :content="{ align: 'start' }"
-            :ui="{ content: 'w-48' }"
-          >
-            <UButton
-              size="sm"
-              color="neutral"
-              variant="ghost"
-              icon="heroicons:briefcase"
-              aria-label="Switch workspace"
-            />
-          </UDropdownMenu>
-        </UTooltip>
 
         <!-- Theme toggle -->
-        <UButton
+
+
+        <UTooltip :text="internetLabel">
+          <UButton size="sm" :color="internetStatusColor" variant="ghost">
+            <UBadge
+              size="sm"
+              class="size-2"
+              :color="internetStatusColor"
+            ></UBadge>
+          </UButton>
+        </UTooltip>
+
+                <UButton
           size="sm"
           color="neutral"
           variant="ghost"
@@ -164,6 +166,23 @@ async function handleSubmit() {
           :aria-label="themeLabel"
           @click="isDark = !isDark"
         />
+        
+        <UDropdownMenu
+          :items="workspaces"
+          size="sm"
+          :content="{ align: 'start' }"
+          :ui="{ content: 'w-48' }"
+        >
+          <UTooltip text="Change workspaces">
+            <UButton
+              size="sm"
+              color="neutral"
+              variant="ghost"
+              icon="heroicons:briefcase"
+              aria-label="Switch workspace"
+            />
+          </UTooltip>
+        </UDropdownMenu>
 
         <!-- Notifications -->
         <UButton

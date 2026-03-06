@@ -27,7 +27,7 @@ use tower_http::{
 };
 
 lazy_static! {
-    static ref ENDPOINT: String = env::var("ENDPOINT").unwrap_or("/".into());
+    static ref ENDPOINT: String = env::var("ENDPOINT").unwrap_or("/orchard".into());
     static ref DATABASE_URL: String =
         env::var("DATABASE_URL").expect("DATABASE_URL environment variable not set");
     static ref DEPTH_LIMIT: Option<usize> = env::var("DEPTH_LIMIT").map_or(None, |data| Some(
@@ -72,6 +72,7 @@ async fn main() -> Result<(), AppError> {
 
     let app = Router::new()
         .route(&*ENDPOINT, get(graphql_playground).post(graphql_handler))
+        // .merge(http_routes)
         .layer(cors)
         .layer(TimeoutLayer::with_status_code(
             StatusCode::REQUEST_TIMEOUT,
