@@ -1,11 +1,10 @@
-use tauri::State;
-use uuid::Uuid;
-
 use almond_kernel::{
     adapters::{meta::RequestMeta, recycle_bin::RecycleBinItemType},
     entities::recycle_bin,
     repositories::recycle_bin::RecycleBinRepositoryExt,
 };
+use tauri::State;
+use uuid::Uuid;
 
 use crate::{adapters::recycle_bin::CreateRecycleBinEntry, errors::AppError, state::app::AppState};
 

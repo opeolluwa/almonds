@@ -1,6 +1,5 @@
 <script setup lang="ts">
 definePageMeta({ layout: false });
-const { notify } = useAppNotification();
 const content = ref("");
 
 const pads = [

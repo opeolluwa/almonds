@@ -1,5 +1,15 @@
 mod shared;
 mod workspace;
+use shared::*;
+
+use fake::{
+    Fake,
+    faker::{
+        company::en::Industry,
+        internet::en::IPv6,
+        lorem::en::{Paragraph, Word},
+    },
+};
 
 use almond_kernel::{
     adapters::{
@@ -13,17 +23,6 @@ use almond_kernel::{
         prelude::{BookmarkRepositoryExt, WorkspaceRepositoryExt},
     },
 };
-
-use fake::{
-    Fake,
-    faker::{
-        company::en::Industry,
-        internet::en::IPv6,
-        lorem::en::{Paragraph, Word},
-    },
-};
-
-use shared::*;
 
 async fn setup_workspace() -> Result<(RequestMeta, BookmarkRepository), KernelError> {
     let repo = get_bookmark_repository().await.clone();

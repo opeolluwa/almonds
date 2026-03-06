@@ -1,5 +1,11 @@
 mod shared;
 mod workspace;
+use shared::*;
+
+use fake::{
+    Fake,
+    faker::lorem::en::{Paragraph, Word},
+};
 
 use almond_kernel::{
     adapters::{
@@ -9,13 +15,6 @@ use almond_kernel::{
     error::KernelError,
     repositories::prelude::NotesRepositoryExt,
 };
-
-use fake::{
-    Fake,
-    faker::lorem::en::{Paragraph, Word},
-};
-
-use shared::*;
 
 #[tokio::test]
 async fn test_create_without_workspace_notes() -> Result<(), KernelError> {

@@ -1,10 +1,11 @@
-use crate::{
-    m20260217_143820_create_snippet_table::Snippets, m20260224_214545_create_workspaces::Workspaces,
-};
 use sea_orm_migration::{
     prelude::*,
     schema::{boolean, pk_uuid, string_null, text, text_null, timestamp_with_time_zone},
     sea_orm::DbBackend,
+};
+
+use crate::{
+    m20260217_143820_create_snippet_table::Snippets, m20260224_214545_create_workspaces::Workspaces,
 };
 
 #[derive(DeriveMigrationName)]

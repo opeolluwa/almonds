@@ -1,7 +1,5 @@
-import { defineStore } from "pinia";
 import { invoke } from "@tauri-apps/api/core";
-import { useWorkspacesStore } from "@/stores/workspaces";
-import type { RequestMeta } from "~/adapters/request-meta";
+import { defineStore } from "pinia";
 
 export type BookmarkTag = "development" | "design" | "research" | "inspiration";
 

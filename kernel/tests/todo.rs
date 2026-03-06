@@ -1,5 +1,12 @@
 mod shared;
 mod workspace;
+use shared::*;
+
+use chrono::Utc;
+use fake::{
+    Fake,
+    faker::lorem::en::{Paragraph, Sentence},
+};
 
 use almond_kernel::{
     adapters::{
@@ -9,14 +16,6 @@ use almond_kernel::{
     error::KernelError,
     repositories::prelude::TodoRepositoryExt,
 };
-
-use chrono::Utc;
-use fake::{
-    Fake,
-    faker::lorem::en::{Paragraph, Sentence},
-};
-
-use shared::*;
 
 // helper to generate a CreateTodo payload
 fn create_todo_payload() -> CreateTodo {

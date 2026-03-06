@@ -1,7 +1,8 @@
 use std::time::Duration;
 
-use migration::{Migrator, MigratorTrait};
 use sea_orm::{ConnectOptions, Database, DatabaseConnection};
+
+use migration::{Migrator, MigratorTrait};
 
 use crate::error::KernelError;
 

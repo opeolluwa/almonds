@@ -1,24 +1,15 @@
 [working-directory:'orchard']
 lint-orchard:
-    cargo fmt
-    cargo sort 
-    # cargo group-imports --fix
-    # cargo clippy -- -D warnings || exit 1
+    sh ../scripts/format
 
 [working-directory:'kernel']
 lint-kernel:
-    cargo fmt
-    cargo sort 
-    # cargo group-imports --fix
-    # cargo clippy -- -D warnings || exit 1
+    sh ../scripts/format
 
 
 [working-directory:'almonds/src-tauri']
 lint-tauri:
-    cargo fmt
-    cargo sort 
-    # cargo group-imports --fix
-    # cargo clippy -- -D warnings || exit 1
+    sh ../../scripts/format
 
 
 [working-directory:'almonds']

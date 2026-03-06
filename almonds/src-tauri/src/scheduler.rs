@@ -3,13 +3,13 @@ use std::sync::atomic::Ordering;
 use std::time::Duration;
 
 use almond_kernel::adapters::meta::RequestMeta;
+use almond_kernel::repositories::reminder::ReminderRepositoryExt;
 use tauri::{AppHandle, Manager};
 use tauri_plugin_notification::NotificationExt;
 
 use crate::state::alarm::AlarmState;
 use crate::state::app::AppState;
 use crate::state::scheduler::SchedulerState;
-use almond_kernel::repositories::reminder::ReminderRepositoryExt;
 
 /// Spawned once at app startup. Wakes at every clock-minute boundary and fires
 /// any reminders whose adjusted fire time (remind_at − lead_time) falls in the

@@ -1,3 +1,13 @@
+use std::fs;
+use std::future::Future;
+use std::path::Path;
+use std::sync::Arc;
+
+use fake::Fake;
+use fake::faker::lorem::en::{Paragraph, Word};
+use sea_orm::DatabaseConnection;
+use tokio::sync::OnceCell;
+
 use almond_kernel::adapters::meta::RequestMeta;
 use almond_kernel::adapters::workspace::CreateWorkspace;
 use almond_kernel::error::KernelError;
@@ -13,14 +23,6 @@ use almond_kernel::repositories::reminder::ReminderRepository;
 use almond_kernel::repositories::snippets::SnippetRepository;
 use almond_kernel::repositories::todo::{TodoRepository, TodoRepositoryExt};
 use almond_kernel::repositories::workspace::WorkspaceRepository;
-use fake::Fake;
-use fake::faker::lorem::en::{Paragraph, Word};
-use sea_orm::DatabaseConnection;
-use std::fs;
-use std::future::Future;
-use std::path::Path;
-use std::sync::Arc;
-use tokio::sync::OnceCell;
 
 pub fn _remove_test_db() -> std::io::Result<()> {
     let path = Path::new("almond.dev.test.db");

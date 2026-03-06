@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import hljs from "highlight.js/lib/common";
-import "highlight.js/styles/github.css"; // light
 import "highlight.js/styles/github-dark.css"; // dark
+import "highlight.js/styles/github.css"; // light
 
 const colorMode = useColorMode();
 

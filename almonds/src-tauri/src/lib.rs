@@ -4,14 +4,15 @@ mod errors;
 mod scheduler;
 mod state;
 mod utils;
+
 use std::sync::Arc;
 
 use tauri::Manager;
+use tauri_plugin_decorum::WebviewWindowExt;
 
 use crate::state::alarm::AlarmState;
 use crate::state::app::AppState;
 use crate::state::scheduler::SchedulerState;
-use tauri_plugin_decorum::WebviewWindowExt;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {

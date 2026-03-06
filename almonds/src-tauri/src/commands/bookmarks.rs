@@ -1,11 +1,10 @@
-use tauri::State;
-use uuid::Uuid;
-
 use almond_kernel::{
     adapters::{bookmarks::BookmarkTag, meta::RequestMeta},
     entities::bookmark,
     repositories::bookmarks::BookmarkRepositoryExt,
 };
+use tauri::State;
+use uuid::Uuid;
 
 use crate::{
     adapters::bookmarks::{CreateBookmark, UpdateBookmark},

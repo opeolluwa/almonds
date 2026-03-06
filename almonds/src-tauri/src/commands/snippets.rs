@@ -1,9 +1,8 @@
-use tauri::State;
-use uuid::Uuid;
-
 use almond_kernel::{
     adapters::meta::RequestMeta, entities::snippets, repositories::snippets::SnippetRepositoryExt,
 };
+use tauri::State;
+use uuid::Uuid;
 
 use crate::{
     adapters::snippets::{CreateSnippet, UpdateSnippet},

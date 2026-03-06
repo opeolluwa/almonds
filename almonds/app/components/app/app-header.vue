@@ -13,8 +13,10 @@ const isDark = computed({
   get: () => colorMode.value === "dark",
   set: (v) => (colorMode.preference = v ? "dark" : "light"),
 });
-const themeIcon = computed(() => isDark.value ? "heroicons:sun" : "heroicons:moon");
-const themeLabel = computed(() => isDark.value ? "Light mode" : "Dark mode");
+const themeIcon = computed(() =>
+  isDark.value ? "heroicons:sun" : "heroicons:moon",
+);
+const themeLabel = computed(() => (isDark.value ? "Light mode" : "Dark mode"));
 
 // ── Layout state ───────────────────────────────────────────────────
 const sidebarCollapsed = ref(false);
@@ -38,7 +40,9 @@ const workspaces = computed<DropdownMenuItem[]>(() => [
       return {
         label: w.name,
         value: w.identifier,
-        icon: isActive ? "heroicons:check-circle-solid" : "heroicons:check-circle",
+        icon: isActive
+          ? "heroicons:check-circle-solid"
+          : "heroicons:check-circle",
         class: isActive ? "font-semibold text-accent-500" : "",
         onSelect: () => workspaceStore.setActiveWorkspace(w.identifier),
       };
@@ -94,11 +98,12 @@ async function handleSubmit() {
     style="padding-top: env(safe-area-inset-top)"
   >
     <div class="flex items-center gap-3 h-14 px-4">
-
       <!-- Hamburger (mobile only) -->
       <UButton
         class="flex md:hidden shrink-0"
-        size="sm" color="neutral" variant="ghost"
+        size="sm"
+        color="neutral"
+        variant="ghost"
         icon="heroicons:bars-3"
         aria-label="Open navigation"
         @click="mobileNavOpen = true"
@@ -107,13 +112,17 @@ async function handleSubmit() {
       <!-- Expand sidebar (desktop, collapsed state only) -->
       <UDashboardSidebarCollapse
         v-if="sidebarCollapsed"
-        size="sm" color="neutral" variant="ghost"
+        size="sm"
+        color="neutral"
+        variant="ghost"
         class="hidden md:flex shrink-0"
       />
 
       <!-- Back button -->
       <UButton
-        size="sm" color="neutral" variant="ghost"
+        size="sm"
+        color="neutral"
+        variant="ghost"
         icon="heroicons:chevron-left"
         @click="router.back()"
       />
@@ -126,12 +135,11 @@ async function handleSubmit() {
           :disabled="!searchConfig"
           class="w-full bg-transparent outline-none text-sm text-gray-700 dark:text-gray-300 placeholder-gray-400"
           @input="onSearchInput(($event.target as HTMLInputElement).value)"
-        />
+        >
       </div>
 
       <!-- Right actions -->
       <div class="flex items-center gap-1 ml-auto">
-
         <!-- Workspace switcher -->
         <UTooltip text="Change workspaces">
           <UDropdownMenu
@@ -141,7 +149,9 @@ async function handleSubmit() {
             :ui="{ content: 'w-48' }"
           >
             <UButton
-              size="sm" color="neutral" variant="ghost"
+              size="sm"
+              color="neutral"
+              variant="ghost"
               icon="heroicons:briefcase"
               aria-label="Switch workspace"
             />
@@ -150,7 +160,9 @@ async function handleSubmit() {
 
         <!-- Theme toggle -->
         <UButton
-          size="sm" color="neutral" variant="ghost"
+          size="sm"
+          color="neutral"
+          variant="ghost"
           :icon="themeIcon"
           :aria-label="themeLabel"
           @click="isDark = !isDark"
@@ -158,7 +170,9 @@ async function handleSubmit() {
 
         <!-- Notifications -->
         <UButton
-          size="sm" color="neutral" variant="ghost"
+          size="sm"
+          color="neutral"
+          variant="ghost"
           icon="heroicons:bell"
           aria-label="Notifications"
           @click="navigateTo('/notifications')"
@@ -167,12 +181,13 @@ async function handleSubmit() {
         <!-- Right panel toggle (mobile only) -->
         <UButton
           class="flex md:hidden"
-          size="sm" color="neutral" variant="ghost"
+          size="sm"
+          color="neutral"
+          variant="ghost"
           icon="heroicons:bars-3-bottom-right"
           aria-label="Open panel"
           @click="asideOpen = true"
         />
-
       </div>
     </div>
   </header>
@@ -185,12 +200,15 @@ async function handleSubmit() {
           Create a New Workspace
         </h2>
         <p class="text-sm text-gray-500 dark:text-gray-400">
-          Set up a new workspace to organize your projects and files.
-          You can have multiple workspaces and switch between them easily.
+          Set up a new workspace to organize your projects and files. You can
+          have multiple workspaces and switch between them easily.
         </p>
       </div>
 
-      <form class="px-6 pb-6 mt-4 flex flex-col gap-4" @submit.prevent="handleSubmit">
+      <form
+        class="px-6 pb-6 mt-4 flex flex-col gap-4"
+        @submit.prevent="handleSubmit"
+      >
         <div class="grid grid-cols-2 gap-3">
           <AppInput
             v-model="form.name"
@@ -216,7 +234,8 @@ async function handleSubmit() {
 
         <div class="flex justify-end gap-2 pt-1">
           <UButton
-            color="neutral" variant="ghost"
+            color="neutral"
+            variant="ghost"
             :disabled="loading"
             @click="showCreateModal = false"
           >

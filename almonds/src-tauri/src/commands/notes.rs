@@ -1,3 +1,6 @@
+use almond_kernel::{
+    adapters::meta::RequestMeta, entities::notes, repositories::notes::NotesRepositoryExt,
+};
 use tauri::State;
 use uuid::Uuid;
 
@@ -5,9 +8,6 @@ use crate::{
     adapters::notes::{CreateNote, UpdateNote},
     errors::AppError,
     state::app::AppState,
-};
-use almond_kernel::{
-    adapters::meta::RequestMeta, entities::notes, repositories::notes::NotesRepositoryExt,
 };
 
 #[tauri::command]

@@ -1,5 +1,9 @@
 mod shared;
 mod workspace;
+use shared::*;
+
+use fake::{Fake, faker::lorem::en::Paragraph};
+use uuid::Uuid;
 
 use almond_kernel::{
     adapters::{
@@ -9,12 +13,6 @@ use almond_kernel::{
     error::KernelError,
     repositories::prelude::RecycleBinRepositoryExt,
 };
-
-use fake::{Fake, faker::lorem::en::Paragraph};
-
-use uuid::Uuid;
-
-use shared::*;
 
 #[tokio::test]
 async fn test_store_without_workspace_recycle_bin() -> Result<(), KernelError> {

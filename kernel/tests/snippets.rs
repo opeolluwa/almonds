@@ -1,5 +1,12 @@
 mod shared;
 mod workspace;
+use shared::*;
+
+use chrono::Local;
+use fake::{
+    Fake,
+    faker::lorem::en::{Paragraph, Sentence, Word},
+};
 
 use almond_kernel::{
     adapters::{
@@ -9,14 +16,6 @@ use almond_kernel::{
     error::KernelError,
     repositories::prelude::SnippetRepositoryExt,
 };
-
-use chrono::Local;
-use fake::{
-    Fake,
-    faker::lorem::en::{Paragraph, Sentence, Word},
-};
-
-use shared::*;
 
 #[tokio::test]
 async fn test_create_without_workspace_snippets() -> Result<(), KernelError> {
