@@ -47,14 +47,20 @@ export const useTodoStore = defineStore("todo_store", {
     async fetchTodos() {
       this.loading = true;
       try {
-        this.todos = await invoke<Todo[]>("get_all_todos");
+        this.todos = await invoke<Todo[]>("get_all_todos", {
+          meta: await getWorkspaceMeta(),
+        });
       } finally {
         this.loading = false;
       }
     },
 
     async createTodo(payload: CreateTodoPayload): Promise<Todo> {
-      const created = await invoke<Todo>("create_todo", { todo: payload });
+      const created = await invoke<Todo>("create_todo", {
+        todo: payload,
+        meta: await getWorkspaceMeta(),
+      });
+
       this.todos.unshift(created);
       return created;
     },
@@ -66,9 +72,12 @@ export const useTodoStore = defineStore("todo_store", {
       const updated = await invoke<Todo>("update_todo", {
         identifier,
         todo: payload,
+        meta: await getWorkspaceMeta(),
       });
+
       const idx = this.todos.findIndex((t) => t.identifier === identifier);
       if (idx !== -1) this.todos[idx] = updated;
+
       return updated;
     },
 
@@ -76,19 +85,28 @@ export const useTodoStore = defineStore("todo_store", {
       const updated = await invoke<Todo>("mark_todo_done", {
         identifier,
         done,
+        meta: await getWorkspaceMeta(),
       });
+
       const idx = this.todos.findIndex((t) => t.identifier === identifier);
       if (idx !== -1) this.todos[idx] = updated;
+
       return updated;
     },
 
-    async changePriority(identifier: string, priority: string): Promise<Todo> {
+    async changePriority(
+      identifier: string,
+      priority: "high" | "medium" | "low",
+    ): Promise<Todo> {
       const updated = await invoke<Todo>("change_todo_priority", {
         identifier,
         priority,
+        meta: await getWorkspaceMeta(),
       });
+
       const idx = this.todos.findIndex((t) => t.identifier === identifier);
       if (idx !== -1) this.todos[idx] = updated;
+
       return updated;
     },
 
@@ -99,14 +117,21 @@ export const useTodoStore = defineStore("todo_store", {
       const updated = await invoke<Todo>("update_todo_due_date", {
         identifier,
         dueDate,
+        meta: await getWorkspaceMeta(),
       });
+
       const idx = this.todos.findIndex((t) => t.identifier === identifier);
       if (idx !== -1) this.todos[idx] = updated;
+
       return updated;
     },
 
     async deleteTodo(identifier: string) {
-      await invoke("delete_todo", { identifier });
+      await invoke("delete_todo", {
+        identifier,
+        meta: await getWorkspaceMeta(),
+      });
+
       this.todos = this.todos.filter((t) => t.identifier !== identifier);
     },
   },

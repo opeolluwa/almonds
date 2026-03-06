@@ -1,17 +1,18 @@
 use std::sync::Arc;
 
 use almond_kernel::{
-    repositories::prelude::*,
     repositories::{
-        bookmarks::BookmarkRepository, notes::NotesRepository, recycle_bin::RecycleBinRepository,
-        reminder::ReminderRepository, snippets::SnippetRepository, sync_queue::SyncQueueRepository,
-        todo::TodoRepository, user_preference::UserPreferenceRepository,
+        bookmarks::BookmarkRepository, notes::NotesRepository, prelude::*,
+        recycle_bin::RecycleBinRepository, reminder::ReminderRepository,
+        snippets::SnippetRepository, sync_queue::SyncQueueRepository, todo::TodoRepository,
+        user_preference::UserPreferenceRepository, workspace::WorkspaceRepository,
     },
     sea_orm::DatabaseConnection,
 };
 
 use crate::state::ollama::OllamaState;
 
+#[allow(unused)]
 pub struct AppState {
     pub bookmark_repository: BookmarkRepository,
     pub notes_repository: NotesRepository,
@@ -22,6 +23,7 @@ pub struct AppState {
     pub todo_repository: TodoRepository,
     pub user_preference_repository: UserPreferenceRepository,
     pub ollama: OllamaState,
+    pub workspace_repository: WorkspaceRepository,
 }
 
 impl AppState {
@@ -36,6 +38,7 @@ impl AppState {
         let user_preference_repository = UserPreferenceRepository::new(conn.clone());
         let ollama = OllamaState::new(conn.clone());
 
+        let workspace_repository = WorkspaceRepository::new(conn.clone());
         AppState {
             bookmark_repository,
             notes_repository,
@@ -46,6 +49,7 @@ impl AppState {
             todo_repository,
             user_preference_repository,
             ollama,
+            workspace_repository,
         }
     }
 }

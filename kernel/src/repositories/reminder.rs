@@ -10,14 +10,17 @@ use uuid::Uuid;
 
 use crate::{
     adapters::{
+        meta::RequestMeta,
         recycle_bin::{CreateRecycleBinEntry, RecycleBinItemType},
         reminder::{CreateReminder, UpdateReminder},
     },
     entities::reminder,
     error::KernelError,
     repositories::recycle_bin::{RecycleBinRepository, RecycleBinRepositoryExt},
+    utils::extract_req_meta,
 };
 
+#[derive(Debug, Clone)]
 pub struct ReminderRepository {
     conn: Arc<DatabaseConnection>,
 }
@@ -26,19 +29,35 @@ pub struct ReminderRepository {
 pub trait ReminderRepositoryExt {
     fn new(conn: Arc<DatabaseConnection>) -> Self;
 
-    async fn create(&self, payload: &CreateReminder) -> Result<reminder::Model, KernelError>;
+    async fn create(
+        &self,
+        payload: &CreateReminder,
+        meta: &Option<RequestMeta>,
+    ) -> Result<reminder::Model, KernelError>;
 
-    async fn find_by_id(&self, identifier: &Uuid) -> Result<Option<reminder::Model>, KernelError>;
+    async fn find_by_id(
+        &self,
+        identifier: &Uuid,
+        meta: &Option<RequestMeta>,
+    ) -> Result<Option<reminder::Model>, KernelError>;
 
-    async fn find_all(&self) -> Result<Vec<reminder::Model>, KernelError>;
+    async fn find_all(
+        &self,
+        meta: &Option<RequestMeta>,
+    ) -> Result<Vec<reminder::Model>, KernelError>;
 
     async fn update(
         &self,
         identifier: &Uuid,
         payload: &UpdateReminder,
+        meta: &Option<RequestMeta>,
     ) -> Result<reminder::Model, KernelError>;
 
-    async fn delete(&self, identifier: &Uuid) -> Result<(), KernelError>;
+    async fn delete(
+        &self,
+        identifier: &Uuid,
+        meta: &Option<RequestMeta>,
+    ) -> Result<(), KernelError>;
 }
 
 #[async_trait]
@@ -47,24 +66,49 @@ impl ReminderRepositoryExt for ReminderRepository {
         Self { conn }
     }
 
-    async fn create(&self, payload: &CreateReminder) -> Result<reminder::Model, KernelError> {
-        let active_model: reminder::ActiveModel = payload.to_owned().into();
+    async fn create(
+        &self,
+        payload: &CreateReminder,
+        meta: &Option<RequestMeta>,
+    ) -> Result<reminder::Model, KernelError> {
+        let mut active_model: reminder::ActiveModel = payload.to_owned().into();
+
+        if let Some(meta) = meta {
+            active_model.workspace_identifier = Set(Some(meta.workspace_identifier));
+        } else {
+            return Err(KernelError::DbOperationError(
+                "workspace identifier is required".into(),
+            ));
+        };
         active_model
             .insert(self.conn.as_ref())
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))
     }
 
-    async fn find_by_id(&self, identifier: &Uuid) -> Result<Option<reminder::Model>, KernelError> {
+    async fn find_by_id(
+        &self,
+        identifier: &Uuid,
+        meta: &Option<RequestMeta>,
+    ) -> Result<Option<reminder::Model>, KernelError> {
+        let meta = extract_req_meta(meta)?;
+
         reminder::Entity::find()
             .filter(reminder::Column::Identifier.eq(*identifier))
+            .filter(reminder::Column::WorkspaceIdentifier.eq(meta.workspace_identifier))
             .one(self.conn.as_ref())
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))
     }
 
-    async fn find_all(&self) -> Result<Vec<reminder::Model>, KernelError> {
+    async fn find_all(
+        &self,
+        meta: &Option<RequestMeta>,
+    ) -> Result<Vec<reminder::Model>, KernelError> {
+        let meta = extract_req_meta(meta)?;
+
         reminder::Entity::find()
+            .filter(reminder::Column::WorkspaceIdentifier.eq(meta.workspace_identifier))
             .all(self.conn.as_ref())
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))
@@ -74,8 +118,12 @@ impl ReminderRepositoryExt for ReminderRepository {
         &self,
         identifier: &Uuid,
         payload: &UpdateReminder,
+        meta: &Option<RequestMeta>,
     ) -> Result<reminder::Model, KernelError> {
+        let meta = extract_req_meta(meta)?;
+
         let model = reminder::Entity::find()
+            .filter(reminder::Column::WorkspaceIdentifier.eq(meta.workspace_identifier))
             .filter(reminder::Column::Identifier.eq(*identifier))
             .one(self.conn.as_ref())
             .await
@@ -110,9 +158,16 @@ impl ReminderRepositoryExt for ReminderRepository {
             .map_err(|err| KernelError::DbOperationError(err.to_string()))
     }
 
-    async fn delete(&self, identifier: &Uuid) -> Result<(), KernelError> {
+    async fn delete(
+        &self,
+        identifier: &Uuid,
+        meta: &Option<RequestMeta>,
+    ) -> Result<(), KernelError> {
+        let meta = extract_req_meta(meta)?;
+
         let model = reminder::Entity::find()
             .filter(reminder::Column::Identifier.eq(*identifier))
+            .filter(reminder::Column::WorkspaceIdentifier.eq(meta.workspace_identifier))
             .one(self.conn.as_ref())
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))?
@@ -122,15 +177,20 @@ impl ReminderRepositoryExt for ReminderRepository {
             .map_err(|err| KernelError::DbOperationError(err.to_string()))?;
 
         RecycleBinRepository::new(self.conn.clone())
-            .store(&CreateRecycleBinEntry {
-                item_id: model.identifier,
-                item_type: RecycleBinItemType::Reminder,
-                payload,
-            })
+            .store(
+                &CreateRecycleBinEntry {
+                    item_id: model.identifier,
+                    item_type: RecycleBinItemType::Reminder,
+                    workspace_identifier: model.workspace_identifier,
+                    payload,
+                },
+                &Some(meta.clone()),
+            )
             .await?;
 
         reminder::Entity::delete_many()
             .filter(reminder::Column::Identifier.eq(*identifier))
+            .filter(reminder::Column::WorkspaceIdentifier.eq(meta.workspace_identifier))
             .exec(self.conn.as_ref())
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))?;

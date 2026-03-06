@@ -1,9 +1,8 @@
-use tauri::State;
-use uuid::Uuid;
-
 use almond_kernel::{
     entities::user_preference, repositories::user_preference::UserPreferenceRepositoryExt,
 };
+use tauri::State;
+use uuid::Uuid;
 
 use crate::{
     adapters::user_preference::{CreateUserPreference, UpdateUserPreference},

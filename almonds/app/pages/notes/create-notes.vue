@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import NotesEditor from "~/components/notes/notes-editor.vue";
-import { useNoteStore } from "~/stores/notes";
+import { onBeforeRouteLeave } from "vue-router";
 
 definePageMeta({ layout: false, name: "Create note", keepalive: true });
 
@@ -34,6 +33,19 @@ async function handleSave() {
     submitting.value = false;
   }
 }
+
+onBeforeRouteLeave(async () => {
+  if (!title.value.trim() && !content.value.trim()) return;
+
+  try {
+    await noteStore.createNote({
+      title: title.value.trim() || "Untitled",
+      content: content.value,
+    });
+  } catch (e) {
+    console.error(e);
+  }
+});
 </script>
 
 <template>
@@ -43,11 +55,10 @@ async function handleSave() {
       <UInput
         v-model="title"
         placeholder="Note title…"
-        size="xl"
         variant="none"
         class="mb-2 w-full"
         :ui="{
-          base: 'text-3xl font-bold placeholder:font-normal placeholder:text-muted',
+          base: 'text-xl font-bold placeholder:font-normal placeholder:text-muted',
         }"
         :disabled="submitting"
       />

@@ -1,20 +1,16 @@
 [working-directory:'orchard']
 lint-orchard:
-    cargo fmt
-    cargo sort -w
-    cargo group-imports --fix
+    sh ../scripts/format
 
 [working-directory:'kernel']
 lint-kernel:
-    cargo fmt
-    cargo sort -w
-    cargo group-imports --fix
+    sh ../scripts/format
+
 
 [working-directory:'almonds/src-tauri']
 lint-tauri:
-    cargo fmt
-    cargo sort -w
-    cargo group-imports --fix
+    sh ../../scripts/format
+
 
 [working-directory:'almonds']
 lint-almonds:

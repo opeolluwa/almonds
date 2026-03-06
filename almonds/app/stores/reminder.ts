@@ -49,8 +49,11 @@ export const useReminderStore = defineStore("reminder_store", {
   actions: {
     async fetchReminders() {
       this.loading = true;
+
       try {
-        this.reminders = await invoke<Reminder[]>("get_all_reminders");
+        this.reminders = await invoke<Reminder[]>("get_all_reminders", {
+          meta: await getWorkspaceMeta(),
+        });
       } finally {
         this.loading = false;
       }
@@ -59,7 +62,9 @@ export const useReminderStore = defineStore("reminder_store", {
     async createReminder(payload: CreateReminderPayload): Promise<Reminder> {
       const created = await invoke<Reminder>("create_reminder", {
         reminder: payload,
+        meta: await getWorkspaceMeta(),
       });
+
       this.reminders.unshift(created);
       return created;
     },
@@ -71,14 +76,21 @@ export const useReminderStore = defineStore("reminder_store", {
       const updated = await invoke<Reminder>("update_reminder", {
         identifier,
         reminder: payload,
+        meta: await getWorkspaceMeta(),
       });
+
       const idx = this.reminders.findIndex((r) => r.identifier === identifier);
       if (idx !== -1) this.reminders[idx] = updated;
+
       return updated;
     },
 
     async deleteReminder(identifier: string) {
-      await invoke("delete_reminder", { identifier });
+      await invoke("delete_reminder", {
+        identifier,
+        meta: await getWorkspaceMeta(),
+      });
+
       this.reminders = this.reminders.filter(
         (r) => r.identifier !== identifier,
       );

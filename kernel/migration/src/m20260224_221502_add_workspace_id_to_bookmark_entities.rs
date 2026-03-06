@@ -1,6 +1,9 @@
-use sea_orm_migration::{prelude::*, sea_orm::DbBackend};
+use sea_orm_migration::{prelude::*, schema::*, sea_orm::DbBackend};
 
-use crate::{m20260218_204212_create_bookmarks_table::Bookmark, m20260224_214545_create_workspaces::Workspaces};
+use crate::{
+    m20260218_204212_create_bookmarks_table::{Bookmark, Tag},
+    m20260224_214545_create_workspaces::Workspaces,
+};
 
 #[derive(DeriveMigrationName)]
 pub struct Migration;
@@ -8,25 +11,52 @@ pub struct Migration;
 #[async_trait::async_trait]
 impl MigrationTrait for Migration {
     async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
-
-           let db_backend = manager.get_database_backend();
+        let db_backend = manager.get_database_backend();
         let db_connection = manager.get_connection();
         if db_backend == DbBackend::Sqlite {
-            // For SQLite, we need to create a new table with the workspace_identifier column, copy the data, and then replace the old table
+            manager
+                .create_table(
+                    Table::create()
+                        .table("bookmarks_new")
+                        .if_not_exists()
+                        .col(pk_uuid("identifier"))
+                        .col(string("title"))
+                        .col(string("url"))
+                        .col(
+                            ColumnDef::new("tag")
+                                .enumeration(
+                                    Tag::Type,
+                                    [
+                                        Tag::Development,
+                                        Tag::Inspiration,
+                                        Tag::Design,
+                                        Tag::Research,
+                                    ],
+                                )
+                                .not_null()
+                                .default("development"),
+                        )
+                        .col(ColumnDef::new("workspace_identifier").uuid())
+                        .foreign_key(
+                            ForeignKey::create()
+                                .name("fk_bookmark_workspace_identifier")
+                                .from(Bookmark::Table, "workspace_identifier")
+                                .to(Workspaces::Table, "identifier")
+                                .on_delete(ForeignKeyAction::Cascade),
+                        )
+                        .col(timestamp_with_time_zone(Bookmark::CreatedAt))
+                        .col(timestamp_with_time_zone(Bookmark::UpdatedAt))
+                        .to_owned(),
+                )
+                .await?;
+
             db_connection
                 .execute_unprepared(
                     r#"
-                    CREATE TABLE IF NOT EXISTS "bookmarks_new" (
-                        "identifier" UUID PRIMARY KEY,
-                        "title" TEXT NOT NULL,
-                        "url" TEXT NOT NULL,
-                        "created_at" TIMESTAMP NOT NULL,
-                        "updated_at" TIMESTAMP NOT NULL,
-                        "workspace_identifier" UUID,
-                        FOREIGN KEY("workspace_identifier") REFERENCES "workspaces"("identifier") ON DELETE CASCADE
-                    );
                     INSERT INTO "bookmarks_new" ("identifier", "title", "url", "created_at", "updated_at")
+
                     SELECT "identifier", "title", "url", "created_at", "updated_at" FROM "bookmark";
+                    
                     DROP TABLE "bookmark";
                     ALTER TABLE "bookmarks_new" RENAME TO "bookmark";
                     "#,

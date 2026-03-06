@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import NotesEditor from "~/components/notes/notes-editor.vue";
-import { useNoteStore } from "~/stores/notes";
-
 definePageMeta({ layout: false, keepalive: true, name: "Edit notes" });
 
 const route = useRoute();
@@ -93,11 +90,10 @@ onMounted(async () => {
         <UInput
           v-model="title"
           placeholder="Note title…"
-          size="xl"
           variant="none"
           class="mb-2 w-full"
           :ui="{
-            base: 'text-3xl font-bold placeholder:font-normal placeholder:text-muted',
+            base: 'text-xl font-bold placeholder:font-normal placeholder:text-muted',
           }"
           :disabled="submitting"
         />

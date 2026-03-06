@@ -10,6 +10,7 @@ pub struct CreateNote {
     pub title: String,
     pub content: String,
     pub categories: Option<Vec<String>>,
+    pub workspace_identifier: Option<Uuid>,
 }
 
 impl Into<entities::notes::ActiveModel> for CreateNote {
@@ -19,9 +20,10 @@ impl Into<entities::notes::ActiveModel> for CreateNote {
             identifier: Set(Uuid::new_v4()),
             title: Set(self.title),
             content: Set(self.content),
-            categories: Set(categories),
+            categories: Set(Some(categories)),
             created_at: Set(Utc::now().fixed_offset()),
             updated_at: Set(Utc::now().fixed_offset()),
+            workspace_identifier: Set(self.workspace_identifier),
         }
     }
 }

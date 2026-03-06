@@ -29,8 +29,11 @@ export const useNoteStore = defineStore("notes_store", {
   actions: {
     async fetchNotes() {
       this.loading = true;
+
       try {
-        this.notes = await invoke<Note[]>("get_all_notes");
+        this.notes = await invoke<Note[]>("get_all_notes", {
+          meta: await getWorkspaceMeta(),
+        });
       } finally {
         this.loading = false;
       }
@@ -38,17 +41,26 @@ export const useNoteStore = defineStore("notes_store", {
 
     async fetchRecentNotes() {
       this.recentLoading = true;
+
       try {
-        this.recent = await invoke<Note[]>("get_recently_added_notes");
+        this.recent = await invoke<Note[]>("get_recently_added_notes", {
+          meta: await getWorkspaceMeta(),
+        });
       } finally {
         this.recentLoading = false;
       }
     },
 
     async createNote(payload: CreateNotePayload): Promise<Note> {
-      const created = await invoke<Note>("create_note", { note: payload });
+      const created = await invoke<Note>("create_note", {
+        note: payload,
+        meta: await getWorkspaceMeta(),
+      });
+
       this.notes.unshift(created);
+
       await this.fetchRecentNotes();
+
       return created;
     },
 
@@ -59,14 +71,24 @@ export const useNoteStore = defineStore("notes_store", {
       const updated = await invoke<Note>("update_note", {
         identifier,
         note: payload,
+        meta: await getWorkspaceMeta(),
       });
+
       const idx = this.notes.findIndex((n) => n.identifier === identifier);
-      if (idx !== -1) this.notes[idx] = updated;
+
+      if (idx !== -1) {
+        this.notes[idx] = updated;
+      }
+
       return updated;
     },
 
     async deleteNote(identifier: string) {
-      await invoke("delete_note", { identifier });
+      await invoke("delete_note", {
+        identifier,
+        meta: await getWorkspaceMeta(),
+      });
+
       this.notes = this.notes.filter((n) => n.identifier !== identifier);
       this.recent = this.recent.filter((n) => n.identifier !== identifier);
     },

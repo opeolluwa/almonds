@@ -61,51 +61,36 @@ async function handleSubmit() {
     <template #body>
       <form class="flex flex-col gap-4" @submit.prevent="handleSubmit">
         <div class="grid grid-cols-2 gap-3">
-          <div class="flex flex-col gap-1">
-            <label class="text-xs font-medium text-gray-500 dark:text-gray-400"
-              >First Name</label
-            >
-            <UInput
-              v-model="form.firstName"
-              placeholder="Jane"
-              :disabled="loading"
-              :ui="{ root: errors.firstName ? 'ring-1 ring-red-500' : '' }"
-            />
-            <p v-if="errors.firstName" class="text-xs text-red-500">
-              {{ errors.firstName }}
-            </p>
-          </div>
-          <div class="flex flex-col gap-1">
-            <label class="text-xs font-medium text-gray-500 dark:text-gray-400"
-              >Last Name</label
-            >
-            <UInput
-              v-model="form.lastName"
-              placeholder="Doe"
-              :disabled="loading"
-              :ui="{ root: errors.lastName ? 'ring-1 ring-red-500' : '' }"
-            />
-            <p v-if="errors.lastName" class="text-xs text-red-500">
-              {{ errors.lastName }}
-            </p>
-          </div>
+          <AppInput
+            v-model="form.firstName"
+            label="First name"
+            hint="required"
+            type="text"
+            name="email"
+            placeholder="Jane"
+            :disabled="loading"
+          />
+
+          <AppInput
+            v-model="form.lastName"
+            label="Last name"
+            hint="required"
+            type="text"
+            name="lastName"
+            placeholder="Doe"
+            :disabled="loading"
+          />
         </div>
 
-        <div class="flex flex-col gap-1">
-          <label class="text-xs font-medium text-gray-500 dark:text-gray-400"
-            >Email</label
-          >
-          <UInput
-            v-model="form.email"
-            type="email"
-            placeholder="jane@example.com"
-            :disabled="loading"
-            :ui="{ root: errors.email ? 'ring-1 ring-red-500' : '' }"
-          />
-          <p v-if="errors.email" class="text-xs text-red-500">
-            {{ errors.email }}
-          </p>
-        </div>
+        <AppInput
+          v-model="form.email"
+          label="Email"
+          hint="required"
+          type="email"
+          name="email"
+          placeholder="jane@example.com"
+          :disabled="loading"
+        />
 
         <div class="flex justify-end pt-1">
           <UButton

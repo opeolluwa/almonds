@@ -1,4 +1,4 @@
-use almond_kernel::adapters::todo::TodoPriority;
+use almond_kernel::adapters::{meta::RequestMeta, todo::TodoPriority};
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
@@ -8,6 +8,7 @@ pub struct CreateTodo {
     pub description: Option<String>,
     pub due_date: Option<String>,
     pub priority: String,
+    pub meta: Option<RequestMeta>,
 }
 
 impl From<CreateTodo> for almond_kernel::adapters::todo::CreateTodo {

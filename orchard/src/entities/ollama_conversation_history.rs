@@ -32,6 +32,8 @@ impl Related<super::ollama_conversation_response::Entity> for Entity {
     }
 }
 
+impl ActiveModelBehavior for ActiveModel {}
+
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelatedEntity)]
 pub enum RelatedEntity {
     #[sea_orm(entity = "super::ollama_conversation_prompt::Entity")]
@@ -39,5 +41,3 @@ pub enum RelatedEntity {
     #[sea_orm(entity = "super::ollama_conversation_response::Entity")]
     OllamaConversationResponse,
 }
-
-impl ActiveModelBehavior for ActiveModel {}

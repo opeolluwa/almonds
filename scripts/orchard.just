@@ -6,3 +6,9 @@ orchard-init url:
 [working-directory:'orchard']
 watch-orchard:
     cargo watch -qcx run 
+
+
+
+[working-directory:'orchard']
+test-orchard:
+    echo "TBD"

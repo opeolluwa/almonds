@@ -68,4 +68,5 @@ export const useUserPreferenceStore = defineStore("user_preference_store", {
       return updated;
     },
   },
+  persist: true,
 });

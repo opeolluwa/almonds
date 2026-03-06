@@ -1,9 +1,10 @@
+use almond_kernel::{
+    adapters::{meta::RequestMeta, todo::TodoPriority},
+    entities::todo,
+    repositories::todo::TodoRepositoryExt,
+};
 use tauri::State;
 use uuid::Uuid;
-
-use almond_kernel::{
-    adapters::todo::TodoPriority, entities::todo, repositories::todo::TodoRepositoryExt,
-};
 
 use crate::{
     adapters::todo::{CreateTodo, UpdateTodo},
@@ -15,10 +16,11 @@ use crate::{
 pub async fn create_todo(
     state: State<'_, AppState>,
     todo: CreateTodo,
+    meta: Option<RequestMeta>,
 ) -> Result<todo::Model, AppError> {
     state
         .todo_repository
-        .create_todo(&todo.into())
+        .create_todo(&todo.into(), &meta)
         .await
         .map_err(Into::into)
 }
@@ -27,17 +29,25 @@ pub async fn create_todo(
 pub async fn get_todo(
     state: State<'_, AppState>,
     identifier: Uuid,
+    meta: Option<RequestMeta>,
 ) -> Result<Option<todo::Model>, AppError> {
     state
         .todo_repository
-        .find_by_id(&identifier)
+        .find_by_id(&identifier, &meta)
         .await
         .map_err(Into::into)
 }
 
 #[tauri::command]
-pub async fn get_all_todos(state: State<'_, AppState>) -> Result<Vec<todo::Model>, AppError> {
-    state.todo_repository.find_all().await.map_err(Into::into)
+pub async fn get_all_todos(
+    state: State<'_, AppState>,
+    meta: Option<RequestMeta>,
+) -> Result<Vec<todo::Model>, AppError> {
+    state
+        .todo_repository
+        .find_all(&meta)
+        .await
+        .map_err(Into::into)
 }
 
 #[tauri::command]
@@ -45,19 +55,24 @@ pub async fn update_todo(
     state: State<'_, AppState>,
     identifier: Uuid,
     todo: UpdateTodo,
+    meta: Option<RequestMeta>,
 ) -> Result<todo::Model, AppError> {
     state
         .todo_repository
-        .update(&identifier, &todo.into())
+        .update(&identifier, &todo.into(), &meta)
         .await
         .map_err(Into::into)
 }
 
 #[tauri::command]
-pub async fn delete_todo(state: State<'_, AppState>, identifier: Uuid) -> Result<(), AppError> {
+pub async fn delete_todo(
+    state: State<'_, AppState>,
+    identifier: Uuid,
+    meta: Option<RequestMeta>,
+) -> Result<(), AppError> {
     state
         .todo_repository
-        .delete(&identifier)
+        .delete(&identifier, &meta)
         .await
         .map_err(Into::into)
 }
@@ -67,10 +82,11 @@ pub async fn mark_todo_done(
     state: State<'_, AppState>,
     identifier: Uuid,
     done: bool,
+    meta: Option<RequestMeta>,
 ) -> Result<todo::Model, AppError> {
     state
         .todo_repository
-        .mark_done(&identifier, done)
+        .mark_done(&identifier, done, &meta)
         .await
         .map_err(Into::into)
 }
@@ -80,6 +96,7 @@ pub async fn change_todo_priority(
     state: State<'_, AppState>,
     identifier: Uuid,
     priority: String,
+    meta: Option<RequestMeta>,
 ) -> Result<todo::Model, AppError> {
     let priority = match priority.as_str() {
         "high" => TodoPriority::High,
@@ -88,7 +105,7 @@ pub async fn change_todo_priority(
     };
     state
         .todo_repository
-        .change_priority(&identifier, &priority)
+        .change_priority(&identifier, &priority, &meta)
         .await
         .map_err(Into::into)
 }
@@ -98,6 +115,7 @@ pub async fn update_todo_due_date(
     state: State<'_, AppState>,
     identifier: Uuid,
     due_date: Option<String>,
+    meta: Option<RequestMeta>,
 ) -> Result<todo::Model, AppError> {
     use chrono::NaiveDate;
 
@@ -107,7 +125,7 @@ pub async fn update_todo_due_date(
 
     state
         .todo_repository
-        .update_due_date(&identifier, date)
+        .update_due_date(&identifier, date, &meta)
         .await
         .map_err(Into::into)
 }

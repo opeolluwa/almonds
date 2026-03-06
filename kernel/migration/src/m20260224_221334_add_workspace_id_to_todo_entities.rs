@@ -1,7 +1,8 @@
-use sea_orm_migration::{prelude::*, sea_orm::DbBackend};
+use sea_orm_migration::{prelude::*, schema::*, sea_orm::DbBackend};
 
 use crate::{
-    m20260218_171131_create_todo_table::Todo, m20260224_214545_create_workspaces::Workspaces,
+    m20260218_171131_create_todo_table::{Priority, Todo},
+    m20260224_214545_create_workspaces::Workspaces,
 };
 
 #[derive(DeriveMigrationName)]
@@ -14,22 +15,46 @@ impl MigrationTrait for Migration {
         let db_connection = manager.get_connection();
 
         if db_backend == DbBackend::Sqlite {
-            // For SQLite, we need to create a new table with the workspace_identifier column, copy the data, and then replace the old table
+            manager
+                .create_table(
+                    Table::create()
+                        .table("todo_new")
+                        .if_not_exists()
+                        .col(pk_uuid("identifier"))
+                        .col(string("title"))
+                        .col(text_null("description"))
+                        .col(date_null("due_date"))
+                        .col(
+                            ColumnDef::new("priority")
+                                .enumeration(
+                                    Priority::Type,
+                                    [Priority::High, Priority::Medium, Priority::Low],
+                                )
+                                .not_null()
+                                .default("medium"),
+                        )
+                        .col(timestamp_with_time_zone("created_at"))
+                        .col(timestamp_with_time_zone("updated_at"))
+                        .col(ColumnDef::new("workspace_identifier").uuid())
+                        .col(boolean("done").default(false))
+                        .foreign_key(
+                            ForeignKey::create()
+                                .name("fk_todo_workspace_identifier")
+                                .from(Todo::Table, "workspace_identifier")
+                                .to(Workspaces::Table, "identifier")
+                                .on_delete(ForeignKeyAction::Cascade),
+                        )
+                        .to_owned(),
+                )
+                .await?;
+
             db_connection
                  .execute_unprepared(
                      r#"
-                     CREATE TABLE IF NOT EXISTS "todo_new" (
-                         "identifier" UUID PRIMARY KEY,
-                         "title" TEXT NOT NULL,
-                         "description" TEXT NOT NULL,
-                         "is_completed" BOOLEAN NOT NULL,
-                         "created_at" TIMESTAMP NOT NULL,
-                         "updated_at" TIMESTAMP NOT NULL,
-                         "workspace_identifier" UUID,
-                         FOREIGN KEY("workspace_identifier") REFERENCES "workspaces"("identifier") ON DELETE CASCADE
-                     );
-                     INSERT INTO "todo_new" ("identifier", "title", "description", "is_completed", "created_at", "updated_at")
-                     SELECT "identifier", "title", "description", "is_completed", "created_at", "updated_at" FROM "todo";
+                     INSERT INTO "todo_new" ("identifier", "title", "description", "done", "created_at", "updated_at")
+
+                     SELECT "identifier", "title", "description", "done", "created_at", "updated_at" FROM "todo";
+
                      DROP TABLE "todo";
                      ALTER TABLE "todo_new" RENAME TO "todo";
                         "#,

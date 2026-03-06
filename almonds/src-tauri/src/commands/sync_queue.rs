@@ -1,7 +1,6 @@
+use almond_kernel::{entities::sync_queue, repositories::sync_queue::SyncQueueRepositoryExt};
 use tauri::State;
 use uuid::Uuid;
-
-use almond_kernel::{entities::sync_queue, repositories::sync_queue::SyncQueueRepositoryExt};
 
 use crate::{adapters::sync_queue::AddSyncQueueEntry, errors::AppError, state::app::AppState};
 

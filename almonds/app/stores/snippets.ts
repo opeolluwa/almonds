@@ -43,7 +43,9 @@ export const useSnippetStore = defineStore("snippets_store", {
     async fetchSnippets() {
       this.loading = true;
       try {
-        this.snippets = await invoke<Snippet[]>("get_all_snippets");
+        this.snippets = await invoke<Snippet[]>("get_all_snippets", {
+          meta: await getWorkspaceMeta(),
+        });
       } finally {
         this.loading = false;
       }
@@ -52,7 +54,9 @@ export const useSnippetStore = defineStore("snippets_store", {
     async fetchRecentSnippets() {
       this.recentLoading = true;
       try {
-        this.recent = await invoke<Snippet[]>("get_recently_added_snippet");
+        this.recent = await invoke<Snippet[]>("get_recently_added_snippet", {
+          meta: await getWorkspaceMeta(),
+        });
       } finally {
         this.recentLoading = false;
       }
@@ -61,7 +65,9 @@ export const useSnippetStore = defineStore("snippets_store", {
     async createSnippet(payload: CreateSnippetPayload): Promise<Snippet> {
       const created = await invoke<Snippet>("create_snippet", {
         snippet: payload,
+        meta: await getWorkspaceMeta(),
       });
+
       this.snippets.unshift(created);
       await this.fetchRecentSnippets();
       return created;
@@ -74,14 +80,21 @@ export const useSnippetStore = defineStore("snippets_store", {
       const updated = await invoke<Snippet>("update_snippet", {
         identifier,
         snippet: payload,
+        meta: await getWorkspaceMeta(),
       });
+
       const idx = this.snippets.findIndex((s) => s.identifier === identifier);
       if (idx !== -1) this.snippets[idx] = updated;
+
       return updated;
     },
 
     async deleteSnippet(identifier: string) {
-      await invoke("delete_snippet", { identifier });
+      await invoke("delete_snippet", {
+        identifier,
+        meta: await getWorkspaceMeta(),
+      });
+
       await this.fetchSnippets();
     },
   },

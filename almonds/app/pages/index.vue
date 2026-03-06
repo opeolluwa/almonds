@@ -4,6 +4,7 @@ import { useBookmarkStore } from "~/stores/bookmarks";
 import { useTodoStore } from "~/stores/todo";
 import { useUserPreferenceStore } from "~/stores/user-preference";
 import { useReminderStore } from "~/stores/reminder";
+import { openUrl } from "@tauri-apps/plugin-opener";
 
 definePageMeta({ layout: false });
 
@@ -385,11 +386,11 @@ const quickActions = [
         </div>
 
         <div v-else class="flex flex-col gap-2">
-          <NuxtLink
+          <div
             v-for="bm in recentBookmarks"
             :key="bm.identifier"
-            :to="bm.url"
             class="group bg-white dark:bg-gray-800 rounded-xl px-4 py-3 border border-gray-100 dark:border-gray-700 hover:shadow-sm hover:border-accent-200 dark:hover:border-accent-800 transition-all flex items-center gap-3"
+            @click="openUrl(bm.url)"
           >
             <UIcon
               name="heroicons:bookmark-solid"
@@ -408,7 +409,7 @@ const quickActions = [
             >
               {{ bm.tag }}
             </span>
-          </NuxtLink>
+          </div>
         </div>
       </section>
     </template>
@@ -454,7 +455,7 @@ const quickActions = [
         </div>
 
         <!-- Filter / Sort / Delete completed controls -->
-        <div class="flex items-center gap-1.5 mb-3 flex-wrap">
+        <div class="flex items-center gap-1.5 mb-3 flex-wrap hidden">
           <div
             class="flex rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 text-xs"
           >

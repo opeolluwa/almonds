@@ -12,72 +12,74 @@ interface Notification {
   time: string; // ISO string
 }
 
-const notifications = ref<Notification[]>([
-  {
-    id: 1,
-    title: "Snippet saved",
-    message: "Your TypeScript utility snippet was saved successfully.",
-    category: "activity",
-    read: false,
-    time: new Date(Date.now() - 1000 * 60 * 4).toISOString(),
-  },
-  {
-    id: 2,
-    title: "Sync complete",
-    message: "All local data has been synced to the server.",
-    category: "system",
-    read: false,
-    time: new Date(Date.now() - 1000 * 60 * 22).toISOString(),
-  },
-  {
-    id: 3,
-    title: "Daily reminder",
-    message: "You have 3 tasks due today. Stay on top of it!",
-    category: "reminder",
-    read: false,
-    time: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
-  },
-  {
-    id: 4,
-    title: "Storage warning",
-    message: "You're using 85% of your available storage quota.",
-    category: "alert",
-    read: false,
-    time: new Date(Date.now() - 1000 * 60 * 60 * 3).toISOString(),
-  },
-  {
-    id: 5,
-    title: "Note updated",
-    message: '"Project Ideas" was modified from another session.',
-    category: "activity",
-    read: true,
-    time: new Date(Date.now() - 1000 * 60 * 60 * 6).toISOString(),
-  },
-  {
-    id: 6,
-    title: "New bookmark added",
-    message: '"Nuxt 4 Migration Guide" was bookmarked.',
-    category: "activity",
-    read: true,
-    time: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
-  },
-  {
-    id: 7,
-    title: "App updated",
-    message: "Almonds was updated to version 1.4.0. See what's new.",
-    category: "system",
-    read: true,
-    time: new Date(Date.now() - 1000 * 60 * 60 * 48).toISOString(),
-  },
-  {
-    id: 8,
-    title: "Weekly summary",
-    message: "You completed 12 tasks and added 5 snippets this week.",
-    category: "reminder",
-    read: true,
-    time: new Date(Date.now() - 1000 * 60 * 60 * 72).toISOString(),
-  },
-]);
+const notifications = ref<Notification[]>([]);
+
+// const test = ref<Notification[]>([
+//   {
+//     id: 1,
+//     title: "Snippet saved",
+//     message: "Your TypeScript utility snippet was saved successfully.",
+//     category: "activity",
+//     read: false,
+//     time: new Date(Date.now() - 1000 * 60 * 4).toISOString(),
+//   },
+//   {
+//     id: 2,
+//     title: "Sync complete",
+//     message: "All local data has been synced to the server.",
+//     category: "system",
+//     read: false,
+//     time: new Date(Date.now() - 1000 * 60 * 22).toISOString(),
+//   },
+//   {
+//     id: 3,
+//     title: "Daily reminder",
+//     message: "You have 3 tasks due today. Stay on top of it!",
+//     category: "reminder",
+//     read: false,
+//     time: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
+//   },
+//   {
+//     id: 4,
+//     title: "Storage warning",
+//     message: "You're using 85% of your available storage quota.",
+//     category: "alert",
+//     read: false,
+//     time: new Date(Date.now() - 1000 * 60 * 60 * 3).toISOString(),
+//   },
+//   {
+//     id: 5,
+//     title: "Note updated",
+//     message: '"Project Ideas" was modified from another session.',
+//     category: "activity",
+//     read: true,
+//     time: new Date(Date.now() - 1000 * 60 * 60 * 6).toISOString(),
+//   },
+//   {
+//     id: 6,
+//     title: "New bookmark added",
+//     message: '"Nuxt 4 Migration Guide" was bookmarked.',
+//     category: "activity",
+//     read: true,
+//     time: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
+//   },
+//   {
+//     id: 7,
+//     title: "App updated",
+//     message: "Almonds was updated to version 1.4.0. See what's new.",
+//     category: "system",
+//     read: true,
+//     time: new Date(Date.now() - 1000 * 60 * 60 * 48).toISOString(),
+//   },
+//   {
+//     id: 8,
+//     title: "Weekly summary",
+//     message: "You completed 12 tasks and added 5 snippets this week.",
+//     category: "reminder",
+//     read: true,
+//     time: new Date(Date.now() - 1000 * 60 * 60 * 72).toISOString(),
+//   },
+// ]);
 
 type FilterTab = "all" | "unread";
 const filter = ref<FilterTab>("all");

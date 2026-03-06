@@ -5,26 +5,39 @@ use sea_orm::entity::prelude::*;
 #[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel)]
 #[sea_orm(table_name = "recycle_bin")]
 pub struct Model {
-    #[sea_orm(
-        primary_key,
-        auto_increment = false,
-        ignore,
-        column_type = "custom(\"UUID\")",
-        select_as = "text"
-    )]
+    #[sea_orm(primary_key, auto_increment = false)]
     pub identifier: Uuid,
     pub item_id: Uuid,
     #[sea_orm(column_type = "Text")]
     pub item_type: String,
+    pub workspace_identifier: Option<Uuid>,
     #[sea_orm(column_type = "Text")]
     pub payload: String,
     pub deleted_at: DateTimeWithTimeZone,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
-pub enum Relation {}
+pub enum Relation {
+    #[sea_orm(
+        belongs_to = "super::workspaces::Entity",
+        from = "Column::WorkspaceIdentifier",
+        to = "super::workspaces::Column::Identifier",
+        on_update = "NoAction",
+        on_delete = "Cascade"
+    )]
+    Workspaces,
+}
 
-#[derive(Copy, Clone, Debug, EnumIter, DeriveRelatedEntity)]
-pub enum RelatedEntity {}
+impl Related<super::workspaces::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Workspaces.def()
+    }
+}
 
 impl ActiveModelBehavior for ActiveModel {}
+
+#[derive(Copy, Clone, Debug, EnumIter, DeriveRelatedEntity)]
+pub enum RelatedEntity {
+    #[sea_orm(entity = "super::workspaces::Entity")]
+    Workspaces,
+}

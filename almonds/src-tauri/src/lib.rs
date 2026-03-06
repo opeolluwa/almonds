@@ -4,9 +4,11 @@ mod errors;
 mod scheduler;
 mod state;
 mod utils;
+
 use std::sync::Arc;
 
 use tauri::Manager;
+use tauri_plugin_decorum::WebviewWindowExt;
 
 use crate::state::alarm::AlarmState;
 use crate::state::app::AppState;
@@ -14,12 +16,29 @@ use crate::state::scheduler::SchedulerState;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    tauri::Builder::default()
+    let mut builder = tauri::Builder::default().plugin(tauri_plugin_opener::init());
+
+    #[cfg(desktop)]
+    {
+        builder = builder.plugin(tauri_plugin_single_instance::init(|app, args, cwd| {
+            // let _ = app
+            //     .get_webview_window("main")
+            //     .expect("no main window")
+            //     .set_focus();
+
+            use tauri::Emitter;
+
+            use crate::adapters::app::Payload;
+
+            app.emit("single-instance", Payload { args, cwd }).unwrap();
+        }));
+    }
+
+    builder
         .plugin(tauri_plugin_os::init())
         .plugin(tauri_plugin_notification::init())
+        .plugin(tauri_plugin_decorum::init())
         .plugin(tauri_plugin_clipboard_manager::init())
-        // .plugin(tauri_plugin_single_instance::init(|_app, _args, _cwd| {}))
-        .plugin(tauri_plugin_sql::Builder::new().build())
         .setup(|app| {
             if cfg!(debug_assertions) {
                 app.handle().plugin(
@@ -27,6 +46,23 @@ pub fn run() {
                         .level(log::LevelFilter::Info)
                         .build(),
                 )?;
+            }
+
+            let main_window = app.get_webview_window("main").unwrap();
+            main_window.create_overlay_titlebar().unwrap();
+
+            // Some macOS-specific helpers
+            #[cfg(target_os = "macos")]
+            {
+                // Set a custom inset to the traffic lights
+                main_window.set_traffic_lights_inset(12.0, 16.0).unwrap();
+
+                // Make window transparent without privateApi
+                main_window.make_transparent().unwrap();
+
+                // Set window level
+                // NSWindowLevel: https://developer.apple.com/documentation/appkit/nswindowlevel
+                // main_window.set_window_level(25).unwrap();
             }
 
             let app_handle = app.handle().clone();
@@ -38,7 +74,11 @@ pub fn run() {
 
                 std::fs::create_dir_all(&app_data_dir).expect("failed to create app data dir");
 
-                let db_path = app_data_dir.join("almond.db");
+                let db_path = match std::env::var("ALMONDS_DB_PATH") {
+                    Ok(path) => std::path::PathBuf::from(path),
+                    Err(_) => app_data_dir.join("almonds.db"),
+                };
+
                 let db_url = format!("sqlite://{}?mode=rwc", db_path.display());
                 dbg!("Database URL: {:?}", &db_path);
                 let kernel = almond_kernel::kernel::Kernel::new(&db_url)
@@ -60,9 +100,9 @@ pub fn run() {
             });
 
             // Spawn the cron-style reminder scheduler.
-            let scheduler_handle = app.handle().clone();
+            let _scheduler_handle = app.handle().clone();
             tauri::async_runtime::spawn(async move {
-                scheduler::run(scheduler_handle).await;
+                // scheduler::run(scheduler_handle).await; //TODO:
             });
 
             Ok(())
@@ -118,6 +158,10 @@ pub fn run() {
             commands::user_preference::get_user_preference,
             commands::user_preference::create_user_preference,
             commands::user_preference::update_user_preference,
+            commands::workspaces::create_workspace,
+            commands::workspaces::list_workspaces,
+            commands::workspaces::get_workspace_by_id,
+            commands::workspaces::delete_workspace
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

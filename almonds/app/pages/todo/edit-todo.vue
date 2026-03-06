@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import DatePicker from "~/components/ui/date-picker.vue";
 import { useTodoStore } from "~/stores/todo";
 
 definePageMeta({ layout: false, name: "Edit Todo" });

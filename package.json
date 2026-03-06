@@ -1,0 +1,25 @@
+{
+  "name": "wild_almonds",
+  "version": "1.0.0",
+  "description": "A personal productivity desktop app built with Tauri, Nuxt 4, and Vue 3. Brings notes, snippets, bookmarks, tasks, and AI conversations into one workspace.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/opeolluwa/almonds.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/opeolluwa/almonds/issues"
+  },
+  "homepage": "https://github.com/opeolluwa/almonds#readme"
+}

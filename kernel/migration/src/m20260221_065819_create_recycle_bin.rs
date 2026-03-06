@@ -52,7 +52,7 @@ pub enum RecycleBin {
 }
 
 #[derive(DeriveIden)]
-enum ItemType {
+pub enum ItemType {
     #[sea_orm(iden = "item_type")]
     Type,
     Todo,

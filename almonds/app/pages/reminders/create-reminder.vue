@@ -54,7 +54,7 @@ async function handleSubmit() {
               type="text"
               placeholder="What should I remind you about?"
               autofocus
-              class="w-full bg-white dark:bg-gray-800 rounded-lg px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 outline-none focus:ring-2 focus:ring-accent-300 dark:focus:ring-accent-600 focus:border-transparent placeholder-gray-400 dark:placeholder-gray-500"
+              class="almond_input_box"
             >
           </div>
 
@@ -65,7 +65,7 @@ async function handleSubmit() {
             <textarea
               v-model="form.description"
               placeholder="Add more details..."
-              rows="3"
+              rows="5"
               class="w-full bg-white dark:bg-gray-800 rounded-lg px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 outline-none focus:ring-2 focus:ring-accent-300 dark:focus:ring-accent-600 focus:border-transparent placeholder-gray-400 dark:placeholder-gray-500 resize-none"
             />
           </div>

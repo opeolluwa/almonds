@@ -2,20 +2,19 @@ use std::io::BufReader;
 use std::sync::atomic::Ordering;
 use std::time::Duration;
 
+use almond_kernel::adapters::meta::RequestMeta;
+use almond_kernel::repositories::reminder::ReminderRepositoryExt;
 use tauri::{AppHandle, Manager};
 use tauri_plugin_notification::NotificationExt;
 
 use crate::state::alarm::AlarmState;
 use crate::state::app::AppState;
 use crate::state::scheduler::SchedulerState;
-use almond_kernel::repositories::reminder::ReminderRepositoryExt;
 
 /// Spawned once at app startup. Wakes at every clock-minute boundary and fires
 /// any reminders whose adjusted fire time (remind_at − lead_time) falls in the
 /// current minute. Deduplicates via `SchedulerState::fired_keys`.
-pub async fn run(app: AppHandle) {
-        log::info!("[Scheduler] Checked reminders at {}", chrono::Utc::now());
-
+pub async fn run(app: AppHandle, meta: Option<RequestMeta>) {
     loop {
         log::info!("[Scheduler] Checked reminders at {}", chrono::Utc::now());
 
@@ -29,12 +28,12 @@ pub async fn run(app: AppHandle) {
         };
         tokio::time::sleep(Duration::from_secs(secs_to_wait as u64)).await;
 
-        check_and_fire(&app).await;
+        check_and_fire(&app, meta.clone()).await;
         log::info!("[Scheduler] Checked reminders at {}", chrono::Utc::now());
     }
 }
 
-async fn check_and_fire(app: &AppHandle) {
+async fn check_and_fire(app: &AppHandle, meta: Option<RequestMeta>) {
     // Snapshot settings without holding the lock across await points.
     let (lead_time_minutes, default_sound) = {
         let sched = app.state::<SchedulerState>();
@@ -47,7 +46,12 @@ async fn check_and_fire(app: &AppHandle) {
     let now_minute = now.timestamp() / 60;
     let lead_duration = chrono::Duration::minutes(lead_time_minutes);
 
-    let reminders = match app.state::<AppState>().reminder_repository.find_all().await {
+    let reminders = match app
+        .state::<AppState>()
+        .reminder_repository
+        .find_all(&meta)
+        .await
+    {
         Ok(r) => r,
         Err(e) => {
             log::error!("[Scheduler] Failed to fetch reminders: {e}");
@@ -55,12 +59,14 @@ async fn check_and_fire(app: &AppHandle) {
         }
     };
 
+    log::info!("[Scheduler] Fetched {} reminders", reminders.len());
+
     for reminder in reminders {
         // Convert to UTC timestamp for timezone-agnostic comparison.
         let fire_at_ts = reminder.remind_at.timestamp() - lead_duration.num_seconds();
         let fire_minute = fire_at_ts / 60;
 
-        if fire_minute != now_minute {
+        if fire_minute < now_minute {
             continue;
         }
 

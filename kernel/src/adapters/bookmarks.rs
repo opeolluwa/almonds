@@ -44,6 +44,7 @@ impl Into<entities::bookmark::ActiveModel> for CreateBookmark {
             tag: Set(self.tag.to_string()),
             created_at: Set(Utc::now().fixed_offset()),
             updated_at: Set(Utc::now().fixed_offset()),
+            ..Default::default()
         }
     }
 }

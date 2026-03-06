@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import ollama from "ollama/browser";
 definePageMeta({ layout: false });
 
 interface Message {
