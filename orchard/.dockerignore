@@ -1,0 +1,10 @@
+target 
+
+.env
+
+*.db 
+
+*.md
+
+
+.gitignore

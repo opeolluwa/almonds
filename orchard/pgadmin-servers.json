@@ -1,0 +1,15 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "Dev Postgres (auto) DB",
+      "Group": "Servers",
+      "Host": "postgres",
+      "Port": 5432,
+      "MaintenanceDB": "postgres",
+      "Username": "orchard",
+      "Password": "orchard",
+      "SSLMode": "prefer",
+      "SavePassword": true
+    }
+  }
+}
