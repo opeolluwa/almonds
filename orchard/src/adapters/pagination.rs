@@ -1,9 +1,7 @@
 use serde::{Deserialize, Serialize, de::DeserializeOwned};
-use ts_rs::TS;
 
-#[derive(Serialize, TS, Debug, Deserialize)]
+#[derive(Serialize,  Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
-#[ts(export)]
 pub struct PaginatedResponse<T> {
     pub records: T,
     pub page: u32,

@@ -18,7 +18,7 @@ use axum::{
     Router,
 };
 use dotenv::dotenv;
-use orchard_lib::{errors::AppError, shutdown::shutdown_signal};
+use orchard_lib::{dderror::AppError, shutdown::shutdown_signal};
 use seaography::{async_graphql, lazy_static::lazy_static};
 use tokio::net::TcpListener;
 use tower_http::{

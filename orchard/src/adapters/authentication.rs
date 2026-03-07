@@ -1,12 +1,10 @@
 use serde::{Deserialize, Serialize};
-use ts_rs::TS;
 use validator::Validate;
 
 use crate::adapters::jwt::Claims;
 
-#[derive(Debug, Serialize, Deserialize, Validate, TS)]
+#[derive(Debug, Serialize, Deserialize, Validate, )]
 #[serde(rename_all = "camelCase")]
-#[ts(export)]
 pub struct CreateUserRequest {
     #[validate(email)]
     pub email: String,
@@ -14,9 +12,8 @@ pub struct CreateUserRequest {
     pub password: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, Validate, TS)]
+#[derive(Debug, Serialize, Deserialize, Validate, )]
 #[serde(rename_all = "camelCase")]
-#[ts(export)]
 pub struct LoginRequest {
     #[validate(email)]
     pub email: String,
@@ -24,17 +21,15 @@ pub struct LoginRequest {
     pub password: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, Validate, TS)]
+#[derive(Debug, Serialize, Deserialize, Validate, )]
 #[serde(rename_all = "camelCase")]
-#[ts(export)]
 pub struct ForgottenPasswordRequest {
     #[validate(email)]
     pub email: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, Validate, TS)]
+#[derive(Debug, Serialize, Deserialize, Validate, )]
 #[serde(rename_all = "camelCase")]
-#[ts(export)]
 pub struct SetNewPasswordRequest {
     #[validate(length(min = 1, message = "password cannot be empty"))]
     pub password: String,
@@ -84,9 +79,8 @@ pub struct VerifyAccountResponse {
 
 pub type RefreshTokenResponse = LoginResponse;
 
-#[derive(Debug, Serialize, Deserialize, Validate, TS)]
+#[derive(Debug, Serialize, Deserialize, Validate, )]
 #[serde(rename_all = "camelCase")]
-#[ts(export)]
 pub struct OnboardingRequest {
     #[validate(length(min = 1, message = "first name cannot be empty"))]
     pub first_name: String,
@@ -97,9 +91,8 @@ pub struct OnboardingRequest {
     pub country_identifier: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, Validate, TS)]
+#[derive(Debug, Serialize, Deserialize, Validate, )]
 #[serde(rename_all = "camelCase")]
-#[ts(export)]
 pub struct ChangePasswordRequest {
     pub current_password: String,
     pub new_password: String,

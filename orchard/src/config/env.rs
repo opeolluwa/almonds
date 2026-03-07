@@ -1,9 +1,8 @@
-use dotenv::dotenv;
-use tower_http::cors::AllowOrigin;
-
-use aers_utils::extract_env;
-
 use crate::errors::app_error::AppError;
+use almond_kernel::utils::extract_env;
+use dotenv::dotenv;
+use std::env;
+use tower_http::cors::AllowOrigin;
 
 #[derive(Debug)]
 pub struct AppConfig {
@@ -15,6 +14,11 @@ pub struct AppConfig {
     pub port: u16,
     pub environment: String,
     pub allowed_origins: AllowOrigin,
+
+    // GraphQL / API settings
+    pub endpoint: String,
+    pub depth_limit: Option<usize>,
+    pub complexity_limit: Option<usize>,
 }
 
 impl AppConfig {
@@ -22,9 +26,7 @@ impl AppConfig {
         dotenv().ok();
 
         let port = extract_env::<u16>("PORT")?;
-
         let max_db_connections = extract_env::<u32>("MAX_DB_CONNECTIONS")?;
-
         let body_limit_mb = extract_env::<usize>("BODY_LIMIT_MB")?;
 
         let export_path = extract_env("EXPORT_PATH").unwrap_or_else(|_| "/tmp".to_string());
@@ -32,12 +34,22 @@ impl AppConfig {
 
         let environment = extract_env("ENVIRONMENT")?;
 
-        // Parse allowed origins (comma-separated list)
+        let endpoint = env::var("ENDPOINT").unwrap_or_else(|_| "/orchard".into());
+
+        let depth_limit = env::var("DEPTH_LIMIT")
+            .ok()
+            .map(|v| v.parse().expect("DEPTH_LIMIT is not a number"));
+
+        let complexity_limit = env::var("COMPLEXITY_LIMIT")
+            .ok()
+            .map(|v| v.parse().expect("COMPLEXITY_LIMIT is not a number"));
+
+        // Parse allowed origins (comma-separated)
         let allowed_origins = match extract_env::<String>("ALLOWED_ORIGINS").as_deref() {
             Ok("*") | Err(_) => AllowOrigin::any(),
             Ok(origins) => {
                 let parsed = origins
-                    .split(",")
+                    .split(',')
                     .map(str::trim)
                     .filter(|s| !s.is_empty())
                     .filter_map(|s| s.parse().ok())
@@ -56,6 +68,9 @@ impl AppConfig {
             port,
             environment,
             allowed_origins,
+            endpoint,
+            depth_limit,
+            complexity_limit,
         })
     }
 }

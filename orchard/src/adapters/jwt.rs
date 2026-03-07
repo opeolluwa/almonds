@@ -1,5 +1,5 @@
 use crate::errors::auth_error::AuthenticationError;
-use crate::shared::extract_env::extract_env;
+use almond_kernel::utils::extract_env;
 use jsonwebtoken::{DecodingKey, EncodingKey, Header, Validation, decode, encode};
 use serde::{Deserialize, Serialize};
 use std::fmt::Display;

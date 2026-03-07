@@ -15,7 +15,7 @@ impl AppFileSystem {
         fs.check_or_create_export_path()?;
         fs.check_or_create_upload_path()?;
 
-        tracing::info!("Fileystem initialized");
+        tracing::info!("File system initialized");
         Ok(())
     }
 }
