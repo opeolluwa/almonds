@@ -3,7 +3,7 @@ use validator::Validate;
 
 use crate::adapters::jwt::Claims;
 
-#[derive(Debug, Serialize, Deserialize, Validate, )]
+#[derive(Debug, Serialize, Deserialize, Validate)]
 #[serde(rename_all = "camelCase")]
 pub struct CreateUserRequest {
     #[validate(email)]
@@ -12,7 +12,7 @@ pub struct CreateUserRequest {
     pub password: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, Validate, )]
+#[derive(Debug, Serialize, Deserialize, Validate)]
 #[serde(rename_all = "camelCase")]
 pub struct LoginRequest {
     #[validate(email)]
@@ -21,14 +21,14 @@ pub struct LoginRequest {
     pub password: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, Validate, )]
+#[derive(Debug, Serialize, Deserialize, Validate)]
 #[serde(rename_all = "camelCase")]
 pub struct ForgottenPasswordRequest {
     #[validate(email)]
     pub email: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, Validate, )]
+#[derive(Debug, Serialize, Deserialize, Validate)]
 #[serde(rename_all = "camelCase")]
 pub struct SetNewPasswordRequest {
     #[validate(length(min = 1, message = "password cannot be empty"))]
@@ -79,7 +79,7 @@ pub struct VerifyAccountResponse {
 
 pub type RefreshTokenResponse = LoginResponse;
 
-#[derive(Debug, Serialize, Deserialize, Validate, )]
+#[derive(Debug, Serialize, Deserialize, Validate)]
 #[serde(rename_all = "camelCase")]
 pub struct OnboardingRequest {
     #[validate(length(min = 1, message = "first name cannot be empty"))]
@@ -91,7 +91,7 @@ pub struct OnboardingRequest {
     pub country_identifier: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, Validate, )]
+#[derive(Debug, Serialize, Deserialize, Validate)]
 #[serde(rename_all = "camelCase")]
 pub struct ChangePasswordRequest {
     pub current_password: String,

@@ -11,12 +11,10 @@ use crate::adapters::authentication::VerifyAccountRequest;
 use crate::adapters::jwt::Claims;
 use crate::adapters::jwt::TWENTY_FIVE_MINUTES;
 use crate::adapters::repository::DatabaseInsertResult;
-
 use crate::errors::database_error::DatabaseError;
 use crate::errors::service_error::ServiceError;
 use crate::events::redis::RedisClient;
 use crate::events::redis::RedisClientExt;
-
 use crate::repositories::base::Repository;
 use crate::services::otp_service::OtpService;
 use crate::services::otp_service::OtpServiceExt;

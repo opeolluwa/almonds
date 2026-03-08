@@ -1,11 +1,12 @@
 use std::{fs, io, path::Path};
 
-use crate::errors::service_error::ServiceError;
 use aers_email_client::{
     ConfirmEmailTemplate, Email, EmailClient, ForgottenPasswordTemplate, PasswordUpdatedTemplate,
     WaitListConfirmationTemplate,
 };
 use bcrypt::{DEFAULT_COST, hash, verify};
+
+use crate::errors::service_error::ServiceError;
 
 #[derive(Clone)]
 pub struct ServiceHelpers {}

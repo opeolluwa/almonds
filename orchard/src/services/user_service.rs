@@ -7,11 +7,10 @@ use axum_typed_multipart::TypedMultipart;
 use sea_orm::DatabaseConnection;
 use uuid::Uuid;
 
-use crate::adapters::profile::UploadProfilePictureRequest;
-use crate::config::AppConfig;
-
 use crate::adapters::authentication::SetNewPasswordRequest;
+use crate::adapters::profile::UploadProfilePictureRequest;
 use crate::adapters::users::PartialUserProfile;
+use crate::config::AppConfig;
 use crate::entities::users;
 use crate::errors::database_error::DatabaseError;
 use crate::errors::service_error::ServiceError;

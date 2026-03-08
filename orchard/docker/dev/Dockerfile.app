@@ -19,7 +19,6 @@ RUN set -e && \
 WORKDIR /app
 
 COPY . .
-
 RUN cargo install cargo-watch
 
 RUN cargo build 

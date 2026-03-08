@@ -1,7 +1,6 @@
 use axum::http::{Method, header};
-use tower_http::cors::{Any, CorsLayer};
-
 use tokio::signal;
+use tower_http::cors::{Any, CorsLayer};
 use tracing::info;
 
 use crate::config::AppConfig;
@@ -29,9 +28,7 @@ pub async fn shutdown_signal() {
 
     #[cfg(unix)]
     let terminate = async {
-        
         signal::unix::signal(signal::unix::SignalKind::terminate())
-        
             .expect("Failed to install signal handler")
             .recv()
             .await;

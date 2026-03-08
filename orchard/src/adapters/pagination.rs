@@ -1,6 +1,6 @@
-use serde::{Deserialize, Serialize, de::DeserializeOwned};
+use serde::{de::DeserializeOwned, Deserialize, Serialize};
 
-#[derive(Serialize,  Debug, Deserialize)]
+#[derive(Serialize, Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct PaginatedResponse<T> {
     pub records: T,

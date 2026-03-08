@@ -1,14 +1,17 @@
+use std::sync::Arc;
+
+use sea_orm::ActiveValue::Set;
+use sea_orm::{
+    ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter, QueryOrder,
+};
+use uuid::Uuid;
+
 use crate::adapters::pagination::PaginationParams;
 use crate::adapters::playlist::{CreatePlaylistRequest, UpdatePlaylistRequest};
 use crate::entities::playlists;
 use crate::errors::database_error::DatabaseError;
 use crate::repositories::base::Repository;
-use sea_orm::ActiveValue::Set;
-use sea_orm::{
-    ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter, QueryOrder,
-};
-use std::sync::Arc;
-use uuid::Uuid;
+
 #[derive(Clone)]
 pub struct PlaylistRepository {
     db_conn: Arc<DatabaseConnection>,

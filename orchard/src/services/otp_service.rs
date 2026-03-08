@@ -5,7 +5,6 @@ use chrono::{Local, TimeDelta};
 use sea_orm::DatabaseConnection;
 use uuid::Uuid;
 
-const OTP_VALIDITY: TimeDelta = TimeDelta::minutes(5);
 use crate::{
     errors::service_error::ServiceError,
     repositories::{
@@ -14,6 +13,7 @@ use crate::{
     },
 };
 
+const OTP_VALIDITY: TimeDelta = TimeDelta::minutes(5);
 #[derive(Debug, Clone)]
 pub struct OtpService {
     otp_repository: OtpRepository,

@@ -11,7 +11,6 @@ use crate::response::ApiResponseBuilder;
 
 #[derive(thiserror::Error, Debug)]
 pub enum ServiceError {
-
     #[error(transparent)]
     ValidationError(#[from] validator::ValidationErrors),
 
@@ -77,7 +76,6 @@ impl ServiceError {
             | ServiceError::TtsError(_) => StatusCode::INTERNAL_SERVER_ERROR,
 
             ServiceError::OperationFailed => StatusCode::UNPROCESSABLE_ENTITY,
-           
 
             ServiceError::DatabaseError(err) => err.status_code(),
             ServiceError::AuthenticationError(err) => err.status_code(),

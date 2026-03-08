@@ -1,8 +1,9 @@
+use std::sync::Arc;
+
 use sea_orm::{
     ActiveModelTrait, ActiveValue::Set, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter,
 };
 use ulid::Ulid;
-use std::sync::Arc;
 use uuid::Uuid;
 
 use crate::{
@@ -23,7 +24,9 @@ pub struct UserRepository {
 
 impl Repository for UserRepository {
     fn init(db_conn: &Arc<DatabaseConnection>) -> Self {
-        Self { db_conn: db_conn.to_owned() }
+        Self {
+            db_conn: db_conn.to_owned(),
+        }
     }
 }
 pub(crate) trait UserRepositoryTrait {

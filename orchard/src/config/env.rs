@@ -1,8 +1,10 @@
-use crate::errors::app_error::AppError;
+use std::env;
+
 use almond_kernel::utils::extract_env;
 use dotenv::dotenv;
-use std::env;
 use tower_http::cors::AllowOrigin;
+
+use crate::errors::app_error::AppError;
 
 #[derive(Debug)]
 pub struct AppConfig {

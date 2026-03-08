@@ -1,10 +1,12 @@
-use crate::errors::auth_error::AuthenticationError;
+use std::fmt::Display;
+use std::time::Duration;
+
 use almond_kernel::utils::extract_env;
 use jsonwebtoken::{DecodingKey, EncodingKey, Header, Validation, decode, encode};
 use serde::{Deserialize, Serialize};
-use std::fmt::Display;
-use std::time::Duration;
 use uuid::Uuid;
+
+use crate::errors::auth_error::AuthenticationError;
 
 // Fixed duration constants (corrected from your original)
 pub const FIVE_MINUTES: Duration = Duration::from_secs(5 * 60);
@@ -218,7 +220,7 @@ impl Claims {
 
         tracing::debug!("Decoding token: {}", token);
         tracing::debug!("Using secret key of length: {}", secret);
-        
+
         let decoding_key = Keys::new(secret.as_bytes()).decoding;
 
         let jwt_validation = Validation::default();

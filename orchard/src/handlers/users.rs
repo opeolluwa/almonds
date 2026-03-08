@@ -1,6 +1,7 @@
 use axum::{Json, extract::State};
 use axum_typed_multipart::TypedMultipart;
 
+use crate::services::user_service::UserServiceTrait;
 use crate::{
     adapters::{
         authentication::SetNewPasswordRequest,
@@ -14,8 +15,6 @@ use crate::{
     response::{ApiResponse, ApiResponseBuilder},
     services::user_service::UserService,
 };
-
-use crate::services::user_service::UserServiceTrait;
 
 pub async fn retrieve_information(
     State(user_service): State<UserService>,

@@ -1,10 +1,10 @@
 use std::fmt::Debug;
 
 use axum::{
-    Json,
     extract::{FromRequest, FromRequestParts, Request},
+    Json,
 };
-use serde::{Serialize, de::DeserializeOwned};
+use serde::{de::DeserializeOwned, Serialize};
 use validator::Validate;
 
 use crate::{

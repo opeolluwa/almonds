@@ -1,3 +1,6 @@
+use axum::extract::State;
+use axum::http::StatusCode;
+
 use crate::adapters::authentication::{
     ChangePasswordRequest, ForgottenPasswordResponse, RefreshTokenResponse,
 };
@@ -15,8 +18,6 @@ use crate::{
     response::ApiResponse,
     services::authentication_service::{AuthenticationService, AuthenticationServiceTrait},
 };
-use axum::extract::State;
-use axum::http::StatusCode;
 
 pub async fn create_account(
     State(auth_service): State<AuthenticationService>,

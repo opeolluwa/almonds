@@ -1,11 +1,13 @@
+use std::sync::Arc;
+
+use sea_orm::DatabaseConnection;
+
 use crate::adapters::wait_list::{JoinWaitListRequest, JoinWaitListResponse};
 use crate::errors::database_error::DatabaseError;
 use crate::errors::service_error::ServiceError;
 use crate::repositories::base::Repository;
 use crate::repositories::wait_list::{WaitListRepository, WaitListRepositoryExt};
 use crate::services::helper_service::{ServiceHelpers, ServiceHelpersTrait};
-use sea_orm::DatabaseConnection;
-use std::sync::Arc;
 
 #[derive(Clone)]
 pub struct WaitListService {
@@ -41,10 +43,7 @@ impl WaitListServiceTrait for WaitListService {
             return Err(ServiceError::DatabaseError(DatabaseError::DuplicateRecord));
         }
 
-        let entry = self
-            .wait_list_repository
-            .add_to_wait_list(request)
-            .await?;
+        let entry = self.wait_list_repository.add_to_wait_list(request).await?;
 
         let email = entry.email.clone();
         let first_name = entry.first_name.clone();

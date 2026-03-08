@@ -6,6 +6,7 @@ use axum::{
     extract::ws::{Message, WebSocket},
     response::Response,
 };
+use futures_util::{sink::SinkExt, stream::StreamExt};
 use sea_orm::DatabaseConnection;
 use uuid::Uuid;
 
@@ -23,7 +24,6 @@ use crate::{
         notification::{NotificationRepository, NotificationRepositoryExt},
     },
 };
-use futures_util::{sink::SinkExt, stream::StreamExt};
 
 #[derive(Clone)]
 pub struct NotificationService {

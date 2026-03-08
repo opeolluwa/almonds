@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use validator::Validate;
 
-#[derive(Debug, Serialize, Deserialize, Validate,)]
+#[derive(Debug, Serialize, Deserialize, Validate)]
 #[serde(rename_all = "camelCase")]
 pub struct JoinWaitListRequest {
     #[validate(length(min = 1, message = "first name is required"))]
@@ -12,7 +12,7 @@ pub struct JoinWaitListRequest {
     pub email: String,
 }
 
-#[derive(Debug, Serialize, Deserialize,)]
+#[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct JoinWaitListResponse {
     pub identifier: String,
