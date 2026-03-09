@@ -1,3 +1,4 @@
+use almond_kernel::error::KernelError;
 use axum::{http::StatusCode, response::IntoResponse};
 
 use crate::errors::app_error::AppError;
@@ -19,6 +20,8 @@ pub enum AuthenticationError {
     JwtError(#[from] jsonwebtoken::errors::Error),
     #[error("{0}")]
     ValidationError(String),
+    #[error(transparent)]
+    KernelError(#[from] KernelError),
 }
 
 impl AuthenticationError {
@@ -30,7 +33,7 @@ impl AuthenticationError {
             AuthenticationError::InvalidToken => StatusCode::UNAUTHORIZED,
             AuthenticationError::InvalidOtp => StatusCode::UNAUTHORIZED,
             AuthenticationError::AppError(err) => err.status_code(),
-            AuthenticationError::JwtError(_) => StatusCode::INTERNAL_SERVER_ERROR,
+            AuthenticationError::JwtError(_) | _ => StatusCode::INTERNAL_SERVER_ERROR,
         }
     }
 }

@@ -1,9 +1,9 @@
 services:
   app:
-    container_name: server
+    container_name: app
     build:
-      context: ..
-      dockerfile: orchard/docker/dev/Dockerfile.app
+      context: .
+      dockerfile: docker/dev/Dockerfile.app
       args:
         - CARGO_TARGET_DIR=/cargo-target
     ports:
@@ -21,7 +21,7 @@ services:
       - .:/app:cached
       - cargo-target:/cargo-target:delegated
       - rust-cache:/usr/local/cargo/registry:delegated
-    command: cargo watch -qcx run
+    # command: cargo watch -qcx run
     stdin_open: true
     tty: true
     healthcheck:

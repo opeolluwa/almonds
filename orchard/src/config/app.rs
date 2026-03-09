@@ -1,4 +1,4 @@
-use axum::http::{Method, header};
+use axum::http::{header, Method};
 use tokio::signal;
 use tower_http::cors::{Any, CorsLayer};
 use tracing::info;

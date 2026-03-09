@@ -138,7 +138,7 @@ async function handleSubmit() {
           :disabled="!searchConfig"
           class="w-full bg-transparent outline-none text-sm text-gray-700 dark:text-gray-300 placeholder-gray-400"
           @input="onSearchInput(($event.target as HTMLInputElement).value)"
-        />
+        >
       </div>
 
       <!-- Right actions -->
@@ -147,18 +147,13 @@ async function handleSubmit() {
 
         <!-- Theme toggle -->
 
-
         <UTooltip :text="internetLabel">
           <UButton size="sm" :color="internetStatusColor" variant="ghost">
-            <UBadge
-              size="sm"
-              class="size-2"
-              :color="internetStatusColor"
-            ></UBadge>
+            <UBadge size="sm" class="size-2" :color="internetStatusColor" />
           </UButton>
         </UTooltip>
 
-                <UButton
+        <UButton
           size="sm"
           color="neutral"
           variant="ghost"
@@ -166,7 +161,7 @@ async function handleSubmit() {
           :aria-label="themeLabel"
           @click="isDark = !isDark"
         />
-        
+
         <UDropdownMenu
           :items="workspaces"
           size="sm"

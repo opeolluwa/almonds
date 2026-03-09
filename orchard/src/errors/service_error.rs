@@ -1,7 +1,6 @@
 use axum::extract::rejection::{FormRejection, JsonRejection};
 use axum::response::Response;
 use axum::{http::StatusCode, response::IntoResponse};
-use redis::RedisError;
 
 use crate::errors::app_error::AppError;
 use crate::errors::auth_error::AuthenticationError;
@@ -38,17 +37,8 @@ pub enum ServiceError {
     #[error("an internal error occurred")]
     AppError(#[from] AppError),
 
-    #[error("an internal error occurred due to redis client")]
-    RedisError(#[from] RedisError),
-
     #[error("an internal error occurred while parsing message")]
     SerdeJsonError(#[from] serde_json::Error),
-
-    #[error(transparent)]
-    TextExtractError(#[from] aers_text_extract::TextExtractError),
-
-    #[error(transparent)]
-    TtsError(#[from] aers_piper_tts::SpeechSynthesisError),
 
     #[error("{0}")]
     InternalError(String),
@@ -69,11 +59,10 @@ impl ServiceError {
 
             ServiceError::BadRequest => StatusCode::BAD_REQUEST,
             ServiceError::AppError(err) => err.status_code(),
-            ServiceError::RedisError(_)
-            | ServiceError::InternalError(_)
-            | ServiceError::SerdeJsonError(_)
-            | ServiceError::TextExtractError(_)
-            | ServiceError::TtsError(_) => StatusCode::INTERNAL_SERVER_ERROR,
+
+            ServiceError::InternalError(_) | ServiceError::SerdeJsonError(_) => {
+                StatusCode::INTERNAL_SERVER_ERROR
+            }
 
             ServiceError::OperationFailed => StatusCode::UNPROCESSABLE_ENTITY,
 

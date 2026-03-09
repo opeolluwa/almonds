@@ -1,10 +1,8 @@
 use std::env;
 
-use almond_kernel::utils::extract_env;
+use almond_kernel::{error::KernelError, utils::extract_env};
 use dotenv::dotenv;
 use tower_http::cors::AllowOrigin;
-
-use crate::errors::app_error::AppError;
 
 #[derive(Debug)]
 pub struct AppConfig {
@@ -24,7 +22,7 @@ pub struct AppConfig {
 }
 
 impl AppConfig {
-    pub fn from_env() -> Result<Self, AppError> {
+    pub fn from_env() -> Result<Self, KernelError> {
         dotenv().ok();
 
         let port = extract_env::<u16>("PORT")?;

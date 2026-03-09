@@ -7,4 +7,7 @@ pub enum KernelError {
 
     #[error("database operation failed: {0}")]
     DbOperationError(String),
+
+    #[error("Failed to extract env: {0}")]
+    EnvError(String)
 }

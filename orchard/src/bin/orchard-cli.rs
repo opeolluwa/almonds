@@ -1,6 +1,6 @@
 use clap::Parser;
 use orchard_lib::cli::app::OrchardCli;
-use orchard_lib::dderror::AppError;
+use orchard_lib::errors::app_error::AppError;
 
 #[tokio::main]
 async fn main() -> Result<(), AppError> {
