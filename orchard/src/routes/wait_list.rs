@@ -1,4 +1,4 @@
-use axum::{Router, routing::post};
+use axum::{routing::post, Router};
 
 use crate::{handlers::wait_list::join_wait_list, states::ServicesState};
 

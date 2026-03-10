@@ -1,7 +1,7 @@
-use axum::{RequestPartsExt, extract::FromRequestParts, http::request::Parts};
+use axum::{extract::FromRequestParts, http::request::Parts, RequestPartsExt};
 use axum_extra::{
+    headers::{authorization::Bearer, Authorization},
     TypedHeader,
-    headers::{Authorization, authorization::Bearer},
 };
 
 use crate::{adapters::jwt::Claims, errors::auth_error::AuthenticationError};

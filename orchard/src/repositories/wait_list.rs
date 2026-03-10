@@ -6,10 +6,8 @@ use sea_orm::{
 use ulid::Ulid;
 
 use crate::{
-    adapters::wait_list::JoinWaitListRequest,
-    entities::wait_list,
-    errors::database_error::DatabaseError,
-    repositories::base::Repository,
+    adapters::wait_list::JoinWaitListRequest, entities::wait_list,
+    errors::database_error::DatabaseError, repositories::base::Repository,
 };
 
 #[derive(Clone)]
@@ -63,9 +61,7 @@ impl WaitListRepositoryExt for WaitListRepository {
     }
 
     async fn fetch_all(&self) -> Result<Vec<wait_list::Model>, DatabaseError> {
-        let entries = wait_list::Entity::find()
-            .all(self.db_conn.as_ref())
-            .await?;
+        let entries = wait_list::Entity::find().all(self.db_conn.as_ref()).await?;
 
         Ok(entries)
     }

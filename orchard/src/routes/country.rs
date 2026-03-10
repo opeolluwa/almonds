@@ -1,4 +1,4 @@
-use axum::{Router, routing::get};
+use axum::{routing::get, Router};
 
 use crate::{
     handlers::country::{fetch_all_countries, fetch_country_by_identifier},

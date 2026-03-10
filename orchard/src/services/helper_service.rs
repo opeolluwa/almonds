@@ -1,10 +1,9 @@
 use std::{fs, io, path::Path};
 
 use async_trait::async_trait;
-use bcrypt::{DEFAULT_COST, hash, verify};
+use bcrypt::{hash, verify, DEFAULT_COST};
 
 use crate::errors::service_error::ServiceError;
-
 
 pub struct PasswordUpdatedTemplate;
 

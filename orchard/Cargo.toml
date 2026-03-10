@@ -14,8 +14,11 @@ path = "src/lib.rs"
 [dependencies]
 almond_kernel = { version = "0.1.0", path = "../kernel" }
 async-graphql-axum = { version = "7.0" }
+async-trait = "0.1.89"
 axum = { version = "0.8" }
+axum-extra = { version = "0.10.1", features = ["typed-header"] }
 axum_typed_multipart = { version = "0.16.3", features = ["tempfile_3"] }
+bcrypt = "0.19.0"
 chrono = "0.4.44"
 clap = "4.5.60"
 console = "0.16.2"
@@ -38,12 +41,9 @@ tower-http = { version = "0.6.8", features = [
 ] }
 tracing = { version = "0.1.37" }
 tracing-subscriber = { version = "0.3.17" }
+ulid = { version = "1.2.1", features = ["serde"] }
 uuid = { version = "1.22.0", features = ["v4"] }
 validator = { version = "0.20.0", features = ["derive"] }
-axum-extra = { version = "0.10.1", features = ["typed-header"] }
-ulid = { version = "1.2.1", features = ["serde"] }
-bcrypt = "0.19.0"
-async-trait = "0.1.89"
 
 [dependencies.sea-orm]
 version = "~2.0.0-rc"

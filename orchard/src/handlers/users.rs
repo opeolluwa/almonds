@@ -1,4 +1,4 @@
-use axum::{extract::State};
+use axum::extract::State;
 use axum_typed_multipart::TypedMultipart;
 
 use crate::services::user_service::UserServiceTrait;

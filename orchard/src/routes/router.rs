@@ -10,7 +10,9 @@ use crate::{
         notification::notification_routes, users::user_routes, wait_list::wait_list_routes,
     },
     services::{
-        authentication_service::AuthenticationService, country_service::CountryService, notification_service::NotificationService, root_service::RootService, user_service::UserService, wait_list_service::WaitListService
+        authentication_service::AuthenticationService, country_service::CountryService,
+        notification_service::NotificationService, root_service::RootService,
+        user_service::UserService, wait_list_service::WaitListService,
     },
     states::ServicesState,
 };

@@ -24,8 +24,9 @@ pub(crate) trait CountryRepositoryExt {
 
 impl Repository for CountryRepository {
     fn init(db_conn: &Arc<DatabaseConnection>) -> Self {
-
-        Self { db_conn: db_conn.to_owned() }
+        Self {
+            db_conn: db_conn.to_owned(),
+        }
     }
 }
 
