@@ -22,7 +22,7 @@ impl WaitListService {
     }
 }
 
-pub trait WaitListServiceTrait {
+pub(crate) trait WaitListServiceTrait {
     async fn join_wait_list(
         &self,
         request: &JoinWaitListRequest,

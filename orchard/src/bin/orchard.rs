@@ -4,7 +4,7 @@ use std::{
     time::Duration,
 };
 
-use almond_kernel::kernel;
+use almond_kernel::{error::KernelError, kernel};
 use async_graphql::http::{playground_source, GraphQLPlaygroundConfig};
 use async_graphql_axum::{GraphQLRequest, GraphQLResponse};
 use axum::{
@@ -25,6 +25,8 @@ use tower_http::{
     cors::{Any, CorsLayer},
     timeout::TimeoutLayer,
 };
+
+use orchard_migration::{Migrator, MigratorTrait};
 
 #[axum::debug_handler]
 async fn graphql_playground(
@@ -78,6 +80,10 @@ async fn main() -> Result<(), AppError> {
     let db = kernel.connection().to_owned();
     let db_conn = Arc::new(db.clone());
 
+    Migrator::up(&db, None)
+        .await
+        .map_err(|e| KernelError::DbConnectError(e.to_string()))?;
+
     let schema =
         orchard_lib::query_root::schema(db, app_config.depth_limit, app_config.complexity_limit)
             .map_err(|err| AppError::GraphQLError(err.to_string()))?;
@@ -106,8 +112,12 @@ async fn main() -> Result<(), AppError> {
         ));
 
     let ip_address = SocketAddr::V4(SocketAddrV4::new(Ipv4Addr::UNSPECIFIED, app_config.port));
-    tracing::info!("Visit GraphQL Playground at http://{}", ip_address);
-
+    tracing::info!(
+        "Visit GraphQL Playground at http://{}/{}",
+        ip_address,
+        app_config.endpoint
+    );
+    tracing::info!("Service health check at http://{}/health", ip_address,);
     axum::serve(TcpListener::bind(ip_address).await.unwrap(), app)
         .with_graceful_shutdown(shutdown_signal())
         .await
