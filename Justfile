@@ -17,7 +17,7 @@ DOCKER_CMD := "docker compose -f docker-compose.yaml"
 
 set dotenv-required := true
 set dotenv-load := true
-set dotenv-path := ".env"
+set dotenv-path := "orchard/.env"
 set export := true
 
 alias w := watch

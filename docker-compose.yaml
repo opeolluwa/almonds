@@ -11,7 +11,7 @@ services:
     environment:
       - PORT=8000
     env_file:
-      - "orchard/.env"
+      - "./orchard/.env"
     depends_on:
       postgres:
         condition: service_healthy
@@ -38,9 +38,9 @@ services:
     container_name: postgres
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${DATABASE_USER:-backoffice}
-      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-backoffice}
-      POSTGRES_DB: ${DATABASE_NAME:-backoffice}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
     ports:
       - "6543:5432"          # expose externally on 6543
     networks:
