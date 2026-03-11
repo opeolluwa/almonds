@@ -6,31 +6,55 @@ author: "Adefemi Adeoye"
 tags: ["toolchain", "open-source", "rust", "engineering"]
 ---
 
----
-
 ## Overview
 
-A few weeks ago, I made an announcement about [Wild Almonds](https://opeolluwa.github.io/almonds). This post reflects on some of the decisions that influenced the choice of technologies behind the project, starting with SeaORM.
+A few weeks ago, I announced [Wild Almonds](https://opeolluwa.github.io/almonds). In this post, I want to reflect on some of the technology decisions behind the project, starting with SeaORM.
 
-In case you missed out on it, [Wild Almonds](https://opeolluwa.github.io/almonds) (or simply _**Almonds**_) is a developer productivity tool I'm building because it's tiring to track snippets with Github gist, while planning each day with Microsoft todo, while keeping reminders on phone, taking notes with Notion and more — I just want a single source.
+In case you missed it: **Wild Almonds** (or simply **Almonds**) is a developer productivity tool I'm building off the [Tauri](https://tauri.app) framework.
 
-That said, the choice of technology can greatly influence the performance and long-term viability of a product across several parameters, including size, speed, and security.ƒ
+I started building it because I got tired of juggling multiple tools — saving snippets in GitHub Gists, planning my day with Microsoft To Do, keeping reminders on my phone, taking notes in Notion, and a dozen other small apps.
 
-Rust was an easy choice because it checks many of these boxes. Its performance, memory safety guarantees, and strong ecosystem make it a compelling foundation for building reliable applications.
+I needed one place for everything — a single source of truth for how I work as a developer.
 
-In this article I'm reflecting on one of the earliest architectural concerns I had when planning Wild Almonds's **data replication**, across devices. While the sync server is still a WIP, it is imperative that things are done right from the ground up.
+That's what Almonds is becoming.
 
-The plan is simple, save on local first then replicate to cloud, I explain what mad me choose Sea-orm amidst the myriads of alternatives.
+That said, the choice of technology can greatly influence the performance and long-term viability of a product across several parameters, including size, speed, and security.
+
+Rust was an easy choice because it checks many of these boxes. Its performance, memory safety guarantees, strong ecosystem, and overall developer experience make it a compelling foundation for building reliable applications.
+
+One of the earliest architectural concerns for Almonds was **data replication**. The model is straightforward:
+
+1. Save data locally first
+2. Replicate to the cloud
+3. Sync across other devices
+
+In this article, I'll highlight how **SeaORM** fits nicely into that data storage approach.
 
 ## Introduction
 
-There are quite a number of offline-first client databases available today, including very ergonomic ones PouchDB, RxDB, and Dexi which I've interacted with at some point in the time past. However, it was important for me to streamline both forward and backward compatibility of the data model from the beginning. Managing NoSQL databases can quickly become murky, especially when the data eventually needs to integrate with relational databases such as Oracle, MySQL, or Postgres.
+There are several offline-first JavaScript client databases today, including very ergonomic ones like **PouchDB**, **RxDB**, and **Dexie**, all of which I’ve interacted with at some point.
 
-Amidst these considerations, SeaORM fits nicely into the architecture. It allows me to use SQLite locally for the client database while keeping a structured relational model. Combined with Seaography and some other features which I'll talk about sooner, this also makes it possible to replicate or expose the data to a cloud database in a consistent and maintainable way.
+However, an important requirement for me was maintaining clear forward and backward compatibility for the data model from the beginning.
 
-In the following section I'll highlight feature that resonated strongly with me starting with other database client in the Rust ecosystem
+Managing NoSQL data can become complicated when the data eventually needs to integrate with relational databases such as **Postgres**, **MySQL**, or **Oracle**.
 
-### SeaORM migration
+SeaORM fits well into this architecture because it allows Almonds to:
+
+- Use **SQLite locally** for the client database
+- Maintain a **structured relational data model**
+- Keep the same schema compatible with server databases
+
+Combined with **Seaography** and other tooling, this also makes it possible to replicate or expose the data to a cloud database in a consistent and maintainable way.
+
+All these are packaged in to a single shared library [Kernel](https://github.com/opeolluwa/almonds/tree/master/kernel) which can be used in future for the mobile application while still maintaining up-to-date data model
+
+In the following sections, I'll highlight some features that resonated strongly with me.
+
+---
+
+## SeaORM migrations
+
+SeaORM provides a very intuitive way to opt out of generic scripting and do some database specific implementation. I found this very helpful while adding workspaces to almonds
 
 ```rust
 use sea_orm_migration::{prelude::*, schema::*, sea_orm::DbBackend};
@@ -48,6 +72,7 @@ impl MigrationTrait for Migration {
     async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         let db_backend = manager.get_database_backend();
         let db_connection = manager.get_connection();
+
         if db_backend == DbBackend::Sqlite {
             manager
                 .create_table(
@@ -55,7 +80,7 @@ impl MigrationTrait for Migration {
                         .table("reminders_new")
                         .if_not_exists()
                         .col(pk_uuid(Reminder::Identifier))
-                        // ... more lines removed
+                        // ...
                         .to_owned(),
                 )
                 .await?;
@@ -63,11 +88,15 @@ impl MigrationTrait for Migration {
             db_connection
                 .execute_unprepared(
                     r#"
-                    INSERT INTO "reminders_new" ("identifier", "title", "description", "recurring", "recurrence_rule", "alarm_sound", "remind_at", "created_at", "updated_at")
-                    --- lines removed --
+                    INSERT INTO "reminders_new"
+                    ("identifier", "title", "description", "recurring",
+                     "recurrence_rule", "alarm_sound", "remind_at",
+                     "created_at", "updated_at")
+                    -- lines removed --
                     "#,
                 )
                 .await?;
+
             return Ok(());
         }
 
@@ -91,16 +120,64 @@ impl MigrationTrait for Migration {
             )
             .await
     }
-
-
+}
 ```
 
-### SeaORm entity generation
+---
 
-### Using Seaography
+## SeaORM entity generation
 
+I've used [sqlx](https://crates.io/crates/sqlx) extensively in personal project and at work. Writing Rust bindings for the database tables can be tricking at times.  SeaORM provides tooling that reduces boilerplate by generating entities directly from a database schema.
+
+This keeps the data model synchronized with the database and reduces the risk of manual inconsistencies.
+
+```rust
+//! `SeaORM` Entity, @generated by sea-orm-codegen 2.0
+
+use sea_orm::entity::prelude::*;
+use serde::{Deserialize, Serialize};
+
+#[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel, Serialize, Deserialize)]
+#[sea_orm(table_name = "bookmark")]
+#[serde(rename_all = "camelCase")]
+pub struct Model {
+    #[sea_orm(primary_key, auto_increment = false)]
+    pub identifier: Uuid,
+    pub title: String,
+    pub url: String,
+    #[sea_orm(column_type = "Text")]
+    pub tag: String,
+    pub workspace_identifier: Option<Uuid>,
+    pub created_at: DateTimeWithTimeZone,
+    pub updated_at: DateTimeWithTimeZone,
+}
+
+#[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
+pub enum Relation {
+    #[sea_orm(
+        belongs_to = "super::workspaces::Entity",
+        from = "Column::WorkspaceIdentifier",
+        to = "super::workspaces::Column::Identifier",
+        on_update = "NoAction",
+        on_delete = "Cascade"
+    )]
+    Workspaces,
+}
+
+impl Related<super::workspaces::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Workspaces.def()
+    }
+}
+
+impl ActiveModelBehavior for ActiveModel {}
+```
+
+---
+
+## Using Seaography
+SeaORM makes it easy to build a GraphQL web server around entities, I found this very instrumental while scratching out my data replication backend — 
 ```sh
-
 [working-directory: 'kernel']
 @generate-entities url:
 	sea-orm-cli generate entity \
@@ -115,17 +192,22 @@ impl MigrationTrait for Migration {
 		--database-url {{url}} \
 		-o src/entities \
 		--seaography
-
 ```
 
-### Role based access control
+---
 
-### Testing
+
+### Role based access control 
+Finally, SeaORM provides the ease of integrating [Role based access control](https://www.sea-ql.org/SeaORM/docs/sea-orm-pro/role-based-access-control/#overview-of-seaorm-rbac), while there are no current intention for this in Almonds I can switch up this with relative ease in due time 
 
 ## Conclusion
 
-Aside the The main advantage of an ORM is abstraction and the code generation. Instead of writing raw SQL for every interaction, the data model is expressed through entities and relationships. This allows the application logic to remain largely independent of the underlying database engine.
+One of the main advantages of an ORM is **abstraction through structured models and code generation**.
 
-For Wild Almonds, this flexibility is important. I do not want the application logic to depend heavily on whether the database is SQLite, MySQL, Postgres, or another supported backend. SeaORM provides a clean way to model the data while still allowing the project to remain portable across multiple database systems.
+Instead of writing raw SQL for every interaction, the data model is expressed through entities and relationships. This allows the application logic to remain largely independent of the underlying database engine.
 
-SeaORM helped unify a lot of code that would have otherwise become platform specific
+For Almonds, this flexibility is important. I don’t want the application logic to depend on whether the database is **SQLite, MySQL, Postgres, or another supported backend**.
+
+SeaORM provides a clean way to model the data while keeping the project portable across multiple database systems.
+
+Ultimately, it helped unify logic that would otherwise become **database-specific or platform-specific**, which is especially valuable for an application designed around **local-first data with cloud replication**.
