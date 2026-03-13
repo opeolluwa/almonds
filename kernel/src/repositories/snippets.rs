@@ -17,7 +17,10 @@ use crate::{
     entities::snippets,
     error::KernelError,
     repositories::{
-        prelude::WorkspaceRepositoryExt, recycle_bin::{RecycleBinRepository, RecycleBinRepositoryExt}, workspace::WorkspaceRepository, workspace_manager::{DuplicateRecord, RecordExistInWorkspace, TransferRecord}
+        prelude::WorkspaceRepositoryExt,
+        recycle_bin::{RecycleBinRepository, RecycleBinRepositoryExt},
+        workspace::WorkspaceRepository,
+        workspace_manager::{DuplicateRecord, RecordExistInWorkspace, TransferRecord},
     },
     utils::extract_req_meta,
 };

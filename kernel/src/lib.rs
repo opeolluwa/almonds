@@ -5,7 +5,7 @@ pub mod kernel;
 pub mod repositories;
 pub mod utils;
 
+pub use graphql_ws_client::*;
 pub use sea_orm;
 
 pub use migration;
-pub use graphql_ws_client::*;

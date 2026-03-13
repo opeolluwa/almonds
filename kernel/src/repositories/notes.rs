@@ -16,14 +16,19 @@ use crate::{
     },
     entities::notes,
     error::KernelError,
-    repositories::{prelude::WorkspaceRepositoryExt, recycle_bin::{RecycleBinRepository, RecycleBinRepositoryExt}, workspace::WorkspaceRepository, workspace_manager::{DuplicateRecord, RecordExistInWorkspace, TransferRecord}},
+    repositories::{
+        prelude::WorkspaceRepositoryExt,
+        recycle_bin::{RecycleBinRepository, RecycleBinRepositoryExt},
+        workspace::WorkspaceRepository,
+        workspace_manager::{DuplicateRecord, RecordExistInWorkspace, TransferRecord},
+    },
     utils::extract_req_meta,
 };
 
 #[derive(Debug, Clone)]
 pub struct NotesRepository {
     conn: Arc<DatabaseConnection>,
-       workspace_repository: WorkspaceRepository,
+    workspace_repository: WorkspaceRepository,
 }
 
 #[async_trait]
@@ -66,8 +71,10 @@ pub trait NotesRepositoryExt {
 #[async_trait]
 impl NotesRepositoryExt for NotesRepository {
     fn new(conn: Arc<DatabaseConnection>) -> Self {
-        Self {   conn: conn.clone(),
-            workspace_repository: WorkspaceRepository::new(conn), }
+        Self {
+            conn: conn.clone(),
+            workspace_repository: WorkspaceRepository::new(conn),
+        }
     }
 
     async fn create(
@@ -205,9 +212,6 @@ impl NotesRepositoryExt for NotesRepository {
             .map_err(|err| KernelError::DbOperationError(err.to_string()))
     }
 }
-
-
-
 
 impl TransferRecord for NotesRepository {
     async fn transfer_record(

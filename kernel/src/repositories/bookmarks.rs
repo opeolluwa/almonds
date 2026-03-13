@@ -240,7 +240,6 @@ impl BookmarkRepositoryExt for BookmarkRepository {
     }
 }
 
-
 impl TransferRecord for BookmarkRepository {
     async fn transfer_record(
         &self,
