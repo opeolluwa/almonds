@@ -16,7 +16,8 @@ use axum::{
 };
 use dotenv::dotenv;
 use orchard_lib::{
- config::AppConfig, errors::app_error::AppError, routes::router::load_routes, shutdown::shutdown_signal, states::GraphQlState
+    config::AppConfig, errors::app_error::AppError, routes::router::load_routes,
+    shutdown::shutdown_signal, states::GraphQlState,
 };
 use seaography::async_graphql;
 use tokio::net::TcpListener;
@@ -48,9 +49,6 @@ async fn main() -> Result<(), AppError> {
     dotenv().ok();
 
     let app_config = AppConfig::from_env()?;
-
-    dbg!(&app_config);
-
 
     tracing_subscriber::fmt()
         .with_max_level(tracing::Level::INFO)
@@ -115,7 +113,7 @@ async fn main() -> Result<(), AppError> {
 
     let ip_address = SocketAddr::V4(SocketAddrV4::new(Ipv4Addr::UNSPECIFIED, app_config.port));
     tracing::info!(
-        "Visit GraphQL Playground at http://{}/{}",
+        "Visit GraphQL Playground at http://{}{}",
         ip_address,
         app_config.endpoint
     );
