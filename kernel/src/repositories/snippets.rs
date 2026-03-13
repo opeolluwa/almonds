@@ -16,13 +16,19 @@ use crate::{
     },
     entities::snippets,
     error::KernelError,
-    repositories::recycle_bin::{RecycleBinRepository, RecycleBinRepositoryExt},
+    repositories::{
+        prelude::WorkspaceRepositoryExt,
+        recycle_bin::{RecycleBinRepository, RecycleBinRepositoryExt},
+        workspace::WorkspaceRepository,
+        workspace_manager::{DuplicateRecord, RecordExistInWorkspace, TransferRecord},
+    },
     utils::extract_req_meta,
 };
 
 #[derive(Debug, Clone)]
 pub struct SnippetRepository {
     conn: Arc<DatabaseConnection>,
+    workspace_repository: WorkspaceRepository,
 }
 
 #[async_trait]
@@ -68,7 +74,10 @@ pub trait SnippetRepositoryExt {
 #[async_trait]
 impl SnippetRepositoryExt for SnippetRepository {
     fn new(conn: Arc<DatabaseConnection>) -> Self {
-        Self { conn }
+        Self {
+            conn: conn.clone(),
+            workspace_repository: WorkspaceRepository::new(conn),
+        }
     }
 
     async fn create(
@@ -213,5 +222,42 @@ impl SnippetRepositoryExt for SnippetRepository {
             .update(self.conn.as_ref())
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))
+    }
+}
+
+impl TransferRecord for SnippetRepository {
+    async fn transfer_record(
+        &self,
+        record_identifier: &Uuid,
+        previous_workspace_identifier: &Uuid,
+        target_workspace_identifier: &Uuid,
+    ) -> Result<(), KernelError> {
+        let workspace = self
+            .workspace_repository
+            .get_workspace_by_id(*target_workspace_identifier)
+            .await?;
+
+        todo!()
+    }
+}
+
+impl RecordExistInWorkspace for SnippetRepository {
+    async fn record_exists_in_workspace(
+        &self,
+        record_identifier: &Uuid,
+        workspace_identifier: &Uuid,
+    ) -> Result<bool, KernelError> {
+        todo!()
+    }
+}
+
+impl DuplicateRecord for SnippetRepository {
+    async fn duplicate_record(
+        &self,
+        record_identifier: &Uuid,
+        previous_workspace_identifier: &Uuid,
+        target_workspace_identifier: &Uuid,
+    ) -> Result<(), KernelError> {
+        todo!()
     }
 }

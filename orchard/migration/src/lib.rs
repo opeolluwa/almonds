@@ -31,10 +31,10 @@ pub struct Migrator;
 
 #[async_trait::async_trait]
 impl MigratorTrait for Migrator {
-     fn migration_table_name() -> sea_orm::DynIden {
+    fn migration_table_name() -> sea_orm::DynIden {
         "orchard_migrations".into_iden()
     }
-    
+
     fn migrations() -> Vec<Box<dyn MigrationTrait>> {
         vec![
             Box::new(m20251225_140002_create_user_table::Migration),

@@ -1,0 +1,12 @@
+query SyncQueueView {
+  syncQueue {
+    size
+    next {
+      id
+      table
+      recordId
+      operation
+      createdAt
+    }
+  }
+}

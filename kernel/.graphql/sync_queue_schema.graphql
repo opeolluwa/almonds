@@ -1,0 +1,18 @@
+
+type SyncQueueItem {
+  id: String!
+  table: String!
+  recordId: String!
+  operation: String!
+  createdAt: String!
+}
+
+type SyncQueue {
+  size: Int!
+  next: SyncQueueItem
+  items(first: Int = 20): [SyncQueueItem!]!
+}
+
+type Query {
+  syncQueue: SyncQueue!
+}

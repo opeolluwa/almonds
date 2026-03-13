@@ -74,7 +74,6 @@ release target:
 
 
 
-
 @server-logs:
     {{ DOCKER_CMD }} logs -f --tail='30' app
 
@@ -82,3 +81,8 @@ release target:
 @server-dev:
     {{ DOCKER_CMD }} up -d 
     @just server-logs
+
+
+#[working-directory:'kernel']
+gph-pull:
+	graphql-client generate  --schema-path .graphql/sync_queue_schema.graphql .graphql/sync_queue_query.graphql --output-directory src/contracts 

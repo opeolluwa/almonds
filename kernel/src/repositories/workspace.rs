@@ -16,6 +16,7 @@ use crate::{
     utils::extract_req_meta,
 };
 
+#[derive(Debug, Clone)]
 pub struct WorkspaceRepository {
     conn: Arc<DatabaseConnection>,
 }
