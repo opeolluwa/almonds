@@ -264,6 +264,7 @@ CREATE TRIGGER workspaces_sync_trigger
 AFTER INSERT OR UPDATE OR DELETE ON workspaces
 FOR EACH ROW EXECUTE FUNCTION enqueue_sync();
 "#;
+            db_connection.execute_unprepared(triggers).await?;
         }
 
         if db_backend == DbBackend::MySql {
@@ -426,6 +427,7 @@ INSERT INTO sync_queue(identifier, table_name, record_identifier, operation, cre
 VALUES (UUID(), 'user_preference', OLD.identifier, 'DELETE', NOW());
 
 "#;
+            db_connection.execute_unprepared(triggers).await?;
         }
         Ok(())
     }
