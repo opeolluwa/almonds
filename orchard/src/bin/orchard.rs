@@ -84,9 +84,8 @@ async fn main() -> Result<(), AppError> {
         .await
         .map_err(|e| KernelError::DbConnectError(e.to_string()))?;
 
-    let schema =
-        orchard_lib::query_root::schema(db, app_config.depth_limit, app_config.complexity_limit)
-            .map_err(|err| AppError::GraphQLError(err.to_string()))?;
+    let schema = orchard_lib::query_root::schema(db, Some(100), app_config.complexity_limit)
+        .map_err(|err| AppError::GraphQLError(err.to_string()))?;
 
     let graphql_state = GraphQlState {
         schema,
