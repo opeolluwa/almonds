@@ -22,6 +22,7 @@ mod m20260225_221818_drop_notes_new;
 mod m20260226_063044_make_notes_categories_optional;
 mod m20260226_064924_drop_notes_new;
 mod m20260304_080239_create_default_workspace;
+mod m20260314_150343_create_trigger_for_bookmarks;
 
 pub use sea_orm_migration::prelude::*;
 
@@ -33,10 +34,10 @@ impl MigratorTrait for Migrator {
         vec![
             Box::new(m20260217_143820_create_snippet_table::Migration),
             Box::new(m20260217_150510_create_sync_queue_table::Migration),
-            Box::new(m20260218_071617_create_ollama_conversation_history::Migration),
-            Box::new(m20260218_110352_create_note_table::Migration),
             Box::new(m20260218_071539_create_ollama_conversation_prompt::Migration),
             Box::new(m20260218_071549_create_ollama_conversation_response::Migration),
+            Box::new(m20260218_071617_create_ollama_conversation_history::Migration),
+            Box::new(m20260218_110352_create_note_table::Migration),
             Box::new(m20260218_110353_create_note_category_table::Migration),
             Box::new(m20260218_171131_create_todo_table::Migration),
             Box::new(m20260218_204212_create_bookmarks_table::Migration),
@@ -55,6 +56,7 @@ impl MigratorTrait for Migrator {
             Box::new(m20260226_063044_make_notes_categories_optional::Migration),
             Box::new(m20260226_064924_drop_notes_new::Migration),
             Box::new(m20260304_080239_create_default_workspace::Migration),
+            Box::new(m20260314_150343_create_trigger_for_bookmarks::Migration),
         ]
     }
 }
