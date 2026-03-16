@@ -27,6 +27,8 @@ pub struct Model {
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
+    #[sea_orm(has_many = "super::audio_books::Entity")]
+    AudioBooks,
     #[sea_orm(has_many = "super::backup_emails::Entity")]
     BackupEmails,
     #[sea_orm(
@@ -41,6 +43,14 @@ pub enum Relation {
     Notifications,
     #[sea_orm(has_many = "super::one_time_passwords::Entity")]
     OneTimePasswords,
+    #[sea_orm(has_many = "super::playlists::Entity")]
+    Playlists,
+}
+
+impl Related<super::audio_books::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::AudioBooks.def()
+    }
 }
 
 impl Related<super::backup_emails::Entity> for Entity {
@@ -67,4 +77,26 @@ impl Related<super::one_time_passwords::Entity> for Entity {
     }
 }
 
+impl Related<super::playlists::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Playlists.def()
+    }
+}
+
 impl ActiveModelBehavior for ActiveModel {}
+
+#[derive(Copy, Clone, Debug, EnumIter, DeriveRelatedEntity)]
+pub enum RelatedEntity {
+    #[sea_orm(entity = "super::audio_books::Entity")]
+    AudioBooks,
+    #[sea_orm(entity = "super::backup_emails::Entity")]
+    BackupEmails,
+    #[sea_orm(entity = "super::countries::Entity")]
+    Countries,
+    #[sea_orm(entity = "super::notifications::Entity")]
+    Notifications,
+    #[sea_orm(entity = "super::one_time_passwords::Entity")]
+    OneTimePasswords,
+    #[sea_orm(entity = "super::playlists::Entity")]
+    Playlists,
+}

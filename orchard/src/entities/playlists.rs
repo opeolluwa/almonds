@@ -4,29 +4,36 @@ use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel, Serialize, Deserialize)]
-#[sea_orm(table_name = "notifications")]
+#[sea_orm(table_name = "playlists")]
 #[serde(rename_all = "camelCase")]
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false)]
     pub identifier: Uuid,
-    pub subject: String,
-    pub body: String,
+    pub name: String,
+    pub description: Option<String>,
     pub created_at: DateTimeWithTimeZone,
     pub updated_at: Option<DateTimeWithTimeZone>,
-    pub is_read: Option<bool>,
-    pub user_identifier: Option<Uuid>,
+    pub user_identifier: Uuid,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
+    #[sea_orm(has_many = "super::audio_books::Entity")]
+    AudioBooks,
     #[sea_orm(
         belongs_to = "super::users::Entity",
         from = "Column::UserIdentifier",
         to = "super::users::Column::Identifier",
         on_update = "Cascade",
-        on_delete = "Cascade"
+        on_delete = "NoAction"
     )]
     Users,
+}
+
+impl Related<super::audio_books::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::AudioBooks.def()
+    }
 }
 
 impl Related<super::users::Entity> for Entity {
@@ -39,6 +46,8 @@ impl ActiveModelBehavior for ActiveModel {}
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelatedEntity)]
 pub enum RelatedEntity {
+    #[sea_orm(entity = "super::audio_books::Entity")]
+    AudioBooks,
     #[sea_orm(entity = "super::users::Entity")]
     Users,
 }

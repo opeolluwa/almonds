@@ -18,5 +18,9 @@
         "titleBar.inactiveBackground": "#5a0a1899",
         "titleBar.inactiveForeground": "#e7e7e799"
     },
-    "peacock.color": "#5a0a18"
+    "peacock.color": "#5a0a18",
+    "cSpell.words": [
+        "ollama",
+        "seaography"
+    ]
 }

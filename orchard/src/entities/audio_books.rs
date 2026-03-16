@@ -4,29 +4,45 @@ use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel, Serialize, Deserialize)]
-#[sea_orm(table_name = "notifications")]
+#[sea_orm(table_name = "audio_books")]
 #[serde(rename_all = "camelCase")]
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false)]
     pub identifier: Uuid,
-    pub subject: String,
-    pub body: String,
+    pub user_identifier: Uuid,
+    pub src: String,
+    pub name: String,
     pub created_at: DateTimeWithTimeZone,
     pub updated_at: Option<DateTimeWithTimeZone>,
-    pub is_read: Option<bool>,
-    pub user_identifier: Option<Uuid>,
+    pub last_played: Option<DateTimeWithTimeZone>,
+    pub playlist_identifier: Option<Uuid>,
+    pub starred: bool,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
     #[sea_orm(
-        belongs_to = "super::users::Entity",
-        from = "Column::UserIdentifier",
-        to = "super::users::Column::Identifier",
+        belongs_to = "super::playlists::Entity",
+        from = "Column::PlaylistIdentifier",
+        to = "super::playlists::Column::Identifier",
         on_update = "Cascade",
         on_delete = "Cascade"
     )]
+    Playlists,
+    #[sea_orm(
+        belongs_to = "super::users::Entity",
+        from = "Column::UserIdentifier",
+        to = "super::users::Column::Identifier",
+        on_update = "NoAction",
+        on_delete = "NoAction"
+    )]
     Users,
+}
+
+impl Related<super::playlists::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Playlists.def()
+    }
 }
 
 impl Related<super::users::Entity> for Entity {
@@ -39,6 +55,8 @@ impl ActiveModelBehavior for ActiveModel {}
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelatedEntity)]
 pub enum RelatedEntity {
+    #[sea_orm(entity = "super::playlists::Entity")]
+    Playlists,
     #[sea_orm(entity = "super::users::Entity")]
     Users,
 }

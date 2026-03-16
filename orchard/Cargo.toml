@@ -61,8 +61,14 @@ features = [
 ]
 
 [dependencies.seaography]
-version = "~2.0.0-rc.8"                                                       # seaography version
-features = ["graphql-playground", "with-decimal", "with-chrono", "with-uuid"]
+version = "~2.0.0-rc.8" # seaography version
+features = [
+    "graphql-playground",
+    "with-decimal",
+    "with-chrono",
+    "with-uuid",
+    "with-postgres-array",
+]
 
 [dev-dependencies]
 serde_json = { version = "1.0.103" }

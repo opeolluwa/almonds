@@ -15,3 +15,10 @@ Cargo.lock
 
 
 .env
+
+
+	sea-orm-cli generate entity \
+		--database-url postgres://orchard:orchard@localhost:6543/orchard \
+		--with-serde both \
+		--model-extra-attributes 'serde(rename_all="camelCase")' \
+		-o src/entities --seaography
