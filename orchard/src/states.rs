@@ -3,9 +3,8 @@ use axum::extract::FromRef;
 use seaography::async_graphql;
 
 use crate::services::{
-    authentication_service::AuthenticationService, country_service::CountryService,
-    notification_service::NotificationService, root_service::RootService,
-    user_service::UserService, wait_list_service::WaitListService,
+    authentication_service::AuthenticationService, notification_service::NotificationService,
+    root_service::RootService, user_service::UserService, wait_list_service::WaitListService,
 };
 
 #[derive(Clone)]
@@ -14,7 +13,7 @@ pub struct ServicesState {
     pub root_service: RootService,
     pub auth_service: AuthenticationService,
     pub notification_service: NotificationService,
-    pub country_service: CountryService,
+    // pub country_service: CountryService,
     pub wait_list_service: WaitListService,
 }
 
@@ -36,11 +35,11 @@ impl FromRef<ServicesState> for AuthenticationService {
     }
 }
 
-impl FromRef<ServicesState> for CountryService {
-    fn from_ref(input: &ServicesState) -> CountryService {
-        input.country_service.clone()
-    }
-}
+// impl FromRef<ServicesState> for CountryService {
+//     fn from_ref(input: &ServicesState) -> CountryService {
+//         input.country_service.clone()
+//     }
+// }
 
 impl FromRef<ServicesState> for NotificationService {
     fn from_ref(services: &ServicesState) -> NotificationService {

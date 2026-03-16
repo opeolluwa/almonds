@@ -2,24 +2,18 @@
 
 use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
-use ts_rs::TS;
 
-#[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel, Serialize, Deserialize, TS)]
+#[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel, Serialize, Deserialize)]
 #[sea_orm(table_name = "reference_emails")]
 #[serde(rename_all = "camelCase")]
-#[ts(export, rename = "ReferenceEmail")]
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false)]
     pub identifier: String,
     pub email: String,
-    #[ts(type = "string")]
     pub user_identifier: Uuid,
     pub verified: bool,
-    #[ts(type = "Date")]
     pub created_at: DateTime,
-    #[ts(type = "Date")]
     pub updated_at: Option<DateTime>,
-    #[ts(type = "Date")]
     pub deleted_at: Option<DateTime>,
 }
 
