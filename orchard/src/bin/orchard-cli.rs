@@ -1,5 +1,6 @@
 use clap::{Parser, Subcommand};
-use rand::{distr::Alphanumeric, RngExt};
+use rand::{RngExt, distr::Alphanumeric};
+
 #[derive(Parser)]
 #[command(name = "orchard")]
 #[command(about = "Orchard CLI utilities")]
