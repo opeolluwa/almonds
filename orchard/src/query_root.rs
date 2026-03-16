@@ -1,6 +1,6 @@
 use async_graphql::dynamic::*;
 use sea_orm::DatabaseConnection;
-use seaography::{Builder, BuilderContext, async_graphql, lazy_static::lazy_static};
+use seaography::{async_graphql, lazy_static::lazy_static, Builder, BuilderContext};
 
 use crate::entities::*;
 
