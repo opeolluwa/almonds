@@ -65,7 +65,6 @@ async function handleSave() {
             placeholder="John"
             label="First Name"
             name="first name"
-
           />
 
           <AppInput

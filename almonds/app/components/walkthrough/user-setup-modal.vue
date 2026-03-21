@@ -103,8 +103,6 @@ async function handleSubmit() {
           >
             Save and continue
           </AppButton>
-
-       
         </div>
       </form>
     </template>

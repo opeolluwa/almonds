@@ -19,7 +19,7 @@ impl Kernel {
             .acquire_timeout(Duration::from_secs(8))
             .idle_timeout(Duration::from_secs(8))
             .max_lifetime(Duration::from_secs(8))
-            .sqlx_logging(false) // disable SQLx logging
+            .sqlx_logging(true) // disable SQLx logging
             .sqlx_logging_level(log::LevelFilter::Info); // set default Postgres schema
 
         let db = Database::connect(opt)
