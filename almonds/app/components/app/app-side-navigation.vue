@@ -1,8 +1,5 @@
 <script setup lang="ts">
 import { primaryRoutes, secondaryRoutes } from "~/data/routes";
-import { useUserPreferenceStore } from "~/stores/user-preference";
-
-const preferenceStore = useUserPreferenceStore();
 
 const route = useRoute();
 const colorMode = useColorMode();
@@ -41,44 +38,12 @@ const sidebarCollapsed = ref(false);
     :min-size="18"
     :max-size="42"
     :ui="{
-      root: 'bg-white dark:bg-gray-900 transition-[width] duration-300 border-e border-gray-200 dark:border-gray-800',
+      root: 'bg-white dark:bg-gray-900 overflow-scroll transition-[width] duration-300 border-e border-gray-200 dark:border-gray-800',
       header: 'shrink-0 h-auto p-0',
       body: 'flex-1 overflow-y-scroll scrollbar-config p-0 gap-0 ',
       footer: 'shrink-0 h-auto p-0',
     }"
   >
-    <!-- Sidebar header: user info + collapse button -->
-    <template #header="{ collapsed }">
-      <!-- <div class="flex flex-col pt-4">
-        <div
-          class="flex items-center px-4 pb-3 gap-2"
-          :class="collapsed ? 'justify-center flex-col' : 'justify-between'"
-        >
-          <div class="flex flex-col gap-0.5 px-2 pb-4">
-            <UUser
-              :name="preferenceStore.fullName"
-              :description="preferenceStore.preference?.email"
-              :avatar="{ icon: 'i-lucide-user' }"
-              class="min-w-0 flex-1 truncate"
-            />
-          </div>
-        </div>
-
-        <div class="px-3 flex mb-3 max-w-9/12 hidden">
-          <UButton
-            color="error"
-            variant="solid"
-            class="flex-1 bg-accent-500 hover:bg-accent-600 justify-center"
-          >
-            <UIcon name="heroicons:plus" class="size-4 shrink-0" />
-            <span v-if="!collapsed">New Workspace</span>
-          </UButton>
-        </div>
-
-        <USeparator class="mx-3" />
-      </div> -->
-    </template>
-
     <!-- Sidebar body: primary nav -->
     <template #default="{ collapsed }">
       <div class="flex flex-col gap-0.5 px-2 py-2">

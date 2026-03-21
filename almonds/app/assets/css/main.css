@@ -90,8 +90,6 @@ body {
   @apply fixed top-0 left-0 right-0 h-14 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 flex items-center p-2;
 }
 
-
-
 .scrollbar-config {
   @apply scrollbar-thumb-rounded-full scrollbar-w-[0.25px]  scrollbar-corner-accent-400 scrollbar-h-20 scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-accent-600 scrollbar-track-transparent;
 }
@@ -100,7 +98,6 @@ body {
   @apply scrollbar-thumb-rounded-full scrollbar-w-[0.25px]  scrollbar-corner-gray-900 scrollbar-h-20 scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-gray-900 scrollbar-track-transparent;
 }
 
-
-#wild_almonds_app{
-    @apply mt-14 rounded;
+#wild_almonds_app {
+  @apply mt-14 rounded;
 }

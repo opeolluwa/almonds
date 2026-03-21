@@ -147,11 +147,11 @@ async function handleSubmit() {
 
         <!-- Theme toggle -->
 
-         <UTooltip :text="internetLabel"> 
+        <UTooltip :text="internetLabel">
           <UButton size="sm" :color="internetStatusColor" variant="ghost">
             <UBadge size="sm" class="size-2" :color="internetStatusColor" />
           </UButton>
-         </UTooltip> 
+        </UTooltip>
 
         <UButton
           size="sm"
@@ -168,7 +168,7 @@ async function handleSubmit() {
           :content="{ align: 'start' }"
           :ui="{ content: 'w-48' }"
         >
-           <UTooltip text="Change workspaces"> 
+          <UTooltip text="Change workspaces">
             <UButton
               size="sm"
               color="neutral"
@@ -176,7 +176,7 @@ async function handleSubmit() {
               icon="heroicons:briefcase"
               aria-label="Switch workspace"
             />
-           </UTooltip> 
+          </UTooltip>
         </UDropdownMenu>
 
         <!-- Notifications -->
