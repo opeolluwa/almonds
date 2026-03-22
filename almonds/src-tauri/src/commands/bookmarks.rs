@@ -2,7 +2,7 @@ use almond_kernel::{
     adapters::{bookmarks::BookmarkTag, meta::RequestMeta},
     entities::bookmark,
     repositories::bookmarks::BookmarkRepositoryExt,
-    repositories::workspace_manager::{DuplicateRecord, TransferRecord}
+    repositories::workspace_manager::{DuplicateRecord, TransferRecord},
 };
 use tauri::State;
 use uuid::Uuid;
@@ -109,7 +109,6 @@ pub async fn delete_bookmark(
         .map_err(Into::into)
 }
 
-
 #[tauri::command]
 pub async fn duplicate_bookmark(
     state: State<'_, AppState>,
@@ -120,11 +119,14 @@ pub async fn duplicate_bookmark(
 ) -> Result<(), AppError> {
     state
         .bookmark_repository
-        .duplicate_record(record_identifier, previous_workspace_identifier, target_workspace_identifier)
+        .duplicate_record(
+            record_identifier,
+            previous_workspace_identifier,
+            target_workspace_identifier,
+        )
         .await
         .map_err(Into::into)
 }
-
 
 #[tauri::command]
 pub async fn transfer_bookmark(
@@ -136,7 +138,11 @@ pub async fn transfer_bookmark(
 ) -> Result<(), AppError> {
     state
         .bookmark_repository
-        .transfer_record(record_identifier, previous_workspace_identifier, target_workspace_identifier)
+        .transfer_record(
+            record_identifier,
+            previous_workspace_identifier,
+            target_workspace_identifier,
+        )
         .await
         .map_err(Into::into)
 }

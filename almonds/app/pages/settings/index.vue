@@ -19,7 +19,7 @@ const route = useRoute();
 const navSections: { key: Section; label: string; icon: string }[] = [
   { key: "profile", label: "Profile", icon: "i-lucide-user" },
   { key: "appearance", label: "Appearance", icon: "heroicons:paint-brush" },
-  { key: "locale", label: "Locale", icon: "heroicons:language" },  
+  { key: "locale", label: "Locale", icon: "heroicons:language" },
   { key: "workspaces", label: "Workspaces", icon: "heroicons:briefcase" },
   { key: "backup", label: "Backup & Sync", icon: "heroicons:cloud-arrow-up" },
   { key: "ai", label: "AI & Ollama", icon: "heroicons:cpu-chip" },

@@ -1,6 +1,8 @@
 use almond_kernel::{
-    adapters::meta::RequestMeta, entities::reminder, repositories::reminder::ReminderRepositoryExt,
-        repositories::workspace_manager::{DuplicateRecord, TransferRecord}
+    adapters::meta::RequestMeta,
+    entities::reminder,
+    repositories::reminder::ReminderRepositoryExt,
+    repositories::workspace_manager::{DuplicateRecord, TransferRecord},
 };
 use tauri::State;
 use uuid::Uuid;
@@ -83,7 +85,11 @@ pub async fn duplicate_reminder(
 ) -> Result<(), AppError> {
     state
         .reminder_repository
-        .duplicate_record(record_identifier, previous_workspace_identifier, target_workspace_identifier)
+        .duplicate_record(
+            record_identifier,
+            previous_workspace_identifier,
+            target_workspace_identifier,
+        )
         .await
         .map_err(Into::into)
 }
@@ -98,7 +104,11 @@ pub async fn transfer_reminder(
 ) -> Result<(), AppError> {
     state
         .reminder_repository
-        .transfer_record(record_identifier, previous_workspace_identifier, target_workspace_identifier)
+        .transfer_record(
+            record_identifier,
+            previous_workspace_identifier,
+            target_workspace_identifier,
+        )
         .await
         .map_err(Into::into)
 }

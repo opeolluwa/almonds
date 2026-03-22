@@ -100,7 +100,5 @@ export const useBookmarkStore = defineStore("bookmark_store", {
         (b) => b.identifier !== identifier,
       );
     },
-    
-    
   },
 });

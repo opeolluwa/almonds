@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Bookmark } from "~/stores/bookmarks";
+import MetaControls from "~/components/meta/meta-controls.vue";
 
 defineProps<{ bookmark: Bookmark }>();
 
@@ -58,6 +59,7 @@ function formatDate(iso: string) {
       >
         <UIcon name="heroicons:trash" class="size-4" />
       </button>
+      <MetaControls/>
     </div>
   </div>
 </template>
