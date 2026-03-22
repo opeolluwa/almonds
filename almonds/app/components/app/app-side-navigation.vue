@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { primaryRoutes, secondaryRoutes } from "~/data/routes";
-
+const workspaceStore = useWorkspacesStore();
+const showCreateModal = ref(false);
 const route = useRoute();
 const colorMode = useColorMode();
 
@@ -25,6 +26,69 @@ function isActive(path: string): boolean {
 }
 
 const sidebarCollapsed = ref(false);
+
+
+const form = reactive({ name: "", description: "" });
+const loading = ref(false);
+const errors = reactive({ name: "", description: "" });
+
+function validate(): boolean {
+  errors.name = form.name.trim() ? "" : "Name is required";
+  errors.description = form.description.trim() ? "" : "Description is required";
+  return !errors.name && !errors.description;
+}
+
+async function handleSubmit() {
+  if (!validate()) return;
+  loading.value = true;
+  try {
+    await workspaceStore.createWorkspace({
+      name: form.name.trim(),
+      description: form.description.trim(),
+    });
+    showCreateModal.value = false;
+    form.name = "";
+    form.description = "";
+    errors.name = "";
+    errors.description = "";
+  } catch (e) {
+    console.error(e);
+  } finally {
+    loading.value = false;
+  }
+}
+
+const workspaces = computed<DropdownMenuItem[]>(() => [
+  ...workspaceStore.workspaces
+    .filter((w): w is Workspace => !!w)
+    .map((w) => {
+      const isActive = w.identifier === activeId.value;
+      return {
+        label: w.name,
+        value: w.identifier,
+        icon: isActive
+          ? "heroicons:check-circle-solid"
+          : "heroicons:check-circle",
+        class: isActive ? "font-semibold text-accent-500" : "",
+        onSelect: () => workspaceStore.setActiveWorkspace(w.identifier),
+      };
+    }),
+  {
+    label: "Manage Workspaces",
+    color: "neutral",
+    icon: "ri:paint-brush-line",
+    onSelect: () => navigateTo("/settings?section=workspaces"),
+  },
+  {
+    label: "Add Workspace",
+    color: "success",
+    icon: "heroicons:plus",
+    onSelect: () => (showCreateModal.value = true),
+  },
+]);
+
+const activeId = computed(() => workspaceStore.currentWorkspace?.identifier);
+
 </script>
 
 <template>
@@ -46,6 +110,19 @@ const sidebarCollapsed = ref(false);
   >
     <!-- Sidebar body: primary nav -->
     <template #default="{ collapsed }">
+    
+
+    <AppSelect
+      v-model="activeId"
+      :items="workspaces"
+      label="Workspace"
+      name="workspace"
+      size="sm"
+      class=" px-3 mt-8 mb-16 bg-transparent "
+      :ui="{ content: 'w-48 ',  }"
+    />
+    
+    
       <div class="flex flex-col gap-0.5 px-2 py-2 overflow-y-scroll">
         <NuxtLink
           v-for="r in primaryRoutes"
@@ -102,5 +179,68 @@ const sidebarCollapsed = ref(false);
         </NuxtLink>
       </div>
     </template>
+    
+    
+   
   </UDashboardSidebar>
+  <UModal v-model:open="showCreateModal">
+    <template #content>
+      <div class="px-6 pt-6 pb-2 flex flex-col gap-1">
+        <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+          Create a New Workspace
+        </h2>
+        <p class="text-sm text-gray-500 dark:text-gray-400">
+          Set up a new workspace to organize your projects and files. You can
+          have multiple workspaces and switch between them easily.
+        </p>
+      </div>
+
+      <form
+        class="px-6 pb-6 mt-4 flex flex-col gap-4"
+        @submit.prevent="handleSubmit"
+      >
+        <div class="grid grid-cols-2 gap-3">
+          <AppInput
+            v-model="form.name"
+            label="Name"
+            hint="required"
+            type="text"
+            name="workspace-name"
+            placeholder="Almonds"
+            :error="errors.name"
+            :disabled="loading"
+          />
+          <AppInput
+            v-model="form.description"
+            label="Description"
+            hint="required"
+            type="text"
+            name="workspace-description"
+            placeholder="Organize files and tasks"
+            :error="errors.description"
+            :disabled="loading"
+          />
+        </div>
+
+        <div class="flex justify-end gap-2 pt-1">
+          <UButton
+            color="neutral"
+            variant="ghost"
+            :disabled="loading"
+            @click="showCreateModal = false"
+          >
+            Cancel
+          </UButton>
+          <UButton
+            type="submit"
+            color="primary"
+            :loading="loading"
+            :disabled="loading"
+          >
+            Save and continue
+          </UButton>
+        </div>
+      </form>
+    </template>
+  </UModal>
 </template>

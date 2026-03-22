@@ -29,9 +29,9 @@ const model = defineModel<string>();
       value-key="value"
       :disabled="disabled"
       :placeholder="placeholder"
-      :ui="{ base: 'py-3 pl-4 lowercase' }"
+      :ui="{ base: 'py-3 pl-4 lowercase border-none' }"
       :class="[
-        'w-full transition-colors first:capitalize',
+        'w-full transition-colors first:capitalize bg-transparent border-none',
         error
           ? 'border-red-500 focus:border-red-500'
           : 'border-gray-300 focus:border-black',
