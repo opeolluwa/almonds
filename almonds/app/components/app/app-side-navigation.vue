@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { primaryRoutes, secondaryRoutes } from "~/data/routes";
+
 const workspaceStore = useWorkspacesStore();
 const showCreateModal = ref(false);
 const route = useRoute();
@@ -111,10 +112,12 @@ const activeId = computed(() => workspaceStore.currentWorkspace?.identifier);
       <AppSelect
         v-model="activeId"
         :items="workspaces"
-        label="Workspace"
+        label=""
         name="workspace"
-        size="sm"
-        class="px-3 mt-8 mb-16 bg-transparent"
+        size="md"
+        icon="heroicons:briefcase"
+        trailing-icon="heroicons:chevron-down-solid"
+        class="px-3 mb-8 bg-transparent"
         :ui="{ content: 'w-48 ' }"
       />
 

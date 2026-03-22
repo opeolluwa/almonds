@@ -29,8 +29,6 @@ const internetStatusColor = computed(() =>
   online.value ? "success" : "error",
 );
 
-const internetLabel = computed(() => (online.value ? "Online" : "Offline"));
-
 function onSearchInput(val: string) {
   searchQuery.value = val;
   searchConfig.value?.searchFn?.(val);
@@ -150,6 +148,17 @@ const isMacOS = computed(() => {
         <div
           class="col-col-end-3 flex items-center justify-center -gap-x-1.25 ml-16"
         >
+          <UTooltip text="Syncing data">
+            <UButton
+              size="sm"
+              color="neutral"
+              :loading="syncing"
+              variant="ghost"
+              icon="heroicons:cloud-arrow-up"
+              aria-label="Switch workspace"
+            />
+          </UTooltip>
+
           <UTooltip text="Go back">
             <UButton
               size="sm"
@@ -180,23 +189,12 @@ const isMacOS = computed(() => {
               :disabled="!searchConfig"
               class="w-full bg-transparent outline-none text-sm text-gray-700 dark:text-gray-300 placeholder-gray-400"
               @input="onSearchInput(($event.target as HTMLInputElement).value)"
-            >
+            />
           </UTooltip>
         </div>
 
         <!-- Right actions -->
         <div class="flex items-center gap-1 ml-auto">
-          <UTooltip text="Syncing data">
-            <UButton
-              size="sm"
-              :loading="syncing"
-              :color="internetStatusColor"
-              variant="ghost"
-              icon="heroicons:cloud-arrow-up"
-              aria-label="Switch workspace"
-            />
-          </UTooltip>
-
           <UTooltip :text="themeLabel">
             <UButton
               size="sm"
@@ -229,6 +227,17 @@ const isMacOS = computed(() => {
               aria-label="Open panel"
             />
           </UTooltip>
+
+          <UUser
+            size="sm"
+            :avatar="{
+              src: 'https://i.pravatar.cc/150?u=john-doe',
+            }"
+            :chip="{
+              color: internetStatusColor,
+              position: 'top-right',
+            }"
+          />
         </div>
       </div>
     </UApp>

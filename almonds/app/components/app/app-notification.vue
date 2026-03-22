@@ -43,17 +43,17 @@ const current = computed(() => config[notification.value?.type ?? "info"]);
     <Transition name="toast">
       <div
         v-if="visible && notification"
-        class="fixed bottom-6 right-6 z-[9999] w-80 max-w-[calc(100vw-3rem)]"
+        class="fixed bottom-6 right-6 z-9999 w-80 py-4 px-2 max-w-[calc(100vw-3rem)]"
         role="alert"
         aria-live="assertive"
       >
         <div
-          class="relative flex items-start gap-3 rounded-xl shadow-lg overflow-hidden px-4 py-3"
+          class="relative flex items-start gap-3 rounded-lg shadow-lg overflow-hidden px-4 py-3"
           :class="current.bg"
         >
           <!-- coloured left bar -->
           <span
-            class="absolute inset-y-0 left-0 w-1 rounded-l-xl"
+            class="absolute inset-y-0 left-0 w-1 rounded-l-lg"
             :class="current.bar"
           />
 
