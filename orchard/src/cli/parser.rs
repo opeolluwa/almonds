@@ -3,7 +3,7 @@ use crate::{
         actors::generate_key_pair,
         app::{Commands, OrchardCli, OrchardCommands},
     },
-    errors::AppError,
+    errors::app_error::AppError,
 };
 
 pub async fn parse_commands(cli: OrchardCli) -> Result<(), AppError> {

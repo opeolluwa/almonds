@@ -1,0 +1,27 @@
+query SyncQueueView {
+  syncQueue {
+    nodes {
+      identifier
+      tableName
+      recordIdentifier
+      createdAt
+      operation
+    }
+  }
+}
+
+# query syncQueue(
+# filters: SyncQueueFilterInput
+# having: SyncQueueHavingInput
+# orderBy: SyncQueueOrderInput
+# pagination: PaginationInput
+# ): SyncQueueConnection!
+
+# query syncQueueUpdate(
+# data: SyncQueueUpdateInput!
+# filter: SyncQueueFilterInput
+# ): [SyncQueueBasic!]!
+
+# query syncQueueDelete(
+# filter: SyncQueueFilterInput
+# ): Int!

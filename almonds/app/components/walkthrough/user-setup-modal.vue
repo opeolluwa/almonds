@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useUserPreferenceStore } from "~/stores/user-preference";
+// import AppButton  from "~/components/forms/app-button.vue";
 
 const store = useUserPreferenceStore();
 
@@ -93,14 +94,15 @@ async function handleSubmit() {
         />
 
         <div class="flex justify-end pt-1">
-          <UButton
+          <AppButton
             type="submit"
             color="primary"
+            class="w-fit"
             :loading="loading"
             :disabled="loading"
           >
             Save and continue
-          </UButton>
+          </AppButton>
         </div>
       </form>
     </template>

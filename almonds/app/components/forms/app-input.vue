@@ -16,7 +16,6 @@ const model = defineModel<string>();
     v-slot="{ error }"
     :label="label"
     :hint="hint"
-    :name="name"
     :ui="{
       error: 'text-red-500 mt-1',
       label: 'text-xs font-medium text-gray-600 dark:text-gray-400',
@@ -28,7 +27,7 @@ const model = defineModel<string>();
       :disabled="disabled"
       :placeholder="placeholder"
       :type="type"
-      :ui="{ base: 'py-3 pl-4 capitalize dark:bg-gray-700' }"
+      :ui="{ base: 'py-3 pl-4 capitalize' }"
       :class="[
         'w-full transition-colors capitalize',
         error

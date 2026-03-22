@@ -46,7 +46,7 @@ function formatDate(iso: string) {
         title="Preview"
         @click="emit('update', workspace.identifier)"
       >
-        <UIcon name="heroicons:eye" class="size-4" />
+        <UIcon name="heroicons:pencil" class="size-4" />
       </button>
       <button
         class="text-gray-400 hover:text-red-500 transition-colors"

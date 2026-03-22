@@ -55,6 +55,7 @@ body {
   overflow: hidden;
   overscroll-behavior: none;
   background-color: #f9fafb;
+  @apply mt-24;
 }
 
 .dark body {
@@ -86,35 +87,7 @@ body {
 }
 
 .titlebar {
-  height: 30px;
-  background: #329ea3;
-  user-select: none;
-  display: grid;
-  grid-template-columns: auto max-content;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-}
-
-.titlebar > .controls {
-  display: flex;
-}
-
-.titlebar button {
-  appearance: none;
-  padding: 0;
-  margin: 0;
-  border: none;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  width: 30px;
-  background-color: transparent;
-}
-
-.titlebar button:hover {
-  background: #5bbec3;
+  @apply fixed top-0 left-0 right-0 h-14 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 flex items-center p-2;
 }
 
 .scrollbar-config {
@@ -123,4 +96,8 @@ body {
 
 .scrollbar-config-dark {
   @apply scrollbar-thumb-rounded-full scrollbar-w-[0.25px]  scrollbar-corner-gray-900 scrollbar-h-20 scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-gray-900 scrollbar-track-transparent;
+}
+
+#wild_almonds_app {
+  @apply mt-14 rounded;
 }

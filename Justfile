@@ -13,6 +13,7 @@ import 'scripts/release.just'
 
 
 DB_PATH := "sqlite:://../../test.sqlite?mode=rwc"
+DOCKER_CMD := "docker compose -f docker-compose.yaml"
 
 set dotenv-required := true
 set dotenv-load := true
@@ -70,3 +71,26 @@ db-pull:
 [working-directory:'.']
 release target:
 	@just release-{{target}}
+
+
+
+@server-logs:
+    {{ DOCKER_CMD }} logs -f --tail='30' app
+
+
+@server-dev:
+    {{ DOCKER_CMD }} up -d 
+    @just server-logs
+
+
+[working-directory:'kernel']
+gph-pull:
+	graphql-client generate  --schema-path .graphql/schema.graphql .graphql/sync_queue_query.graphql --output-directory src/contracts 
+
+
+
+sync:
+	sh scripts/sync.sh
+
+
+

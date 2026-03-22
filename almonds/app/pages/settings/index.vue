@@ -16,7 +16,7 @@ type Section =
 const route = useRoute();
 
 const navSections: { key: Section; label: string; icon: string }[] = [
-  { key: "profile", label: "Profile", icon: "heroicons:user-circle" },
+  { key: "profile", label: "Profile", icon: "i-lucide-user" },
   { key: "appearance", label: "Appearance", icon: "heroicons:paint-brush" },
   { key: "workspaces", label: "Workspaces", icon: "heroicons:briefcase" },
   { key: "backup", label: "Backup & Sync", icon: "heroicons:cloud-arrow-up" },
@@ -59,7 +59,7 @@ const activeSection = ref<Section>(
         <button
           v-for="s in navSections"
           :key="s.key"
-          class="flex items-center gap-3 py-2 px-3 rounded-lg text-sm transition-colors w-full text-left"
+          class="flex items-center gap-3 py-2 px-3 rounded-lg text-sm transition-colors w-full text-left cursor-pointer"
           :class="
             activeSection === s.key
               ? 'bg-accent-50 dark:bg-accent-950 text-accent-700 dark:text-accent-300 font-medium'

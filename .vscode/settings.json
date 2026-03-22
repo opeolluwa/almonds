@@ -19,6 +19,7 @@
     "oneshot",
     "ormlite",
     "persistedstate",
+    "pgadmin",
     "pkce",
     "proto",
     "pswd",

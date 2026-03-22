@@ -1,7 +1,7 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
   "productName": "Wild almonds",
-  "version": "0.8.5",
+  "version": "0.8.6",
   "identifier": "com.wildalmonds.app",
   "build": {
     "frontendDist": "../dist",
@@ -16,7 +16,8 @@
         "height": 800,
         "resizable": true,
         "fullscreen": false,
-        "decorations": true
+        "decorations": false,
+        "shadow": true
       }
     ],
     "withGlobalTauri": true,

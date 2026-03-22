@@ -1,0 +1,26 @@
+{
+    "workbench.colorCustomizations": {
+        "activityBar.activeBackground": "#880f24",
+        "activityBar.background": "#880f24",
+        "activityBar.foreground": "#e7e7e7",
+        "activityBar.inactiveForeground": "#e7e7e799",
+        "activityBarBadge.background": "#000000",
+        "activityBarBadge.foreground": "#e7e7e7",
+        "commandCenter.border": "#e7e7e799",
+        "sash.hoverBorder": "#880f24",
+        "statusBar.background": "#5a0a18",
+        "statusBar.foreground": "#e7e7e7",
+        "statusBarItem.hoverBackground": "#880f24",
+        "statusBarItem.remoteBackground": "#5a0a18",
+        "statusBarItem.remoteForeground": "#e7e7e7",
+        "titleBar.activeBackground": "#5a0a18",
+        "titleBar.activeForeground": "#e7e7e7",
+        "titleBar.inactiveBackground": "#5a0a1899",
+        "titleBar.inactiveForeground": "#e7e7e799"
+    },
+    "peacock.color": "#5a0a18",
+    "cSpell.words": [
+        "ollama",
+        "seaography"
+    ]
+}

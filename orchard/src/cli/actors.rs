@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-use crate::errors::AppError;
+use crate::errors::app_error::AppError;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct OrchardAuthKeys {

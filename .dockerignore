@@ -1,0 +1,23 @@
+# Ignore everything
+**
+
+# Allow root cargo files
+!Cargo.toml
+!Cargo.lock
+
+# Allow the two crates
+!kernel/**
+!orchard/**
+
+# But ignore their build artifacts
+kernel/target
+orchard/target
+kernel/migration/target
+**/target
+
+# Optional common ignores
+**/*.db
+.env
+.git
+.github
+.idea

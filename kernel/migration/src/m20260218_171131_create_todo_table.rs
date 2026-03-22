@@ -1,4 +1,8 @@
-use sea_orm_migration::{prelude::*, schema::*};
+use sea_orm_migration::{
+    prelude::{extension::postgres::Type, *},
+    schema::*,
+    sea_orm::DbBackend,
+};
 
 #[derive(DeriveMigrationName)]
 pub struct Migration;
@@ -6,6 +10,19 @@ pub struct Migration;
 #[async_trait::async_trait]
 impl MigrationTrait for Migration {
     async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
+        let db_backend = manager.get_database_backend();
+
+        if db_backend == DbBackend::Postgres {
+            manager
+                .create_type(
+                    Type::create()
+                        .as_enum(Priority::Type)
+                        .values([Priority::High, Priority::Medium, Priority::Low])
+                        .to_owned(),
+                )
+                .await?;
+        }
+
         manager
             .create_table(
                 Table::create()

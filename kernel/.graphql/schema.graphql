@@ -1,0 +1,2275 @@
+# Indicates that an Input Object is a OneOf Input Object (and thus requires exactly one of its field be provided)
+directive @oneOf on INPUT_OBJECT
+
+type Array {
+  array: ColumnType!
+}
+
+type AudioBooks {
+  identifier: String!
+  userIdentifier: String!
+  src: String!
+  name: String!
+  createdAt: String!
+  updatedAt: String
+  lastPlayed: String
+  playlistIdentifier: String
+  starred: Boolean!
+  playlists: Playlists
+  users: Users
+}
+
+type AudioBooksBasic {
+  identifier: String!
+  userIdentifier: String!
+  src: String!
+  name: String!
+  createdAt: String!
+  updatedAt: String
+  lastPlayed: String
+  playlistIdentifier: String
+  starred: Boolean!
+}
+
+type AudioBooksConnection {
+  pageInfo: PageInfo!
+  paginationInfo: PaginationInfo
+  nodes: [AudioBooks!]!
+  edges: [AudioBooksEdge!]!
+}
+
+type AudioBooksEdge {
+  cursor: String!
+  node: AudioBooks!
+}
+
+input AudioBooksFilterInput {
+  identifier: TextFilterInput
+  userIdentifier: TextFilterInput
+  src: StringFilterInput
+  name: StringFilterInput
+  createdAt: TextFilterInput
+  updatedAt: TextFilterInput
+  lastPlayed: TextFilterInput
+  playlistIdentifier: TextFilterInput
+  starred: BooleanFilterInput
+  and: [AudioBooksFilterInput!]
+  or: [AudioBooksFilterInput!]
+  not: AudioBooksFilterInput
+}
+
+input AudioBooksHavingInput {
+  playlists: PlaylistsFilterInput
+  users: UsersFilterInput
+}
+
+input AudioBooksInsertInput {
+  identifier: String!
+  userIdentifier: String!
+  src: String!
+  name: String!
+  createdAt: String!
+  updatedAt: String
+  lastPlayed: String
+  playlistIdentifier: String
+  starred: Boolean!
+}
+
+input AudioBooksOrderInput {
+  identifier: OrderByEnum
+  userIdentifier: OrderByEnum
+  src: OrderByEnum
+  name: OrderByEnum
+  createdAt: OrderByEnum
+  updatedAt: OrderByEnum
+  lastPlayed: OrderByEnum
+  playlistIdentifier: OrderByEnum
+  starred: OrderByEnum
+}
+
+input AudioBooksUpdateInput {
+  identifier: String
+  userIdentifier: String
+  src: String
+  name: String
+  createdAt: String
+  updatedAt: String
+  lastPlayed: String
+  playlistIdentifier: String
+  starred: Boolean
+}
+
+type BackupEmails {
+  identifier: String!
+  email: String!
+  userIdentifier: String!
+  verified: Boolean!
+  createdAt: String!
+  updatedAt: String
+  deletedAt: String
+  users: Users
+}
+
+type BackupEmailsBasic {
+  identifier: String!
+  email: String!
+  userIdentifier: String!
+  verified: Boolean!
+  createdAt: String!
+  updatedAt: String
+  deletedAt: String
+}
+
+type BackupEmailsConnection {
+  pageInfo: PageInfo!
+  paginationInfo: PaginationInfo
+  nodes: [BackupEmails!]!
+  edges: [BackupEmailsEdge!]!
+}
+
+type BackupEmailsEdge {
+  cursor: String!
+  node: BackupEmails!
+}
+
+input BackupEmailsFilterInput {
+  identifier: StringFilterInput
+  email: StringFilterInput
+  userIdentifier: TextFilterInput
+  verified: BooleanFilterInput
+  createdAt: TextFilterInput
+  updatedAt: TextFilterInput
+  deletedAt: TextFilterInput
+  and: [BackupEmailsFilterInput!]
+  or: [BackupEmailsFilterInput!]
+  not: BackupEmailsFilterInput
+}
+
+input BackupEmailsHavingInput {
+  users: UsersFilterInput
+}
+
+input BackupEmailsInsertInput {
+  identifier: String!
+  email: String!
+  userIdentifier: String!
+  verified: Boolean!
+  createdAt: String!
+  updatedAt: String
+  deletedAt: String
+}
+
+input BackupEmailsOrderInput {
+  identifier: OrderByEnum
+  email: OrderByEnum
+  userIdentifier: OrderByEnum
+  verified: OrderByEnum
+  createdAt: OrderByEnum
+  updatedAt: OrderByEnum
+  deletedAt: OrderByEnum
+}
+
+input BackupEmailsUpdateInput {
+  identifier: String
+  email: String
+  userIdentifier: String
+  verified: Boolean
+  createdAt: String
+  updatedAt: String
+  deletedAt: String
+}
+
+type Bookmark {
+  identifier: String!
+  title: String!
+  url: String!
+  tag: TagEnum!
+  createdAt: String!
+  updatedAt: String!
+  workspaceIdentifier: String
+  workspaces: Workspaces
+}
+
+type BookmarkBasic {
+  identifier: String!
+  title: String!
+  url: String!
+  tag: TagEnum!
+  createdAt: String!
+  updatedAt: String!
+  workspaceIdentifier: String
+}
+
+type BookmarkConnection {
+  pageInfo: PageInfo!
+  paginationInfo: PaginationInfo
+  nodes: [Bookmark!]!
+  edges: [BookmarkEdge!]!
+}
+
+type BookmarkEdge {
+  cursor: String!
+  node: Bookmark!
+}
+
+input BookmarkFilterInput {
+  identifier: TextFilterInput
+  title: StringFilterInput
+  url: StringFilterInput
+  tag: TagEnumFilterInput
+  createdAt: TextFilterInput
+  updatedAt: TextFilterInput
+  workspaceIdentifier: TextFilterInput
+  and: [BookmarkFilterInput!]
+  or: [BookmarkFilterInput!]
+  not: BookmarkFilterInput
+}
+
+input BookmarkHavingInput {
+  workspaces: WorkspacesFilterInput
+}
+
+input BookmarkInsertInput {
+  identifier: String!
+  title: String!
+  url: String!
+  tag: TagEnum!
+  createdAt: String!
+  updatedAt: String!
+  workspaceIdentifier: String
+}
+
+input BookmarkOrderInput {
+  identifier: OrderByEnum
+  title: OrderByEnum
+  url: OrderByEnum
+  tag: OrderByEnum
+  createdAt: OrderByEnum
+  updatedAt: OrderByEnum
+  workspaceIdentifier: OrderByEnum
+}
+
+input BookmarkUpdateInput {
+  identifier: String
+  title: String
+  url: String
+  tag: TagEnum
+  createdAt: String
+  updatedAt: String
+  workspaceIdentifier: String
+}
+
+input BooleanFilterInput {
+  eq: Boolean
+  ne: Boolean
+  gt: Boolean
+  gte: Boolean
+  lt: Boolean
+  lte: Boolean
+  is_in: [Boolean!]
+  is_not_in: [Boolean!]
+  is_null: Boolean
+}
+
+type Column {
+  name: String!
+  type_: ColumnType!
+  nullable: Boolean!
+  unique: Boolean
+  comment: String
+}
+
+type ColumnType {
+  primitive: String
+  array: Array
+  enumeration: Enumeration
+}
+
+type Countries {
+  identifier: String!
+  currencyCode: String!
+  currency: String!
+  country: String!
+  flag: String
+  users(
+    filters: UsersFilterInput
+    orderBy: UsersOrderInput
+    pagination: PaginationInput
+  ): UsersConnection!
+}
+
+type CountriesBasic {
+  identifier: String!
+  currencyCode: String!
+  currency: String!
+  country: String!
+  flag: String
+}
+
+type CountriesConnection {
+  pageInfo: PageInfo!
+  paginationInfo: PaginationInfo
+  nodes: [Countries!]!
+  edges: [CountriesEdge!]!
+}
+
+type CountriesEdge {
+  cursor: String!
+  node: Countries!
+}
+
+input CountriesFilterInput {
+  identifier: StringFilterInput
+  currencyCode: StringFilterInput
+  currency: StringFilterInput
+  country: StringFilterInput
+  flag: StringFilterInput
+  and: [CountriesFilterInput!]
+  or: [CountriesFilterInput!]
+  not: CountriesFilterInput
+}
+
+input CountriesHavingInput {
+  users: UsersFilterInput
+}
+
+input CountriesInsertInput {
+  identifier: String!
+  currencyCode: String!
+  currency: String!
+  country: String!
+  flag: String
+}
+
+input CountriesOrderInput {
+  identifier: OrderByEnum
+  currencyCode: OrderByEnum
+  currency: OrderByEnum
+  country: OrderByEnum
+  flag: OrderByEnum
+}
+
+input CountriesUpdateInput {
+  identifier: String
+  currencyCode: String
+  currency: String
+  country: String
+  flag: String
+}
+
+input CursorInput {
+  cursor: String
+  limit: Int!
+}
+
+type Enumeration {
+  name: String!
+  variants: [String!]!
+}
+
+input IntegerFilterInput {
+  eq: Int
+  ne: Int
+  gt: Int
+  gte: Int
+  lt: Int
+  lte: Int
+  is_in: [Int!]
+  is_not_in: [Int!]
+  is_null: Boolean
+  between: [Int!]
+  not_between: [Int!]
+}
+
+enum ItemTypeEnum {
+  todo
+  note
+  reminder
+  snippet
+  bookmark
+}
+
+input ItemTypeEnumFilterInput {
+  eq: ItemTypeEnum
+  ne: ItemTypeEnum
+  gt: ItemTypeEnum
+  gte: ItemTypeEnum
+  lt: ItemTypeEnum
+  lte: ItemTypeEnum
+  is_in: [ItemTypeEnum!]
+  is_not_in: [ItemTypeEnum!]
+  is_null: Boolean
+}
+
+type Mutation {
+  _ping: String
+  audioBooksCreateOne(data: AudioBooksInsertInput!): AudioBooksBasic!
+  audioBooksCreateBatch(data: [AudioBooksInsertInput!]!): [AudioBooksBasic!]!
+  audioBooksUpdate(
+    data: AudioBooksUpdateInput!
+    filter: AudioBooksFilterInput
+  ): [AudioBooksBasic!]!
+  audioBooksDelete(filter: AudioBooksFilterInput): Int!
+  backupEmailsCreateOne(data: BackupEmailsInsertInput!): BackupEmailsBasic!
+  backupEmailsCreateBatch(
+    data: [BackupEmailsInsertInput!]!
+  ): [BackupEmailsBasic!]!
+  backupEmailsUpdate(
+    data: BackupEmailsUpdateInput!
+    filter: BackupEmailsFilterInput
+  ): [BackupEmailsBasic!]!
+  backupEmailsDelete(filter: BackupEmailsFilterInput): Int!
+  bookmarkCreateOne(data: BookmarkInsertInput!): BookmarkBasic!
+  bookmarkCreateBatch(data: [BookmarkInsertInput!]!): [BookmarkBasic!]!
+  bookmarkUpdate(
+    data: BookmarkUpdateInput!
+    filter: BookmarkFilterInput
+  ): [BookmarkBasic!]!
+  bookmarkDelete(filter: BookmarkFilterInput): Int!
+  countriesCreateOne(data: CountriesInsertInput!): CountriesBasic!
+  countriesCreateBatch(data: [CountriesInsertInput!]!): [CountriesBasic!]!
+  countriesUpdate(
+    data: CountriesUpdateInput!
+    filter: CountriesFilterInput
+  ): [CountriesBasic!]!
+  countriesDelete(filter: CountriesFilterInput): Int!
+  noteCategoriesCreateOne(
+    data: NoteCategoriesInsertInput!
+  ): NoteCategoriesBasic!
+  noteCategoriesCreateBatch(
+    data: [NoteCategoriesInsertInput!]!
+  ): [NoteCategoriesBasic!]!
+  noteCategoriesUpdate(
+    data: NoteCategoriesUpdateInput!
+    filter: NoteCategoriesFilterInput
+  ): [NoteCategoriesBasic!]!
+  noteCategoriesDelete(filter: NoteCategoriesFilterInput): Int!
+  notesCreateOne(data: NotesInsertInput!): NotesBasic!
+  notesCreateBatch(data: [NotesInsertInput!]!): [NotesBasic!]!
+  notesUpdate(data: NotesUpdateInput!, filter: NotesFilterInput): [NotesBasic!]!
+  notesDelete(filter: NotesFilterInput): Int!
+  notificationsCreateOne(data: NotificationsInsertInput!): NotificationsBasic!
+  notificationsCreateBatch(
+    data: [NotificationsInsertInput!]!
+  ): [NotificationsBasic!]!
+  notificationsUpdate(
+    data: NotificationsUpdateInput!
+    filter: NotificationsFilterInput
+  ): [NotificationsBasic!]!
+  notificationsDelete(filter: NotificationsFilterInput): Int!
+  ollamaConversationHistoryCreateOne(
+    data: OllamaConversationHistoryInsertInput!
+  ): OllamaConversationHistoryBasic!
+  ollamaConversationHistoryCreateBatch(
+    data: [OllamaConversationHistoryInsertInput!]!
+  ): [OllamaConversationHistoryBasic!]!
+  ollamaConversationHistoryUpdate(
+    data: OllamaConversationHistoryUpdateInput!
+    filter: OllamaConversationHistoryFilterInput
+  ): [OllamaConversationHistoryBasic!]!
+  ollamaConversationHistoryDelete(
+    filter: OllamaConversationHistoryFilterInput
+  ): Int!
+  ollamaConversationPromptCreateOne(
+    data: OllamaConversationPromptInsertInput!
+  ): OllamaConversationPromptBasic!
+  ollamaConversationPromptCreateBatch(
+    data: [OllamaConversationPromptInsertInput!]!
+  ): [OllamaConversationPromptBasic!]!
+  ollamaConversationPromptUpdate(
+    data: OllamaConversationPromptUpdateInput!
+    filter: OllamaConversationPromptFilterInput
+  ): [OllamaConversationPromptBasic!]!
+  ollamaConversationPromptDelete(
+    filter: OllamaConversationPromptFilterInput
+  ): Int!
+  ollamaConversationResponseCreateOne(
+    data: OllamaConversationResponseInsertInput!
+  ): OllamaConversationResponseBasic!
+  ollamaConversationResponseCreateBatch(
+    data: [OllamaConversationResponseInsertInput!]!
+  ): [OllamaConversationResponseBasic!]!
+  ollamaConversationResponseUpdate(
+    data: OllamaConversationResponseUpdateInput!
+    filter: OllamaConversationResponseFilterInput
+  ): [OllamaConversationResponseBasic!]!
+  ollamaConversationResponseDelete(
+    filter: OllamaConversationResponseFilterInput
+  ): Int!
+  oneTimePasswordsCreateOne(
+    data: OneTimePasswordsInsertInput!
+  ): OneTimePasswordsBasic!
+  oneTimePasswordsCreateBatch(
+    data: [OneTimePasswordsInsertInput!]!
+  ): [OneTimePasswordsBasic!]!
+  oneTimePasswordsUpdate(
+    data: OneTimePasswordsUpdateInput!
+    filter: OneTimePasswordsFilterInput
+  ): [OneTimePasswordsBasic!]!
+  oneTimePasswordsDelete(filter: OneTimePasswordsFilterInput): Int!
+  orchardMigrationsCreateOne(
+    data: OrchardMigrationsInsertInput!
+  ): OrchardMigrationsBasic!
+  orchardMigrationsCreateBatch(
+    data: [OrchardMigrationsInsertInput!]!
+  ): [OrchardMigrationsBasic!]!
+  orchardMigrationsUpdate(
+    data: OrchardMigrationsUpdateInput!
+    filter: OrchardMigrationsFilterInput
+  ): [OrchardMigrationsBasic!]!
+  orchardMigrationsDelete(filter: OrchardMigrationsFilterInput): Int!
+  playlistsCreateOne(data: PlaylistsInsertInput!): PlaylistsBasic!
+  playlistsCreateBatch(data: [PlaylistsInsertInput!]!): [PlaylistsBasic!]!
+  playlistsUpdate(
+    data: PlaylistsUpdateInput!
+    filter: PlaylistsFilterInput
+  ): [PlaylistsBasic!]!
+  playlistsDelete(filter: PlaylistsFilterInput): Int!
+  recycleBinCreateOne(data: RecycleBinInsertInput!): RecycleBinBasic!
+  recycleBinCreateBatch(data: [RecycleBinInsertInput!]!): [RecycleBinBasic!]!
+  recycleBinUpdate(
+    data: RecycleBinUpdateInput!
+    filter: RecycleBinFilterInput
+  ): [RecycleBinBasic!]!
+  recycleBinDelete(filter: RecycleBinFilterInput): Int!
+  reminderCreateOne(data: ReminderInsertInput!): ReminderBasic!
+  reminderCreateBatch(data: [ReminderInsertInput!]!): [ReminderBasic!]!
+  reminderUpdate(
+    data: ReminderUpdateInput!
+    filter: ReminderFilterInput
+  ): [ReminderBasic!]!
+  reminderDelete(filter: ReminderFilterInput): Int!
+  snippetsCreateOne(data: SnippetsInsertInput!): SnippetsBasic!
+  snippetsCreateBatch(data: [SnippetsInsertInput!]!): [SnippetsBasic!]!
+  snippetsUpdate(
+    data: SnippetsUpdateInput!
+    filter: SnippetsFilterInput
+  ): [SnippetsBasic!]!
+  snippetsDelete(filter: SnippetsFilterInput): Int!
+  syncQueueCreateOne(data: SyncQueueInsertInput!): SyncQueueBasic!
+  syncQueueCreateBatch(data: [SyncQueueInsertInput!]!): [SyncQueueBasic!]!
+  syncQueueUpdate(
+    data: SyncQueueUpdateInput!
+    filter: SyncQueueFilterInput
+  ): [SyncQueueBasic!]!
+  syncQueueDelete(filter: SyncQueueFilterInput): Int!
+  todoCreateOne(data: TodoInsertInput!): TodoBasic!
+  todoCreateBatch(data: [TodoInsertInput!]!): [TodoBasic!]!
+  todoUpdate(data: TodoUpdateInput!, filter: TodoFilterInput): [TodoBasic!]!
+  todoDelete(filter: TodoFilterInput): Int!
+  userPreferenceCreateOne(
+    data: UserPreferenceInsertInput!
+  ): UserPreferenceBasic!
+  userPreferenceCreateBatch(
+    data: [UserPreferenceInsertInput!]!
+  ): [UserPreferenceBasic!]!
+  userPreferenceUpdate(
+    data: UserPreferenceUpdateInput!
+    filter: UserPreferenceFilterInput
+  ): [UserPreferenceBasic!]!
+  userPreferenceDelete(filter: UserPreferenceFilterInput): Int!
+  usersCreateOne(data: UsersInsertInput!): UsersBasic!
+  usersCreateBatch(data: [UsersInsertInput!]!): [UsersBasic!]!
+  usersUpdate(data: UsersUpdateInput!, filter: UsersFilterInput): [UsersBasic!]!
+  usersDelete(filter: UsersFilterInput): Int!
+  waitListCreateOne(data: WaitListInsertInput!): WaitListBasic!
+  waitListCreateBatch(data: [WaitListInsertInput!]!): [WaitListBasic!]!
+  waitListUpdate(
+    data: WaitListUpdateInput!
+    filter: WaitListFilterInput
+  ): [WaitListBasic!]!
+  waitListDelete(filter: WaitListFilterInput): Int!
+  workspacesCreateOne(data: WorkspacesInsertInput!): WorkspacesBasic!
+  workspacesCreateBatch(data: [WorkspacesInsertInput!]!): [WorkspacesBasic!]!
+  workspacesUpdate(
+    data: WorkspacesUpdateInput!
+    filter: WorkspacesFilterInput
+  ): [WorkspacesBasic!]!
+  workspacesDelete(filter: WorkspacesFilterInput): Int!
+}
+
+type NoteCategories {
+  identifier: String!
+  label: String!
+  description: String
+}
+
+type NoteCategoriesBasic {
+  identifier: String!
+  label: String!
+  description: String
+}
+
+type NoteCategoriesConnection {
+  pageInfo: PageInfo!
+  paginationInfo: PaginationInfo
+  nodes: [NoteCategories!]!
+  edges: [NoteCategoriesEdge!]!
+}
+
+type NoteCategoriesEdge {
+  cursor: String!
+  node: NoteCategories!
+}
+
+input NoteCategoriesFilterInput {
+  identifier: TextFilterInput
+  label: StringFilterInput
+  description: StringFilterInput
+  and: [NoteCategoriesFilterInput!]
+  or: [NoteCategoriesFilterInput!]
+  not: NoteCategoriesFilterInput
+}
+
+input NoteCategoriesHavingInput {
+  _: Boolean
+}
+
+input NoteCategoriesInsertInput {
+  identifier: String!
+  label: String!
+  description: String
+}
+
+input NoteCategoriesOrderInput {
+  identifier: OrderByEnum
+  label: OrderByEnum
+  description: OrderByEnum
+}
+
+input NoteCategoriesUpdateInput {
+  identifier: String
+  label: String
+  description: String
+}
+
+type Notes {
+  identifier: String!
+  title: String!
+  content: String!
+  createdAt: String!
+  updatedAt: String!
+  workspaceIdentifier: String
+  workspaces: Workspaces
+}
+
+type NotesBasic {
+  identifier: String!
+  title: String!
+  content: String!
+  createdAt: String!
+  updatedAt: String!
+  workspaceIdentifier: String
+}
+
+type NotesConnection {
+  pageInfo: PageInfo!
+  paginationInfo: PaginationInfo
+  nodes: [Notes!]!
+  edges: [NotesEdge!]!
+}
+
+type NotesEdge {
+  cursor: String!
+  node: Notes!
+}
+
+input NotesFilterInput {
+  identifier: TextFilterInput
+  title: StringFilterInput
+  content: StringFilterInput
+  createdAt: TextFilterInput
+  updatedAt: TextFilterInput
+  workspaceIdentifier: TextFilterInput
+  and: [NotesFilterInput!]
+  or: [NotesFilterInput!]
+  not: NotesFilterInput
+}
+
+input NotesHavingInput {
+  workspaces: WorkspacesFilterInput
+}
+
+input NotesInsertInput {
+  identifier: String!
+  title: String!
+  content: String!
+  createdAt: String!
+  updatedAt: String!
+  workspaceIdentifier: String
+}
+
+input NotesOrderInput {
+  identifier: OrderByEnum
+  title: OrderByEnum
+  content: OrderByEnum
+  categories: OrderByEnum
+  createdAt: OrderByEnum
+  updatedAt: OrderByEnum
+  workspaceIdentifier: OrderByEnum
+}
+
+input NotesUpdateInput {
+  identifier: String
+  title: String
+  content: String
+  createdAt: String
+  updatedAt: String
+  workspaceIdentifier: String
+}
+
+type Notifications {
+  identifier: String!
+  subject: String!
+  body: String!
+  createdAt: String!
+  updatedAt: String
+  isRead: Boolean
+  userIdentifier: String
+  users: Users
+}
+
+type NotificationsBasic {
+  identifier: String!
+  subject: String!
+  body: String!
+  createdAt: String!
+  updatedAt: String
+  isRead: Boolean
+  userIdentifier: String
+}
+
+type NotificationsConnection {
+  pageInfo: PageInfo!
+  paginationInfo: PaginationInfo
+  nodes: [Notifications!]!
+  edges: [NotificationsEdge!]!
+}
+
+type NotificationsEdge {
+  cursor: String!
+  node: Notifications!
+}
+
+input NotificationsFilterInput {
+  identifier: TextFilterInput
+  subject: StringFilterInput
+  body: StringFilterInput
+  createdAt: TextFilterInput
+  updatedAt: TextFilterInput
+  isRead: BooleanFilterInput
+  userIdentifier: TextFilterInput
+  and: [NotificationsFilterInput!]
+  or: [NotificationsFilterInput!]
+  not: NotificationsFilterInput
+}
+
+input NotificationsHavingInput {
+  users: UsersFilterInput
+}
+
+input NotificationsInsertInput {
+  identifier: String!
+  subject: String!
+  body: String!
+  createdAt: String!
+  updatedAt: String
+  isRead: Boolean
+  userIdentifier: String
+}
+
+input NotificationsOrderInput {
+  identifier: OrderByEnum
+  subject: OrderByEnum
+  body: OrderByEnum
+  createdAt: OrderByEnum
+  updatedAt: OrderByEnum
+  isRead: OrderByEnum
+  userIdentifier: OrderByEnum
+}
+
+input NotificationsUpdateInput {
+  identifier: String
+  subject: String
+  body: String
+  createdAt: String
+  updatedAt: String
+  isRead: Boolean
+  userIdentifier: String
+}
+
+input OffsetInput {
+  limit: Int!
+  offset: Int!
+}
+
+type OllamaConversationHistory {
+  identifier: String!
+  bookmarked: Boolean!
+  createdAt: String!
+  updatedAt: String!
+  ollamaConversationPrompt(
+    filters: OllamaConversationPromptFilterInput
+    orderBy: OllamaConversationPromptOrderInput
+    pagination: PaginationInput
+  ): OllamaConversationPromptConnection!
+  ollamaConversationResponse(
+    filters: OllamaConversationResponseFilterInput
+    orderBy: OllamaConversationResponseOrderInput
+    pagination: PaginationInput
+  ): OllamaConversationResponseConnection!
+}
+
+type OllamaConversationHistoryBasic {
+  identifier: String!
+  bookmarked: Boolean!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type OllamaConversationHistoryConnection {
+  pageInfo: PageInfo!
+  paginationInfo: PaginationInfo
+  nodes: [OllamaConversationHistory!]!
+  edges: [OllamaConversationHistoryEdge!]!
+}
+
+type OllamaConversationHistoryEdge {
+  cursor: String!
+  node: OllamaConversationHistory!
+}
+
+input OllamaConversationHistoryFilterInput {
+  identifier: TextFilterInput
+  bookmarked: BooleanFilterInput
+  createdAt: TextFilterInput
+  updatedAt: TextFilterInput
+  and: [OllamaConversationHistoryFilterInput!]
+  or: [OllamaConversationHistoryFilterInput!]
+  not: OllamaConversationHistoryFilterInput
+}
+
+input OllamaConversationHistoryHavingInput {
+  ollamaConversationPrompt: OllamaConversationPromptFilterInput
+  ollamaConversationResponse: OllamaConversationResponseFilterInput
+}
+
+input OllamaConversationHistoryInsertInput {
+  identifier: String!
+  bookmarked: Boolean!
+  createdAt: String!
+  updatedAt: String!
+}
+
+input OllamaConversationHistoryOrderInput {
+  identifier: OrderByEnum
+  bookmarked: OrderByEnum
+  createdAt: OrderByEnum
+  updatedAt: OrderByEnum
+}
+
+input OllamaConversationHistoryUpdateInput {
+  identifier: String
+  bookmarked: Boolean
+  createdAt: String
+  updatedAt: String
+}
+
+type OllamaConversationPrompt {
+  identifier: String!
+  historyId: String!
+  content: String!
+  createdAt: String!
+  ollamaConversationHistory: OllamaConversationHistory
+}
+
+type OllamaConversationPromptBasic {
+  identifier: String!
+  historyId: String!
+  content: String!
+  createdAt: String!
+}
+
+type OllamaConversationPromptConnection {
+  pageInfo: PageInfo!
+  paginationInfo: PaginationInfo
+  nodes: [OllamaConversationPrompt!]!
+  edges: [OllamaConversationPromptEdge!]!
+}
+
+type OllamaConversationPromptEdge {
+  cursor: String!
+  node: OllamaConversationPrompt!
+}
+
+input OllamaConversationPromptFilterInput {
+  identifier: TextFilterInput
+  historyId: TextFilterInput
+  content: StringFilterInput
+  createdAt: TextFilterInput
+  and: [OllamaConversationPromptFilterInput!]
+  or: [OllamaConversationPromptFilterInput!]
+  not: OllamaConversationPromptFilterInput
+}
+
+input OllamaConversationPromptHavingInput {
+  ollamaConversationHistory: OllamaConversationHistoryFilterInput
+}
+
+input OllamaConversationPromptInsertInput {
+  identifier: String!
+  historyId: String!
+  content: String!
+  createdAt: String!
+}
+
+input OllamaConversationPromptOrderInput {
+  identifier: OrderByEnum
+  historyId: OrderByEnum
+  content: OrderByEnum
+  createdAt: OrderByEnum
+}
+
+input OllamaConversationPromptUpdateInput {
+  identifier: String
+  historyId: String
+  content: String
+  createdAt: String
+}
+
+type OllamaConversationResponse {
+  identifier: String!
+  historyId: String!
+  content: String!
+  createdAt: String!
+  ollamaConversationHistory: OllamaConversationHistory
+}
+
+type OllamaConversationResponseBasic {
+  identifier: String!
+  historyId: String!
+  content: String!
+  createdAt: String!
+}
+
+type OllamaConversationResponseConnection {
+  pageInfo: PageInfo!
+  paginationInfo: PaginationInfo
+  nodes: [OllamaConversationResponse!]!
+  edges: [OllamaConversationResponseEdge!]!
+}
+
+type OllamaConversationResponseEdge {
+  cursor: String!
+  node: OllamaConversationResponse!
+}
+
+input OllamaConversationResponseFilterInput {
+  identifier: TextFilterInput
+  historyId: TextFilterInput
+  content: StringFilterInput
+  createdAt: TextFilterInput
+  and: [OllamaConversationResponseFilterInput!]
+  or: [OllamaConversationResponseFilterInput!]
+  not: OllamaConversationResponseFilterInput
+}
+
+input OllamaConversationResponseHavingInput {
+  ollamaConversationHistory: OllamaConversationHistoryFilterInput
+}
+
+input OllamaConversationResponseInsertInput {
+  identifier: String!
+  historyId: String!
+  content: String!
+  createdAt: String!
+}
+
+input OllamaConversationResponseOrderInput {
+  identifier: OrderByEnum
+  historyId: OrderByEnum
+  content: OrderByEnum
+  createdAt: OrderByEnum
+}
+
+input OllamaConversationResponseUpdateInput {
+  identifier: String
+  historyId: String
+  content: String
+  createdAt: String
+}
+
+type OneTimePasswords {
+  identifier: String!
+  userIdentifier: String!
+  createdAt: String!
+  code: String!
+  updatedAt: String
+  users: Users
+}
+
+type OneTimePasswordsBasic {
+  identifier: String!
+  userIdentifier: String!
+  createdAt: String!
+  code: String!
+  updatedAt: String
+}
+
+type OneTimePasswordsConnection {
+  pageInfo: PageInfo!
+  paginationInfo: PaginationInfo
+  nodes: [OneTimePasswords!]!
+  edges: [OneTimePasswordsEdge!]!
+}
+
+type OneTimePasswordsEdge {
+  cursor: String!
+  node: OneTimePasswords!
+}
+
+input OneTimePasswordsFilterInput {
+  identifier: TextFilterInput
+  userIdentifier: TextFilterInput
+  createdAt: TextFilterInput
+  code: StringFilterInput
+  updatedAt: TextFilterInput
+  and: [OneTimePasswordsFilterInput!]
+  or: [OneTimePasswordsFilterInput!]
+  not: OneTimePasswordsFilterInput
+}
+
+input OneTimePasswordsHavingInput {
+  users: UsersFilterInput
+}
+
+input OneTimePasswordsInsertInput {
+  identifier: String!
+  userIdentifier: String!
+  createdAt: String!
+  code: String!
+  updatedAt: String
+}
+
+input OneTimePasswordsOrderInput {
+  identifier: OrderByEnum
+  userIdentifier: OrderByEnum
+  createdAt: OrderByEnum
+  code: OrderByEnum
+  updatedAt: OrderByEnum
+}
+
+input OneTimePasswordsUpdateInput {
+  identifier: String
+  userIdentifier: String
+  createdAt: String
+  code: String
+  updatedAt: String
+}
+
+type OrchardMigrations {
+  version: String!
+  appliedAt: Int!
+}
+
+type OrchardMigrationsBasic {
+  version: String!
+  appliedAt: Int!
+}
+
+type OrchardMigrationsConnection {
+  pageInfo: PageInfo!
+  paginationInfo: PaginationInfo
+  nodes: [OrchardMigrations!]!
+  edges: [OrchardMigrationsEdge!]!
+}
+
+type OrchardMigrationsEdge {
+  cursor: String!
+  node: OrchardMigrations!
+}
+
+input OrchardMigrationsFilterInput {
+  version: StringFilterInput
+  appliedAt: IntegerFilterInput
+  and: [OrchardMigrationsFilterInput!]
+  or: [OrchardMigrationsFilterInput!]
+  not: OrchardMigrationsFilterInput
+}
+
+input OrchardMigrationsHavingInput {
+  _: Boolean
+}
+
+input OrchardMigrationsInsertInput {
+  version: String!
+  appliedAt: Int!
+}
+
+input OrchardMigrationsOrderInput {
+  version: OrderByEnum
+  appliedAt: OrderByEnum
+}
+
+input OrchardMigrationsUpdateInput {
+  version: String
+  appliedAt: Int
+}
+
+enum OrderByEnum {
+  ASC
+  DESC
+}
+
+type PageInfo {
+  hasPreviousPage: Boolean!
+  hasNextPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+input PageInput {
+  limit: Int!
+  page: Int!
+}
+
+type PaginationInfo {
+  pages: Int!
+  current: Int!
+  offset: Int!
+  total: Int!
+}
+
+input PaginationInput {
+  cursor: CursorInput
+  page: PageInput
+  offset: OffsetInput
+}
+
+type Playlists {
+  identifier: String!
+  name: String!
+  description: String
+  createdAt: String!
+  updatedAt: String
+  userIdentifier: String!
+  audioBooks(
+    filters: AudioBooksFilterInput
+    orderBy: AudioBooksOrderInput
+    pagination: PaginationInput
+  ): AudioBooksConnection!
+  users: Users
+}
+
+type PlaylistsBasic {
+  identifier: String!
+  name: String!
+  description: String
+  createdAt: String!
+  updatedAt: String
+  userIdentifier: String!
+}
+
+type PlaylistsConnection {
+  pageInfo: PageInfo!
+  paginationInfo: PaginationInfo
+  nodes: [Playlists!]!
+  edges: [PlaylistsEdge!]!
+}
+
+type PlaylistsEdge {
+  cursor: String!
+  node: Playlists!
+}
+
+input PlaylistsFilterInput {
+  identifier: TextFilterInput
+  name: StringFilterInput
+  description: StringFilterInput
+  createdAt: TextFilterInput
+  updatedAt: TextFilterInput
+  userIdentifier: TextFilterInput
+  and: [PlaylistsFilterInput!]
+  or: [PlaylistsFilterInput!]
+  not: PlaylistsFilterInput
+}
+
+input PlaylistsHavingInput {
+  audioBooks: AudioBooksFilterInput
+  users: UsersFilterInput
+}
+
+input PlaylistsInsertInput {
+  identifier: String!
+  name: String!
+  description: String
+  createdAt: String!
+  updatedAt: String
+  userIdentifier: String!
+}
+
+input PlaylistsOrderInput {
+  identifier: OrderByEnum
+  name: OrderByEnum
+  description: OrderByEnum
+  createdAt: OrderByEnum
+  updatedAt: OrderByEnum
+  userIdentifier: OrderByEnum
+}
+
+input PlaylistsUpdateInput {
+  identifier: String
+  name: String
+  description: String
+  createdAt: String
+  updatedAt: String
+  userIdentifier: String
+}
+
+enum PriorityEnum {
+  high
+  medium
+  low
+}
+
+input PriorityEnumFilterInput {
+  eq: PriorityEnum
+  ne: PriorityEnum
+  gt: PriorityEnum
+  gte: PriorityEnum
+  lt: PriorityEnum
+  lte: PriorityEnum
+  is_in: [PriorityEnum!]
+  is_not_in: [PriorityEnum!]
+  is_null: Boolean
+}
+
+type Query {
+  audioBooks(
+    filters: AudioBooksFilterInput
+    having: AudioBooksHavingInput
+    orderBy: AudioBooksOrderInput
+    pagination: PaginationInput
+  ): AudioBooksConnection!
+  backupEmails(
+    filters: BackupEmailsFilterInput
+    having: BackupEmailsHavingInput
+    orderBy: BackupEmailsOrderInput
+    pagination: PaginationInput
+  ): BackupEmailsConnection!
+  bookmark(
+    filters: BookmarkFilterInput
+    having: BookmarkHavingInput
+    orderBy: BookmarkOrderInput
+    pagination: PaginationInput
+  ): BookmarkConnection!
+  countries(
+    filters: CountriesFilterInput
+    having: CountriesHavingInput
+    orderBy: CountriesOrderInput
+    pagination: PaginationInput
+  ): CountriesConnection!
+  noteCategories(
+    filters: NoteCategoriesFilterInput
+    having: NoteCategoriesHavingInput
+    orderBy: NoteCategoriesOrderInput
+    pagination: PaginationInput
+  ): NoteCategoriesConnection!
+  notes(
+    filters: NotesFilterInput
+    having: NotesHavingInput
+    orderBy: NotesOrderInput
+    pagination: PaginationInput
+  ): NotesConnection!
+  notifications(
+    filters: NotificationsFilterInput
+    having: NotificationsHavingInput
+    orderBy: NotificationsOrderInput
+    pagination: PaginationInput
+  ): NotificationsConnection!
+  ollamaConversationHistory(
+    filters: OllamaConversationHistoryFilterInput
+    having: OllamaConversationHistoryHavingInput
+    orderBy: OllamaConversationHistoryOrderInput
+    pagination: PaginationInput
+  ): OllamaConversationHistoryConnection!
+  ollamaConversationPrompt(
+    filters: OllamaConversationPromptFilterInput
+    having: OllamaConversationPromptHavingInput
+    orderBy: OllamaConversationPromptOrderInput
+    pagination: PaginationInput
+  ): OllamaConversationPromptConnection!
+  ollamaConversationResponse(
+    filters: OllamaConversationResponseFilterInput
+    having: OllamaConversationResponseHavingInput
+    orderBy: OllamaConversationResponseOrderInput
+    pagination: PaginationInput
+  ): OllamaConversationResponseConnection!
+  oneTimePasswords(
+    filters: OneTimePasswordsFilterInput
+    having: OneTimePasswordsHavingInput
+    orderBy: OneTimePasswordsOrderInput
+    pagination: PaginationInput
+  ): OneTimePasswordsConnection!
+  orchardMigrations(
+    filters: OrchardMigrationsFilterInput
+    having: OrchardMigrationsHavingInput
+    orderBy: OrchardMigrationsOrderInput
+    pagination: PaginationInput
+  ): OrchardMigrationsConnection!
+  playlists(
+    filters: PlaylistsFilterInput
+    having: PlaylistsHavingInput
+    orderBy: PlaylistsOrderInput
+    pagination: PaginationInput
+  ): PlaylistsConnection!
+  recycleBin(
+    filters: RecycleBinFilterInput
+    having: RecycleBinHavingInput
+    orderBy: RecycleBinOrderInput
+    pagination: PaginationInput
+  ): RecycleBinConnection!
+  reminder(
+    filters: ReminderFilterInput
+    having: ReminderHavingInput
+    orderBy: ReminderOrderInput
+    pagination: PaginationInput
+  ): ReminderConnection!
+  snippets(
+    filters: SnippetsFilterInput
+    having: SnippetsHavingInput
+    orderBy: SnippetsOrderInput
+    pagination: PaginationInput
+  ): SnippetsConnection!
+  syncQueue(
+    filters: SyncQueueFilterInput
+    having: SyncQueueHavingInput
+    orderBy: SyncQueueOrderInput
+    pagination: PaginationInput
+  ): SyncQueueConnection!
+  todo(
+    filters: TodoFilterInput
+    having: TodoHavingInput
+    orderBy: TodoOrderInput
+    pagination: PaginationInput
+  ): TodoConnection!
+  userPreference(
+    filters: UserPreferenceFilterInput
+    having: UserPreferenceHavingInput
+    orderBy: UserPreferenceOrderInput
+    pagination: PaginationInput
+  ): UserPreferenceConnection!
+  users(
+    filters: UsersFilterInput
+    having: UsersHavingInput
+    orderBy: UsersOrderInput
+    pagination: PaginationInput
+  ): UsersConnection!
+  waitList(
+    filters: WaitListFilterInput
+    having: WaitListHavingInput
+    orderBy: WaitListOrderInput
+    pagination: PaginationInput
+  ): WaitListConnection!
+  workspaces(
+    filters: WorkspacesFilterInput
+    having: WorkspacesHavingInput
+    orderBy: WorkspacesOrderInput
+    pagination: PaginationInput
+  ): WorkspacesConnection!
+  _sea_orm_entity_metadata(table_name: String!): Table!
+}
+
+type RecycleBin {
+  identifier: String!
+  itemId: String!
+  itemType: ItemTypeEnum!
+  payload: String!
+  deletedAt: String!
+  workspaceIdentifier: String
+  workspaces: Workspaces
+}
+
+type RecycleBinBasic {
+  identifier: String!
+  itemId: String!
+  itemType: ItemTypeEnum!
+  payload: String!
+  deletedAt: String!
+  workspaceIdentifier: String
+}
+
+type RecycleBinConnection {
+  pageInfo: PageInfo!
+  paginationInfo: PaginationInfo
+  nodes: [RecycleBin!]!
+  edges: [RecycleBinEdge!]!
+}
+
+type RecycleBinEdge {
+  cursor: String!
+  node: RecycleBin!
+}
+
+input RecycleBinFilterInput {
+  identifier: TextFilterInput
+  itemId: TextFilterInput
+  itemType: ItemTypeEnumFilterInput
+  payload: StringFilterInput
+  deletedAt: TextFilterInput
+  workspaceIdentifier: TextFilterInput
+  and: [RecycleBinFilterInput!]
+  or: [RecycleBinFilterInput!]
+  not: RecycleBinFilterInput
+}
+
+input RecycleBinHavingInput {
+  workspaces: WorkspacesFilterInput
+}
+
+input RecycleBinInsertInput {
+  identifier: String!
+  itemId: String!
+  itemType: ItemTypeEnum!
+  payload: String!
+  deletedAt: String!
+  workspaceIdentifier: String
+}
+
+input RecycleBinOrderInput {
+  identifier: OrderByEnum
+  itemId: OrderByEnum
+  itemType: OrderByEnum
+  payload: OrderByEnum
+  deletedAt: OrderByEnum
+  workspaceIdentifier: OrderByEnum
+}
+
+input RecycleBinUpdateInput {
+  identifier: String
+  itemId: String
+  itemType: ItemTypeEnum
+  payload: String
+  deletedAt: String
+  workspaceIdentifier: String
+}
+
+type Reminder {
+  identifier: String!
+  title: String!
+  description: String
+  recurring: Boolean!
+  recurrenceRule: String
+  alarmSound: String
+  remindAt: String!
+  createdAt: String!
+  updatedAt: String!
+  workspaceIdentifier: String
+  workspaces: Workspaces
+}
+
+type ReminderBasic {
+  identifier: String!
+  title: String!
+  description: String
+  recurring: Boolean!
+  recurrenceRule: String
+  alarmSound: String
+  remindAt: String!
+  createdAt: String!
+  updatedAt: String!
+  workspaceIdentifier: String
+}
+
+type ReminderConnection {
+  pageInfo: PageInfo!
+  paginationInfo: PaginationInfo
+  nodes: [Reminder!]!
+  edges: [ReminderEdge!]!
+}
+
+type ReminderEdge {
+  cursor: String!
+  node: Reminder!
+}
+
+input ReminderFilterInput {
+  identifier: TextFilterInput
+  title: StringFilterInput
+  description: StringFilterInput
+  recurring: BooleanFilterInput
+  recurrenceRule: StringFilterInput
+  alarmSound: StringFilterInput
+  remindAt: TextFilterInput
+  createdAt: TextFilterInput
+  updatedAt: TextFilterInput
+  workspaceIdentifier: TextFilterInput
+  and: [ReminderFilterInput!]
+  or: [ReminderFilterInput!]
+  not: ReminderFilterInput
+}
+
+input ReminderHavingInput {
+  workspaces: WorkspacesFilterInput
+}
+
+input ReminderInsertInput {
+  identifier: String!
+  title: String!
+  description: String
+  recurring: Boolean!
+  recurrenceRule: String
+  alarmSound: String
+  remindAt: String!
+  createdAt: String!
+  updatedAt: String!
+  workspaceIdentifier: String
+}
+
+input ReminderOrderInput {
+  identifier: OrderByEnum
+  title: OrderByEnum
+  description: OrderByEnum
+  recurring: OrderByEnum
+  recurrenceRule: OrderByEnum
+  alarmSound: OrderByEnum
+  remindAt: OrderByEnum
+  createdAt: OrderByEnum
+  updatedAt: OrderByEnum
+  workspaceIdentifier: OrderByEnum
+}
+
+input ReminderUpdateInput {
+  identifier: String
+  title: String
+  description: String
+  recurring: Boolean
+  recurrenceRule: String
+  alarmSound: String
+  remindAt: String
+  createdAt: String
+  updatedAt: String
+  workspaceIdentifier: String
+}
+
+type Snippets {
+  identifier: String!
+  title: String
+  language: String
+  code: String!
+  description: String
+  isPinned: Boolean!
+  createdAt: String!
+  updatedAt: String!
+  workspaceIdentifier: String
+  workspaces: Workspaces
+}
+
+type SnippetsBasic {
+  identifier: String!
+  title: String
+  language: String
+  code: String!
+  description: String
+  isPinned: Boolean!
+  createdAt: String!
+  updatedAt: String!
+  workspaceIdentifier: String
+}
+
+type SnippetsConnection {
+  pageInfo: PageInfo!
+  paginationInfo: PaginationInfo
+  nodes: [Snippets!]!
+  edges: [SnippetsEdge!]!
+}
+
+type SnippetsEdge {
+  cursor: String!
+  node: Snippets!
+}
+
+input SnippetsFilterInput {
+  identifier: TextFilterInput
+  title: StringFilterInput
+  language: StringFilterInput
+  code: StringFilterInput
+  description: StringFilterInput
+  isPinned: BooleanFilterInput
+  createdAt: TextFilterInput
+  updatedAt: TextFilterInput
+  workspaceIdentifier: TextFilterInput
+  and: [SnippetsFilterInput!]
+  or: [SnippetsFilterInput!]
+  not: SnippetsFilterInput
+}
+
+input SnippetsHavingInput {
+  workspaces: WorkspacesFilterInput
+}
+
+input SnippetsInsertInput {
+  identifier: String!
+  title: String
+  language: String
+  code: String!
+  description: String
+  isPinned: Boolean!
+  createdAt: String!
+  updatedAt: String!
+  workspaceIdentifier: String
+}
+
+input SnippetsOrderInput {
+  identifier: OrderByEnum
+  title: OrderByEnum
+  language: OrderByEnum
+  code: OrderByEnum
+  description: OrderByEnum
+  isPinned: OrderByEnum
+  createdAt: OrderByEnum
+  updatedAt: OrderByEnum
+  workspaceIdentifier: OrderByEnum
+}
+
+input SnippetsUpdateInput {
+  identifier: String
+  title: String
+  language: String
+  code: String
+  description: String
+  isPinned: Boolean
+  createdAt: String
+  updatedAt: String
+  workspaceIdentifier: String
+}
+
+input StringFilterInput {
+  eq: String
+  ne: String
+  gt: String
+  gte: String
+  lt: String
+  lte: String
+  ci_eq: String
+  is_in: [String!]
+  is_not_in: [String!]
+  is_null: Boolean
+  contains: String
+  starts_with: String
+  ends_with: String
+  like: String
+  not_like: String
+  between: [String!]
+  not_between: [String!]
+}
+
+type SyncQueue {
+  identifier: String!
+  tableName: String!
+  recordIdentifier: String!
+  operation: String!
+  createdAt: String!
+}
+
+type SyncQueueBasic {
+  identifier: String!
+  tableName: String!
+  recordIdentifier: String!
+  operation: String!
+  createdAt: String!
+}
+
+type SyncQueueConnection {
+  pageInfo: PageInfo!
+  paginationInfo: PaginationInfo
+  nodes: [SyncQueue!]!
+  edges: [SyncQueueEdge!]!
+}
+
+type SyncQueueEdge {
+  cursor: String!
+  node: SyncQueue!
+}
+
+input SyncQueueFilterInput {
+  identifier: TextFilterInput
+  tableName: StringFilterInput
+  recordIdentifier: StringFilterInput
+  operation: StringFilterInput
+  createdAt: StringFilterInput
+  and: [SyncQueueFilterInput!]
+  or: [SyncQueueFilterInput!]
+  not: SyncQueueFilterInput
+}
+
+input SyncQueueHavingInput {
+  _: Boolean
+}
+
+input SyncQueueInsertInput {
+  identifier: String!
+  tableName: String!
+  recordIdentifier: String!
+  operation: String!
+  createdAt: String!
+}
+
+input SyncQueueOrderInput {
+  identifier: OrderByEnum
+  tableName: OrderByEnum
+  recordIdentifier: OrderByEnum
+  operation: OrderByEnum
+  createdAt: OrderByEnum
+}
+
+input SyncQueueUpdateInput {
+  identifier: String
+  tableName: String
+  recordIdentifier: String
+  operation: String
+  createdAt: String
+}
+
+type Table {
+  columns: [Column!]!
+  primary_key: [String!]!
+  comment: String
+}
+
+enum TagEnum {
+  development
+  inspiration
+  design
+  research
+}
+
+input TagEnumFilterInput {
+  eq: TagEnum
+  ne: TagEnum
+  gt: TagEnum
+  gte: TagEnum
+  lt: TagEnum
+  lte: TagEnum
+  is_in: [TagEnum!]
+  is_not_in: [TagEnum!]
+  is_null: Boolean
+}
+
+input TextFilterInput {
+  eq: String
+  ne: String
+  gt: String
+  gte: String
+  lt: String
+  lte: String
+  is_in: [String!]
+  is_not_in: [String!]
+  is_null: Boolean
+  between: [String!]
+  not_between: [String!]
+}
+
+type Todo {
+  identifier: String!
+  title: String!
+  description: String
+  dueDate: String
+  priority: PriorityEnum!
+  done: Boolean!
+  createdAt: String!
+  updatedAt: String!
+  dueTime: String
+  workspaceIdentifier: String
+  workspaces: Workspaces
+}
+
+type TodoBasic {
+  identifier: String!
+  title: String!
+  description: String
+  dueDate: String
+  priority: PriorityEnum!
+  done: Boolean!
+  createdAt: String!
+  updatedAt: String!
+  dueTime: String
+  workspaceIdentifier: String
+}
+
+type TodoConnection {
+  pageInfo: PageInfo!
+  paginationInfo: PaginationInfo
+  nodes: [Todo!]!
+  edges: [TodoEdge!]!
+}
+
+type TodoEdge {
+  cursor: String!
+  node: Todo!
+}
+
+input TodoFilterInput {
+  identifier: TextFilterInput
+  title: StringFilterInput
+  description: StringFilterInput
+  dueDate: TextFilterInput
+  priority: PriorityEnumFilterInput
+  done: BooleanFilterInput
+  createdAt: TextFilterInput
+  updatedAt: TextFilterInput
+  dueTime: TextFilterInput
+  workspaceIdentifier: TextFilterInput
+  and: [TodoFilterInput!]
+  or: [TodoFilterInput!]
+  not: TodoFilterInput
+}
+
+input TodoHavingInput {
+  workspaces: WorkspacesFilterInput
+}
+
+input TodoInsertInput {
+  identifier: String!
+  title: String!
+  description: String
+  dueDate: String
+  priority: PriorityEnum!
+  done: Boolean!
+  createdAt: String!
+  updatedAt: String!
+  dueTime: String
+  workspaceIdentifier: String
+}
+
+input TodoOrderInput {
+  identifier: OrderByEnum
+  title: OrderByEnum
+  description: OrderByEnum
+  dueDate: OrderByEnum
+  priority: OrderByEnum
+  done: OrderByEnum
+  createdAt: OrderByEnum
+  updatedAt: OrderByEnum
+  dueTime: OrderByEnum
+  workspaceIdentifier: OrderByEnum
+}
+
+input TodoUpdateInput {
+  identifier: String
+  title: String
+  description: String
+  dueDate: String
+  priority: PriorityEnum
+  done: Boolean
+  createdAt: String
+  updatedAt: String
+  dueTime: String
+  workspaceIdentifier: String
+}
+
+type UserPreference {
+  identifier: String!
+  firstName: String!
+  lastName: String!
+  email: String!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type UserPreferenceBasic {
+  identifier: String!
+  firstName: String!
+  lastName: String!
+  email: String!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type UserPreferenceConnection {
+  pageInfo: PageInfo!
+  paginationInfo: PaginationInfo
+  nodes: [UserPreference!]!
+  edges: [UserPreferenceEdge!]!
+}
+
+type UserPreferenceEdge {
+  cursor: String!
+  node: UserPreference!
+}
+
+input UserPreferenceFilterInput {
+  identifier: TextFilterInput
+  firstName: StringFilterInput
+  lastName: StringFilterInput
+  email: StringFilterInput
+  createdAt: TextFilterInput
+  updatedAt: TextFilterInput
+  and: [UserPreferenceFilterInput!]
+  or: [UserPreferenceFilterInput!]
+  not: UserPreferenceFilterInput
+}
+
+input UserPreferenceHavingInput {
+  _: Boolean
+}
+
+input UserPreferenceInsertInput {
+  identifier: String!
+  firstName: String!
+  lastName: String!
+  email: String!
+  createdAt: String!
+  updatedAt: String!
+}
+
+input UserPreferenceOrderInput {
+  identifier: OrderByEnum
+  firstName: OrderByEnum
+  lastName: OrderByEnum
+  email: OrderByEnum
+  createdAt: OrderByEnum
+  updatedAt: OrderByEnum
+}
+
+input UserPreferenceUpdateInput {
+  identifier: String
+  firstName: String
+  lastName: String
+  email: String
+  createdAt: String
+  updatedAt: String
+}
+
+type Users {
+  identifier: String!
+  firstName: String
+  lastName: String
+  email: String!
+  password: String!
+  createdAt: String!
+  updatedAt: String
+  isActive: Boolean!
+  profilePicture: String
+  username: String
+  countryIdentifier: String
+  enable2fa: Boolean!
+  enableBiometrics: Boolean!
+  audioBooks(
+    filters: AudioBooksFilterInput
+    orderBy: AudioBooksOrderInput
+    pagination: PaginationInput
+  ): AudioBooksConnection!
+  backupEmails(
+    filters: BackupEmailsFilterInput
+    orderBy: BackupEmailsOrderInput
+    pagination: PaginationInput
+  ): BackupEmailsConnection!
+  countries: Countries
+  notifications(
+    filters: NotificationsFilterInput
+    orderBy: NotificationsOrderInput
+    pagination: PaginationInput
+  ): NotificationsConnection!
+  oneTimePasswords(
+    filters: OneTimePasswordsFilterInput
+    orderBy: OneTimePasswordsOrderInput
+    pagination: PaginationInput
+  ): OneTimePasswordsConnection!
+  playlists(
+    filters: PlaylistsFilterInput
+    orderBy: PlaylistsOrderInput
+    pagination: PaginationInput
+  ): PlaylistsConnection!
+}
+
+type UsersBasic {
+  identifier: String!
+  firstName: String
+  lastName: String
+  email: String!
+  password: String!
+  createdAt: String!
+  updatedAt: String
+  isActive: Boolean!
+  profilePicture: String
+  username: String
+  countryIdentifier: String
+  enable2fa: Boolean!
+  enableBiometrics: Boolean!
+}
+
+type UsersConnection {
+  pageInfo: PageInfo!
+  paginationInfo: PaginationInfo
+  nodes: [Users!]!
+  edges: [UsersEdge!]!
+}
+
+type UsersEdge {
+  cursor: String!
+  node: Users!
+}
+
+input UsersFilterInput {
+  identifier: TextFilterInput
+  firstName: StringFilterInput
+  lastName: StringFilterInput
+  email: StringFilterInput
+  password: StringFilterInput
+  createdAt: TextFilterInput
+  updatedAt: TextFilterInput
+  isActive: BooleanFilterInput
+  profilePicture: StringFilterInput
+  username: StringFilterInput
+  countryIdentifier: StringFilterInput
+  enable2fa: BooleanFilterInput
+  enableBiometrics: BooleanFilterInput
+  and: [UsersFilterInput!]
+  or: [UsersFilterInput!]
+  not: UsersFilterInput
+}
+
+input UsersHavingInput {
+  audioBooks: AudioBooksFilterInput
+  backupEmails: BackupEmailsFilterInput
+  countries: CountriesFilterInput
+  notifications: NotificationsFilterInput
+  oneTimePasswords: OneTimePasswordsFilterInput
+  playlists: PlaylistsFilterInput
+}
+
+input UsersInsertInput {
+  identifier: String!
+  firstName: String
+  lastName: String
+  email: String!
+  password: String!
+  createdAt: String!
+  updatedAt: String
+  isActive: Boolean!
+  profilePicture: String
+  username: String
+  countryIdentifier: String
+  enable2fa: Boolean!
+  enableBiometrics: Boolean!
+}
+
+input UsersOrderInput {
+  identifier: OrderByEnum
+  firstName: OrderByEnum
+  lastName: OrderByEnum
+  email: OrderByEnum
+  password: OrderByEnum
+  createdAt: OrderByEnum
+  updatedAt: OrderByEnum
+  isActive: OrderByEnum
+  profilePicture: OrderByEnum
+  username: OrderByEnum
+  countryIdentifier: OrderByEnum
+  enable2fa: OrderByEnum
+  enableBiometrics: OrderByEnum
+}
+
+input UsersUpdateInput {
+  identifier: String
+  firstName: String
+  lastName: String
+  email: String
+  password: String
+  createdAt: String
+  updatedAt: String
+  isActive: Boolean
+  profilePicture: String
+  username: String
+  countryIdentifier: String
+  enable2fa: Boolean
+  enableBiometrics: Boolean
+}
+
+type WaitList {
+  identifier: String!
+  firstName: String!
+  lastName: String!
+  email: String!
+  createdAt: String!
+  updatedAt: String
+  deletedAt: String
+  lastNotifiedAt: String
+}
+
+type WaitListBasic {
+  identifier: String!
+  firstName: String!
+  lastName: String!
+  email: String!
+  createdAt: String!
+  updatedAt: String
+  deletedAt: String
+  lastNotifiedAt: String
+}
+
+type WaitListConnection {
+  pageInfo: PageInfo!
+  paginationInfo: PaginationInfo
+  nodes: [WaitList!]!
+  edges: [WaitListEdge!]!
+}
+
+type WaitListEdge {
+  cursor: String!
+  node: WaitList!
+}
+
+input WaitListFilterInput {
+  identifier: StringFilterInput
+  firstName: StringFilterInput
+  lastName: StringFilterInput
+  email: StringFilterInput
+  createdAt: TextFilterInput
+  updatedAt: TextFilterInput
+  deletedAt: TextFilterInput
+  lastNotifiedAt: TextFilterInput
+  and: [WaitListFilterInput!]
+  or: [WaitListFilterInput!]
+  not: WaitListFilterInput
+}
+
+input WaitListHavingInput {
+  _: Boolean
+}
+
+input WaitListInsertInput {
+  identifier: String!
+  firstName: String!
+  lastName: String!
+  email: String!
+  createdAt: String!
+  updatedAt: String
+  deletedAt: String
+  lastNotifiedAt: String
+}
+
+input WaitListOrderInput {
+  identifier: OrderByEnum
+  firstName: OrderByEnum
+  lastName: OrderByEnum
+  email: OrderByEnum
+  createdAt: OrderByEnum
+  updatedAt: OrderByEnum
+  deletedAt: OrderByEnum
+  lastNotifiedAt: OrderByEnum
+}
+
+input WaitListUpdateInput {
+  identifier: String
+  firstName: String
+  lastName: String
+  email: String
+  createdAt: String
+  updatedAt: String
+  deletedAt: String
+  lastNotifiedAt: String
+}
+
+type Workspaces {
+  identifier: String!
+  name: String!
+  description: String!
+  createdAt: String!
+  updatedAt: String!
+  bookmark(
+    filters: BookmarkFilterInput
+    orderBy: BookmarkOrderInput
+    pagination: PaginationInput
+  ): BookmarkConnection!
+  notes(
+    filters: NotesFilterInput
+    orderBy: NotesOrderInput
+    pagination: PaginationInput
+  ): NotesConnection!
+  recycleBin(
+    filters: RecycleBinFilterInput
+    orderBy: RecycleBinOrderInput
+    pagination: PaginationInput
+  ): RecycleBinConnection!
+  reminder(
+    filters: ReminderFilterInput
+    orderBy: ReminderOrderInput
+    pagination: PaginationInput
+  ): ReminderConnection!
+  snippets(
+    filters: SnippetsFilterInput
+    orderBy: SnippetsOrderInput
+    pagination: PaginationInput
+  ): SnippetsConnection!
+  todo(
+    filters: TodoFilterInput
+    orderBy: TodoOrderInput
+    pagination: PaginationInput
+  ): TodoConnection!
+}
+
+type WorkspacesBasic {
+  identifier: String!
+  name: String!
+  description: String!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type WorkspacesConnection {
+  pageInfo: PageInfo!
+  paginationInfo: PaginationInfo
+  nodes: [Workspaces!]!
+  edges: [WorkspacesEdge!]!
+}
+
+type WorkspacesEdge {
+  cursor: String!
+  node: Workspaces!
+}
+
+input WorkspacesFilterInput {
+  identifier: TextFilterInput
+  name: StringFilterInput
+  description: StringFilterInput
+  createdAt: TextFilterInput
+  updatedAt: TextFilterInput
+  and: [WorkspacesFilterInput!]
+  or: [WorkspacesFilterInput!]
+  not: WorkspacesFilterInput
+}
+
+input WorkspacesHavingInput {
+  bookmark: BookmarkFilterInput
+  notes: NotesFilterInput
+  recycleBin: RecycleBinFilterInput
+  reminder: ReminderFilterInput
+  snippets: SnippetsFilterInput
+  todo: TodoFilterInput
+}
+
+input WorkspacesInsertInput {
+  identifier: String!
+  name: String!
+  description: String!
+  createdAt: String!
+  updatedAt: String!
+}
+
+input WorkspacesOrderInput {
+  identifier: OrderByEnum
+  name: OrderByEnum
+  description: OrderByEnum
+  createdAt: OrderByEnum
+  updatedAt: OrderByEnum
+}
+
+input WorkspacesUpdateInput {
+  identifier: String
+  name: String
+  description: String
+  createdAt: String
+  updatedAt: String
+}
