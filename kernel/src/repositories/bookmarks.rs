@@ -253,6 +253,7 @@ impl BookmarkRepositoryExt for BookmarkRepository {
     }
 }
 
+#[async_trait::async_trait]
 impl TransferRecord for BookmarkRepository {
     async fn transfer_record(
         &self,
@@ -311,7 +312,7 @@ impl TransferRecord for BookmarkRepository {
         Ok(())
     }
 }
-
+#[async_trait::async_trait]
 impl RecordExistInWorkspace for BookmarkRepository {
     async fn record_exists_in_workspace(
         &self,
@@ -329,6 +330,7 @@ impl RecordExistInWorkspace for BookmarkRepository {
     }
 }
 
+#[async_trait::async_trait]
 impl DuplicateRecord for BookmarkRepository {
     async fn duplicate_record(
         &self,

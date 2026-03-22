@@ -212,6 +212,7 @@ impl NotesRepositoryExt for NotesRepository {
             .map_err(|err| KernelError::DbOperationError(err.to_string()))
     }
 }
+#[async_trait::async_trait]
 
 impl TransferRecord for NotesRepository {
     async fn transfer_record(
@@ -271,6 +272,7 @@ impl TransferRecord for NotesRepository {
         Ok(())
     }
 }
+#[async_trait::async_trait]
 
 impl RecordExistInWorkspace for NotesRepository {
     async fn record_exists_in_workspace(
@@ -288,6 +290,7 @@ impl RecordExistInWorkspace for NotesRepository {
         Ok(record.is_some())
     }
 }
+#[async_trait::async_trait]
 
 impl DuplicateRecord for NotesRepository {
     async fn duplicate_record(

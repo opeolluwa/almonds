@@ -2,8 +2,8 @@ use uuid::Uuid;
 
 use crate::error::KernelError;
 
-// #[async_trait::async_trait]
-pub(crate) trait TransferRecord {
+#[async_trait::async_trait]
+pub trait TransferRecord {
     async fn transfer_record(
         &self,
         record_identifier: &Uuid,
@@ -12,8 +12,8 @@ pub(crate) trait TransferRecord {
     ) -> Result<(), KernelError>;
 }
 
-// #[async_trait::async_trait]
-pub(crate) trait DuplicateRecord {
+#[async_trait::async_trait]
+pub trait DuplicateRecord {
     async fn duplicate_record(
         &self,
         record_identifier: &Uuid,
@@ -22,8 +22,8 @@ pub(crate) trait DuplicateRecord {
     ) -> Result<(), KernelError>;
 }
 
-// #[async_trait::async_trait]
-pub(crate) trait RecordExistInWorkspace {
+#[async_trait::async_trait]
+pub trait RecordExistInWorkspace {
     async fn record_exists_in_workspace(
         &self,
         record_identifier: &Uuid,

@@ -1,5 +1,8 @@
 use almond_kernel::{
-    adapters::meta::RequestMeta, entities::snippets, repositories::snippets::SnippetRepositoryExt,
+    adapters::meta::RequestMeta,
+    entities::snippets,
+    repositories::snippets::SnippetRepositoryExt,
+    repositories::workspace_manager::{DuplicateRecord, TransferRecord},
 };
 use tauri::State;
 use uuid::Uuid;
@@ -79,4 +82,42 @@ pub async fn get_recently_added_snippet(
 ) -> Result<Vec<snippets::Model>, AppError> {
     let snippets = state.snippet_repository.recently_added(&meta).await?;
     Ok(snippets)
+}
+
+#[tauri::command]
+pub async fn duplicate_snippet(
+    state: State<'_, AppState>,
+    record_identifier: &Uuid,
+    previous_workspace_identifier: &Uuid,
+    target_workspace_identifier: &Uuid,
+    meta: Option<RequestMeta>,
+) -> Result<(), AppError> {
+    state
+        .snippet_repository
+        .duplicate_record(
+            record_identifier,
+            previous_workspace_identifier,
+            target_workspace_identifier,
+        )
+        .await
+        .map_err(Into::into)
+}
+
+#[tauri::command]
+pub async fn transfer_snippet(
+    state: State<'_, AppState>,
+    record_identifier: &Uuid,
+    previous_workspace_identifier: &Uuid,
+    target_workspace_identifier: &Uuid,
+    meta: Option<RequestMeta>,
+) -> Result<(), AppError> {
+    state
+        .snippet_repository
+        .transfer_record(
+            record_identifier,
+            previous_workspace_identifier,
+            target_workspace_identifier,
+        )
+        .await
+        .map_err(Into::into)
 }

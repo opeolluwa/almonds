@@ -224,6 +224,7 @@ impl SnippetRepositoryExt for SnippetRepository {
             .map_err(|err| KernelError::DbOperationError(err.to_string()))
     }
 }
+#[async_trait::async_trait]
 
 impl TransferRecord for SnippetRepository {
     async fn transfer_record(
@@ -283,6 +284,7 @@ impl TransferRecord for SnippetRepository {
         Ok(())
     }
 }
+#[async_trait::async_trait]
 
 impl RecordExistInWorkspace for SnippetRepository {
     async fn record_exists_in_workspace(
@@ -300,6 +302,7 @@ impl RecordExistInWorkspace for SnippetRepository {
         Ok(record.is_some())
     }
 }
+#[async_trait::async_trait]
 
 impl DuplicateRecord for SnippetRepository {
     async fn duplicate_record(

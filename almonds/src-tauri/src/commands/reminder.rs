@@ -1,5 +1,8 @@
 use almond_kernel::{
-    adapters::meta::RequestMeta, entities::reminder, repositories::reminder::ReminderRepositoryExt,
+    adapters::meta::RequestMeta,
+    entities::reminder,
+    repositories::reminder::ReminderRepositoryExt,
+    repositories::workspace_manager::{DuplicateRecord, TransferRecord},
 };
 use tauri::State;
 use uuid::Uuid;
@@ -70,4 +73,42 @@ pub async fn delete_reminder(
 ) -> Result<(), AppError> {
     state.reminder_repository.delete(&identifier, &meta).await?;
     Ok(())
+}
+
+#[tauri::command]
+pub async fn duplicate_reminder(
+    state: State<'_, AppState>,
+    record_identifier: &Uuid,
+    previous_workspace_identifier: &Uuid,
+    target_workspace_identifier: &Uuid,
+    meta: Option<RequestMeta>,
+) -> Result<(), AppError> {
+    state
+        .reminder_repository
+        .duplicate_record(
+            record_identifier,
+            previous_workspace_identifier,
+            target_workspace_identifier,
+        )
+        .await
+        .map_err(Into::into)
+}
+
+#[tauri::command]
+pub async fn transfer_reminder(
+    state: State<'_, AppState>,
+    record_identifier: &Uuid,
+    previous_workspace_identifier: &Uuid,
+    target_workspace_identifier: &Uuid,
+    meta: Option<RequestMeta>,
+) -> Result<(), AppError> {
+    state
+        .reminder_repository
+        .transfer_record(
+            record_identifier,
+            previous_workspace_identifier,
+            target_workspace_identifier,
+        )
+        .await
+        .map_err(Into::into)
 }

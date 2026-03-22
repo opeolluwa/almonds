@@ -206,6 +206,7 @@ impl ReminderRepositoryExt for ReminderRepository {
         Ok(())
     }
 }
+#[async_trait::async_trait]
 
 impl TransferRecord for ReminderRepository {
     async fn transfer_record(
@@ -265,6 +266,7 @@ impl TransferRecord for ReminderRepository {
         Ok(())
     }
 }
+#[async_trait::async_trait]
 
 impl RecordExistInWorkspace for ReminderRepository {
     async fn record_exists_in_workspace(
@@ -282,6 +284,7 @@ impl RecordExistInWorkspace for ReminderRepository {
         Ok(record.is_some())
     }
 }
+#[async_trait::async_trait]
 
 impl DuplicateRecord for ReminderRepository {
     async fn duplicate_record(

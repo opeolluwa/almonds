@@ -1,5 +1,8 @@
 use almond_kernel::{
-    entities::user_preference, repositories::user_preference::UserPreferenceRepositoryExt,
+    adapters::meta::RequestMeta,
+    entities::user_preference,
+    repositories::user_preference::UserPreferenceRepositoryExt,
+    repositories::workspace_manager::{DuplicateRecord, TransferRecord},
 };
 use tauri::State;
 use uuid::Uuid;
@@ -44,4 +47,42 @@ pub async fn update_user_preference(
         .update(&identifier, &preference.into())
         .await?;
     Ok(updated)
+}
+
+#[tauri::command]
+pub async fn duplicate_user_preference(
+    state: State<'_, AppState>,
+    record_identifier: Uuid,
+    previous_workspace_identifier: Uuid,
+    target_workspace_identifier: Uuid,
+    meta: Option<RequestMeta>,
+) -> Result<(), AppError> {
+    state
+        .user_preference_repository
+        .duplicate_record(
+            &record_identifier,
+            &previous_workspace_identifier,
+            &target_workspace_identifier,
+        )
+        .await
+        .map_err(Into::into)
+}
+
+#[tauri::command]
+pub async fn transfer_user_preference(
+    state: State<'_, AppState>,
+    record_identifier: Uuid,
+    previous_workspace_identifier: Uuid,
+    target_workspace_identifier: Uuid,
+    meta: Option<RequestMeta>,
+) -> Result<(), AppError> {
+    state
+        .user_preference_repository
+        .transfer_record(
+            &record_identifier,
+            &previous_workspace_identifier,
+            &target_workspace_identifier,
+        )
+        .await
+        .map_err(Into::into)
 }

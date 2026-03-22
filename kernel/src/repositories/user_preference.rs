@@ -102,6 +102,7 @@ impl UserPreferenceRepositoryExt for UserPreferenceRepository {
             .map_err(|err| KernelError::DbOperationError(err.to_string()))
     }
 }
+#[async_trait::async_trait]
 
 impl TransferRecord for UserPreferenceRepository {
     async fn transfer_record(
@@ -161,6 +162,7 @@ impl TransferRecord for UserPreferenceRepository {
         Ok(())
     }
 }
+#[async_trait::async_trait]
 
 impl RecordExistInWorkspace for UserPreferenceRepository {
     async fn record_exists_in_workspace(
@@ -178,6 +180,7 @@ impl RecordExistInWorkspace for UserPreferenceRepository {
         Ok(record.is_some())
     }
 }
+#[async_trait::async_trait]
 
 impl DuplicateRecord for UserPreferenceRepository {
     async fn duplicate_record(

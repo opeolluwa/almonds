@@ -2,6 +2,7 @@ use almond_kernel::{
     adapters::{meta::RequestMeta, todo::TodoPriority},
     entities::todo,
     repositories::todo::TodoRepositoryExt,
+    repositories::workspace_manager::{DuplicateRecord, TransferRecord},
 };
 use tauri::State;
 use uuid::Uuid;
@@ -126,6 +127,44 @@ pub async fn update_todo_due_date(
     state
         .todo_repository
         .update_due_date(&identifier, date, &meta)
+        .await
+        .map_err(Into::into)
+}
+
+#[tauri::command]
+pub async fn transfer_todo(
+    state: State<'_, AppState>,
+    record_identifier: Uuid,
+    previous_workspace_identifier: Uuid,
+    target_workspace_identifier: Uuid,
+    meta: Option<RequestMeta>,
+) -> Result<(), AppError> {
+    state
+        .todo_repository
+        .transfer_record(
+            &record_identifier,
+            &previous_workspace_identifier,
+            &target_workspace_identifier,
+        )
+        .await
+        .map_err(Into::into)
+}
+
+#[tauri::command]
+pub async fn duplicate_todo(
+    state: State<'_, AppState>,
+    record_identifier: Uuid,
+    previous_workspace_identifier: Uuid,
+    target_workspace_identifier: Uuid,
+    meta: Option<RequestMeta>,
+) -> Result<(), AppError> {
+    state
+        .todo_repository
+        .duplicate_record(
+            &record_identifier,
+            &previous_workspace_identifier,
+            &target_workspace_identifier,
+        )
         .await
         .map_err(Into::into)
 }

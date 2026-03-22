@@ -1,5 +1,8 @@
 use almond_kernel::{
-    adapters::meta::RequestMeta, entities::notes, repositories::notes::NotesRepositoryExt,
+    adapters::meta::RequestMeta,
+    entities::notes,
+    repositories::notes::NotesRepositoryExt,
+    repositories::workspace_manager::{DuplicateRecord, TransferRecord},
 };
 use tauri::State;
 use uuid::Uuid;
@@ -77,6 +80,44 @@ pub async fn get_recently_added_notes(
     state
         .notes_repository
         .recently_added(&meta)
+        .await
+        .map_err(Into::into)
+}
+
+#[tauri::command]
+pub async fn duplicate_note(
+    state: State<'_, AppState>,
+    record_identifier: Uuid,
+    previous_workspace_identifier: Uuid,
+    target_workspace_identifier: Uuid,
+    meta: Option<RequestMeta>,
+) -> Result<(), AppError> {
+    state
+        .notes_repository
+        .duplicate_record(
+            &record_identifier,
+            &previous_workspace_identifier,
+            &target_workspace_identifier,
+        )
+        .await
+        .map_err(Into::into)
+}
+
+#[tauri::command]
+pub async fn transfer_note(
+    state: State<'_, AppState>,
+    record_identifier: Uuid,
+    previous_workspace_identifier: Uuid,
+    target_workspace_identifier: Uuid,
+    meta: Option<RequestMeta>,
+) -> Result<(), AppError> {
+    state
+        .notes_repository
+        .transfer_record(
+            &record_identifier,
+            &previous_workspace_identifier,
+            &target_workspace_identifier,
+        )
         .await
         .map_err(Into::into)
 }

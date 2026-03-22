@@ -6,6 +6,7 @@ definePageMeta({ layout: false });
 type Section =
   | "profile"
   | "appearance"
+  | "locale"
   | "backup"
   | "ai"
   | "notifications"
@@ -18,6 +19,7 @@ const route = useRoute();
 const navSections: { key: Section; label: string; icon: string }[] = [
   { key: "profile", label: "Profile", icon: "i-lucide-user" },
   { key: "appearance", label: "Appearance", icon: "heroicons:paint-brush" },
+  { key: "locale", label: "Locale", icon: "heroicons:language" },
   { key: "workspaces", label: "Workspaces", icon: "heroicons:briefcase" },
   { key: "backup", label: "Backup & Sync", icon: "heroicons:cloud-arrow-up" },
   { key: "ai", label: "AI & Ollama", icon: "heroicons:cpu-chip" },
@@ -49,6 +51,7 @@ const activeSection = ref<Section>(
       <SettingsAlarmSettings v-else-if="activeSection === 'alarm'" />
       <SettingsAboutSettings v-else-if="activeSection === 'about'" />
       <SettingsWorkspaces v-else-if="activeSection === 'workspaces'" />
+      <SettingsLocaleSettings v-else-if="activeSection === 'locale'" />
     </template>
 
     <template #side_content>

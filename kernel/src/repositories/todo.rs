@@ -287,6 +287,7 @@ impl TodoRepositoryExt for TodoRepository {
             .map_err(|err| KernelError::DbOperationError(err.to_string()))
     }
 }
+#[async_trait::async_trait]
 
 impl TransferRecord for TodoRepository {
     async fn transfer_record(
@@ -346,6 +347,7 @@ impl TransferRecord for TodoRepository {
         Ok(())
     }
 }
+#[async_trait::async_trait]
 
 impl RecordExistInWorkspace for TodoRepository {
     async fn record_exists_in_workspace(
@@ -363,7 +365,7 @@ impl RecordExistInWorkspace for TodoRepository {
         Ok(record.is_some())
     }
 }
-
+#[async_trait::async_trait]
 impl DuplicateRecord for TodoRepository {
     async fn duplicate_record(
         &self,
