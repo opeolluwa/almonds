@@ -39,6 +39,8 @@ pub trait WorkspaceRepositoryExt {
         identifier: &Uuid,
         meta: &Option<RequestMeta>,
     ) -> Result<(), KernelError>;
+
+    async fn exists(&self, id: &Uuid) -> Result<bool, KernelError>;
 }
 
 #[async_trait]
@@ -114,5 +116,10 @@ impl WorkspaceRepositoryExt for WorkspaceRepository {
 
         log::info!("{:#?}", result);
         Ok(())
+    }
+
+    async fn exists(&self, id: &Uuid) -> Result<bool, KernelError> {
+        let result = self.get_workspace_by_id(id.to_owned()).await.ok();
+        Ok(result.is_some())
     }
 }
