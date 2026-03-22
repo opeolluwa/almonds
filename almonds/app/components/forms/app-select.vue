@@ -42,6 +42,5 @@ const model = defineModel<string>();
           : 'border-gray-300 focus:border-black',
       ]"
     />
-    
   </UFormField>
 </template>
