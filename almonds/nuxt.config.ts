@@ -29,6 +29,11 @@ export default defineNuxtConfig({
     "@vueuse/nuxt",
   ],
 
+  icon: {
+     serverBundle: {
+       collections: ['heroicons', 'lucide', "ri"] 
+     }
+  },
   vite: {
     optimizeDeps: {
       include: [

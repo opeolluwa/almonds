@@ -115,8 +115,9 @@ const activeId = computed(() => workspaceStore.currentWorkspace?.identifier);
         label=""
         name="workspace"
         size="md"
+        class-name="!ring-0"
         icon="heroicons:briefcase"
-        trailing-icon="heroicons:chevron-down-solid"
+        trailing-icon="ri:arrow-drop-down-fill"
         class="px-3 mb-8 bg-transparent"
         :ui="{ content: 'w-48 ' }"
       />
