@@ -135,7 +135,7 @@ pub async fn transfer_bookmark(
     previous_workspace_identifier: Uuid,
     target_workspace_identifier: Uuid,
     _meta: Option<RequestMeta>,
-) -> Result<(), AppError> {    
+) -> Result<(), AppError> {
     state
         .bookmark_repository
         .transfer_record(

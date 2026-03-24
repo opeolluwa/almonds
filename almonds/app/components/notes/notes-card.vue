@@ -70,7 +70,6 @@ const handleTransfer = async (targetWorkspaceId: string) => {
     targetWorkspaceId,
   );
 };
-
 </script>
 
 <template>
@@ -120,8 +119,12 @@ const handleTransfer = async (targetWorkspaceId: string) => {
         </button>
         <MetaControls
           item-name="note"
-          @duplicate-record="(targetWorkspaceId) => handleDuplicate(targetWorkspaceId)"
-          @transfer-record="(targetWorkspaceId) => handleTransfer(targetWorkspaceId)"
+          @duplicate-record="
+            (targetWorkspaceId) => handleDuplicate(targetWorkspaceId)
+          "
+          @transfer-record="
+            (targetWorkspaceId) => handleTransfer(targetWorkspaceId)
+          "
         />
       </div>
     </div>
