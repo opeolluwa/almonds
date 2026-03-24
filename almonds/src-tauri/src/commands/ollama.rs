@@ -1,14 +1,15 @@
-use crate::state::app::AppState;
-use ollama_rs::generation::chat::{request::ChatMessageRequest, ChatMessage};
+use ollama_rs::generation::chat::{ChatMessage, request::ChatMessageRequest};
 use ollama_rs::history::ChatHistory;
 use ollama_rs::{
-    generation::completion::{request::GenerationRequest, GenerationContext},
     Ollama,
+    generation::completion::{GenerationContext, request::GenerationRequest},
 };
 use tauri::AppHandle;
 use tauri::Emitter;
 use tauri::State;
 use tokio_stream::StreamExt;
+
+use crate::state::app::AppState;
 
 #[tauri::command]
 pub fn is_ollama_installed(state: State<'_, AppState>) -> bool {

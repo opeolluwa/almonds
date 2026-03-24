@@ -61,7 +61,7 @@ pub async fn run() {
             // }
 
             let app_handle = app.handle().clone();
-  
+
             tauri::async_runtime::spawn(async move {
                 let app_data_dir = app_handle
                     .path()

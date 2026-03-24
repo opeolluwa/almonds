@@ -112,7 +112,7 @@ onMounted(async () => {
               placeholder="Ask Ollama something..."
               class="flex-1 bg-gray-50 dark:bg-gray-700 rounded-lg px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 border-none outline-none focus:ring-2 focus:ring-accent-300 dark:focus:ring-accent-600 placeholder-gray-400 dark:placeholder-gray-500"
               @keydown.enter="sendMessage"
-            />
+            >
             <button
               class="p-2.5 bg-accent-600 text-white rounded-lg hover:bg-accent-700 transition-colors"
               @click="sendMessage"

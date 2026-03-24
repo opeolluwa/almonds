@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use almond_kernel::{
     repositories::{
         bookmarks::BookmarkRepository, notes::NotesRepository, prelude::*,
@@ -7,8 +9,7 @@ use almond_kernel::{
     },
     sea_orm::DatabaseConnection,
 };
-use ollama_rs::{generation::completion::GenerationContext, Ollama};
-use std::sync::Arc;
+use ollama_rs::{Ollama, generation::completion::GenerationContext};
 use tokio::sync::Mutex;
 
 use crate::state::ollama::OllamaState;
