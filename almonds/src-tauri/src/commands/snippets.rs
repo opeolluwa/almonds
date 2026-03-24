@@ -87,17 +87,17 @@ pub async fn get_recently_added_snippet(
 #[tauri::command]
 pub async fn duplicate_snippet(
     state: State<'_, AppState>,
-    record_identifier: &Uuid,
-    previous_workspace_identifier: &Uuid,
-    target_workspace_identifier: &Uuid,
-    meta: Option<RequestMeta>,
+    record_identifier: Uuid,
+    previous_workspace_identifier: Uuid,
+    target_workspace_identifier: Uuid,
+    _meta: Option<RequestMeta>,
 ) -> Result<(), AppError> {
     state
         .snippet_repository
         .duplicate_record(
-            record_identifier,
-            previous_workspace_identifier,
-            target_workspace_identifier,
+            &record_identifier,
+            &previous_workspace_identifier,
+            &target_workspace_identifier,
         )
         .await
         .map_err(Into::into)
@@ -106,17 +106,17 @@ pub async fn duplicate_snippet(
 #[tauri::command]
 pub async fn transfer_snippet(
     state: State<'_, AppState>,
-    record_identifier: &Uuid,
-    previous_workspace_identifier: &Uuid,
-    target_workspace_identifier: &Uuid,
-    meta: Option<RequestMeta>,
+    record_identifier: Uuid,
+    previous_workspace_identifier: Uuid,
+    target_workspace_identifier: Uuid,
+    _meta: Option<RequestMeta>,
 ) -> Result<(), AppError> {
     state
         .snippet_repository
         .transfer_record(
-            record_identifier,
-            previous_workspace_identifier,
-            target_workspace_identifier,
+            &record_identifier,
+            &previous_workspace_identifier,
+            &target_workspace_identifier,
         )
         .await
         .map_err(Into::into)

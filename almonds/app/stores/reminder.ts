@@ -95,5 +95,37 @@ export const useReminderStore = defineStore("reminder_store", {
         (r) => r.identifier !== identifier,
       );
     },
+    
+    async duplicateReminder(
+      recordIdentifier: string,
+      previousWorkspaceIdentifier: string,
+      targetWorkspaceIdentifier: string,
+    ) {
+      await invoke("duplicate_reminder", {
+        recordIdentifier,
+        previousWorkspaceIdentifier,
+        targetWorkspaceIdentifier,
+        meta: await getWorkspaceMeta(),
+      });
+    
+      await this.fetchReminders();
+    },
+    
+    async transferReminder(
+      recordIdentifier: string,
+      previousWorkspaceIdentifier: string,
+      targetWorkspaceIdentifier: string,
+    ) {
+      await invoke("transfer_reminder", {
+        recordIdentifier,
+        previousWorkspaceIdentifier,
+        targetWorkspaceIdentifier,
+        meta: await getWorkspaceMeta(),
+      });
+    
+      this.reminders = this.reminders.filter(
+        (r) => r.identifier !== recordIdentifier,
+      );
+    },
   },
 });

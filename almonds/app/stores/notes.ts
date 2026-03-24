@@ -92,5 +92,42 @@ export const useNoteStore = defineStore("notes_store", {
       this.notes = this.notes.filter((n) => n.identifier !== identifier);
       this.recent = this.recent.filter((n) => n.identifier !== identifier);
     },
+    
+    
+    async duplicateNote(
+      recordIdentifier: string,
+      previousWorkspaceIdentifier: string,
+      targetWorkspaceIdentifier: string,
+    ) {
+      await invoke("duplicate_note", {
+        recordIdentifier,
+        previousWorkspaceIdentifier,
+        targetWorkspaceIdentifier,
+        meta: await getWorkspaceMeta(),
+      });
+    
+      await this.fetchNotes();
+    },
+    
+    async transferNote(
+      recordIdentifier: string,
+      previousWorkspaceIdentifier: string,
+      targetWorkspaceIdentifier: string,
+    ) {
+      await invoke("transfer_note", {
+        recordIdentifier,
+        previousWorkspaceIdentifier,
+        targetWorkspaceIdentifier,
+        meta: await getWorkspaceMeta(),
+      });
+    
+      this.notes = this.notes.filter(
+        (n) => n.identifier !== recordIdentifier,
+      );
+    
+      this.recent = this.recent.filter(
+        (n) => n.identifier !== recordIdentifier,
+      );
+    },
   },
 });

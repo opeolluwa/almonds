@@ -59,7 +59,7 @@ function formatDate(iso: string) {
       >
         <UIcon name="heroicons:trash" class="size-4" />
       </button>
-      <MetaControls />
+      <MetaControls item-name="bookmark" @duplicateRecord="" @transferRecord="" />
     </div>
   </div>
 </template>

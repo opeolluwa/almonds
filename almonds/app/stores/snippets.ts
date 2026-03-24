@@ -97,5 +97,38 @@ export const useSnippetStore = defineStore("snippets_store", {
 
       await this.fetchSnippets();
     },
+    
+    async duplicateSnippet(
+      recordIdentifier: string,
+      previousWorkspaceIdentifier: string,
+      targetWorkspaceIdentifier: string,
+    ) {
+      await invoke("duplicate_snippet", {
+        recordIdentifier,
+        previousWorkspaceIdentifier,
+        targetWorkspaceIdentifier,
+        meta: await getWorkspaceMeta(),
+      });
+    
+      await this.fetchSnippets();
+    },
+    
+    async transferSnippet(
+      recordIdentifier: string,
+      previousWorkspaceIdentifier: string,
+      targetWorkspaceIdentifier: string,
+    ) {
+      await invoke("transfer_snippet", {
+        recordIdentifier,
+        previousWorkspaceIdentifier,
+        targetWorkspaceIdentifier,
+        meta: await getWorkspaceMeta(),
+      });
+    
+      this.snippets = this.snippets.filter(
+        (s) => s.identifier !== recordIdentifier,
+      );
+    },
+    
   },
 });

@@ -2,6 +2,8 @@
 import { ref } from "vue";
 import type { DropdownMenuItem } from "@nuxt/ui";
 
+const { notify } = useAppNotification();
+
 const workspaceStore = useWorkspacesStore();
 const showDuplicateModal = ref(false);
 const showTransferModal = ref(false);
@@ -9,10 +11,9 @@ const showTransferModal = ref(false);
 const targetWorkspaceId = ref("");
 const isSubmitting = ref(false);
 
-const activeWorkspace = computed(() => workspaceStore.currentWorkspace);
 const currentWorkspaceId = computed(() => workspaceStore.activeWorkspaceId);
 const emit = defineEmits(["transferRecord", "duplicateRecord"]);
-defineProps({
+const props = defineProps({
   itemName: {
     type: String,
     required: false,
@@ -46,6 +47,7 @@ const handleDuplicate = async () => {
     emit("duplicateRecord", targetWorkspaceId.value);
     showDuplicateModal.value = false;
     targetWorkspaceId.value = "";
+    notify({ message: `${props.itemName} duplicated successfully` });
   } finally {
     isSubmitting.value = false;
   }
@@ -60,6 +62,7 @@ const handleTransfer = async () => {
     emit("transferRecord", targetWorkspaceId.value);
     showTransferModal.value = false;
     targetWorkspaceId.value = "";
+    notify({ message: `${props.itemName} transferred successfully` });
   } finally {
     isSubmitting.value = false;
   }
@@ -118,7 +121,6 @@ const workspaces = computed<DropdownMenuItem[]>(() => [
         />
         <AppButton
           class="mt-2 w-fit ml-auto"
-          size="sm"
           :disabled="!targetWorkspaceId || isSubmitting"
           @click="handleDuplicate"
         >
@@ -147,7 +149,6 @@ const workspaces = computed<DropdownMenuItem[]>(() => [
         />
         <AppButton
           class="mt-2 w-fit ml-auto"
-          size="sm"
           :disabled="!targetWorkspaceId || isSubmitting"
           @click="handleTransfer"
         >

@@ -8,7 +8,7 @@ mod utils;
 use std::sync::Arc;
 
 use tauri::Manager;
-use tauri_plugin_decorum::WebviewWindowExt;
+// use tauri_plugin_decorum::WebviewWindowExt;
 
 use crate::state::alarm::AlarmState;
 use crate::state::app::AppState;
@@ -20,17 +20,11 @@ pub fn run() {
 
     #[cfg(desktop)]
     {
-        builder = builder.plugin(tauri_plugin_single_instance::init(|app, args, cwd| {
-            // let _ = app
-            //     .get_webview_window("main")
-            //     .expect("no main window")
-            //     .set_focus();
-
-            use tauri::Emitter;
-
-            use crate::adapters::app::Payload;
-
-            app.emit("single-instance", Payload { args, cwd }).unwrap();
+        builder = builder.plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
+            let _ = app
+                .get_webview_window("main")
+                .expect("no main window")
+                .set_focus();
         }));
     }
 
@@ -110,71 +104,70 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             commands::alarm::list_alarm_sounds,
             commands::alarm::play_alarm_sound,
-            commands::alarm::stop_alarm_sound,
             commands::alarm::set_alarm_settings,
+            commands::alarm::stop_alarm_sound,
             commands::bookmarks::create_bookmark,
-            commands::bookmarks::get_bookmark,
+            commands::bookmarks::delete_bookmark,
+            commands::bookmarks::duplicate_bookmark,
             commands::bookmarks::get_all_bookmarks,
+            commands::bookmarks::get_bookmark,
             commands::bookmarks::get_bookmarks_by_tag,
             commands::bookmarks::get_recently_added_bookmarks,
+            commands::bookmarks::transfer_bookmark,
             commands::bookmarks::update_bookmark,
-            commands::bookmarks::delete_bookmark,
-            commands::user_preference::duplicate_user_preference,
-            commands::user_preference::transfer_user_preference,
-            commands::user_preference::get_user_preference,
             commands::notes::create_note,
-            commands::notes::get_note,
-            commands::notes::get_all_notes,
             commands::notes::delete_note,
-            commands::notes::update_note,
-            commands::notes::get_recently_added_notes,
             commands::notes::duplicate_note,
+            commands::notes::get_all_notes,
+            commands::notes::get_note,
+            commands::notes::get_recently_added_notes,
             commands::notes::transfer_note,
-            commands::snippets::create_snippet,
-            commands::snippets::get_snippet,
-            commands::snippets::get_all_snippets,
-            commands::snippets::delete_snippet,
-            commands::snippets::update_snippet,
-            commands::snippets::get_recently_added_snippet,
-            commands::sync_queue::add_sync_queue_entry,
-            commands::sync_queue::remove_sync_queue_entry,
-            commands::sync_queue::count_sync_queue_entries,
-            commands::sync_queue::run_sync,
-            commands::ollama::is_ollama_installed,
+            commands::notes::update_note,
+            commands::reminder::create_reminder,
+            commands::reminder::delete_reminder,
+            commands::reminder::duplicate_reminder,
+            commands::reminder::get_all_reminders,
+            commands::reminder::get_reminder,
+            commands::reminder::transfer_reminder,
+            commands::reminder::update_reminder,
             commands::recycle_bin::create_recycle_bin_entry,
             commands::recycle_bin::get_all_recycle_bin_entries,
             commands::recycle_bin::get_recycle_bin_entry,
             commands::recycle_bin::get_recycle_bin_entries_by_type,
-            commands::recycle_bin::purge_recycle_bin_entry,
             commands::recycle_bin::purge_all_recycle_bin_entries,
-            commands::reminder::create_reminder,
-            commands::reminder::get_reminder,
-            commands::reminder::get_all_reminders,
-            commands::reminder::update_reminder,
-            commands::reminder::delete_reminder,
-            commands::user_preference::duplicate_user_preference,
-            commands::user_preference::transfer_user_preference,
-            commands::todo::create_todo,
-            commands::todo::get_todo,
-            commands::todo::get_all_todos,
-            commands::todo::update_todo,
-            commands::todo::delete_todo,
-            commands::todo::mark_todo_done,
+            commands::recycle_bin::purge_recycle_bin_entry,
+            commands::snippets::create_snippet,
+            commands::snippets::delete_snippet,
+            commands::snippets::duplicate_snippet,
+            commands::snippets::get_all_snippets,
+            commands::snippets::get_recently_added_snippet,
+            commands::snippets::get_snippet,
+            commands::snippets::transfer_snippet,
+            commands::snippets::update_snippet,
+            commands::sync_queue::add_sync_queue_entry,
+            commands::sync_queue::count_sync_queue_entries,
+            commands::sync_queue::remove_sync_queue_entry,
+            commands::sync_queue::run_sync,
             commands::todo::change_todo_priority,
-            commands::todo::transfer_todo,
+            commands::todo::create_todo,
+            commands::todo::delete_todo,
             commands::todo::duplicate_todo,
+            commands::todo::get_all_todos,
+            commands::todo::get_todo,
+            commands::todo::mark_todo_done,
+            commands::todo::transfer_todo,
+            commands::todo::update_todo,
             commands::todo::update_todo_due_date,
-            commands::notes::duplicate_note,
-            commands::notes::transfer_note,
-            commands::user_preference::get_user_preference,
             commands::user_preference::create_user_preference,
-            commands::user_preference::update_user_preference,
             commands::user_preference::duplicate_user_preference,
+            commands::user_preference::get_user_preference,
             commands::user_preference::transfer_user_preference,
+            commands::user_preference::update_user_preference,
             commands::workspaces::create_workspace,
-            commands::workspaces::list_workspaces,
+            commands::workspaces::delete_workspace,
             commands::workspaces::get_workspace_by_id,
-            commands::workspaces::delete_workspace
+            commands::workspaces::list_workspaces,
+            commands::ollama::is_ollama_installed,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

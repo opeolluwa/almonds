@@ -6,7 +6,6 @@
     :size="size"
     :disabled="disabled || loading"
     :ui="{ base: 'py-3 pl-4' }"
-
   >
     <slot />
   </UButton>
@@ -56,6 +55,5 @@ defineProps({
     type: String as PropType<"xs" | "sm" | "md" | "lg" | "xl">,
     default: "md",
   },
-  
 });
 </script>

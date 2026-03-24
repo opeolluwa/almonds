@@ -137,7 +137,7 @@ pub async fn transfer_todo(
     record_identifier: Uuid,
     previous_workspace_identifier: Uuid,
     target_workspace_identifier: Uuid,
-    meta: Option<RequestMeta>,
+    _meta: Option<RequestMeta>,
 ) -> Result<(), AppError> {
     state
         .todo_repository
@@ -156,7 +156,7 @@ pub async fn duplicate_todo(
     record_identifier: Uuid,
     previous_workspace_identifier: Uuid,
     target_workspace_identifier: Uuid,
-    meta: Option<RequestMeta>,
+    _meta: Option<RequestMeta>,
 ) -> Result<(), AppError> {
     state
         .todo_repository
