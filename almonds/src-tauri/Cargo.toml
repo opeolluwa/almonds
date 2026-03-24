@@ -18,6 +18,7 @@ crate-type = ["staticlib", "cdylib", "rlib"]
 almond_kernel = { version = "0.1.0", path = "../../kernel" }
 chrono = { version = "0.4.43", features = ["serde"] }
 log = "0.4"
+ollama-rs = { version = "0.3.4", features = ["stream"] }
 rodio = { version = "0.19", features = ["mp3", "wav", "vorbis", "flac"] }
 sanitizer = { version = "1.0.0", features = ["derive"] }
 serde = { version = "1.0", features = ["derive"] }
@@ -31,6 +32,7 @@ tauri-plugin-opener = "2"
 tauri-plugin-os = "2"
 thiserror = "2"
 tokio = { version = "1", features = ["time"] }
+tokio-stream = "0.1.18"
 ts-rs = "10.1.0"
 uuid = { version = "1", features = ["v4", "serde"] }
 validator = { version = "0.19.0", features = ["derive"] }

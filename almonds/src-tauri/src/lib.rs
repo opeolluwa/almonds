@@ -15,7 +15,8 @@ use crate::state::app::AppState;
 use crate::state::scheduler::SchedulerState;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
-pub fn run() {
+#[tokio::main]
+pub async fn run() {
     let mut builder = tauri::Builder::default().plugin(tauri_plugin_opener::init());
 
     #[cfg(desktop)]
@@ -60,7 +61,8 @@ pub fn run() {
             // }
 
             let app_handle = app.handle().clone();
-            tauri::async_runtime::block_on(async move {
+  
+            tauri::async_runtime::spawn(async move {
                 let app_data_dir = app_handle
                     .path()
                     .app_data_dir()
@@ -86,7 +88,7 @@ pub fn run() {
 
                 let conn = Arc::new(kernel.connection().clone());
 
-                let state = AppState::new(conn);
+                let state = AppState::new(conn).await;
 
                 app_handle.manage(state);
                 app_handle.manage(AlarmState::new());
@@ -168,6 +170,7 @@ pub fn run() {
             commands::workspaces::get_workspace_by_id,
             commands::workspaces::list_workspaces,
             commands::ollama::is_ollama_installed,
+            commands::ollama::generate_stream,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

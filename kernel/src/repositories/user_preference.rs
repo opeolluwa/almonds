@@ -168,7 +168,7 @@ impl RecordExistInWorkspace for UserPreferenceRepository {
     async fn record_exists_in_workspace(
         &self,
         record_identifier: &Uuid,
-        workspace_identifier: &Uuid,
+        _workspace_identifier: &Uuid,
     ) -> Result<bool, KernelError> {
         let record = user_preference::Entity::find()
             .filter(user_preference::Column::Identifier.eq(*record_identifier))

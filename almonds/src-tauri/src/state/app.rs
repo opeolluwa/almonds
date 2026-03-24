@@ -1,5 +1,3 @@
-use std::sync::Arc;
-
 use almond_kernel::{
     repositories::{
         bookmarks::BookmarkRepository, notes::NotesRepository, prelude::*,
@@ -9,6 +7,9 @@ use almond_kernel::{
     },
     sea_orm::DatabaseConnection,
 };
+use ollama_rs::{generation::completion::GenerationContext, Ollama};
+use std::sync::Arc;
+use tokio::sync::Mutex;
 
 use crate::state::ollama::OllamaState;
 
@@ -24,10 +25,11 @@ pub struct AppState {
     pub user_preference_repository: UserPreferenceRepository,
     pub ollama: OllamaState,
     pub workspace_repository: WorkspaceRepository,
+    pub context: Mutex<Option<GenerationContext>>,
 }
 
 impl AppState {
-    pub fn new(conn: Arc<DatabaseConnection>) -> Self {
+    pub async fn new(conn: Arc<DatabaseConnection>) -> Self {
         let bookmark_repository = BookmarkRepository::new(conn.clone());
         let notes_repository = NotesRepository::new(conn.clone());
         let recycle_bin_repository = RecycleBinRepository::new(conn.clone());
@@ -36,9 +38,11 @@ impl AppState {
         let sync_queue_repository = SyncQueueRepository::new(conn.clone());
         let todo_repository = TodoRepository::new(conn.clone());
         let user_preference_repository = UserPreferenceRepository::new(conn.clone());
-        let ollama = OllamaState::new(conn.clone());
+        let ollama = OllamaState::new(conn.clone()).await;
 
         let workspace_repository = WorkspaceRepository::new(conn.clone());
+        let context = Mutex::new(None);
+
         AppState {
             bookmark_repository,
             notes_repository,
@@ -50,6 +54,7 @@ impl AppState {
             user_preference_repository,
             ollama,
             workspace_repository,
+            context,
         }
     }
 }

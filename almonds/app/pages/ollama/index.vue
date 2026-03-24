@@ -1,10 +1,15 @@
 <script setup lang="ts">
+import { listen } from "@tauri-apps/api/event";
+import { invoke } from "@tauri-apps/api/core";
+
 definePageMeta({ layout: false });
 
 interface Message {
   role: "user" | "assistant";
   content: string;
 }
+
+const isOllamaInstalled = ref(false);
 
 const prompt = ref("");
 const messages = ref<Message[]>([
@@ -18,7 +23,7 @@ const messages = ref<Message[]>([
 const models = ["llama3", "codellama", "mistral", "gemma"];
 const selectedModel = ref("llama3");
 
-function sendMessage() {
+async function sendMessage() {
   if (!prompt.value.trim()) return;
   messages.value.push({ role: "user", content: prompt.value });
   messages.value.push({
@@ -26,8 +31,18 @@ function sendMessage() {
     content:
       "This is a placeholder response. Connect to your local Ollama instance to get real responses.",
   });
+  await invoke("generate_stream", {
+    prompt: "Hello",
+  });
   prompt.value = "";
 }
+
+onMounted(async () => {
+  isOllamaInstalled.value = await invoke("is_ollama_installed");
+  listen("ollama://stream", (event) => {
+    console.log("chunk:", event.payload);
+  });
+});
 </script>
 
 <template>
@@ -35,10 +50,14 @@ function sendMessage() {
     <template #main_content>
       <div class="flex items-center justify-end mb-6">
         <div class="flex items-center gap-2">
-          <span class="size-2 rounded-full bg-emerald-400" />
-          <span class="text-xs text-gray-500 dark:text-gray-400"
-            >Connected</span
-          >
+          <span
+            v-if="isOllamaInstalled"
+            class="size-2 rounded-full bg-emerald-400"
+          />
+          <span v-else class="size-2 rounded-full bg-red-400" />
+          <span class="text-xs text-gray-500 dark:text-gray-400">{{
+            isOllamaInstalled ? "Connected" : "Ollama not installed"
+          }}</span>
         </div>
       </div>
 
@@ -93,7 +112,7 @@ function sendMessage() {
               placeholder="Ask Ollama something..."
               class="flex-1 bg-gray-50 dark:bg-gray-700 rounded-lg px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 border-none outline-none focus:ring-2 focus:ring-accent-300 dark:focus:ring-accent-600 placeholder-gray-400 dark:placeholder-gray-500"
               @keydown.enter="sendMessage"
-            >
+            />
             <button
               class="p-2.5 bg-accent-600 text-white rounded-lg hover:bg-accent-700 transition-colors"
               @click="sendMessage"
