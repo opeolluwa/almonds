@@ -1,9 +1,9 @@
 <script setup lang="ts">
 defineProps<{
-  label: string;
+  label?: string;
   icon?: string;
   className?: string;
-  name: string;
+  name?: string;
   trailingIcon?: string;
   placeholder?: string;
   hint?: string;
@@ -23,7 +23,7 @@ const model = defineModel<string>();
       error: 'text-red-500 mt-1',
       label: 'text-xs font-medium text-gray-600 dark:text-gray-400',
       hint: 'mr-auto text-gray-400 dark:text-gray-600 font-normal ml-1',
-      root: 'lowercase border-2 border-red-500',
+      root: 'lowercase',
     }"
   >
     <USelectMenu
@@ -35,8 +35,8 @@ const model = defineModel<string>();
       :disabled="disabled"
       :placeholder="placeholder"
       :ui="{
-        base: 'lowercase',
-        trailingIcon: 'size-10',
+        base: 'lowercase py-3',
+        trailingIcon: 'size-5',
       }"
       :class="[
         'w-full transition-colors first:capitalize bg-transparent ' + className,

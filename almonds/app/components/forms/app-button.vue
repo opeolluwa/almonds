@@ -3,9 +3,10 @@
     :type="type"
     :color="color"
     :loading="loading"
+    :size="size"
     :disabled="disabled || loading"
     :ui="{ base: 'py-3 pl-4' }"
-    :class="['cursor-pointer transition-colors', error ? 'border-red-500' : '']"
+
   >
     <slot />
   </UButton>
@@ -51,5 +52,10 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  size: {
+    type: String as PropType<"xs" | "sm" | "md" | "lg" | "xl">,
+    default: "md",
+  },
+  
 });
 </script>
