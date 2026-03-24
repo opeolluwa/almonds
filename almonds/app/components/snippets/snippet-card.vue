@@ -3,7 +3,6 @@ import hljs from "highlight.js/lib/common";
 import "highlight.js/styles/github.css"; // light
 import "highlight.js/styles/github-dark.css"; // dark
 
-
 const hlLanguageMap: Record<string, string> = {
   C: "c",
   "C++": "cpp",
