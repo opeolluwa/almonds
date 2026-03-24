@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Todo } from "~/stores/todo";
 
-defineProps<{
+const { todo } = defineProps<{
   todo: Todo;
 }>();
 
@@ -41,6 +41,24 @@ function isToday(dateStr: string | null) {
     d.getDate() === now.getDate()
   );
 }
+const workspaceStore = useWorkspacesStore();
+const currentWorkspaceId = computed(() => workspaceStore.activeWorkspaceId);
+const todoStore = useTodoStore();
+const handleDuplicate = async (targetWorkspaceId: string) => {
+  await todoStore.duplicateTodo(
+    todo.identifier,
+    currentWorkspaceId.value,
+    targetWorkspaceId,
+  );
+};
+
+const handleTransfer = async (targetWorkspaceId: string) => {
+  await todoStore.transferTodo(
+    todo.identifier,
+    currentWorkspaceId.value,
+    targetWorkspaceId,
+  );
+};
 </script>
 
 <template>
@@ -116,6 +134,15 @@ function isToday(dateStr: string | null) {
       >
         <UIcon name="heroicons:trash" class="size-3.5" />
       </button>
+      <MetaControls
+        item-name="todo"
+        @duplicate-record="
+          (targetWorkspaceId) => handleDuplicate(targetWorkspaceId)
+        "
+        @transfer-record="
+          (targetWorkspaceId) => handleTransfer(targetWorkspaceId)
+        "
+      />
     </div>
   </div>
 </template>

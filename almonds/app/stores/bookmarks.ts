@@ -106,14 +106,18 @@ export const useBookmarkStore = defineStore("bookmark_store", {
       previousWorkspaceIdentifier: string,
       targetWorkspaceIdentifier: string,
     ) {
-      await invoke("duplicate_bookmark", {
-        recordIdentifier,
-        previousWorkspaceIdentifier,
-        targetWorkspaceIdentifier,
-        meta: await getWorkspaceMeta(),
-      });
-
-      await this.fetchBookmarks();
+      try {
+        await invoke("duplicate_bookmark", {
+          recordIdentifier,
+          previousWorkspaceIdentifier,
+          targetWorkspaceIdentifier,
+          meta: await getWorkspaceMeta(),
+        });
+      } catch (e) {
+        console.error(e);
+      } finally {
+        await this.fetchBookmarks();
+      }
     },
 
     async transferBookmark(

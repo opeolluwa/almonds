@@ -52,6 +52,25 @@ function downloadMarkdown() {
   anchor.click();
   URL.revokeObjectURL(url);
 }
+const workspaceStore = useWorkspacesStore();
+const currentWorkspaceId = computed(() => workspaceStore.activeWorkspaceId);
+
+const handleDuplicate = async (targetWorkspaceId: string) => {
+  await noteStore.duplicateNote(
+    props.identifier,
+    currentWorkspaceId.value,
+    targetWorkspaceId,
+  );
+};
+
+const handleTransfer = async (targetWorkspaceId: string) => {
+  await noteStore.transferNote(
+    props.identifier,
+    currentWorkspaceId.value,
+    targetWorkspaceId,
+  );
+};
+
 </script>
 
 <template>
@@ -101,8 +120,8 @@ function downloadMarkdown() {
         </button>
         <MetaControls
           item-name="note"
-          @duplicate-record="noteStore.duplicateNote"
-          @transfer-record="noteStore.transferNote"
+          @duplicate-record="(targetWorkspaceId) => handleDuplicate(targetWorkspaceId)"
+          @transfer-record="(targetWorkspaceId) => handleTransfer(targetWorkspaceId)"
         />
       </div>
     </div>

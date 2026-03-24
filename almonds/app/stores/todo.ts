@@ -134,5 +134,38 @@ export const useTodoStore = defineStore("todo_store", {
 
       this.todos = this.todos.filter((t) => t.identifier !== identifier);
     },
+
+    async duplicateTodo(
+      identifier: string,
+      sourceWorkspaceId: string,
+      targetWorkspaceId: string,
+    ): Promise<Todo> {
+      const updated = await invoke<Todo>("duplicate_todo", {
+        identifier,
+        sourceWorkspaceId,
+        targetWorkspaceId,
+        meta: await getWorkspaceMeta(),
+      });
+
+      this.todos.push(updated);
+      return updated;
+    },
+
+    async transferTodo(
+      identifier: string,
+      sourceWorkspaceId: string,
+      targetWorkspaceId: string,
+    ): Promise<Todo> {
+      const updated = await invoke<Todo>("transfer_todo", {
+        identifier,
+        sourceWorkspaceId,
+        targetWorkspaceId,
+        meta: await getWorkspaceMeta(),
+      });
+
+      const idx = this.todos.findIndex((t) => t.identifier === identifier);
+      if (idx !== -1) this.todos[idx] = updated;
+      return updated;
+    },
   },
 });

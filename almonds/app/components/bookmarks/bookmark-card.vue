@@ -3,7 +3,11 @@ import type { Bookmark } from "~/stores/bookmarks";
 import MetaControls from "~/components/meta/meta-controls.vue";
 
 const bookmarksStore = useBookmarkStore();
-defineProps<{ bookmark: Bookmark }>();
+const workspaceStore = useWorkspacesStore();
+
+const { bookmark } = defineProps<{ bookmark: Bookmark }>();
+
+const currentWorkspaceId = computed(() => workspaceStore.activeWorkspaceId);
 
 const emit = defineEmits<{
   delete: [identifier: string];
@@ -17,6 +21,25 @@ function formatDate(iso: string) {
     year: "numeric",
   });
 }
+const handleDuplicate = async (targetWorkspaceId: string) => {
+  try {
+    await bookmarksStore.duplicateBookmark(
+      bookmark.identifier,
+      currentWorkspaceId.value,
+      targetWorkspaceId,
+    );
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+const handleTransfer = async (targetWorkspaceId: string) => {
+  await bookmarksStore.transferBookmark(
+    bookmark.identifier,
+    currentWorkspaceId.value,
+    targetWorkspaceId,
+  );
+};
 </script>
 
 <template>
@@ -60,10 +83,15 @@ function formatDate(iso: string) {
       >
         <UIcon name="heroicons:trash" class="size-4" />
       </button>
+
       <MetaControls
         item-name="bookmark"
-        @duplicate-record="bookmarksStore.duplicateBookmark"
-        @transfer-record="bookmarksStore.transferBookmark"
+        @duplicate-record="
+          (targetWorkspaceId) => handleDuplicate(targetWorkspaceId)
+        "
+        @transfer-record="
+          (targetWorkspaceId) => handleTransfer(targetWorkspaceId)
+        "
       />
     </div>
   </div>
