@@ -26,7 +26,24 @@ pub fn schema_builder(
     builder = register_entity_modules(builder);
     builder = register_active_enums(builder);
 
-    seaography::register_custom_inputs!(builder, [types::workspaces::CreateWorkspaceInput]);
+    seaography::register_custom_inputs!(
+        builder,
+        [
+            types::workspaces::CreateWorkspaceInput,
+            types::todo::CreateTodoInput,
+            types::notes::CreateNoteInput,
+            types::reminder::CreateReminderInput,
+            types::snippets::CreateSnippetInput,
+            types::bookmark::CreateBookmarkInput,
+            types::playlist::CreatePlaylistInput,
+            types::audio_book::CreateAudioBookInput,
+            types::recycle_bin::CreateRecycleBinItemInput,
+            types::note_category::CreateNoteCategoryInput,
+            types::ollama_conversation_history::CreateOllamaConversationHistoryInput,
+            types::ollama_conversation_prompt::CreateOllamaConversationPromptInput,
+            types::ollama_conversation_response::CreateOllamaConversationResponseInput
+        ]
+    );
     // seaography::register_custom_outputs!(builder, [types::PurchaseOrder, ..]);
     // seaography::register_complex_custom_outputs!(builder, [types::Rectangle, ..]);
     // seaography::register_custom_unions!(builder, [types::Shape, ..]);
@@ -35,7 +52,19 @@ pub fn schema_builder(
         builder,
         [
             mutations::hello::SayHello,
-            mutations::workspace::CreateWorkspace
+            mutations::workspace::CreateWorkspace,
+            mutations::todo::CreateTodo,
+            mutations::notes::CreateNote,
+            mutations::reminder::CreateReminder,
+            mutations::snippets::CreateSnippet,
+            mutations::bookmark::CreateBookmark,
+            mutations::playlist::CreatePlaylist,
+            mutations::audio_book::CreateAudioBook,
+            mutations::recycle_bin::CreateRecycleBinItem,
+            mutations::note_category::CreateNoteCategory,
+            mutations::ollama_conversation_history::CreateOllamaConversationHistory,
+            mutations::ollama_conversation_prompt::CreateOllamaConversationPrompt,
+            mutations::ollama_conversation_response::CreateOllamaConversationResponse
         ]
     );
 
