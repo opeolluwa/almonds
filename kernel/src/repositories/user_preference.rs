@@ -14,9 +14,10 @@ use crate::repositories::{
     workspace_manager::{DuplicateRecord, RecordExistInWorkspace, TransferRecord},
 };
 use crate::{
-    adapters::user_preference::{CreateUserPreference, UpdateUserPreference},
+    adapters::{meta::RequestMeta, user_preference::{CreateUserPreference, UpdateUserPreference}},
     entities::user_preference,
     error::KernelError,
+    utils::extract_req_meta,
 };
 
 pub struct UserPreferenceRepository {
@@ -31,14 +32,19 @@ pub trait UserPreferenceRepositoryExt {
     async fn create(
         &self,
         payload: &CreateUserPreference,
+        meta: &Option<RequestMeta>,
     ) -> Result<user_preference::Model, KernelError>;
 
-    async fn get(&self) -> Result<Option<user_preference::Model>, KernelError>;
+    async fn get(
+        &self,
+        meta: &Option<RequestMeta>,
+    ) -> Result<Option<user_preference::Model>, KernelError>;
 
     async fn update(
         &self,
         identifier: &Uuid,
         payload: &UpdateUserPreference,
+        meta: &Option<RequestMeta>,
     ) -> Result<user_preference::Model, KernelError>;
 }
 
@@ -54,16 +60,32 @@ impl UserPreferenceRepositoryExt for UserPreferenceRepository {
     async fn create(
         &self,
         payload: &CreateUserPreference,
+        meta: &Option<RequestMeta>,
     ) -> Result<user_preference::Model, KernelError> {
-        let active_model: user_preference::ActiveModel = payload.to_owned().into();
+        let mut active_model: user_preference::ActiveModel = payload.to_owned().into();
+
+        if let Some(meta) = meta {
+            active_model.workspace_identifier = Set(Some(meta.workspace_identifier));
+        } else {
+            return Err(KernelError::DbOperationError(
+                "workspace identifier is required".into(),
+            ));
+        };
+
         active_model
             .insert(self.conn.as_ref())
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))
     }
 
-    async fn get(&self) -> Result<Option<user_preference::Model>, KernelError> {
+    async fn get(
+        &self,
+        meta: &Option<RequestMeta>,
+    ) -> Result<Option<user_preference::Model>, KernelError> {
+        let meta = extract_req_meta(meta)?;
+
         user_preference::Entity::find()
+            .filter(user_preference::Column::WorkspaceIdentifier.eq(meta.workspace_identifier))
             .one(self.conn.as_ref())
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))
@@ -73,9 +95,13 @@ impl UserPreferenceRepositoryExt for UserPreferenceRepository {
         &self,
         identifier: &Uuid,
         payload: &UpdateUserPreference,
+        meta: &Option<RequestMeta>,
     ) -> Result<user_preference::Model, KernelError> {
+        let meta = extract_req_meta(meta)?;
+
         let model = user_preference::Entity::find()
             .filter(user_preference::Column::Identifier.eq(*identifier))
+            .filter(user_preference::Column::WorkspaceIdentifier.eq(meta.workspace_identifier))
             .one(self.conn.as_ref())
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))?
@@ -102,8 +128,8 @@ impl UserPreferenceRepositoryExt for UserPreferenceRepository {
             .map_err(|err| KernelError::DbOperationError(err.to_string()))
     }
 }
-#[async_trait::async_trait]
 
+#[async_trait::async_trait]
 impl TransferRecord for UserPreferenceRepository {
     async fn transfer_record(
         &self,
@@ -152,7 +178,7 @@ impl TransferRecord for UserPreferenceRepository {
         let mut active_model = record.into_active_model();
 
         active_model.updated_at = Set(Utc::now().fixed_offset());
-        // active_model.workspace_identifier = Set(Some(*target_workspace_identifier));
+        active_model.workspace_identifier = Set(Some(*target_workspace_identifier));
 
         active_model
             .update(self.conn.as_ref())
@@ -162,17 +188,17 @@ impl TransferRecord for UserPreferenceRepository {
         Ok(())
     }
 }
-#[async_trait::async_trait]
 
+#[async_trait::async_trait]
 impl RecordExistInWorkspace for UserPreferenceRepository {
     async fn record_exists_in_workspace(
         &self,
         record_identifier: &Uuid,
-        _workspace_identifier: &Uuid,
+        workspace_identifier: &Uuid,
     ) -> Result<bool, KernelError> {
         let record = user_preference::Entity::find()
             .filter(user_preference::Column::Identifier.eq(*record_identifier))
-            // .filter(user_preference::Column::WorkspaceIdentifier.eq(*workspace_identifier))
+            .filter(user_preference::Column::WorkspaceIdentifier.eq(*workspace_identifier))
             .one(self.conn.as_ref())
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))?;
@@ -180,8 +206,8 @@ impl RecordExistInWorkspace for UserPreferenceRepository {
         Ok(record.is_some())
     }
 }
-#[async_trait::async_trait]
 
+#[async_trait::async_trait]
 impl DuplicateRecord for UserPreferenceRepository {
     async fn duplicate_record(
         &self,
@@ -213,7 +239,7 @@ impl DuplicateRecord for UserPreferenceRepository {
 
         let Some(record) = user_preference::Entity::find()
             .filter(user_preference::Column::Identifier.eq(*record_identifier))
-            // .filter(user_preference::Column::WorkspaceIdentifier.eq(*previous_workspace_identifier))
+            .filter(user_preference::Column::WorkspaceIdentifier.eq(*previous_workspace_identifier))
             .one(self.conn.as_ref())
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))?
@@ -224,7 +250,7 @@ impl DuplicateRecord for UserPreferenceRepository {
         let mut new_record = record.into_active_model();
 
         new_record.identifier = Set(Uuid::new_v4());
-        // new_record.workspace_identifier = Set(Some(*target_workspace_identifier));//TODO: use workspace in user_preference table
+        new_record.workspace_identifier = Set(Some(*target_workspace_identifier));
         new_record.created_at = Set(Utc::now().fixed_offset());
         new_record.updated_at = Set(Utc::now().fixed_offset());
 

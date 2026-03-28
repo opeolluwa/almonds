@@ -16,10 +16,11 @@ use crate::{
 #[tauri::command]
 pub async fn get_user_preference(
     state: State<'_, AppState>,
+    meta: Option<RequestMeta>,
 ) -> Result<Option<user_preference::Model>, AppError> {
     state
         .user_preference_repository
-        .get()
+        .get(&meta)
         .await
         .map_err(Into::into)
 }
@@ -28,10 +29,11 @@ pub async fn get_user_preference(
 pub async fn create_user_preference(
     state: State<'_, AppState>,
     preference: CreateUserPreference,
+    meta: Option<RequestMeta>,
 ) -> Result<user_preference::Model, AppError> {
     let created = state
         .user_preference_repository
-        .create(&preference.into())
+        .create(&preference.into(), &meta)
         .await?;
     Ok(created)
 }
@@ -41,10 +43,11 @@ pub async fn update_user_preference(
     state: State<'_, AppState>,
     identifier: Uuid,
     preference: UpdateUserPreference,
+    meta: Option<RequestMeta>,
 ) -> Result<user_preference::Model, AppError> {
     let updated = state
         .user_preference_repository
-        .update(&identifier, &preference.into())
+        .update(&identifier, &preference.into(), &meta)
         .await?;
     Ok(updated)
 }

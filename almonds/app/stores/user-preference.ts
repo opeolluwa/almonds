@@ -1,11 +1,13 @@
 import { defineStore } from "pinia";
 import { invoke } from "@tauri-apps/api/core";
+import { getWorkspaceMeta } from "~/composables/getWorkspaceMeta";
 
 export interface UserPreference {
   identifier: string;
   firstName: string;
   lastName: string;
   email: string;
+  workspaceIdentifier: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -41,6 +43,9 @@ export const useUserPreferenceStore = defineStore("user_preference_store", {
       try {
         this.preference = await invoke<UserPreference | null>(
           "get_user_preference",
+          {
+            meta: await getWorkspaceMeta(),
+          },
         );
       } finally {
         this.loading = false;
@@ -52,6 +57,7 @@ export const useUserPreferenceStore = defineStore("user_preference_store", {
     ): Promise<UserPreference> {
       const created = await invoke<UserPreference>("create_user_preference", {
         preference: payload,
+        meta: await getWorkspaceMeta(),
       });
       this.preference = created;
       return created;
@@ -63,6 +69,7 @@ export const useUserPreferenceStore = defineStore("user_preference_store", {
       const updated = await invoke<UserPreference>("update_user_preference", {
         identifier: this.preference!.identifier,
         preference: payload,
+        meta: await getWorkspaceMeta(),
       });
       this.preference = updated;
       return updated;

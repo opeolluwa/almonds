@@ -20,6 +20,7 @@ impl Into<entities::user_preference::ActiveModel> for CreateUserPreference {
             first_name: Set(self.first_name),
             last_name: Set(self.last_name),
             email: Set(self.email),
+            workspace_identifier: Set(None),
             created_at: Set(Utc::now().fixed_offset()),
             updated_at: Set(Utc::now().fixed_offset()),
         }

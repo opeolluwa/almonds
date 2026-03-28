@@ -30,7 +30,7 @@ impl MigrationTrait for Migration {
 }
 
 #[derive(DeriveIden)]
-enum UserPreference {
+pub enum UserPreference {
     Table,
     Identifier,
     FirstName,
