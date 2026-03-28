@@ -27,12 +27,24 @@ const images: { src: string; title: string }[] = [];
     </template>
 
     <template #main_content>
-      <div v-if="images.length === 0" class="flex flex-col items-center justify-center h-full py-24 text-center">
-        <div class="size-16 rounded-2xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center mb-4">
-          <UIcon name="heroicons:photo" class="size-8 text-gray-400 dark:text-gray-500" />
+      <div
+        v-if="images.length === 0"
+        class="flex flex-col items-center justify-center h-full py-24 text-center"
+      >
+        <div
+          class="size-16 rounded-2xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center mb-4"
+        >
+          <UIcon
+            name="heroicons:photo"
+            class="size-8 text-gray-400 dark:text-gray-500"
+          />
         </div>
-        <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">No images yet</p>
-        <p class="text-xs text-gray-400 dark:text-gray-500">Add images to start building your moodboard.</p>
+        <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+          No images yet
+        </p>
+        <p class="text-xs text-gray-400 dark:text-gray-500">
+          Add images to start building your moodboard.
+        </p>
       </div>
       <div v-else class="columns-2 gap-3 space-y-3">
         <div
@@ -64,8 +76,14 @@ const images: { src: string; title: string }[] = [];
       <h2 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">
         Boards
       </h2>
-      <div v-if="boards.length === 0" class="flex flex-col items-center justify-center py-6 text-center mb-6">
-        <UIcon name="heroicons:squares-2x2" class="size-6 text-gray-300 dark:text-gray-600 mb-2" />
+      <div
+        v-if="boards.length === 0"
+        class="flex flex-col items-center justify-center py-6 text-center mb-6"
+      >
+        <UIcon
+          name="heroicons:squares-2x2"
+          class="size-6 text-gray-300 dark:text-gray-600 mb-2"
+        />
         <p class="text-xs text-gray-400 dark:text-gray-500">No boards yet</p>
       </div>
       <div v-else class="flex flex-col gap-2 mb-6">
