@@ -4,6 +4,7 @@ use std::time::Duration;
 
 use almond_kernel::adapters::meta::RequestMeta;
 use almond_kernel::repositories::reminder::ReminderRepositoryExt;
+use almond_kernel::repositories::workspace::WorkspaceRepositoryExt;
 use tauri::{AppHandle, Manager};
 use tauri_plugin_notification::NotificationExt;
 
@@ -46,18 +47,44 @@ async fn check_and_fire(app: &AppHandle, meta: Option<RequestMeta>) {
     let now_minute = now.timestamp() / 60;
     let lead_duration = chrono::Duration::minutes(lead_time_minutes);
 
-    let reminders = match app
-        .state::<AppState>()
-        .reminder_repository
-        .find_all(&meta)
-        .await
-    {
-        Ok(r) => r,
-        Err(e) => {
-            log::error!("[Scheduler] Failed to fetch reminders: {e}");
-            return;
+    // Resolve the metas to query: either the one provided, or one per workspace.
+    let metas: Vec<RequestMeta> = match meta {
+        Some(m) => vec![m],
+        None => {
+            match app
+                .state::<AppState>()
+                .workspace_repository
+                .list_workspaces()
+                .await
+            {
+                Ok(workspaces) => workspaces
+                    .into_iter()
+                    .map(|ws| RequestMeta {
+                        workspace_identifier: ws.identifier,
+                    })
+                    .collect(),
+                Err(e) => {
+                    log::error!("[Scheduler] Failed to fetch workspaces: {e}");
+                    return;
+                }
+            }
         }
     };
+
+    let mut reminders = Vec::new();
+    for m in metas {
+        match app
+            .state::<AppState>()
+            .reminder_repository
+            .find_all(&Some(m))
+            .await
+        {
+            Ok(mut r) => reminders.append(&mut r),
+            Err(e) => {
+                log::error!("[Scheduler] Failed to fetch reminders: {e}");
+            }
+        }
+    }
 
     log::info!("[Scheduler] Fetched {} reminders", reminders.len());
 
