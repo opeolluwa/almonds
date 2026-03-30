@@ -27,7 +27,7 @@ const model = defineModel<string>();
       :disabled="disabled"
       :placeholder="placeholder"
       :type="type"
-      :ui="{ base: 'py-3 pl-4 capitalize' }"
+      :ui="{ base: 'py-3 pl-4 capitalize bg-transparent' }"
       :class="[
         'w-full transition-colors capitalize',
         error

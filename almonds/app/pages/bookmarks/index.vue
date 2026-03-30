@@ -24,6 +24,51 @@ const TAG_ICONS: Record<BookmarkTag, string> = {
 
 const activeTag = ref<BookmarkTag | "all">("all");
 const showAddModal = ref(false);
+type BookmarkSort = "name-asc" | "name-desc" | "date-newest" | "date-oldest";
+const sortBy = ref<BookmarkSort>("date-newest");
+
+const sortItems = computed(() => [
+  [
+    {
+      label: "Name A–Z",
+      icon:
+        sortBy.value === "name-asc"
+          ? "heroicons:check"
+          : "heroicons:bars-arrow-up",
+      onSelect: () => {
+        sortBy.value = "name-asc";
+      },
+    },
+    {
+      label: "Name Z–A",
+      icon:
+        sortBy.value === "name-desc"
+          ? "heroicons:check"
+          : "heroicons:bars-arrow-down",
+      onSelect: () => {
+        sortBy.value = "name-desc";
+      },
+    },
+  ],
+  [
+    {
+      label: "Newest first",
+      icon:
+        sortBy.value === "date-newest" ? "heroicons:check" : "heroicons:clock",
+      onSelect: () => {
+        sortBy.value = "date-newest";
+      },
+    },
+    {
+      label: "Oldest first",
+      icon:
+        sortBy.value === "date-oldest" ? "heroicons:check" : "heroicons:clock",
+      onSelect: () => {
+        sortBy.value = "date-oldest";
+      },
+    },
+  ],
+]);
 
 const filtered = computed(() => {
   let list =
@@ -41,7 +86,22 @@ const filtered = computed(() => {
     );
   }
 
-  return list;
+  return [...list].sort((a, b) => {
+    switch (sortBy.value) {
+      case "name-asc":
+        return a.title.localeCompare(b.title);
+      case "name-desc":
+        return b.title.localeCompare(a.title);
+      case "date-newest":
+        return (
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+      case "date-oldest":
+        return (
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        );
+    }
+  });
 });
 
 onMounted(async () => {
@@ -85,7 +145,26 @@ async function handleCreate(payload: {
     </template>
 
     <template #main_content>
-      <BookmarkTagFilters v-model="activeTag" :tags="TAGS" />
+      <div class="flex items-center gap-2 mb-1">
+        <BookmarkTagFilters v-model="activeTag" :tags="TAGS" class="flex-1" />
+        <UDropdownMenu
+          :items="sortItems"
+          size="sm"
+          :ui="{
+            content:
+              'min-w-40 rounded-xl shadow-lg border border-gray-100 dark:border-gray-800 py-1',
+            item: 'rounded-lg mx-1 px-3 py-2 gap-2.5 text-sm transition-colors duration-150',
+            separator: 'my-1 mx-2',
+          }"
+        >
+          <button
+            class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors shrink-0"
+          >
+            <UIcon name="heroicons:arrows-up-down" class="size-3.5" />
+            Sort
+          </button>
+        </UDropdownMenu>
+      </div>
 
       <!-- Loading -->
       <div

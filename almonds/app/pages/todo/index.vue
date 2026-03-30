@@ -8,6 +8,77 @@ const todoStore = useTodoStore();
 const router = useRouter();
 const { searchQuery, setSearch, clearSearch } = useAppSearch();
 const filter = ref<"all" | "active" | "completed">("all");
+type TodoSort =
+  | "priority-high"
+  | "priority-low"
+  | "name-asc"
+  | "name-desc"
+  | "date-newest"
+  | "date-oldest";
+const sortBy = ref<TodoSort>("priority-high");
+
+const priorityOrder: Record<string, number> = { high: 0, medium: 1, low: 2 };
+
+const sortItems = computed(() => [
+  [
+    {
+      label: "Priority (high → low)",
+      icon:
+        sortBy.value === "priority-high" ? "heroicons:check" : "heroicons:flag",
+      onSelect: () => {
+        sortBy.value = "priority-high";
+      },
+    },
+    {
+      label: "Priority (low → high)",
+      icon:
+        sortBy.value === "priority-low" ? "heroicons:check" : "heroicons:flag",
+      onSelect: () => {
+        sortBy.value = "priority-low";
+      },
+    },
+  ],
+  [
+    {
+      label: "Name A–Z",
+      icon:
+        sortBy.value === "name-asc"
+          ? "heroicons:check"
+          : "heroicons:bars-arrow-up",
+      onSelect: () => {
+        sortBy.value = "name-asc";
+      },
+    },
+    {
+      label: "Name Z–A",
+      icon:
+        sortBy.value === "name-desc"
+          ? "heroicons:check"
+          : "heroicons:bars-arrow-down",
+      onSelect: () => {
+        sortBy.value = "name-desc";
+      },
+    },
+  ],
+  [
+    {
+      label: "Newest first",
+      icon:
+        sortBy.value === "date-newest" ? "heroicons:check" : "heroicons:clock",
+      onSelect: () => {
+        sortBy.value = "date-newest";
+      },
+    },
+    {
+      label: "Oldest first",
+      icon:
+        sortBy.value === "date-oldest" ? "heroicons:check" : "heroicons:clock",
+      onSelect: () => {
+        sortBy.value = "date-oldest";
+      },
+    },
+  ],
+]);
 
 const filteredTodos = computed(() => {
   let list = todoStore.todos;
@@ -24,7 +95,30 @@ const filteredTodos = computed(() => {
     );
   }
 
-  return list;
+  return [...list].sort((a, b) => {
+    switch (sortBy.value) {
+      case "priority-high":
+        return (
+          (priorityOrder[a.priority] ?? 99) - (priorityOrder[b.priority] ?? 99)
+        );
+      case "priority-low":
+        return (
+          (priorityOrder[b.priority] ?? 99) - (priorityOrder[a.priority] ?? 99)
+        );
+      case "name-asc":
+        return a.title.localeCompare(b.title);
+      case "name-desc":
+        return b.title.localeCompare(a.title);
+      case "date-newest":
+        return (
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+      case "date-oldest":
+        return (
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        );
+    }
+  });
 });
 
 async function handleToggle(identifier: string, done: boolean) {
@@ -85,6 +179,23 @@ onUnmounted(() => clearSearch());
             {{ f }}
           </button>
         </div>
+        <UDropdownMenu
+          :items="sortItems"
+          size="sm"
+          :ui="{
+            content:
+              'min-w-44 rounded-xl shadow-lg border border-gray-100 dark:border-gray-800 py-1',
+            item: 'rounded-lg mx-1 px-3 py-2 gap-2.5 text-sm transition-colors duration-150',
+            separator: 'my-1 mx-2',
+          }"
+        >
+          <button
+            class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+          >
+            <UIcon name="heroicons:arrows-up-down" class="size-3.5" />
+            Sort
+          </button>
+        </UDropdownMenu>
         <button
           v-if="todoStore.completedTodos.length > 0"
           class="ml-auto flex items-center gap-1.5 text-xs text-red-400 hover:text-red-500 transition-colors"

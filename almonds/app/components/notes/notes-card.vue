@@ -11,9 +11,6 @@ const props = defineProps<{
 const router = useRouter();
 const noteStore = useNoteStore();
 
-const deleting = ref(false);
-const showDeleteConfirm = ref(false);
-
 const preview = computed(() => {
   const stripped = props.content
     .replace(/#{1,6}\s+/g, "")
@@ -36,7 +33,6 @@ const formattedDate = computed(() =>
 );
 
 async function confirmDelete() {
-  deleting.value = true;
   await noteStore.deleteNote(props.identifier);
 }
 
@@ -97,20 +93,6 @@ const handleTransfer = async (targetWorkspaceId: string) => {
 
       <div class="flex items-center gap-2" @click.stop>
         <button
-          class="text-xs text-accent-600 dark:text-accent-400 hover:text-accent-700 font-medium transition-colors"
-          @click="router.push(`/notes/edit-notes?id=${identifier}`)"
-        >
-          Edit
-        </button>
-
-        <button
-          class="text-xs text-red-400 hover:text-red-600 dark:hover:text-red-300 transition-colors"
-          @click="showDeleteConfirm = true"
-        >
-          Delete
-        </button>
-
-        <button
           class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
           title="Download as .md"
           @click="downloadMarkdown"
@@ -119,6 +101,8 @@ const handleTransfer = async (targetWorkspaceId: string) => {
         </button>
         <MetaControls
           item-name="note"
+          @edit-record="router.push(`/notes/edit-notes?id=${identifier}`)"
+          @delete-record="confirmDelete"
           @duplicate-record="
             (targetWorkspaceId) => handleDuplicate(targetWorkspaceId)
           "
@@ -128,37 +112,5 @@ const handleTransfer = async (targetWorkspaceId: string) => {
         />
       </div>
     </div>
-
-    <UModal v-model:open="showDeleteConfirm" title="Delete note">
-      <template #body>
-        <p class="text-sm text-gray-600 dark:text-gray-400">
-          Are you sure you want to delete
-          <span class="font-medium text-gray-800 dark:text-gray-200">{{
-            title || "Untitled"
-          }}</span
-          >? This action cannot be undone.
-        </p>
-      </template>
-      <template #footer>
-        <div class="flex justify-end gap-2">
-          <UButton
-            size="xs"
-            variant="ghost"
-            :disabled="deleting"
-            @click="showDeleteConfirm = false"
-          >
-            Cancel
-          </UButton>
-          <UButton
-            size="xs"
-            color="error"
-            :loading="deleting"
-            @click="confirmDelete"
-          >
-            Delete
-          </UButton>
-        </div>
-      </template>
-    </UModal>
   </div>
 </template>

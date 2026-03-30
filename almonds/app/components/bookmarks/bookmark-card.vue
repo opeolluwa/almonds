@@ -76,16 +76,10 @@ const handleTransfer = async (targetWorkspaceId: string) => {
       >
         <UIcon name="heroicons:eye" class="size-4" />
       </button>
-      <button
-        class="text-gray-400 hover:text-red-500 transition-colors"
-        title="Delete"
-        @click="emit('delete', bookmark.identifier)"
-      >
-        <UIcon name="heroicons:trash" class="size-4" />
-      </button>
-
       <MetaControls
         item-name="bookmark"
+        :show-edit="false"
+        @delete-record="emit('delete', bookmark.identifier)"
         @duplicate-record="
           (targetWorkspaceId) => handleDuplicate(targetWorkspaceId)
         "
