@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import { useOnline } from "@vueuse/core";
+import { useOnline, useEventListener } from "@vueuse/core";
 import { platform } from "@tauri-apps/plugin-os";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 
@@ -10,6 +10,7 @@ const colorMode = useColorMode();
 const { searchConfig, searchQuery } = useAppSearch();
 
 const appWindow = getCurrentWindow();
+const searchInputRef = ref<HTMLInputElement | null>(null);
 
 const isDark = computed({
   get: () => colorMode.value === "dark",
@@ -34,10 +35,28 @@ const currentPlatform = platform();
 const isMacOS = computed(() => {
   return currentPlatform.toLowerCase() === "macos";
 });
+
+useEventListener("keydown", (e: KeyboardEvent) => {
+  const mod = isMacOS.value ? e.metaKey : e.ctrlKey;
+  if (!mod) return;
+
+  if (e.key === "f" && searchConfig.value) {
+    e.preventDefault();
+    searchInputRef.value?.focus();
+    searchInputRef.value?.select();
+  } else if (e.key === "<" || e.key === "[") {
+    e.preventDefault();
+    router.back();
+  } else if (e.key === ">" || e.key === "]") {
+    e.preventDefault();
+    router.forward();
+  }
+});
 </script>
 
 <template>
   <div class="titlebar grid grid-cls-12">
+      <div data-tauri-drag-region></div>
     <!-- mac os controls-->
     <div v-if="isMacOS" class="traffic-lights col-span-1">
       <UTooltip text="Close">
@@ -102,38 +121,62 @@ const isMacOS = computed(() => {
         />
       </UTooltip>
 
-      <UTooltip text="Go back">
+      <UTooltip :text="`Go back (${isMacOS ? '⌘' : 'Ctrl'}+[)`">
         <UButton
           size="sm"
           color="neutral"
           variant="ghost"
           icon="heroicons:chevron-left"
+          aria-label="Go back"
           @click="router.back()"
         />
       </UTooltip>
 
-      <UTooltip text="Go forward">
+      <UTooltip :text="`Go forward (${isMacOS ? '⌘' : 'Ctrl'}+])`">
         <UButton
           size="sm"
           color="neutral"
           variant="ghost"
           icon="heroicons:chevron-right"
+          aria-label="Go forward"
           @click="router.forward()"
         />
       </UTooltip>
     </div>
 
     <!-- Search -->
-    <div class="col-span-4 mx-auto">
-      <UTooltip text="Search">
+    <div class="col-span-4 mx-auto w-full max-w-sm">
+      <div
+        class="flex items-center gap-2 px-3 py-1.5 rounded-full border transition-colors"
+        :class="searchConfig
+          ? 'bg-gray-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus-within:border-accent-400 dark:focus-within:border-accent-500'
+          : 'bg-gray-50 dark:bg-gray-800/50 border-gray-200/60 dark:border-gray-700/40 opacity-50'"
+      >
+        <UIcon name="heroicons:magnifying-glass" class="size-3.5 shrink-0 text-gray-400 dark:text-gray-500" />
         <input
+          ref="searchInputRef"
           :value="searchQuery"
           :placeholder="searchConfig?.placeholder ?? 'Search...'"
           :disabled="!searchConfig"
-          class="w-full bg-transparent outline-none text-sm text-gray-700 dark:text-gray-300 placeholder-gray-400"
+          class="flex-1 min-w-0 bg-transparent outline-none text-sm text-gray-700 dark:text-gray-300 placeholder-gray-400 dark:placeholder-gray-500"
           @input="onSearchInput(($event.target as HTMLInputElement).value)"
+          @keydown.escape="searchInputRef?.blur()"
         >
-      </UTooltip>
+        <kbd
+          v-if="searchConfig && !searchQuery"
+          class="hidden sm:inline-flex items-center gap-0.5 text-[10px] text-gray-400 dark:text-gray-500 font-mono select-none"
+        >
+          <span>{{ isMacOS ? '⌘' : 'Ctrl' }}</span><span>F</span>
+        </kbd>
+        <button
+          v-if="searchQuery"
+          class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+          aria-label="Clear search"
+          @click="onSearchInput(''); searchInputRef?.focus()"
+        >
+          <UIcon name="heroicons:x-mark" class="size-3.5" />
+        </button>
+      </div>
     </div>
 
     <!-- Right actions -->
