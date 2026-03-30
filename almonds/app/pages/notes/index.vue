@@ -5,13 +5,53 @@ const noteStore = useNoteStore();
 const router = useRouter();
 const { searchQuery, setSearch, clearSearch } = useAppSearch();
 
+type NoteSort = "name-asc" | "name-desc" | "date-newest" | "date-oldest";
+const sortBy = ref<NoteSort>("date-newest");
+
+const sortItems = computed(() => [
+  [
+    {
+      label: "Name A–Z",
+      icon: sortBy.value === "name-asc" ? "heroicons:check" : "heroicons:bars-arrow-up",
+      onSelect: () => { sortBy.value = "name-asc"; },
+    },
+    {
+      label: "Name Z–A",
+      icon: sortBy.value === "name-desc" ? "heroicons:check" : "heroicons:bars-arrow-down",
+      onSelect: () => { sortBy.value = "name-desc"; },
+    },
+  ],
+  [
+    {
+      label: "Last modified (newest)",
+      icon: sortBy.value === "date-newest" ? "heroicons:check" : "heroicons:clock",
+      onSelect: () => { sortBy.value = "date-newest"; },
+    },
+    {
+      label: "Last modified (oldest)",
+      icon: sortBy.value === "date-oldest" ? "heroicons:check" : "heroicons:clock",
+      onSelect: () => { sortBy.value = "date-oldest"; },
+    },
+  ],
+]);
+
 const filteredNotes = computed(() => {
   const q = searchQuery.value.trim().toLowerCase();
-  if (!q) return noteStore.notes;
-  return noteStore.notes.filter(
-    (n) =>
-      n.title.toLowerCase().includes(q) || n.content.toLowerCase().includes(q),
-  );
+  let list = q
+    ? noteStore.notes.filter(
+        (n) =>
+          n.title.toLowerCase().includes(q) || n.content.toLowerCase().includes(q),
+      )
+    : noteStore.notes;
+
+  return [...list].sort((a, b) => {
+    switch (sortBy.value) {
+      case "name-asc": return a.title.localeCompare(b.title);
+      case "name-desc": return b.title.localeCompare(a.title);
+      case "date-newest": return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+      case "date-oldest": return new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime();
+    }
+  });
 });
 
 function formatDate(dateStr: string) {
@@ -42,6 +82,26 @@ onUnmounted(() => clearSearch());
     </template>
 
     <template #main_content>
+      <!-- Sort control -->
+      <div v-if="!noteStore.loading && noteStore.notes.length > 0" class="flex justify-end mb-3">
+        <UDropdownMenu
+          :items="sortItems"
+          size="sm"
+          :ui="{
+            content: 'min-w-48 rounded-xl shadow-lg border border-gray-100 dark:border-gray-800 py-1',
+            item: 'rounded-lg mx-1 px-3 py-2 gap-2.5 text-sm transition-colors duration-150',
+            separator: 'my-1 mx-2',
+          }"
+        >
+          <button
+            class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+          >
+            <UIcon name="heroicons:arrows-up-down" class="size-3.5" />
+            Sort
+          </button>
+        </UDropdownMenu>
+      </div>
+
       <!-- Loading -->
       <div v-if="noteStore.loading" class="flex flex-col gap-3">
         <USkeleton v-for="i in 4" :key="i" class="h-24 rounded-lg" />

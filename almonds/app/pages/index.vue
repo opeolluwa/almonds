@@ -4,6 +4,7 @@ import { useBookmarkStore } from "~/stores/bookmarks";
 import { useTodoStore } from "~/stores/todo";
 import { useUserPreferenceStore } from "~/stores/user-preference";
 import { useReminderStore } from "~/stores/reminder";
+import { useSnippetStore } from "~/stores/snippets";
 import { openUrl } from "@tauri-apps/plugin-opener";
 
 definePageMeta({ layout: false });
@@ -13,6 +14,9 @@ const bookmarkStore = useBookmarkStore();
 const todoStore = useTodoStore();
 const userPreferenceStore = useUserPreferenceStore();
 const reminderStore = useReminderStore();
+const snippetStore = useSnippetStore();
+
+const { setSearch, clearSearch, searchQuery } = useAppSearch();
 
 onMounted(async () => {
   await Promise.all([
@@ -21,7 +25,85 @@ onMounted(async () => {
     todoStore.fetchTodos(),
     userPreferenceStore.fetchPreference(),
     reminderStore.fetchReminders(),
+    snippetStore.fetchSnippets(),
   ]);
+  setSearch({ placeholder: "Search everything…" });
+});
+
+onUnmounted(() => clearSearch());
+
+const searchResults = computed(() => {
+  const q = searchQuery.value.trim().toLowerCase();
+  if (!q) return null;
+
+  const notes = noteStore.notes
+    .filter(
+      (n) =>
+        n.title?.toLowerCase().includes(q) ||
+        n.content?.toLowerCase().includes(q),
+    )
+    .map((n) => ({ type: "note" as const, identifier: n.identifier, title: n.title, sub: n.updatedAt, href: "/notes" }));
+
+  const bookmarks = bookmarkStore.bookmarks
+    .filter(
+      (b) =>
+        b.title?.toLowerCase().includes(q) ||
+        b.url?.toLowerCase().includes(q) ||
+        b.tag?.toLowerCase().includes(q),
+    )
+    .map((b) => ({ type: "bookmark" as const, identifier: b.identifier, title: b.title, sub: b.url, href: "/bookmarks", url: b.url }));
+
+  const snippets = snippetStore.snippets
+    .filter(
+      (s) =>
+        s.title?.toLowerCase().includes(q) ||
+        s.language?.toLowerCase().includes(q) ||
+        s.description?.toLowerCase().includes(q) ||
+        s.code?.toLowerCase().includes(q),
+    )
+    .map((s) => ({ type: "snippet" as const, identifier: s.identifier, title: s.title || "Untitled", sub: s.language || "", href: "/snippets" }));
+
+  const todos = todoStore.todos
+    .filter(
+      (t) =>
+        t.title?.toLowerCase().includes(q) ||
+        t.description?.toLowerCase().includes(q),
+    )
+    .map((t) => ({ type: "todo" as const, identifier: t.identifier, title: t.title, sub: t.priority, href: "/todo" }));
+
+  const reminders = reminderStore.reminders
+    .filter(
+      (r) =>
+        r.title?.toLowerCase().includes(q) ||
+        r.description?.toLowerCase().includes(q),
+    )
+    .map((r) => ({ type: "reminder" as const, identifier: r.identifier, title: r.title, sub: r.remindAt, href: "/reminders" }));
+
+  return { notes, bookmarks, snippets, todos, reminders };
+});
+
+const totalSearchResults = computed(() => {
+  if (!searchResults.value) return 0;
+  const r = searchResults.value;
+  return r.notes.length + r.bookmarks.length + r.snippets.length + r.todos.length + r.reminders.length;
+});
+
+const searchSections = computed(() => {
+  if (!searchResults.value) return [];
+  const iconMap = {
+    note: { icon: "heroicons:document-text", color: "text-violet-400", bg: "bg-violet-50 dark:bg-violet-950/60" },
+    bookmark: { icon: "heroicons:bookmark-solid", color: "text-accent-400", bg: "bg-accent-50 dark:bg-accent-950/60" },
+    snippet: { icon: "heroicons:code-bracket", color: "text-blue-400", bg: "bg-blue-50 dark:bg-blue-950/60" },
+    todo: { icon: "heroicons:check-circle", color: "text-emerald-400", bg: "bg-emerald-50 dark:bg-emerald-950/60" },
+    reminder: { icon: "heroicons:clock", color: "text-rose-400", bg: "bg-rose-50 dark:bg-rose-950/60" },
+  };
+  return [
+    { label: "Notes", items: searchResults.value.notes, ...iconMap.note },
+    { label: "Bookmarks", items: searchResults.value.bookmarks, ...iconMap.bookmark },
+    { label: "Snippets", items: searchResults.value.snippets, ...iconMap.snippet },
+    { label: "Todos", items: searchResults.value.todos, ...iconMap.todo },
+    { label: "Reminders", items: searchResults.value.reminders, ...iconMap.reminder },
+  ].filter((s) => s.items.length > 0);
 });
 
 // Live clock
@@ -288,7 +370,45 @@ const quickActions = [
 
     <!-- ── Main content ────────────────────────────────────────────── -->
     <template #main_content>
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <!-- Search results -->
+      <template v-if="searchQuery.trim()">
+        <div v-if="totalSearchResults === 0" class="flex flex-col items-center justify-center py-20 text-center">
+          <UIcon name="heroicons:magnifying-glass" class="size-10 text-gray-300 dark:text-gray-600 mb-3" />
+          <p class="text-sm font-medium text-gray-500 dark:text-gray-400">No results for "{{ searchQuery }}"</p>
+        </div>
+        <div v-else class="flex flex-col gap-4">
+          <p class="text-xs text-gray-400">{{ totalSearchResults }} result{{ totalSearchResults === 1 ? '' : 's' }} for "{{ searchQuery }}"</p>
+          <div
+            v-for="section in searchSections"
+            :key="section.label"
+            class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700/60 overflow-hidden"
+          >
+            <div class="flex items-center gap-2 px-4 py-3 border-b border-gray-100 dark:border-gray-700/50">
+              <UIcon :name="section.icon" class="size-4 shrink-0" :class="section.color" />
+              <h2 class="text-sm font-semibold text-gray-700 dark:text-gray-300">{{ section.label }}</h2>
+              <span class="ml-auto text-xs text-gray-400">{{ section.items.length }}</span>
+            </div>
+            <div class="divide-y divide-gray-100 dark:divide-gray-700/40">
+              <NuxtLink
+                v-for="item in section.items"
+                :key="item.identifier"
+                :to="item.href"
+                class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800/40 transition-colors"
+              >
+                <div class="size-7 rounded-lg flex items-center justify-center shrink-0" :class="section.bg">
+                  <UIcon :name="section.icon" class="size-3.5" :class="section.color" />
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm text-gray-800 dark:text-gray-200 truncate">{{ item.title }}</p>
+                  <p v-if="item.sub" class="text-xs text-gray-400 truncate mt-0.5">{{ item.sub }}</p>
+                </div>
+              </NuxtLink>
+            </div>
+          </div>
+        </div>
+      </template>
+
+      <div v-else class="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <!-- Todos: 2-col card with SVG ring -->
         <div
           class="lg:col-span-2 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700/60 overflow-hidden flex flex-col"
@@ -624,7 +744,8 @@ const quickActions = [
           </div>
         </div>
       </div>
-    </template>
+      </template>
+   
 
     <!-- ── Side panel ──────────────────────────────────────────────── -->
     <template #side_content>

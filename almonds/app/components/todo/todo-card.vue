@@ -122,20 +122,10 @@ const handleTransfer = async (targetWorkspaceId: string) => {
         <UIcon name="heroicons:check" class="size-3.5" />
         Done
       </button>
-      <button
-        class="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
-        @click="emit('edit', todo.identifier)"
-      >
-        <UIcon name="heroicons:pencil" class="size-3.5" />
-      </button>
-      <button
-        class="p-1 text-gray-400 hover:text-rose-500 transition-colors"
-        @click="emit('delete', todo.identifier)"
-      >
-        <UIcon name="heroicons:trash" class="size-3.5" />
-      </button>
       <MetaControls
         item-name="todo"
+        @edit-record="emit('edit', todo.identifier)"
+        @delete-record="emit('delete', todo.identifier)"
         @duplicate-record="
           (targetWorkspaceId) => handleDuplicate(targetWorkspaceId)
         "

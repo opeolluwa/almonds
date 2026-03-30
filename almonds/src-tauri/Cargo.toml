@@ -42,3 +42,5 @@ tauri-plugin-single-instance = "2"
 
 [build-dependencies]
 tauri-build = { version = "2.5.4", features = [] }
+
+[workspace]

@@ -64,11 +64,8 @@ const props = defineProps<{
 const router = useRouter();
 const snippetStore = useSnippetStore();
 const copied = ref(false);
-const deleting = ref(false);
-const showDeleteConfirm = ref(false);
 
 async function confirmDelete() {
-  deleting.value = true;
   await snippetStore.deleteSnippet(props.identifier);
 }
 
@@ -206,20 +203,10 @@ const handleTransfer = async (targetWorkspaceId: string) => {
         >
           {{ copied ? "Copied!" : "Copy" }}
         </button>
-        <button
-          class="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-          @click="router.push(`/snippets/edit-snippet?id=${identifier}`)"
-        >
-          Edit
-        </button>
-        <button
-          class="text-xs text-red-400 hover:text-red-600 dark:hover:text-red-300"
-          @click="showDeleteConfirm = true"
-        >
-          Delete
-        </button>
         <MetaControls
           item-name="snippet"
+          @edit-record="router.push(`/snippets/edit-snippet?id=${identifier}`)"
+          @delete-record="confirmDelete"
           @duplicate-record="
             (targetWorkspaceId) => handleDuplicate(targetWorkspaceId)
           "
@@ -229,38 +216,6 @@ const handleTransfer = async (targetWorkspaceId: string) => {
         />
       </div>
     </div>
-
-    <UModal v-model:open="showDeleteConfirm" title="Delete snippet">
-      <template #body>
-        <p class="text-sm text-gray-600 dark:text-gray-400">
-          Are you sure you want to delete
-          <span class="font-medium text-gray-800 dark:text-gray-200">{{
-            title
-          }}</span
-          >? This action cannot be undone.
-        </p>
-      </template>
-      <template #footer>
-        <div class="flex justify-end gap-2">
-          <UButton
-            size="xs"
-            variant="ghost"
-            :disabled="deleting"
-            @click="showDeleteConfirm = false"
-          >
-            Cancel
-          </UButton>
-          <UButton
-            size="xs"
-            color="error"
-            :loading="deleting"
-            @click="confirmDelete"
-          >
-            Delete
-          </UButton>
-        </div>
-      </template>
-    </UModal>
   </div>
 </template>
 
