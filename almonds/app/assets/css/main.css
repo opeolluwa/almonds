@@ -54,12 +54,8 @@ body {
   height: 100%;
   overflow: hidden;
   overscroll-behavior: none;
-  background-color: #f9fafb;
+  background-color: transparent;
   @apply mt-24;
-}
-
-.dark body {
-  background-color: var(--color-surface-900);
 }
 
 /*
@@ -87,7 +83,7 @@ body {
 }
 
 .titlebar {
-  @apply fixed top-0 left-0 right-0 h-14 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 flex items-center p-2;
+  @apply fixed top-0 left-0 right-0 h-14 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 flex items-center p-2 rounded-t-2xl;
 }
 
 .scrollbar-config {
@@ -99,5 +95,5 @@ body {
 }
 
 #wild_almonds_app {
-  @apply mt-14 rounded;
+  @apply mt-14 rounded-b-2xl overflow-hidden bg-gray-50 dark:bg-surface-950 ring-1 ring-gray-200/80 dark:ring-white/10 shadow-2xl;
 }
