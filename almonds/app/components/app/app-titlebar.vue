@@ -7,7 +7,7 @@ import { getCurrentWindow } from "@tauri-apps/api/window";
 const online = useOnline();
 const router = useRouter();
 const colorMode = useColorMode();
-const { searchConfig, searchQuery } = useAppSearch();
+const { searchQuery, isOpen } = useAppSearch();
 
 const appWindow = getCurrentWindow();
 const searchInputRef = ref<HTMLInputElement | null>(null);
@@ -26,7 +26,7 @@ const internetStatusColor = computed(() =>
 
 function onSearchInput(val: string) {
   searchQuery.value = val;
-  searchConfig.value?.searchFn?.(val);
+  isOpen.value = val.trim().length > 0;
 }
 
 const syncing = ref(false);
@@ -40,7 +40,7 @@ useEventListener("keydown", (e: KeyboardEvent) => {
   const mod = isMacOS.value ? e.metaKey : e.ctrlKey;
   if (!mod) return;
 
-  if (e.key === "f" && searchConfig.value) {
+  if (e.key === "f") {
     e.preventDefault();
     searchInputRef.value?.focus();
     searchInputRef.value?.select();
@@ -55,8 +55,7 @@ useEventListener("keydown", (e: KeyboardEvent) => {
 </script>
 
 <template>
-  <div class="titlebar grid grid-cls-12">
-    <div data-tauri-drag-region />
+  <div class="titlebar grid grid-cls-12" data-tauri-drag-region>
     <!-- mac os controls-->
     <div v-if="isMacOS" class="traffic-lights col-span-1">
       <UTooltip text="Close">
@@ -145,14 +144,9 @@ useEventListener("keydown", (e: KeyboardEvent) => {
     </div>
 
     <!-- Search -->
-    <div class="col-span-4 mx-auto w-full max-w-sm">
+    <div class="col-span-4 mx-auto w-full max-w-sm relative">
       <div
-        class="flex items-center gap-2 px-3 py-1.5 rounded-full border transition-colors"
-        :class="
-          searchConfig
-            ? 'bg-gray-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus-within:border-accent-400 dark:focus-within:border-accent-500'
-            : 'bg-gray-50 dark:bg-gray-800/50 border-gray-200/60 dark:border-gray-700/40 opacity-50'
-        "
+        class="flex items-center gap-2 px-3 py-1.5 rounded-full border transition-colors bg-gray-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus-within:border-accent-400 dark:focus-within:border-accent-500"
       >
         <UIcon
           name="heroicons:magnifying-glass"
@@ -161,17 +155,16 @@ useEventListener("keydown", (e: KeyboardEvent) => {
         <input
           ref="searchInputRef"
           :value="searchQuery"
-          :placeholder="searchConfig?.placeholder ?? 'Search...'"
-          :disabled="!searchConfig"
+          placeholder="Search..."
           autocapitalize="off"
           autocorrect="off"
           spellcheck="false"
           class="flex-1 min-w-0 bg-transparent outline-none text-sm text-gray-700 dark:text-gray-300 placeholder-gray-400 dark:placeholder-gray-500"
           @input="onSearchInput(($event.target as HTMLInputElement).value)"
-          @keydown.escape="searchInputRef?.blur()"
+          @keydown.escape="isOpen = false; searchInputRef?.blur()"
         >
         <kbd
-          v-if="searchConfig && !searchQuery"
+          v-if="!searchQuery"
           class="hidden sm:inline-flex items-center gap-0.5 text-[10px] text-gray-400 dark:text-gray-500 font-mono select-none"
         >
           <span>{{ isMacOS ? "⌘" : "Ctrl" }}</span
@@ -189,6 +182,8 @@ useEventListener("keydown", (e: KeyboardEvent) => {
           <UIcon name="heroicons:x-mark" class="size-3.5" />
         </button>
       </div>
+
+      <AppGlobalSearch v-if="isOpen" @close="isOpen = false; searchQuery = ''" />
     </div>
 
     <!-- Right actions -->

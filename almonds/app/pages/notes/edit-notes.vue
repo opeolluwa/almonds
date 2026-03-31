@@ -278,7 +278,7 @@ onMounted(async () => {
             autocapitalize="off"
             autocorrect="off"
             spellcheck="false"
-            class="bg-transparent outline-none text-xs text-gray-400 placeholder:text-gray-300 dark:placeholder:text-gray-600 w-20 min-w-0"
+            class="bg-transparent outline-none text-xs text-gray-400 dark:text-gray-300 placeholder:text-gray-300 dark:placeholder:text-gray-600 w-20 min-w-0"
             @keydown="onTagKeydown"
             @blur="addTag"
           >

@@ -73,6 +73,7 @@ async function handleSubmit() {
         placeholder="Paste your code here..."
         :rows="12"
         :disabled="submitting"
+        :ui="{ base: 'bg-transparent' }"
         class="font-mono"
       />
     </div>
@@ -90,6 +91,7 @@ async function handleSubmit() {
         placeholder="What does this snippet do?"
         :rows="3"
         :disabled="submitting"
+        :ui="{ base: 'bg-transparent' }"
       />
     </div>
 

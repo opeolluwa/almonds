@@ -14,6 +14,7 @@ const model = defineModel<string>();
 <template>
   <UFormField
     v-slot="{ error }"
+    :name="name"
     :label="label"
     :hint="hint"
     :ui="{
@@ -27,12 +28,12 @@ const model = defineModel<string>();
       :disabled="disabled"
       :placeholder="placeholder"
       :type="type"
-      :ui="{ base: 'py-3 pl-4 capitalize bg-transparent' }"
+      :ui="{ base: 'py-3 pl-4 bg-transparent' }"
       :class="[
-        'w-full transition-colors capitalize',
+        'w-full transition-colors',
         error
-          ? 'border-red-500 focus:border-red-500'
-          : 'border-gray-300 focus:border-black',
+          ? 'border-red-500 focus-within:border-red-500'
+          : 'border-gray-300 dark:border-gray-600 focus-within:border-black dark:focus-within:border-gray-400',
       ]"
     />
   </UFormField>
