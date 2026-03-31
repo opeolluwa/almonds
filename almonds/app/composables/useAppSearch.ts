@@ -1,27 +1,17 @@
-interface SearchConfig {
-  placeholder?: string;
-  searchFn?: (query: string) => void;
-  data?: unknown[];
-}
-
 export function useAppSearch() {
-  const searchConfig = useState<SearchConfig | null>("appSearch", () => null);
   const searchQuery = useState<string>("appSearchQuery", () => "");
+  const isOpen = useState<boolean>("appSearchOpen", () => false);
 
-  function setSearch(config: SearchConfig) {
+  // Kept for backward compat — pages that register per-page search still call these;
+  // now they're no-ops since search is global.
+  function setSearch(_config?: unknown) {
     searchQuery.value = "";
-    searchConfig.value = config;
   }
 
   function clearSearch() {
-    searchConfig.value = null;
     searchQuery.value = "";
+    isOpen.value = false;
   }
 
-  return {
-    searchConfig: readonly(searchConfig),
-    searchQuery,
-    setSearch,
-    clearSearch,
-  };
+  return { searchQuery, isOpen, setSearch, clearSearch };
 }

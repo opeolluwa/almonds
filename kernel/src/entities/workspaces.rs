@@ -11,6 +11,8 @@ pub struct Model {
     pub identifier: Uuid,
     pub name: String,
     pub description: String,
+    pub is_default: bool,
+    pub is_hidden: bool,
     pub created_at: DateTimeWithTimeZone,
     pub updated_at: DateTimeWithTimeZone,
 }

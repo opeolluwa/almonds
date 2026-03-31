@@ -155,12 +155,12 @@ onUnmounted(() => clearSearch());
         <p class="text-xs text-gray-400 dark:text-gray-500 mb-4">
           Create your first note to get started.
         </p>
-        <NuxtLink
-          to="/notes/create-notes"
+        <button
           class="text-xs text-accent-500 hover:text-accent-600 font-medium"
+          @click="navigateTo('/notes/create-notes')"
         >
           Create note
-        </NuxtLink>
+        </button>
       </div>
 
       <!-- Empty state: search has no results -->

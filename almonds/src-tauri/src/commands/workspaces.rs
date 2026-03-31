@@ -1,5 +1,8 @@
 use almond_kernel::{
-    adapters::{meta::RequestMeta, workspace::CreateWorkspace},
+    adapters::{
+        meta::RequestMeta,
+        workspace::{CreateWorkspace, UpdateWorkspace},
+    },
     repositories::workspace::WorkspaceRepositoryExt,
 };
 use tauri::State;
@@ -35,6 +38,21 @@ pub async fn get_workspace_by_id(
         .map_err(|_| AppError::Io(format!("Invalid UUID string: {}", id)))?;
     let workspace = state.workspace_repository.get_workspace_by_id(uuid).await?;
     Ok(workspace)
+}
+
+#[tauri::command]
+pub async fn update_workspace(
+    state: State<'_, AppState>,
+    identifier: String,
+    workspace: UpdateWorkspace,
+) -> Result<almond_kernel::entities::workspaces::Model, AppError> {
+    let uuid = uuid::Uuid::parse_str(&identifier)
+        .map_err(|_| AppError::Io(format!("Invalid UUID string: {}", identifier)))?;
+    let updated = state
+        .workspace_repository
+        .update_workspace(&uuid, workspace)
+        .await?;
+    Ok(updated)
 }
 
 #[tauri::command]

@@ -41,8 +41,8 @@ const model = defineModel<string>();
       :class="[
         'w-full transition-colors first:capitalize bg-transparent ' + className,
         error
-          ? 'border-red-500 focus:border-red-500'
-          : 'border-gray-300 focus:border-black',
+          ? 'border-red-500 focus-within:border-red-500'
+          : 'border-gray-300 dark:border-gray-600 focus-within:border-black dark:focus-within:border-gray-400',
       ]"
     />
   </UFormField>

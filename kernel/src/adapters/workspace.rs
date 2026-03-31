@@ -7,7 +7,6 @@ use crate::entities::{self, workspaces::ActiveModel};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-
 pub struct CreateWorkspace {
     pub name: String,
     pub description: String,
@@ -19,8 +18,19 @@ impl Into<entities::workspaces::ActiveModel> for CreateWorkspace {
             identifier: Set(Uuid::new_v4()),
             name: Set(self.name),
             description: Set(self.description),
+            is_default: Set(false),
+            is_hidden: Set(false),
             created_at: Set(Utc::now().fixed_offset()),
             updated_at: Set(Utc::now().fixed_offset()),
         }
     }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct UpdateWorkspace {
+    pub name: Option<String>,
+    pub description: Option<String>,
+    pub is_default: Option<bool>,
+    pub is_hidden: Option<bool>,
 }

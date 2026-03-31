@@ -29,26 +29,42 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+  showDuplicate: {
+    type: Boolean,
+    default: true,
+  },
+  showTransfer: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 const controls = computed(() => [
   [
-    {
-      label: "Duplicate",
-      icon: "i-lucide-copy",
-      class: "text-gray-700 dark:text-gray-300",
-      onSelect: () => {
-        showDuplicateModal.value = true;
-      },
-    },
-    {
-      label: "Transfer to workspace",
-      icon: "i-lucide-arrow-right-left",
-      class: "text-gray-700 dark:text-gray-300",
-      onSelect: () => {
-        showTransferModal.value = true;
-      },
-    },
+    ...(props.showDuplicate
+      ? [
+          {
+            label: "Duplicate",
+            icon: "i-lucide-copy",
+            class: "text-gray-700 dark:text-gray-300",
+            onSelect: () => {
+              showDuplicateModal.value = true;
+            },
+          },
+        ]
+      : []),
+    ...(props.showTransfer
+      ? [
+          {
+            label: "Transfer to workspace",
+            icon: "i-lucide-arrow-right-left",
+            class: "text-gray-700 dark:text-gray-300",
+            onSelect: () => {
+              showTransferModal.value = true;
+            },
+          },
+        ]
+      : []),
   ],
   [
     ...(props.showEdit
@@ -210,21 +226,39 @@ const workspaces = computed<DropdownMenuItem[]>(() => [
     </template>
   </UModal>
 
-  <UModal v-model:open="showDeleteConfirm" :title="`Delete ${itemName}`">
-    <template #body>
-      <p class="text-sm text-gray-600 dark:text-gray-400">
-        Are you sure you want to delete this {{ itemName }}? This action cannot
-        be undone.
-      </p>
-    </template>
-    <template #footer>
-      <div class="flex justify-end gap-2">
-        <UButton size="xs" variant="ghost" @click="showDeleteConfirm = false">
-          Cancel
-        </UButton>
-        <UButton size="xs" color="error" @click="handleDelete">
-          Delete
-        </UButton>
+  <UModal v-model:open="showDeleteConfirm">
+    <template #content>
+      <div class="px-6 py-6 flex flex-col gap-5">
+        <!-- Warning avatar -->
+        <div class="flex items-start gap-4">
+          <div
+            class="shrink-0 size-10 rounded-full bg-red-100 dark:bg-red-950 flex items-center justify-center"
+          >
+            <UIcon
+              name="heroicons:trash"
+              class="size-5 text-red-600 dark:text-red-400"
+            />
+          </div>
+          <div class="flex flex-col gap-1">
+            <h2 class="text-base font-semibold text-gray-900 dark:text-white">
+              Delete {{ itemName }}
+            </h2>
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+              Are you sure you want to delete this {{ itemName }}? This action
+              cannot be undone.
+            </p>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex justify-end gap-2">
+          <UButton size="sm" variant="ghost" @click="showDeleteConfirm = false">
+            Cancel
+          </UButton>
+          <UButton size="sm" color="error" @click="handleDelete">
+            Delete
+          </UButton>
+        </div>
       </div>
     </template>
   </UModal>

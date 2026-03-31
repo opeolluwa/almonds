@@ -5,6 +5,8 @@ export interface Workspace {
   identifier: string;
   name: string;
   description: string;
+  isDefault: boolean;
+  isHidden: boolean;
   createdAt: string;
   updatedAt: string;
 }
@@ -17,19 +19,23 @@ export interface CreateWorkspacePayload {
 export interface UpdateWorkspacePayload {
   name?: string;
   description?: string;
+  isDefault?: boolean;
+  isHidden?: boolean;
 }
 
 export const useWorkspacesStore = defineStore("workspaces_store", {
   state: () => ({
     workspaces: [] as Workspace[],
     loading: false,
-    activeWorkspaceId: "" as string, // <- track active workspace
+    activeWorkspaceId: "" as string,
   }),
 
   getters: {
     currentWorkspace: (state) =>
       state.workspaces.find((w) => w.identifier === state.activeWorkspaceId) ||
       null,
+
+    visibleWorkspaces: (state) => state.workspaces.filter((w) => !w.isHidden),
   },
 
   actions: {
@@ -37,9 +43,12 @@ export const useWorkspacesStore = defineStore("workspaces_store", {
       this.loading = true;
       try {
         this.workspaces = await invoke<Workspace[]>("list_workspaces");
-        // If no active workspace yet, set the first one
         if (!this.activeWorkspaceId && this.workspaces.length > 0) {
-          this.activeWorkspaceId = this.workspaces[0]!.identifier;
+          // Prefer the default workspace on first load
+          const defaultWs = this.workspaces.find((w) => w.isDefault);
+          this.activeWorkspaceId = (
+            defaultWs ?? this.workspaces[0]!
+          ).identifier;
         }
       } finally {
         this.loading = false;
@@ -51,19 +60,21 @@ export const useWorkspacesStore = defineStore("workspaces_store", {
         workspace: payload,
       });
       this.workspaces.push(created);
-      // Automatically set new workspace as active
       this.activeWorkspaceId = created.identifier;
       return created;
     },
 
-    async updateWorkspace(payload: CreateWorkspacePayload): Promise<Workspace> {
-      const created = await invoke<Workspace>("create_workspace", {
+    async updateWorkspace(
+      identifier: string,
+      payload: UpdateWorkspacePayload,
+    ): Promise<Workspace> {
+      const updated = await invoke<Workspace>("update_workspace", {
+        identifier,
         workspace: payload,
       });
-      this.workspaces.push(created);
-      // Automatically set new workspace as active
-      this.activeWorkspaceId = created.identifier;
-      return created;
+      const idx = this.workspaces.findIndex((w) => w.identifier === identifier);
+      if (idx !== -1) this.workspaces[idx] = updated;
+      return updated;
     },
 
     async deleteWorkspace(identifier: string): Promise<void> {
@@ -79,8 +90,6 @@ export const useWorkspacesStore = defineStore("workspaces_store", {
           message: "Workspace deleted",
           type: "success",
         });
-
-        return;
       } catch (error) {
         notify({
           message:
@@ -97,6 +106,7 @@ export const useWorkspacesStore = defineStore("workspaces_store", {
         console.warn("Workspace not found:", identifier);
       }
 
+      const noteStore = useNoteStore();
       const todoStore = useTodoStore();
       const bookmarksStore = useBookmarkStore();
       const recycleBinStore = useRecycleBinStore();
@@ -104,6 +114,8 @@ export const useWorkspacesStore = defineStore("workspaces_store", {
       const userPreferenceStore = useUserPreferenceStore();
       const snippetsStore = useSnippetStore();
 
+      await noteStore.fetchNotes();
+      await noteStore.fetchRecentNotes();
       await todoStore.fetchTodos();
       await bookmarksStore.fetchBookmarks();
       await recycleBinStore.fetchEntries();
