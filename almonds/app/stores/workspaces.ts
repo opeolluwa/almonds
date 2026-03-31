@@ -19,6 +19,7 @@ export interface CreateWorkspacePayload {
 export interface UpdateWorkspacePayload {
   name?: string;
   description?: string;
+  isDefault?: boolean;
   isHidden?: boolean;
 }
 
@@ -34,8 +35,7 @@ export const useWorkspacesStore = defineStore("workspaces_store", {
       state.workspaces.find((w) => w.identifier === state.activeWorkspaceId) ||
       null,
 
-    visibleWorkspaces: (state) =>
-      state.workspaces.filter((w) => !w.isHidden),
+    visibleWorkspaces: (state) => state.workspaces.filter((w) => !w.isHidden),
   },
 
   actions: {
@@ -46,7 +46,9 @@ export const useWorkspacesStore = defineStore("workspaces_store", {
         if (!this.activeWorkspaceId && this.workspaces.length > 0) {
           // Prefer the default workspace on first load
           const defaultWs = this.workspaces.find((w) => w.isDefault);
-          this.activeWorkspaceId = (defaultWs ?? this.workspaces[0]!).identifier;
+          this.activeWorkspaceId = (
+            defaultWs ?? this.workspaces[0]!
+          ).identifier;
         }
       } finally {
         this.loading = false;

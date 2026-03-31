@@ -7,6 +7,7 @@ const emit = defineEmits<{
   delete: [identifier: string];
   edit: [identifier: string];
   toggleHidden: [identifier: string];
+  setDefault: [identifier: string];
 }>();
 
 function formatDate(iso: string) {
@@ -25,7 +26,9 @@ function formatDate(iso: string) {
     <UIcon name="heroicons:briefcase" class="size-5 text-accent-500 shrink-0" />
     <div class="flex-1 min-w-0">
       <div class="flex items-center gap-2">
-        <h3 class="text-sm font-medium text-gray-800 dark:text-gray-200 truncate">
+        <h3
+          class="text-sm font-medium text-gray-800 dark:text-gray-200 truncate"
+        >
           {{ workspace.name }}
         </h3>
         <span
@@ -51,7 +54,9 @@ function formatDate(iso: string) {
     <div
       class="opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity flex items-center gap-1"
     >
-      <UTooltip :text="workspace.isHidden ? 'Show workspace' : 'Hide workspace'">
+      <UTooltip
+        :text="workspace.isHidden ? 'Show workspace' : 'Hide workspace'"
+      >
         <button
           class="text-gray-400 hover:text-accent-500 transition-colors"
           @click="emit('toggleHidden', workspace.identifier)"
@@ -62,6 +67,15 @@ function formatDate(iso: string) {
           />
         </button>
       </UTooltip>
+      <UTooltip text="Set as default workspace">
+        <button
+          v-if="!workspace.isDefault"
+          class="text-gray-400 hover:text-accent-500 transition-colors"
+          @click="emit('setDefault', workspace.identifier)"
+        >
+          <UIcon name="heroicons:star" class="size-4" />
+        </button>
+      </UTooltip>
       <UTooltip text="Edit workspace">
         <button
           class="text-gray-400 hover:text-accent-500 transition-colors"
@@ -70,10 +84,20 @@ function formatDate(iso: string) {
           <UIcon name="heroicons:pencil" class="size-4" />
         </button>
       </UTooltip>
-      <UTooltip :text="workspace.isDefault ? 'Default workspace cannot be deleted' : 'Delete workspace'">
+      <UTooltip
+        :text="
+          workspace.isDefault
+            ? 'Default workspace cannot be deleted'
+            : 'Delete workspace'
+        "
+      >
         <button
           class="text-gray-400 transition-colors"
-          :class="workspace.isDefault ? 'opacity-30 cursor-not-allowed' : 'hover:text-red-500'"
+          :class="
+            workspace.isDefault
+              ? 'opacity-30 cursor-not-allowed'
+              : 'hover:text-red-500'
+          "
           :disabled="workspace.isDefault"
           @click="!workspace.isDefault && emit('delete', workspace.identifier)"
         >

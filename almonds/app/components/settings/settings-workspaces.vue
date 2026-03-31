@@ -7,18 +7,33 @@ async function handleDelete(identifier: string) {
   await workspaceStore.deleteWorkspace(identifier);
 }
 
+// ── set default ───────────────────────────────────────────────────────────────
+async function handleSetDefault(identifier: string) {
+  try {
+    await workspaceStore.updateWorkspace(identifier, { isDefault: true });
+    notify({ message: "Default workspace updated", type: "success" });
+  } catch (e) {
+    notify({ message: (e as Error).message || "Failed to update workspace", type: "error" });
+  }
+}
+
 // ── toggle hidden ─────────────────────────────────────────────────────────────
 async function handleToggleHidden(identifier: string) {
   const ws = workspaceStore.workspaces.find((w) => w.identifier === identifier);
   if (!ws) return;
   try {
-    await workspaceStore.updateWorkspace(identifier, { isHidden: !ws.isHidden });
+    await workspaceStore.updateWorkspace(identifier, {
+      isHidden: !ws.isHidden,
+    });
     notify({
       message: ws.isHidden ? "Workspace is now visible" : "Workspace hidden",
       type: "success",
     });
   } catch (e) {
-    notify({ message: (e as Error).message || "Failed to update workspace", type: "error" });
+    notify({
+      message: (e as Error).message || "Failed to update workspace",
+      type: "error",
+    });
   }
 }
 
@@ -53,7 +68,10 @@ async function submitEdit() {
     notify({ message: "Workspace updated", type: "success" });
     closeEdit();
   } catch (e) {
-    notify({ message: (e as Error).message || "Failed to update workspace", type: "error" });
+    notify({
+      message: (e as Error).message || "Failed to update workspace",
+      type: "error",
+    });
   } finally {
     editSubmitting.value = false;
   }
@@ -75,6 +93,7 @@ const workspaces = computed(() => workspaceStore.workspaces);
         @delete="handleDelete"
         @edit="handleEdit"
         @toggle-hidden="handleToggleHidden"
+        @set-default="handleSetDefault"
       />
     </div>
 

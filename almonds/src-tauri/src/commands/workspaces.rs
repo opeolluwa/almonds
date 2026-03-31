@@ -1,5 +1,8 @@
 use almond_kernel::{
-    adapters::{meta::RequestMeta, workspace::{CreateWorkspace, UpdateWorkspace}},
+    adapters::{
+        meta::RequestMeta,
+        workspace::{CreateWorkspace, UpdateWorkspace},
+    },
     repositories::workspace::WorkspaceRepositoryExt,
 };
 use tauri::State;
