@@ -157,7 +157,7 @@ onUnmounted(() => clearSearch());
         </p>
         <button
           class="text-xs text-accent-500 hover:text-accent-600 font-medium"
-          @click="router.push('/notes/create-notes')"
+          @click="navigateTo('/notes/create-notes')"
         >
           Create note
         </button>

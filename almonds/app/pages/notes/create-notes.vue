@@ -122,7 +122,7 @@ onBeforeRouteLeave(async () => {
           placeholder="Untitled"
           rows="1"
           :disabled="submitting"
-          class="w-full resize-none bg-transparent outline-none text-3xl font-bold text-gray-900 dark:text-gray-50 placeholder:text-gray-300 dark:placeholder:text-gray-600 leading-tight mb-4 overflow-hidden"
+          class="w-full resize-none bg-transparent outline-none text-3xl font-bold text-gray-900 dark:text-gray-50 placeholder:text-gray-300 dark:placeholder:text-gray-500 leading-tight mb-4 overflow-hidden"
           @input="
             ($event.target as HTMLTextAreaElement).style.height = 'auto';
             ($event.target as HTMLTextAreaElement).style.height =
@@ -148,7 +148,10 @@ onBeforeRouteLeave(async () => {
           <input
             v-model="tagInput"
             placeholder="Add tag…"
-            class="bg-transparent outline-none text-xs text-gray-400 placeholder:text-gray-300 dark:placeholder:text-gray-600 w-20 min-w-0"
+            autocapitalize="off"
+            autocorrect="off"
+            spellcheck="false"
+            class="bg-transparent outline-none text-xs text-gray-400 dark:text-gray-300 placeholder:text-gray-300 dark:placeholder:text-gray-500 w-20 min-w-0"
             @keydown="onTagKeydown"
             @blur="addTag"
           >

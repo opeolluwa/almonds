@@ -76,34 +76,14 @@ function formatDate(iso: string) {
           <UIcon name="heroicons:star" class="size-4" />
         </button>
       </UTooltip>
-      <UTooltip text="Edit workspace">
-        <button
-          class="text-gray-400 hover:text-accent-500 transition-colors"
-          @click="emit('edit', workspace.identifier)"
-        >
-          <UIcon name="heroicons:pencil" class="size-4" />
-        </button>
-      </UTooltip>
-      <UTooltip
-        :text="
-          workspace.isDefault
-            ? 'Default workspace cannot be deleted'
-            : 'Delete workspace'
-        "
-      >
-        <button
-          class="text-gray-400 transition-colors"
-          :class="
-            workspace.isDefault
-              ? 'opacity-30 cursor-not-allowed'
-              : 'hover:text-red-500'
-          "
-          :disabled="workspace.isDefault"
-          @click="!workspace.isDefault && emit('delete', workspace.identifier)"
-        >
-          <UIcon name="heroicons:trash" class="size-4" />
-        </button>
-      </UTooltip>
+      <MetaControls
+        item-name="workspace"
+        :show-edit="true"
+        :show-duplicate="false"
+        :show-transfer="false"
+        @edit-record="emit('edit', workspace.identifier)"
+        @delete-record="emit('delete', workspace.identifier)"
+      />
     </div>
   </div>
 </template>

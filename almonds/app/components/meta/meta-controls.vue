@@ -29,26 +29,42 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+  showDuplicate: {
+    type: Boolean,
+    default: true,
+  },
+  showTransfer: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 const controls = computed(() => [
   [
-    {
-      label: "Duplicate",
-      icon: "i-lucide-copy",
-      class: "text-gray-700 dark:text-gray-300",
-      onSelect: () => {
-        showDuplicateModal.value = true;
-      },
-    },
-    {
-      label: "Transfer to workspace",
-      icon: "i-lucide-arrow-right-left",
-      class: "text-gray-700 dark:text-gray-300",
-      onSelect: () => {
-        showTransferModal.value = true;
-      },
-    },
+    ...(props.showDuplicate
+      ? [
+          {
+            label: "Duplicate",
+            icon: "i-lucide-copy",
+            class: "text-gray-700 dark:text-gray-300",
+            onSelect: () => {
+              showDuplicateModal.value = true;
+            },
+          },
+        ]
+      : []),
+    ...(props.showTransfer
+      ? [
+          {
+            label: "Transfer to workspace",
+            icon: "i-lucide-arrow-right-left",
+            class: "text-gray-700 dark:text-gray-300",
+            onSelect: () => {
+              showTransferModal.value = true;
+            },
+          },
+        ]
+      : []),
   ],
   [
     ...(props.showEdit

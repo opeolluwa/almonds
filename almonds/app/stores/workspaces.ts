@@ -106,6 +106,7 @@ export const useWorkspacesStore = defineStore("workspaces_store", {
         console.warn("Workspace not found:", identifier);
       }
 
+      const noteStore = useNoteStore();
       const todoStore = useTodoStore();
       const bookmarksStore = useBookmarkStore();
       const recycleBinStore = useRecycleBinStore();
@@ -113,6 +114,8 @@ export const useWorkspacesStore = defineStore("workspaces_store", {
       const userPreferenceStore = useUserPreferenceStore();
       const snippetsStore = useSnippetStore();
 
+      await noteStore.fetchNotes();
+      await noteStore.fetchRecentNotes();
       await todoStore.fetchTodos();
       await bookmarksStore.fetchBookmarks();
       await recycleBinStore.fetchEntries();
