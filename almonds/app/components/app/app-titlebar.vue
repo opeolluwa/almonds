@@ -56,7 +56,7 @@ useEventListener("keydown", (e: KeyboardEvent) => {
 
 <template>
   <div class="titlebar grid grid-cls-12">
-    <div data-tauri-drag-region/>
+    <div data-tauri-drag-region />
     <!-- mac os controls-->
     <div v-if="isMacOS" class="traffic-lights col-span-1">
       <UTooltip text="Close">

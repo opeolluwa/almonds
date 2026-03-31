@@ -169,6 +169,7 @@ pub async fn run() {
             commands::workspaces::delete_workspace,
             commands::workspaces::get_workspace_by_id,
             commands::workspaces::list_workspaces,
+            commands::workspaces::update_workspace,
             commands::ollama::is_ollama_installed,
             commands::ollama::generate_stream,
         ])
