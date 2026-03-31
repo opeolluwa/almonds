@@ -52,7 +52,11 @@ function onTagKeydown(e: KeyboardEvent) {
   if (e.key === "Enter" || e.key === ",") {
     e.preventDefault();
     addTag();
-  } else if (e.key === "Backspace" && !tagInput.value && categories.value.length) {
+  } else if (
+    e.key === "Backspace" &&
+    !tagInput.value &&
+    categories.value.length
+  ) {
     categories.value.pop();
   }
 }
@@ -119,7 +123,11 @@ onBeforeRouteLeave(async () => {
           rows="1"
           :disabled="submitting"
           class="w-full resize-none bg-transparent outline-none text-3xl font-bold text-gray-900 dark:text-gray-50 placeholder:text-gray-300 dark:placeholder:text-gray-600 leading-tight mb-4 overflow-hidden"
-          @input="($event.target as HTMLTextAreaElement).style.height = 'auto'; ($event.target as HTMLTextAreaElement).style.height = ($event.target as HTMLTextAreaElement).scrollHeight + 'px'"
+          @input="
+            ($event.target as HTMLTextAreaElement).style.height = 'auto';
+            ($event.target as HTMLTextAreaElement).style.height =
+              ($event.target as HTMLTextAreaElement).scrollHeight + 'px';
+          "
         />
 
         <!-- Tags row -->
@@ -143,7 +151,7 @@ onBeforeRouteLeave(async () => {
             class="bg-transparent outline-none text-xs text-gray-400 placeholder:text-gray-300 dark:placeholder:text-gray-600 w-20 min-w-0"
             @keydown="onTagKeydown"
             @blur="addTag"
-          />
+          >
         </div>
 
         <!-- Divider -->
@@ -159,17 +167,25 @@ onBeforeRouteLeave(async () => {
     <template #side_content>
       <!-- Document stats -->
       <div class="mb-6">
-        <h2 class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-3">
+        <h2
+          class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-3"
+        >
           Document
         </h2>
         <div class="flex flex-col gap-2">
           <div class="flex items-center justify-between text-xs">
             <span class="text-gray-400">Words</span>
-            <span class="font-medium text-gray-700 dark:text-gray-300 tabular-nums">{{ wordCount }}</span>
+            <span
+              class="font-medium text-gray-700 dark:text-gray-300 tabular-nums"
+              >{{ wordCount }}</span
+            >
           </div>
           <div class="flex items-center justify-between text-xs">
             <span class="text-gray-400">Categories</span>
-            <span class="font-medium text-gray-700 dark:text-gray-300 tabular-nums">{{ categories.length }}</span>
+            <span
+              class="font-medium text-gray-700 dark:text-gray-300 tabular-nums"
+              >{{ categories.length }}</span
+            >
           </div>
         </div>
       </div>
@@ -194,14 +210,24 @@ onBeforeRouteLeave(async () => {
         >
           Discard
         </UButton>
-        <p class="text-center text-[10px] text-gray-300 dark:text-gray-600 mt-1">
-          {{ submitting ? 'Saving…' : hasContent ? '⌘S to save' : 'Start writing to save' }}
+        <p
+          class="text-center text-[10px] text-gray-300 dark:text-gray-600 mt-1"
+        >
+          {{
+            submitting
+              ? "Saving…"
+              : hasContent
+                ? "⌘S to save"
+                : "Start writing to save"
+          }}
         </p>
       </div>
 
       <!-- Tips -->
       <div>
-        <h2 class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-3">
+        <h2
+          class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-3"
+        >
           Tips
         </h2>
         <ul class="flex flex-col gap-2.5">
@@ -215,7 +241,10 @@ onBeforeRouteLeave(async () => {
             :key="tip"
             class="flex items-start gap-2 text-xs text-gray-400 dark:text-gray-500"
           >
-            <UIcon name="heroicons:light-bulb" class="size-3.5 mt-0.5 shrink-0 text-accent-400" />
+            <UIcon
+              name="heroicons:light-bulb"
+              class="size-3.5 mt-0.5 shrink-0 text-accent-400"
+            />
             {{ tip }}
           </li>
         </ul>

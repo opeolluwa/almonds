@@ -13,7 +13,10 @@ async function handleSetDefault(identifier: string) {
     await workspaceStore.updateWorkspace(identifier, { isDefault: true });
     notify({ message: "Default workspace updated", type: "success" });
   } catch (e) {
-    notify({ message: (e as Error).message || "Failed to update workspace", type: "error" });
+    notify({
+      message: (e as Error).message || "Failed to update workspace",
+      type: "error",
+    });
   }
 }
 
