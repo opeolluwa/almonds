@@ -170,6 +170,9 @@ pub async fn run() {
             commands::workspaces::get_workspace_by_id,
             commands::workspaces::list_workspaces,
             commands::workspaces::update_workspace,
+            commands::moodboard::save_moodboard_image,
+            commands::moodboard::list_moodboard_images,
+            commands::moodboard::delete_moodboard_image,
             commands::ollama::is_ollama_installed,
             commands::ollama::generate_stream,
         ])

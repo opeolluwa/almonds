@@ -23,6 +23,7 @@ log = "0.4"
 ollama-rs = { version = "0.3.4", features = ["stream"] }
 rodio = { version = "0.19", features = ["mp3", "wav", "vorbis", "flac"] }
 sanitizer = { version = "1.0.0", features = ["derive"] }
+base64 = "0.22"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 tauri = { version = "2.10.0", features = ["macos-private-api", "tray-icon"] }
