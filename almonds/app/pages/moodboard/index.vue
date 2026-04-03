@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { invoke } from "@tauri-apps/api/core";
+import { listen } from "@tauri-apps/api/event";
 import { useMoodboardStore } from "~/stores/moodboard";
 
 definePageMeta({ layout: false });
@@ -6,9 +8,58 @@ definePageMeta({ layout: false });
 const moodboardStore = useMoodboardStore();
 const fileInputRef = ref<HTMLInputElement | null>(null);
 
-onMounted(() => {
+// AI state
+const aiAvailable = ref(false);
+const modelReady = ref(false);
+const downloading = ref(false);
+const downloadStatus = ref("");
+const downloadProgress = ref(0);
+
+let unlisten: (() => void) | null = null;
+
+onMounted(async () => {
   moodboardStore.fetchImages();
+
+  aiAvailable.value = await invoke<boolean>("is_ollama_installed");
+  if (aiAvailable.value) {
+    modelReady.value = await invoke<boolean>("check_ai_model");
+  }
+
+  unlisten = await listen<{
+    status: string;
+    total?: number;
+    completed?: number;
+  }>("ai://pull-progress", (event) => {
+    downloadStatus.value = event.payload.status;
+    if (event.payload.total && event.payload.completed) {
+      downloadProgress.value = Math.round(
+        (event.payload.completed / event.payload.total) * 100,
+      );
+    }
+    if (event.payload.status === "success") {
+      downloading.value = false;
+      modelReady.value = true;
+    }
+  });
 });
+
+onUnmounted(() => {
+  unlisten?.();
+});
+
+async function downloadModel() {
+  downloading.value = true;
+  downloadStatus.value = "Starting download…";
+  downloadProgress.value = 0;
+  try {
+    await invoke("pull_ai_model");
+    modelReady.value = true;
+  } catch {
+    downloadStatus.value = "Download failed. Please try again.";
+  } finally {
+    downloading.value = false;
+  }
+}
 
 function triggerUpload() {
   fileInputRef.value?.click();
@@ -43,7 +94,11 @@ async function handleDelete(filename: string) {
           @click="triggerUpload"
         >
           <UIcon
-            :name="moodboardStore.uploading ? 'heroicons:arrow-path' : 'heroicons:plus'"
+            :name="
+              moodboardStore.uploading
+                ? 'heroicons:arrow-path'
+                : 'heroicons:plus'
+            "
             :class="['size-4', moodboardStore.uploading && 'animate-spin']"
           />
           {{ moodboardStore.uploading ? "Uploading…" : "Add Image" }}
@@ -57,7 +112,9 @@ async function handleDelete(filename: string) {
         @click="triggerUpload"
       >
         <UIcon
-          :name="moodboardStore.uploading ? 'heroicons:arrow-path' : 'heroicons:plus'"
+          :name="
+            moodboardStore.uploading ? 'heroicons:arrow-path' : 'heroicons:plus'
+          "
           :class="['size-6', moodboardStore.uploading && 'animate-spin']"
         />
       </button>
@@ -70,7 +127,7 @@ async function handleDelete(filename: string) {
         multiple
         class="hidden"
         @change="handleFileChange"
-      />
+      >
     </template>
 
     <template #main_content>
@@ -124,7 +181,7 @@ async function handleDelete(filename: string) {
               :src="image.src"
               :alt="image.title"
               class="w-full object-cover"
-            />
+            >
             <div
               class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-end justify-between"
             >
@@ -166,6 +223,60 @@ async function handleDelete(filename: string) {
         Tags
       </h2>
       <p class="text-xs text-gray-400 dark:text-gray-500">No tags yet</p>
+
+      <USeparator class="my-4" />
+
+      <h2 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">
+        AI
+      </h2>
+
+      <!-- AI service not running -->
+      <div v-if="!aiAvailable" class="flex flex-col gap-1">
+        <p class="text-xs text-gray-400 dark:text-gray-500">
+          AI service is not running.
+        </p>
+      </div>
+
+      <!-- Model ready -->
+      <div v-else-if="modelReady" class="flex items-center gap-2">
+        <UIcon
+          name="heroicons:check-circle"
+          class="size-4 text-green-500 shrink-0"
+        />
+        <p class="text-xs text-gray-500 dark:text-gray-400">AI model ready</p>
+      </div>
+
+      <!-- Downloading -->
+      <div v-else-if="downloading" class="flex flex-col gap-2">
+        <p class="text-xs text-gray-500 dark:text-gray-400 truncate">
+          {{ downloadStatus }}
+        </p>
+        <div
+          class="w-full h-1.5 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden"
+        >
+          <div
+            class="h-full bg-accent-500 rounded-full transition-all duration-300"
+            :style="{ width: `${downloadProgress}%` }"
+          />
+        </div>
+        <p class="text-xs text-gray-400 dark:text-gray-500 text-right">
+          {{ downloadProgress }}%
+        </p>
+      </div>
+
+      <!-- Prompt to download -->
+      <div v-else class="flex flex-col gap-2">
+        <p class="text-xs text-gray-400 dark:text-gray-500">
+          Download the AI model to get smart suggestions for your images.
+        </p>
+        <button
+          class="flex items-center gap-2 py-1.5 px-3 bg-accent-500 text-white rounded-lg text-xs font-medium hover:bg-accent-600 transition-colors"
+          @click="downloadModel"
+        >
+          <UIcon name="heroicons:arrow-down-tray" class="size-3.5" />
+          Download AI (~2 GB)
+        </button>
+      </div>
     </template>
   </NuxtLayout>
 </template>

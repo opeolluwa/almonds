@@ -9,7 +9,7 @@ use almond_kernel::{
     },
     sea_orm::DatabaseConnection,
 };
-use ollama_rs::{generation::completion::GenerationContext, Ollama};
+use ollama_rs::generation::completion::GenerationContext;
 use tokio::sync::Mutex;
 
 use crate::state::ollama::OllamaState;

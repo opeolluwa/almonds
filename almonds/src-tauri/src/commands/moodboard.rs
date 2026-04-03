@@ -1,5 +1,6 @@
-use base64::{engine::general_purpose, Engine as _};
 use std::path::PathBuf;
+
+use base64::{engine::general_purpose, Engine as _};
 use tauri::{AppHandle, Manager};
 
 #[derive(serde::Serialize, serde::Deserialize, Clone)]
@@ -10,10 +11,7 @@ pub struct MoodboardImage {
 }
 
 fn moodboard_dir(app: &AppHandle) -> Result<PathBuf, String> {
-    let app_data_dir = app
-        .path()
-        .app_data_dir()
-        .map_err(|e| e.to_string())?;
+    let app_data_dir = app.path().app_data_dir().map_err(|e| e.to_string())?;
     Ok(app_data_dir.join("moodboard"))
 }
 

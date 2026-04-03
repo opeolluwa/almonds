@@ -12,7 +12,7 @@ use crate::{
     adapters::{
         meta::RequestMeta,
         recycle_bin::{CreateRecycleBinEntry, RecycleBinItemType},
-        workspace::{CreateWorkspace, UpdateWorkspace},
+        workspace::{CreateWorkspace, UpdateWorkspace, hash_password, verify_password},
     },
     entities::workspaces,
     error::KernelError,
@@ -49,6 +49,12 @@ pub trait WorkspaceRepositoryExt {
         identifier: &Uuid,
         payload: UpdateWorkspace,
     ) -> Result<workspaces::Model, KernelError>;
+
+    async fn verify_workspace_password(
+        &self,
+        identifier: &Uuid,
+        password: &str,
+    ) -> Result<bool, KernelError>;
 
     async fn exists(&self, id: &Uuid) -> Result<bool, KernelError>;
 }
@@ -163,12 +169,44 @@ impl WorkspaceRepositoryExt for WorkspaceRepository {
         if let Some(is_hidden) = payload.is_hidden {
             active.is_hidden = Set(is_hidden);
         }
+        if let Some(is_secured) = payload.is_secured {
+            active.is_secured = Set(is_secured);
+            // When disabling security, clear the hash
+            if !is_secured {
+                active.password_hash = Set(None);
+            }
+        }
+        if let Some(password) = payload.password {
+            if password.is_empty() {
+                active.password_hash = Set(None);
+            } else {
+                let hash = hash_password(&password)
+                    .map_err(|e| KernelError::DbOperationError(e.to_string()))?;
+                active.password_hash = Set(Some(hash));
+            }
+        }
         active.updated_at = Set(Utc::now().fixed_offset());
 
         active
             .update(self.conn.as_ref())
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))
+    }
+
+    async fn verify_workspace_password(
+        &self,
+        identifier: &Uuid,
+        password: &str,
+    ) -> Result<bool, KernelError> {
+        let model = self.get_workspace_by_id(*identifier).await?;
+        if !model.is_secured {
+            return Ok(true);
+        }
+        match model.password_hash {
+            Some(ref hash) => verify_password(password, hash)
+                .map_err(|e| KernelError::DbOperationError(e.to_string())),
+            None => Ok(false),
+        }
     }
 
     async fn exists(&self, id: &Uuid) -> Result<bool, KernelError> {

@@ -170,10 +170,13 @@ pub async fn run() {
             commands::workspaces::get_workspace_by_id,
             commands::workspaces::list_workspaces,
             commands::workspaces::update_workspace,
+            commands::workspaces::verify_workspace_password,
             commands::moodboard::save_moodboard_image,
             commands::moodboard::list_moodboard_images,
             commands::moodboard::delete_moodboard_image,
             commands::ollama::is_ollama_installed,
+            commands::ollama::check_ai_model,
+            commands::ollama::pull_ai_model,
             commands::ollama::generate_stream,
         ])
         .run(tauri::generate_context!())

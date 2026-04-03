@@ -2,6 +2,89 @@
 const { notify } = useAppNotification();
 const workspaceStore = useWorkspacesStore();
 
+// ── secure workspace ──────────────────────────────────────────────────────────
+const secureTargetId = ref<string | null>(null);
+const securePassword = ref("");
+const secureConfirm = ref("");
+const secureError = ref("");
+const secureSubmitting = ref(false);
+
+const secureTargetWorkspace = computed(() =>
+  secureTargetId.value
+    ? workspaceStore.workspaces.find(
+        (w) => w.identifier === secureTargetId.value,
+      )
+    : null,
+);
+
+function handleToggleSecured(identifier: string) {
+  const ws = workspaceStore.workspaces.find((w) => w.identifier === identifier);
+  if (!ws) return;
+  secureTargetId.value = identifier;
+  securePassword.value = "";
+  secureConfirm.value = "";
+  secureError.value = "";
+}
+
+function closeSecureModal() {
+  secureTargetId.value = null;
+  securePassword.value = "";
+  secureConfirm.value = "";
+  secureError.value = "";
+}
+
+async function submitSecure() {
+  if (!secureTargetId.value || !secureTargetWorkspace.value) return;
+
+  if (!secureTargetWorkspace.value.isSecured) {
+    // Setting a new password
+    if (!securePassword.value) {
+      secureError.value = "Password is required.";
+      return;
+    }
+    if (securePassword.value !== secureConfirm.value) {
+      secureError.value = "Passwords do not match.";
+      return;
+    }
+  }
+
+  secureSubmitting.value = true;
+  secureError.value = "";
+  try {
+    if (secureTargetWorkspace.value.isSecured) {
+      // Removing the password — verify current password first
+      const ok = await workspaceStore.verifyWorkspacePassword(
+        secureTargetId.value,
+        securePassword.value,
+      );
+      if (!ok) {
+        secureError.value = "Incorrect password.";
+        return;
+      }
+      await workspaceStore.updateWorkspace(secureTargetId.value, {
+        isSecured: false,
+        password: "",
+      });
+      notify({ message: "Workspace password removed", type: "success" });
+    } else {
+      await workspaceStore.updateWorkspace(secureTargetId.value, {
+        isSecured: true,
+        password: securePassword.value,
+      });
+      workspaceStore.unlockWorkspace(secureTargetId.value);
+      notify({ message: "Workspace secured with password", type: "success" });
+    }
+    closeSecureModal();
+  } catch (e) {
+    notify({
+      message: (e as Error).message || "Failed to update workspace security",
+      type: "error",
+    });
+  } finally {
+    secureSubmitting.value = false;
+  }
+}
+
 // ── delete ────────────────────────────────────────────────────────────────────
 async function handleDelete(identifier: string) {
   await workspaceStore.deleteWorkspace(identifier);
@@ -97,6 +180,7 @@ const workspaces = computed(() => workspaceStore.workspaces);
         @edit="handleEdit"
         @toggle-hidden="handleToggleHidden"
         @set-default="handleSetDefault"
+        @toggle-secured="handleToggleSecured"
       />
     </div>
 
@@ -137,6 +221,78 @@ const workspaces = computed(() => workspaceStore.workspaces);
               size="sm"
               :disabled="editSubmitting"
               @click="closeEdit"
+            >
+              Cancel
+            </UButton>
+          </div>
+        </div>
+      </template>
+    </UModal>
+    <!-- Secure workspace modal -->
+    <UModal :open="!!secureTargetId" @close="closeSecureModal">
+      <template #content>
+        <div class="p-6 flex flex-col gap-4">
+          <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-200">
+            {{
+              secureTargetWorkspace?.isSecured
+                ? "Remove workspace password"
+                : "Set workspace password"
+            }}
+          </h3>
+          <p class="text-xs text-gray-500 dark:text-gray-400">
+            {{
+              secureTargetWorkspace?.isSecured
+                ? "Enter the current password to remove protection from this workspace."
+                : "This workspace will require a password before it can be accessed."
+            }}
+          </p>
+          <UFormField
+            :label="
+              secureTargetWorkspace?.isSecured ? 'Current password' : 'Password'
+            "
+          >
+            <UInput
+              v-model="securePassword"
+              type="password"
+              placeholder="Enter password"
+              class="w-full"
+              :disabled="secureSubmitting"
+            />
+          </UFormField>
+          <UFormField
+            v-if="!secureTargetWorkspace?.isSecured"
+            label="Confirm password"
+          >
+            <UInput
+              v-model="secureConfirm"
+              type="password"
+              placeholder="Confirm password"
+              class="w-full"
+              :disabled="secureSubmitting"
+            />
+          </UFormField>
+          <p v-if="secureError" class="text-xs text-red-500 dark:text-red-400">
+            {{ secureError }}
+          </p>
+          <div class="flex items-center gap-2 mt-2">
+            <UButton
+              size="sm"
+              :color="secureTargetWorkspace?.isSecured ? 'error' : 'primary'"
+              :loading="secureSubmitting"
+              :disabled="!securePassword"
+              @click="submitSecure"
+            >
+              {{
+                secureTargetWorkspace?.isSecured
+                  ? "Remove password"
+                  : "Set password"
+              }}
+            </UButton>
+            <UButton
+              variant="ghost"
+              size="sm"
+              :disabled="secureSubmitting"
+              @click="closeSecureModal"
             >
               Cancel
             </UButton>

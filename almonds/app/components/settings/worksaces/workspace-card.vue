@@ -8,6 +8,7 @@ const emit = defineEmits<{
   edit: [identifier: string];
   toggleHidden: [identifier: string];
   setDefault: [identifier: string];
+  toggleSecured: [identifier: string];
 }>();
 
 function formatDate(iso: string) {
@@ -43,6 +44,12 @@ function formatDate(iso: string) {
         >
           hidden
         </span>
+        <span
+          v-if="workspace.isSecured"
+          class="px-1.5 py-0.5 rounded text-[10px] font-medium bg-amber-100 dark:bg-amber-900 text-amber-600 dark:text-amber-300 shrink-0"
+        >
+          secured
+        </span>
       </div>
       <div class="text-xs text-gray-400 truncate block">
         {{ workspace.description }}
@@ -63,6 +70,23 @@ function formatDate(iso: string) {
         >
           <UIcon
             :name="workspace.isHidden ? 'heroicons:eye' : 'heroicons:eye-slash'"
+            class="size-4"
+          />
+        </button>
+      </UTooltip>
+      <UTooltip
+        :text="workspace.isSecured ? 'Remove password' : 'Set password'"
+      >
+        <button
+          class="text-gray-400 hover:text-amber-500 transition-colors"
+          @click="emit('toggleSecured', workspace.identifier)"
+        >
+          <UIcon
+            :name="
+              workspace.isSecured
+                ? 'heroicons:lock-closed'
+                : 'heroicons:lock-open'
+            "
             class="size-4"
           />
         </button>

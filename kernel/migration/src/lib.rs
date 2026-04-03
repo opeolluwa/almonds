@@ -25,6 +25,7 @@ mod m20260304_080239_create_default_workspace;
 mod m20260314_150343_create_trigger_for_bookmarks;
 mod m20260327_000000_add_workspace_id_to_user_preference;
 mod m20260331_000000_add_workspace_flags;
+mod m20260403_000000_add_workspace_security;
 
 pub use sea_orm_migration::prelude::*;
 
@@ -61,6 +62,7 @@ impl MigratorTrait for Migrator {
             Box::new(m20260314_150343_create_trigger_for_bookmarks::Migration),
             Box::new(m20260327_000000_add_workspace_id_to_user_preference::Migration),
             Box::new(m20260331_000000_add_workspace_flags::Migration),
+            Box::new(m20260403_000000_add_workspace_security::Migration),
         ]
     }
 }
