@@ -170,6 +170,7 @@ pub async fn run() {
             commands::workspaces::get_workspace_by_id,
             commands::workspaces::list_workspaces,
             commands::workspaces::update_workspace,
+            commands::workspaces::verify_workspace_password,
             commands::moodboard::save_moodboard_image,
             commands::moodboard::list_moodboard_images,
             commands::moodboard::delete_moodboard_image,

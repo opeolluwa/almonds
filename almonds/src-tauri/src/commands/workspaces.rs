@@ -56,6 +56,21 @@ pub async fn update_workspace(
 }
 
 #[tauri::command]
+pub async fn verify_workspace_password(
+    state: State<'_, AppState>,
+    identifier: String,
+    password: String,
+) -> Result<bool, AppError> {
+    let uuid = uuid::Uuid::parse_str(&identifier)
+        .map_err(|_| AppError::Io(format!("Invalid UUID string: {}", identifier)))?;
+    let ok = state
+        .workspace_repository
+        .verify_workspace_password(&uuid, &password)
+        .await?;
+    Ok(ok)
+}
+
+#[tauri::command]
 pub async fn delete_workspace(
     state: State<'_, AppState>,
     identifier: String,

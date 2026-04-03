@@ -7,6 +7,7 @@ export interface Workspace {
   description: string;
   isDefault: boolean;
   isHidden: boolean;
+  isSecured: boolean;
   createdAt: string;
   updatedAt: string;
 }
@@ -21,6 +22,9 @@ export interface UpdateWorkspacePayload {
   description?: string;
   isDefault?: boolean;
   isHidden?: boolean;
+  isSecured?: boolean;
+  /** Plain-text password; pass empty string to remove the password. */
+  password?: string;
 }
 
 export const useWorkspacesStore = defineStore("workspaces_store", {
@@ -28,6 +32,8 @@ export const useWorkspacesStore = defineStore("workspaces_store", {
     workspaces: [] as Workspace[],
     loading: false,
     activeWorkspaceId: "" as string,
+    /** Identifiers of secured workspaces the user has unlocked this session. */
+    unlockedWorkspaceIds: [] as string[],
   }),
 
   getters: {
@@ -36,6 +42,17 @@ export const useWorkspacesStore = defineStore("workspaces_store", {
       null,
 
     visibleWorkspaces: (state) => state.workspaces.filter((w) => !w.isHidden),
+
+    isWorkspaceUnlocked: (state) => (identifier: string) =>
+      !state.workspaces.find((w) => w.identifier === identifier)?.isSecured ||
+      state.unlockedWorkspaceIds.includes(identifier),
+
+    isCurrentWorkspaceLocked: (state) => {
+      const current = state.workspaces.find(
+        (w) => w.identifier === state.activeWorkspaceId,
+      );
+      return !!current?.isSecured && !state.unlockedWorkspaceIds.includes(state.activeWorkspaceId);
+    },
   },
 
   actions: {
@@ -123,6 +140,24 @@ export const useWorkspacesStore = defineStore("workspaces_store", {
       await userPreferenceStore.fetchPreference();
       await snippetsStore.fetchSnippets();
     },
+
+    async verifyWorkspacePassword(
+      identifier: string,
+      password: string,
+    ): Promise<boolean> {
+      return invoke<boolean>("verify_workspace_password", {
+        identifier,
+        password,
+      });
+    },
+
+    unlockWorkspace(identifier: string) {
+      if (!this.unlockedWorkspaceIds.includes(identifier)) {
+        this.unlockedWorkspaceIds.push(identifier);
+      }
+    },
   },
-  persist: true,
+  persist: {
+    omit: ["unlockedWorkspaceIds"],
+  },
 });

@@ -18,6 +18,8 @@ const {
 
 useAlarmScheduler();
 
+const showWorkspaceLock = ref(false);
+
 onMounted(async () => {
   init();
   initFontSize();
@@ -27,6 +29,10 @@ onMounted(async () => {
 
   const workspaceStore = useWorkspacesStore();
   await workspaceStore.fetchWorkspaces();
+
+  if (workspaceStore.isCurrentWorkspaceLocked) {
+    showWorkspaceLock.value = true;
+  }
 
   let permissionGranted = await isPermissionGranted();
 
@@ -45,6 +51,10 @@ onMounted(async () => {
     <AppNotification />
     <UserSetupModal v-if="setupRequired" />
     <WorkspaceSetupModal v-if="workspaceSetupRequired" />
+    <WorkspaceLockModal
+      v-if="showWorkspaceLock && !setupRequired && !workspaceSetupRequired"
+      @unlocked="showWorkspaceLock = false"
+    />
 
     <Transition
       enter-active-class="transition-opacity duration-200"

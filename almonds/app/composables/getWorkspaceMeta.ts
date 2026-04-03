@@ -12,6 +12,10 @@ export async function getWorkspaceMeta(): Promise<RequestMeta> {
     throw new Error("No active workspace");
   }
 
+  // if (workspaceStore.isCurrentWorkspaceLocked) {
+  //   throw new Error("Workspace is locked");
+  // }
+
   return {
     workspaceIdentifier: workspace.identifier,
   };

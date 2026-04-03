@@ -13,6 +13,9 @@ pub struct Model {
     pub description: String,
     pub is_default: bool,
     pub is_hidden: bool,
+    pub is_secured: bool,
+    #[serde(skip)]
+    pub password_hash: Option<String>,
     pub created_at: DateTimeWithTimeZone,
     pub updated_at: DateTimeWithTimeZone,
 }

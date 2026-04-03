@@ -14,6 +14,7 @@ graphql_client = "0.16.0"
 log = "0.4.29"
 migration = { path = "migration" }
 sanitizer = { version = "1.0.0", features = ["derive"] }
+argon2 = "0.5"
 sea-orm = { version = "2.0.0-rc", features = [
     "sqlx-sqlite",
     "sqlx-mysql",

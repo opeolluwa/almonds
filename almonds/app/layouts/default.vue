@@ -3,8 +3,10 @@ import _ from "lodash";
 
 import { primaryRoutes, secondaryRoutes } from "~/data/routes";
 import { useUserPreferenceStore } from "~/stores/user-preference";
+import { useWorkspacesStore } from "~/stores/workspaces";
 
 const preferenceStore = useUserPreferenceStore();
+const workspaceStore = useWorkspacesStore();
 
 const route = useRoute();
 const colorMode = useColorMode();
@@ -62,12 +64,30 @@ const pageTitle = computed(() => {
             </h1>
           </slot>
 
-          <div class="hidden md:flex items-center justify-end mt-5 my-6">
+          <div
+            v-if="!workspaceStore.isCurrentWorkspaceLocked"
+            class="hidden md:flex items-center justify-end mt-5 my-6"
+          >
             <slot name="primary_cta" />
           </div>
 
           <div class="mt-5">
-            <slot name="main_content" />
+            <div
+              v-if="workspaceStore.isCurrentWorkspaceLocked && !route.path.startsWith('/settings')"
+              class="flex flex-col items-center justify-center gap-3 py-24 text-center"
+            >
+              <UIcon
+                name="heroicons:lock-closed"
+                class="size-10 text-amber-400 dark:text-amber-500"
+              />
+              <p class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                This workspace is password protected
+              </p>
+              <p class="text-xs text-gray-400 dark:text-gray-500">
+                Select it from the workspace switcher to unlock.
+              </p>
+            </div>
+            <slot v-else-if="!workspaceStore.isCurrentWorkspaceLocked || route.path.startsWith('/settings')" name="main_content" />
           </div>
         </main>
 
@@ -91,7 +111,7 @@ const pageTitle = computed(() => {
             >
           </div>
           <div class="flex-1 overflow-y-scroll scrollbar-config p-4">
-            <slot name="side_content" />
+            <slot v-if="!workspaceStore.isCurrentWorkspaceLocked" name="side_content" />
           </div>
         </aside>
       </div>

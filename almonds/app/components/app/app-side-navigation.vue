@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import type { Workspace } from "~/stores/workspaces";
 import { primaryRoutes, secondaryRoutes } from "~/data/routes";
 
 const workspaceStore = useWorkspacesStore();
+const preferenceStore = useUserPreferenceStore();
 const showCreateModal = ref(false);
 const route = useRoute();
 const colorMode = useColorMode();
@@ -38,19 +40,30 @@ function validate(): boolean {
   return !errors.name && !errors.description;
 }
 
+// Shared ref for the newly created workspace across all post-creation steps
+const pendingNewWorkspace = ref<Workspace | null>(null);
+
 async function handleSubmit() {
   if (!validate()) return;
   loading.value = true;
   try {
-    await workspaceStore.createWorkspace({
+    // Snapshot current profile BEFORE createWorkspace switches activeWorkspaceId
+    const existingPref = preferenceStore.preference;
+    profileForm.firstName = existingPref?.firstName ?? "";
+    profileForm.lastName = existingPref?.lastName ?? "";
+    profileForm.email = existingPref?.email ?? "";
+
+    const created = await workspaceStore.createWorkspace({
       name: form.name.trim(),
       description: form.description.trim(),
     });
+    pendingNewWorkspace.value = created;
     showCreateModal.value = false;
     form.name = "";
     form.description = "";
     errors.name = "";
     errors.description = "";
+    showProfileSetup.value = true;
   } catch (e) {
     console.error(e);
   } finally {
@@ -58,8 +71,161 @@ async function handleSubmit() {
   }
 }
 
+// ── step 1: profile setup ─────────────────────────────────────────────────────
+const showProfileSetup = ref(false);
+const profileForm = reactive({ firstName: "", lastName: "", email: "" });
+const profileSetupLoading = ref(false);
+
+function openSecurityStep() {
+  securityMode.value = "new";
+  securityPassword.value = "";
+  securityConfirm.value = "";
+  reuseSourceId.value = "";
+  securityError.value = "";
+  showSecuritySetup.value = true;
+}
+
+async function submitProfileSetup() {
+  if (!pendingNewWorkspace.value) return;
+  profileSetupLoading.value = true;
+  try {
+    await preferenceStore.createPreference({
+      firstName: profileForm.firstName.trim(),
+      lastName: profileForm.lastName.trim(),
+      email: profileForm.email.trim(),
+    });
+  } catch (e) {
+    console.error(e);
+  } finally {
+    profileSetupLoading.value = false;
+    showProfileSetup.value = false;
+    openSecurityStep();
+  }
+}
+
+function useDefaultProfile() {
+  showProfileSetup.value = false;
+  openSecurityStep();
+}
+
+// ── step 2: security setup ────────────────────────────────────────────────────
+const showSecuritySetup = ref(false);
+const securityMode = ref<"new" | "reuse">("new");
+const securityPassword = ref("");
+const securityConfirm = ref("");
+const reuseSourceId = ref("");
+const securityError = ref("");
+const securitySetupLoading = ref(false);
+
+const securedWorkspaces = computed(() =>
+  workspaceStore.workspaces.filter(
+    (w) => w.isSecured && w.identifier !== pendingNewWorkspace.value?.identifier,
+  ),
+);
+
+function closeSecuritySetup() {
+  showSecuritySetup.value = false;
+  pendingNewWorkspace.value = null;
+}
+
+async function submitSecuritySetup() {
+  if (!pendingNewWorkspace.value) return;
+  securityError.value = "";
+
+  if (securityMode.value === "new") {
+    if (!securityPassword.value) {
+      securityError.value = "Password is required.";
+      return;
+    }
+    if (securityPassword.value !== securityConfirm.value) {
+      securityError.value = "Passwords do not match.";
+      return;
+    }
+  } else {
+    if (!reuseSourceId.value || !securityPassword.value) {
+      securityError.value = "Select a workspace and enter its password.";
+      return;
+    }
+    const ok = await workspaceStore.verifyWorkspacePassword(
+      reuseSourceId.value,
+      securityPassword.value,
+    );
+    if (!ok) {
+      securityError.value = "Incorrect password for the selected workspace.";
+      return;
+    }
+  }
+
+  securitySetupLoading.value = true;
+  try {
+    await workspaceStore.updateWorkspace(pendingNewWorkspace.value.identifier, {
+      isSecured: true,
+      password: securityPassword.value,
+    });
+    workspaceStore.unlockWorkspace(pendingNewWorkspace.value.identifier);
+    closeSecuritySetup();
+  } catch (e) {
+    securityError.value = (e as Error).message || "Failed to secure workspace.";
+  } finally {
+    securitySetupLoading.value = false;
+  }
+}
+
+const pendingWorkspaceId = ref<string | null>(null);
+const showPasswordModal = ref(false);
+const passwordInput = ref("");
+const passwordError = ref("");
+const verifyingPassword = ref(false);
+
+function handleWorkspaceSelect(identifier: string) {
+  const ws = workspaceStore.visibleWorkspaces.find(
+    (w) => w.identifier === identifier,
+  );
+  if (!ws) return;
+  if (ws.isSecured && !workspaceStore.isWorkspaceUnlocked(identifier)) {
+    pendingWorkspaceId.value = identifier;
+    passwordInput.value = "";
+    passwordError.value = "";
+    showPasswordModal.value = true;
+  } else {
+    workspaceStore.setActiveWorkspace(identifier);
+  }
+}
+
+async function submitPassword() {
+  if (!pendingWorkspaceId.value || !passwordInput.value) return;
+  verifyingPassword.value = true;
+  passwordError.value = "";
+  try {
+    const ok = await workspaceStore.verifyWorkspacePassword(
+      pendingWorkspaceId.value,
+      passwordInput.value,
+    );
+    if (ok) {
+      workspaceStore.unlockWorkspace(pendingWorkspaceId.value);
+      await workspaceStore.setActiveWorkspace(pendingWorkspaceId.value);
+      showPasswordModal.value = false;
+      pendingWorkspaceId.value = null;
+      passwordInput.value = "";
+    } else {
+      passwordError.value = "Incorrect password. Please try again.";
+    }
+  } catch {
+    passwordError.value = "Failed to verify password.";
+  } finally {
+    verifyingPassword.value = false;
+  }
+}
+
+function closePasswordModal() {
+  showPasswordModal.value = false;
+  pendingWorkspaceId.value = null;
+  passwordInput.value = "";
+  passwordError.value = "";
+}
+
 const workspaceItems = computed(() => [
-  workspaceStore.workspaces
+  workspaceStore.visibleWorkspaces
     .filter((w): w is Workspace => !!w)
     .map((w) => {
       const isActive = w.identifier === activeId.value;
@@ -67,11 +233,13 @@ const workspaceItems = computed(() => [
         label: w.name,
         icon: isActive
           ? "heroicons:check-circle-solid"
-          : "heroicons:check-circle",
+          : w.isSecured && !workspaceStore.isWorkspaceUnlocked(w.identifier)
+            ? "heroicons:lock-closed"
+            : "heroicons:check-circle",
         class: isActive
           ? "font-semibold text-accent-500 dark:text-accent-400"
           : "text-gray-700 dark:text-gray-300",
-        onSelect: () => workspaceStore.setActiveWorkspace(w.identifier),
+        onSelect: () => handleWorkspaceSelect(w.identifier),
       };
     }),
   [
@@ -204,6 +372,223 @@ const activeWorkspaceName = computed(
       </div>
     </template>
   </UDashboardSidebar>
+  <!-- Password prompt for secured workspaces -->
+  <UModal v-model:open="showPasswordModal" @close="closePasswordModal">
+    <template #content>
+      <div class="px-6 pt-6 pb-2 flex flex-col gap-1">
+        <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+          Secured Workspace
+        </h2>
+        <p class="text-sm text-gray-500 dark:text-gray-400">
+          Enter the password to access this workspace.
+        </p>
+      </div>
+      <form
+        class="px-6 pb-6 mt-4 flex flex-col gap-4"
+        @submit.prevent="submitPassword"
+      >
+        <AppInput
+          v-model="passwordInput"
+          label="Password"
+          type="password"
+          name="workspace-password"
+          placeholder="Enter password"
+          :error="passwordError"
+          :disabled="verifyingPassword"
+          autofocus
+        />
+        <div class="flex justify-end gap-2 pt-1">
+          <UButton
+            color="neutral"
+            variant="ghost"
+            :disabled="verifyingPassword"
+            @click="closePasswordModal"
+          >
+            Cancel
+          </UButton>
+          <UButton
+            type="submit"
+            color="primary"
+            :loading="verifyingPassword"
+            :disabled="!passwordInput || verifyingPassword"
+          >
+            Unlock
+          </UButton>
+        </div>
+      </form>
+    </template>
+  </UModal>
+
+  <!-- Profile setup modal (step 1 after workspace creation) -->
+  <UModal :open="showProfileSetup" @close="useDefaultProfile">
+    <template #content>
+      <div class="px-6 pt-6 pb-2 flex flex-col gap-1">
+        <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+          Set up your profile
+        </h2>
+        <p class="text-sm text-gray-500 dark:text-gray-400">
+          Add a profile for <span class="font-medium text-gray-700 dark:text-gray-200">{{ pendingNewWorkspace?.name }}</span>, or continue with your existing details.
+        </p>
+      </div>
+
+      <div class="px-6 pb-6 mt-4 flex flex-col gap-4">
+        <div class="grid grid-cols-2 gap-3">
+          <AppInput
+            v-model="profileForm.firstName"
+            label="First name"
+            type="text"
+            name="profile-first-name"
+            placeholder="John"
+            :disabled="profileSetupLoading"
+          />
+          <AppInput
+            v-model="profileForm.lastName"
+            label="Last name"
+            type="text"
+            name="profile-last-name"
+            placeholder="Doe"
+            :disabled="profileSetupLoading"
+          />
+        </div>
+        <AppInput
+          v-model="profileForm.email"
+          label="Email"
+          type="email"
+          name="profile-email"
+          placeholder="john@example.com"
+          :disabled="profileSetupLoading"
+        />
+
+        <div class="flex justify-end gap-2 pt-1">
+          <UButton
+            color="neutral"
+            variant="ghost"
+            :disabled="profileSetupLoading"
+            @click="useDefaultProfile"
+          >
+            Continue with default
+          </UButton>
+          <UButton
+            type="button"
+            color="primary"
+            :loading="profileSetupLoading"
+            :disabled="!profileForm.firstName.trim() || !profileForm.email.trim() || profileSetupLoading"
+            @click="submitProfileSetup"
+          >
+            Save profile
+          </UButton>
+        </div>
+      </div>
+    </template>
+  </UModal>
+
+  <!-- Security setup modal (step 2 after workspace creation) -->
+  <UModal :open="showSecuritySetup" @close="closeSecuritySetup">
+    <template #content>
+      <div class="px-6 pt-6 pb-2 flex flex-col gap-1">
+        <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+          Secure "{{ pendingNewWorkspace?.name }}"
+        </h2>
+        <p class="text-sm text-gray-500 dark:text-gray-400">
+          Optionally protect this workspace with a password.
+        </p>
+      </div>
+
+      <div class="px-6 pb-6 mt-4 flex flex-col gap-4">
+        <!-- Mode selector -->
+        <div class="flex gap-2">
+          <button
+            class="flex-1 rounded-lg border px-3 py-2 text-xs font-medium transition-colors"
+            :class="
+              securityMode === 'new'
+                ? 'border-accent-500 bg-accent-50 dark:bg-accent-950 text-accent-600 dark:text-accent-300'
+                : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'
+            "
+            @click="securityMode = 'new'; securityPassword = ''; securityConfirm = ''; securityError = ''"
+          >
+            New password
+          </button>
+          <button
+            v-if="securedWorkspaces.length > 0"
+            class="flex-1 rounded-lg border px-3 py-2 text-xs font-medium transition-colors"
+            :class="
+              securityMode === 'reuse'
+                ? 'border-accent-500 bg-accent-50 dark:bg-accent-950 text-accent-600 dark:text-accent-300'
+                : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'
+            "
+            @click="securityMode = 'reuse'; securityPassword = ''; securityConfirm = ''; reuseSourceId = securedWorkspaces[0]?.identifier ?? ''; securityError = ''"
+          >
+            Reuse existing profile
+          </button>
+        </div>
+
+        <!-- New password fields -->
+        <template v-if="securityMode === 'new'">
+          <AppInput
+            v-model="securityPassword"
+            label="Password"
+            type="password"
+            name="new-ws-password"
+            placeholder="Enter password"
+            :disabled="securitySetupLoading"
+          />
+          <AppInput
+            v-model="securityConfirm"
+            label="Confirm password"
+            type="password"
+            name="new-ws-password-confirm"
+            placeholder="Confirm password"
+            :disabled="securitySetupLoading"
+          />
+        </template>
+
+        <!-- Reuse from existing workspace -->
+        <template v-else>
+          <UFormField label="Copy from workspace">
+            <USelect
+              v-model="reuseSourceId"
+              :items="securedWorkspaces.map((w) => ({ label: w.name, value: w.identifier }))"
+              class="w-full"
+              :disabled="securitySetupLoading"
+            />
+          </UFormField>
+          <AppInput
+            v-model="securityPassword"
+            :label="`Password for &quot;${securedWorkspaces.find((w) => w.identifier === reuseSourceId)?.name ?? 'workspace'}&quot;`"
+            type="password"
+            name="reuse-ws-password"
+            placeholder="Enter that workspace's password"
+            :disabled="securitySetupLoading"
+          />
+        </template>
+
+        <p v-if="securityError" class="text-xs text-red-500 dark:text-red-400">
+          {{ securityError }}
+        </p>
+
+        <div class="flex justify-end gap-2 pt-1">
+          <UButton
+            color="neutral"
+            variant="ghost"
+            :disabled="securitySetupLoading"
+            @click="closeSecuritySetup"
+          >
+            Skip
+          </UButton>
+          <UButton
+            type="button"
+            color="primary"
+            :loading="securitySetupLoading"
+            :disabled="!securityPassword || securitySetupLoading"
+            @click="submitSecuritySetup"
+          >
+            Secure workspace
+          </UButton>
+        </div>
+      </div>
+    </template>
+  </UModal>
+
   <UModal v-model:open="showCreateModal">
     <template #content>
       <div class="px-6 pt-6 pb-2 flex flex-col gap-1">
