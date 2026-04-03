@@ -119,7 +119,8 @@ const securitySetupLoading = ref(false);
 
 const securedWorkspaces = computed(() =>
   workspaceStore.workspaces.filter(
-    (w) => w.isSecured && w.identifier !== pendingNewWorkspace.value?.identifier,
+    (w) =>
+      w.isSecured && w.identifier !== pendingNewWorkspace.value?.identifier,
   ),
 );
 
@@ -427,7 +428,11 @@ const activeWorkspaceName = computed(
           Set up your profile
         </h2>
         <p class="text-sm text-gray-500 dark:text-gray-400">
-          Add a profile for <span class="font-medium text-gray-700 dark:text-gray-200">{{ pendingNewWorkspace?.name }}</span>, or continue with your existing details.
+          Add a profile for
+          <span class="font-medium text-gray-700 dark:text-gray-200">{{
+            pendingNewWorkspace?.name
+          }}</span
+          >, or continue with your existing details.
         </p>
       </div>
 
@@ -472,7 +477,11 @@ const activeWorkspaceName = computed(
             type="button"
             color="primary"
             :loading="profileSetupLoading"
-            :disabled="!profileForm.firstName.trim() || !profileForm.email.trim() || profileSetupLoading"
+            :disabled="
+              !profileForm.firstName.trim() ||
+              !profileForm.email.trim() ||
+              profileSetupLoading
+            "
             @click="submitProfileSetup"
           >
             Save profile
@@ -504,7 +513,12 @@ const activeWorkspaceName = computed(
                 ? 'border-accent-500 bg-accent-50 dark:bg-accent-950 text-accent-600 dark:text-accent-300'
                 : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'
             "
-            @click="securityMode = 'new'; securityPassword = ''; securityConfirm = ''; securityError = ''"
+            @click="
+              securityMode = 'new';
+              securityPassword = '';
+              securityConfirm = '';
+              securityError = '';
+            "
           >
             New password
           </button>
@@ -516,7 +530,13 @@ const activeWorkspaceName = computed(
                 ? 'border-accent-500 bg-accent-50 dark:bg-accent-950 text-accent-600 dark:text-accent-300'
                 : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'
             "
-            @click="securityMode = 'reuse'; securityPassword = ''; securityConfirm = ''; reuseSourceId = securedWorkspaces[0]?.identifier ?? ''; securityError = ''"
+            @click="
+              securityMode = 'reuse';
+              securityPassword = '';
+              securityConfirm = '';
+              reuseSourceId = securedWorkspaces[0]?.identifier ?? '';
+              securityError = '';
+            "
           >
             Reuse existing profile
           </button>
@@ -547,7 +567,12 @@ const activeWorkspaceName = computed(
           <UFormField label="Copy from workspace">
             <USelect
               v-model="reuseSourceId"
-              :items="securedWorkspaces.map((w) => ({ label: w.name, value: w.identifier }))"
+              :items="
+                securedWorkspaces.map((w) => ({
+                  label: w.name,
+                  value: w.identifier,
+                }))
+              "
               class="w-full"
               :disabled="securitySetupLoading"
             />

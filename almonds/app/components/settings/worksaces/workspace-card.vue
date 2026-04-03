@@ -83,7 +83,9 @@ function formatDate(iso: string) {
         >
           <UIcon
             :name="
-              workspace.isSecured ? 'heroicons:lock-closed' : 'heroicons:lock-open'
+              workspace.isSecured
+                ? 'heroicons:lock-closed'
+                : 'heroicons:lock-open'
             "
             class="size-4"
           />

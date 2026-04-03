@@ -51,7 +51,10 @@ export const useWorkspacesStore = defineStore("workspaces_store", {
       const current = state.workspaces.find(
         (w) => w.identifier === state.activeWorkspaceId,
       );
-      return !!current?.isSecured && !state.unlockedWorkspaceIds.includes(state.activeWorkspaceId);
+      return (
+        !!current?.isSecured &&
+        !state.unlockedWorkspaceIds.includes(state.activeWorkspaceId)
+      );
     },
   },
 

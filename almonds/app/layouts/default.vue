@@ -73,7 +73,10 @@ const pageTitle = computed(() => {
 
           <div class="mt-5">
             <div
-              v-if="workspaceStore.isCurrentWorkspaceLocked && !route.path.startsWith('/settings')"
+              v-if="
+                workspaceStore.isCurrentWorkspaceLocked &&
+                !route.path.startsWith('/settings')
+              "
               class="flex flex-col items-center justify-center gap-3 py-24 text-center"
             >
               <UIcon
@@ -87,7 +90,13 @@ const pageTitle = computed(() => {
                 Select it from the workspace switcher to unlock.
               </p>
             </div>
-            <slot v-else-if="!workspaceStore.isCurrentWorkspaceLocked || route.path.startsWith('/settings')" name="main_content" />
+            <slot
+              v-else-if="
+                !workspaceStore.isCurrentWorkspaceLocked ||
+                route.path.startsWith('/settings')
+              "
+              name="main_content"
+            />
           </div>
         </main>
 
@@ -111,7 +120,10 @@ const pageTitle = computed(() => {
             >
           </div>
           <div class="flex-1 overflow-y-scroll scrollbar-config p-4">
-            <slot v-if="!workspaceStore.isCurrentWorkspaceLocked" name="side_content" />
+            <slot
+              v-if="!workspaceStore.isCurrentWorkspaceLocked"
+              name="side_content"
+            />
           </div>
         </aside>
       </div>

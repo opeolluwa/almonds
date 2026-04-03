@@ -11,7 +11,9 @@ const secureSubmitting = ref(false);
 
 const secureTargetWorkspace = computed(() =>
   secureTargetId.value
-    ? workspaceStore.workspaces.find((w) => w.identifier === secureTargetId.value)
+    ? workspaceStore.workspaces.find(
+        (w) => w.identifier === secureTargetId.value,
+      )
     : null,
 );
 
@@ -269,10 +271,7 @@ const workspaces = computed(() => workspaceStore.workspaces);
               :disabled="secureSubmitting"
             />
           </UFormField>
-          <p
-            v-if="secureError"
-            class="text-xs text-red-500 dark:text-red-400"
-          >
+          <p v-if="secureError" class="text-xs text-red-500 dark:text-red-400">
             {{ secureError }}
           </p>
           <div class="flex items-center gap-2 mt-2">
@@ -283,7 +282,11 @@ const workspaces = computed(() => workspaceStore.workspaces);
               :disabled="!securePassword"
               @click="submitSecure"
             >
-              {{ secureTargetWorkspace?.isSecured ? "Remove password" : "Set password" }}
+              {{
+                secureTargetWorkspace?.isSecured
+                  ? "Remove password"
+                  : "Set password"
+              }}
             </UButton>
             <UButton
               variant="ghost"

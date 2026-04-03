@@ -33,7 +33,12 @@ async function submit() {
 </script>
 
 <template>
-  <UModal :open="true" :close="false" :dismissible="false" @update:open="() => {}">
+  <UModal
+    :open="true"
+    :close="false"
+    :dismissible="false"
+    @update:open="() => {}"
+  >
     <template #header>
       <div class="flex flex-col gap-1">
         <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
@@ -41,7 +46,10 @@ async function submit() {
         </h2>
         <p class="text-sm text-gray-500 dark:text-gray-400">
           Enter the password to access
-          <span class="font-medium text-gray-700 dark:text-gray-200">{{ workspaceName }}</span>.
+          <span class="font-medium text-gray-700 dark:text-gray-200">{{
+            workspaceName
+          }}</span
+          >.
         </p>
       </div>
     </template>

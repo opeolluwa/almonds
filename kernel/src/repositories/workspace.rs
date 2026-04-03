@@ -12,7 +12,7 @@ use crate::{
     adapters::{
         meta::RequestMeta,
         recycle_bin::{CreateRecycleBinEntry, RecycleBinItemType},
-        workspace::{hash_password, verify_password, CreateWorkspace, UpdateWorkspace},
+        workspace::{CreateWorkspace, UpdateWorkspace, hash_password, verify_password},
     },
     entities::workspaces,
     error::KernelError,
