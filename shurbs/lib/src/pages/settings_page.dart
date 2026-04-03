@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../theme_notifier.dart';
+
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
 
@@ -8,7 +10,7 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  bool _darkMode = false;
+  bool get _darkMode => themeModeNotifier.value == ThemeMode.dark;
   bool _notifications = true;
   bool _alarmSound = true;
 
@@ -21,7 +23,7 @@ class _SettingsPageState extends State<SettingsPage> {
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
-            const SliverAppBar.large(title: Text('Settings')),
+            const SliverAppBar(pinned: true, title: Text('Settings')),
             SliverPadding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               sliver: SliverList(
@@ -63,7 +65,9 @@ class _SettingsPageState extends State<SettingsPage> {
                           title: const Text('Dark Mode'),
                           secondary: const Icon(Icons.dark_mode_outlined),
                           value: _darkMode,
-                          onChanged: (v) => setState(() => _darkMode = v),
+                          onChanged: (v) => setState(() {
+                            themeModeNotifier.value = v ? ThemeMode.dark : ThemeMode.light;
+                          }),
                         ),
                       ],
                     ),

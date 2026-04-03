@@ -98,7 +98,7 @@ class _AlarmsPageState extends State<AlarmsPage> {
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
-            const SliverAppBar.large(title: Text('Alarms')),
+            const SliverAppBar(pinned: true, title: Text('Alarms')),
             _alarms.isEmpty
                 ? SliverFillRemaining(
                     child: Center(

@@ -12,16 +12,7 @@ class HomePage extends StatelessWidget {
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
-            SliverAppBar.large(
-              title: const Text('Wild Almonds'),
-              actions: [
-                IconButton(
-                  icon: const Icon(Icons.search),
-                  onPressed: () {},
-                ),
-                const SizedBox(width: 8),
-              ],
-            ),
+            const SliverAppBar.large(title: Text('Wild Almonds')),
             SliverPadding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               sliver: SliverList(
