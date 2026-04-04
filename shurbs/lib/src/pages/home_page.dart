@@ -238,7 +238,7 @@ class _StatCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          HeroIcon(stat.icon, size: 18, color: stat.color),
+          HeroIcon(stat.icon, size: 20, color: stat.color),
           const SizedBox(height: 8),
           Text(
             stat.count,
@@ -316,7 +316,7 @@ class _FocusCard extends StatelessWidget {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const HeroIcon(HeroIcons.checkCircle, size: 13, color: Color(0xFF6366F1)),
+                    const HeroIcon(HeroIcons.checkCircle, size: 20, color: Color(0xFF6366F1)),
                     const SizedBox(width: 4),
                     Text('Top todo', style: theme.textTheme.labelSmall?.copyWith(color: const Color(0xFF6366F1), fontWeight: FontWeight.w600)),
                   ],
@@ -423,7 +423,7 @@ class _TimelineTile extends StatelessWidget {
                     color: item.color.withValues(alpha: 0.12),
                     shape: BoxShape.circle,
                   ),
-                  child: Center(child: HeroIcon(item.icon, size: 16, color: item.color)),
+                  child: Center(child: HeroIcon(item.icon, size: 20, color: item.color)),
                 ),
                 if (!isLast)
                   Expanded(

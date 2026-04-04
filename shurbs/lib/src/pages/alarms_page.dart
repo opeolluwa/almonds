@@ -51,7 +51,7 @@ class _AlarmsPageState extends State<AlarmsPage> {
                   final time = await showTimePicker(context: ctx, initialTime: selectedTime);
                   if (time != null) setModalState(() => selectedTime = time);
                 },
-                icon: const HeroIcon(HeroIcons.clock),
+                icon: const HeroIcon(HeroIcons.clock, size: 20),
                 label: Text(selectedTime.format(ctx)),
               ),
               const SizedBox(height: 12),
@@ -188,7 +188,7 @@ class _AlarmTile extends StatelessWidget {
               scale: 0.75,
               child: Switch(value: alarm.enabled, onChanged: (_) => onToggle()),
             ),
-            IconButton(icon: const HeroIcon(HeroIcons.trash, size: 18), onPressed: onDelete),
+            IconButton(icon: const HeroIcon(HeroIcons.trash, size: 20), onPressed: onDelete),
           ],
         ),
       ),

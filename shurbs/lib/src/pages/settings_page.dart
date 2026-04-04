@@ -1,169 +1,59 @@
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
 
-import '../theme_notifier.dart';
+import 'settings/profile_settings_page.dart';
+import 'settings/appearance_settings_page.dart';
+import 'settings/locale_settings_page.dart';
+import 'settings/workspaces_settings_page.dart';
+import 'settings/backup_settings_page.dart';
+import 'settings/ai_settings_page.dart';
+import 'settings/notifications_settings_page.dart';
+import 'settings/alarm_settings_page.dart';
+import 'settings/about_settings_page.dart';
 
-class SettingsPage extends StatefulWidget {
+class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
-
-  @override
-  State<SettingsPage> createState() => _SettingsPageState();
-}
-
-class _SettingsPageState extends State<SettingsPage> {
-  bool get _darkMode => themeModeNotifier.value == ThemeMode.dark;
-  bool _notifications = true;
-  bool _alarmSound = true;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
+    void go(Widget page) {
+      Navigator.push(context, MaterialPageRoute(builder: (_) => page));
+    }
+
+    final sections = [
+      _SettingsItem(icon: HeroIcons.user, label: 'Profile', onTap: () => go(const ProfileSettingsPage())),
+      _SettingsItem(icon: HeroIcons.pencil, label: 'Appearance', onTap: () => go(const AppearanceSettingsPage())),
+      _SettingsItem(icon: HeroIcons.language, label: 'Locale', onTap: () => go(const LocaleSettingsPage())),
+      _SettingsItem(icon: HeroIcons.briefcase, label: 'Workspaces', onTap: () => go(const WorkspacesSettingsPage())),
+      _SettingsItem(icon: HeroIcons.cloudArrowUp, label: 'Backup & Sync', onTap: () => go(const BackupSettingsPage())),
+      _SettingsItem(icon: HeroIcons.cpuChip, label: 'AI & Ollama', onTap: () => go(const AiSettingsPage())),
+      _SettingsItem(icon: HeroIcons.inboxArrowDown, label: 'Notifications', onTap: () => go(const NotificationsSettingsPage())),
+      _SettingsItem(icon: HeroIcons.bell, label: 'Alarm', onTap: () => go(const AlarmSettingsPage())),
+      _SettingsItem(icon: HeroIcons.informationCircle, label: 'About', onTap: () => go(const AboutSettingsPage())),
+    ];
+
     return Scaffold(
       body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-           
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              sliver: SliverList(
-                delegate: SliverChildListDelegate([
-                  // Profile card
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Row(
-                        children: [
-                          CircleAvatar(
-                            radius: 32,
-                            backgroundColor: colorScheme.primaryContainer,
-                            child: HeroIcon(HeroIcons.user, size: 32, color: colorScheme.onPrimaryContainer),
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('User', style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
-                                Text('user@wildalmonds.app', style: theme.textTheme.bodySmall),
-                              ],
-                            ),
-                          ),
-                          TextButton(onPressed: () {}, child: const Text('Edit')),
-                        ],
-                      ),
+        child: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          children: [
+            Card(
+              child: Column(
+                children: [
+                  for (int i = 0; i < sections.length; i++) ...[
+                    if (i > 0) const Divider(height: 1, indent: 56),
+                    _SettingsTile(
+                      item: sections[i],
+                      colorScheme: colorScheme,
+                      theme: theme,
+                      isFirst: i == 0,
+                      isLast: i == sections.length - 1,
                     ),
-                  ),
-                  const SizedBox(height: 24),
-
-                  // Appearance
-                  _SectionHeader(title: 'Appearance'),
-                  Card(
-                    child: Column(
-                      children: [
-                        ListTile(
-                          leading: const HeroIcon(HeroIcons.moon),
-                          title: const Text('Dark Mode'),
-                          trailing: Transform.scale(
-                            scale: 0.75,
-                            child: Switch(
-                              value: _darkMode,
-                              onChanged: (v) => setState(() {
-                                themeModeNotifier.value = v ? ThemeMode.dark : ThemeMode.light;
-                              }),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Notifications
-                  _SectionHeader(title: 'Notifications'),
-                  Card(
-                    child: Column(
-                      children: [
-                        ListTile(
-                          leading: const HeroIcon(HeroIcons.bell),
-                          title: const Text('Push Notifications'),
-                          trailing: Transform.scale(
-                            scale: 0.75,
-                            child: Switch(
-                              value: _notifications,
-                              onChanged: (v) => setState(() => _notifications = v),
-                            ),
-                          ),
-                        ),
-                        const Divider(height: 1),
-                        ListTile(
-                          leading: const HeroIcon(HeroIcons.speakerWave),
-                          title: const Text('Alarm Sound'),
-                          trailing: Transform.scale(
-                            scale: 0.75,
-                            child: Switch(
-                              value: _alarmSound,
-                              onChanged: (v) => setState(() => _alarmSound = v),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Data
-                  _SectionHeader(title: 'Data'),
-                  Card(
-                    child: Column(
-                      children: [
-                        ListTile(
-                          leading: const HeroIcon(HeroIcons.arrowUpTray),
-                          title: const Text('Export Data'),
-                          trailing: const HeroIcon(HeroIcons.chevronRight),
-                          onTap: () {},
-                        ),
-                        const Divider(height: 1),
-                        ListTile(
-                          leading: const HeroIcon(HeroIcons.arrowDownTray),
-                          title: const Text('Import Data'),
-                          trailing: const HeroIcon(HeroIcons.chevronRight),
-                          onTap: () {},
-                        ),
-                        const Divider(height: 1),
-                        ListTile(
-                          leading: HeroIcon(HeroIcons.trash, color: colorScheme.error),
-                          title: Text('Clear All Data', style: TextStyle(color: colorScheme.error)),
-                          onTap: () => _confirmClearData(context),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-
-                  // About
-                  _SectionHeader(title: 'About'),
-                  Card(
-                    child: Column(
-                      children: [
-                        ListTile(
-                          leading: const HeroIcon(HeroIcons.informationCircle),
-                          title: const Text('Version'),
-                          trailing: Text('1.0.0', style: theme.textTheme.bodySmall),
-                        ),
-                        const Divider(height: 1),
-                        ListTile(
-                          leading: const HeroIcon(HeroIcons.codeBracket),
-                          title: const Text('Wild Almonds'),
-                          trailing: const HeroIcon(HeroIcons.chevronRight),
-                          onTap: () {},
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 32),
-                ]),
+                  ],
+                ],
               ),
             ),
           ],
@@ -171,41 +61,49 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
     );
   }
+}
 
-  void _confirmClearData(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Clear All Data?'),
-        content: const Text('This will permanently delete all your todos, alarms, and bookmarks. This cannot be undone.'),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
-          FilledButton(
-            style: FilledButton.styleFrom(backgroundColor: Theme.of(ctx).colorScheme.error),
-            onPressed: () => Navigator.pop(ctx),
-            child: const Text('Clear'),
-          ),
-        ],
+class _SettingsTile extends StatelessWidget {
+  final _SettingsItem item;
+  final ColorScheme colorScheme;
+  final ThemeData theme;
+  final bool isFirst;
+  final bool isLast;
+
+  const _SettingsTile({
+    required this.item,
+    required this.colorScheme,
+    required this.theme,
+    required this.isFirst,
+    required this.isLast,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: item.onTap,
+      borderRadius: BorderRadius.vertical(
+        top: isFirst ? const Radius.circular(12) : Radius.zero,
+        bottom: isLast ? const Radius.circular(12) : Radius.zero,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        child: Row(
+          children: [
+            HeroIcon(item.icon, size: 20, color: colorScheme.onSurfaceVariant),
+            const SizedBox(width: 18),
+            Expanded(child: Text(item.label, style: theme.textTheme.bodyLarge)),
+            HeroIcon(HeroIcons.chevronRight, size: 20, color: colorScheme.onSurfaceVariant),
+          ],
+        ),
       ),
     );
   }
 }
 
-class _SectionHeader extends StatelessWidget {
-  final String title;
-
-  const _SectionHeader({required this.title});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 4, bottom: 8),
-      child: Text(
-        title,
-        style: Theme.of(context).textTheme.labelLarge?.copyWith(
-          color: Theme.of(context).colorScheme.primary,
-        ),
-      ),
-    );
-  }
+class _SettingsItem {
+  final HeroIcons icon;
+  final String label;
+  final VoidCallback onTap;
+  const _SettingsItem({required this.icon, required this.label, required this.onTap});
 }

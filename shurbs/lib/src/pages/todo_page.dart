@@ -226,7 +226,7 @@ class _TodoTile extends StatelessWidget {
               ),
             ),
             IconButton(
-              icon: const HeroIcon(HeroIcons.trash, size: 18),
+              icon: const HeroIcon(HeroIcons.trash, size: 20),
               onPressed: onDelete,
             ),
           ],

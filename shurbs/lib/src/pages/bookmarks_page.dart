@@ -115,12 +115,6 @@ class _BookmarksPageState extends State<BookmarksPage> {
               sliver: SliverToBoxAdapter(
                 child: Column(
                   children: [
-                    SearchBar(
-                      hintText: 'Search bookmarks…',
-                      leading: const HeroIcon(HeroIcons.magnifyingGlass),
-                      onChanged: (v) => setState(() => _search = v),
-                    ),
-                    const SizedBox(height: 12),
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
@@ -227,7 +221,7 @@ class _BookmarkTile extends StatelessWidget {
                 child: Text(bookmark.tag!, style: TextStyle(fontSize: 11, color: theme.colorScheme.onPrimaryContainer)),
               ),
             IconButton(
-              icon: const HeroIcon(HeroIcons.documentDuplicate, size: 18),
+              icon: const HeroIcon(HeroIcons.documentDuplicate, size: 20),
               onPressed: () {
                 Clipboard.setData(ClipboardData(text: bookmark.url));
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -236,7 +230,7 @@ class _BookmarkTile extends StatelessWidget {
               },
             ),
             IconButton(
-              icon: const HeroIcon(HeroIcons.trash, size: 18),
+              icon: const HeroIcon(HeroIcons.trash, size: 20),
               onPressed: onDelete,
             ),
           ],

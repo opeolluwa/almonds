@@ -31,23 +31,14 @@ class ShurbsApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: const SystemUiOverlayStyle(
-        statusBarColor: _rosePrimaryContainer,
-        statusBarIconBrightness: Brightness.light,
-        statusBarBrightness: Brightness.dark,
-        systemNavigationBarColor: Colors.transparent,
-      ),
-      child: ValueListenableBuilder<ThemeMode>(
-        valueListenable: themeModeNotifier,
-        builder: (context, mode, child) => MaterialApp(
-          // title: 'Wild Almonds',
-          debugShowCheckedModeBanner: false,
-          themeMode: mode,
-          theme: _lightTheme(),
-          darkTheme: _darkTheme(),
-          home: const AppShell(),
-        ),
+    return ValueListenableBuilder<ThemeMode>(
+      valueListenable: themeModeNotifier,
+      builder: (context, mode, child) => MaterialApp(
+        debugShowCheckedModeBanner: false,
+        themeMode: mode,
+        theme: _lightTheme(),
+        darkTheme: _darkTheme(),
+        home: const AppShell(),
       ),
     );
   }
@@ -69,10 +60,20 @@ ThemeData _lightTheme() {
       ),
     ),
     appBarTheme: const AppBarTheme(
-      backgroundColor: _rosePrimary,
-      foregroundColor: Colors.white,
+      backgroundColor: Colors.transparent,
+      foregroundColor: _rosePrimary,
       elevation: 0,
+      scrolledUnderElevation: 0,
       surfaceTintColor: Colors.transparent,
+      systemOverlayStyle: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.light,
+      ),
+    ),
+    searchBarTheme: const SearchBarThemeData(
+      elevation: WidgetStatePropertyAll(0),
+      surfaceTintColor: WidgetStatePropertyAll(Colors.transparent),
     ),
   );
 }

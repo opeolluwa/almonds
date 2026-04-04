@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:heroicons/heroicons.dart';
 
 import 'pages/home_page.dart';
@@ -76,8 +77,16 @@ class _AppShellState extends State<AppShell> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return Scaffold(
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
+        statusBarBrightness: isDark ? Brightness.dark : Brightness.light,
+        systemNavigationBarColor: Colors.transparent,
+      ),
+      child: Scaffold(
       drawer: _AppDrawer(
         currentIndex: _currentIndex,
         onNavigate: (index) => setState(() => _currentIndex = index),
@@ -92,7 +101,7 @@ class _AppShellState extends State<AppShell> {
                 children: [
                   Builder(
                     builder: (ctx) => IconButton(
-                      icon: const HeroIcon(HeroIcons.bars3),
+                      icon: const HeroIcon(HeroIcons.bars3, size: 20),
                       onPressed: () => Scaffold.of(ctx).openDrawer(),
                     ),
                   ),
@@ -105,7 +114,7 @@ class _AppShellState extends State<AppShell> {
                     ),
                   ),
                   IconButton(
-                    icon: const HeroIcon(HeroIcons.bell),
+                    icon: const HeroIcon(HeroIcons.bell, size: 20),
                     tooltip: 'Notifications',
                     onPressed: () => Navigator.push(
                       context,
@@ -160,6 +169,7 @@ class _AppShellState extends State<AppShell> {
             )
             .toList(),
       ),
+    ),
     );
   }
 }
@@ -247,7 +257,7 @@ class _DrawerItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: HeroIcon(icon, size: 22),
+      leading: HeroIcon(icon, size: 20),
       title: Text(label),
       onTap: onTap,
       selected: selected,
