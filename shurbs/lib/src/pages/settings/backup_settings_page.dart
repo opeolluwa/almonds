@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
 
+import 'settings_header_bg.dart';
+
 enum _BackupProvider { local, cloud, selfHosted }
 
 class BackupSettingsPage extends StatefulWidget {
@@ -49,149 +51,199 @@ class _BackupSettingsPageState extends State<BackupSettingsPage> {
     ];
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Backup & Sync')),
-      body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Backup & Sync', style: theme.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600)),
-                    const SizedBox(height: 4),
-                    Text('Choose where your data is stored and synced.', style: theme.textTheme.bodySmall),
-                    const SizedBox(height: 16),
-                    ...options.map((opt) {
-                      final selected = _selected == opt.key;
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 8),
-                        child: GestureDetector(
-                          onTap: () => setState(() => _selected = opt.key),
-                          child: AnimatedContainer(
-                            duration: const Duration(milliseconds: 150),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 180,
+            pinned: true,
+            flexibleSpace: FlexibleSpaceBar(
+              title: const Text(
+                'Backup & Sync',
+                style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 16),
+              ),
+              titlePadding: const EdgeInsets.only(left: 56, bottom: 16),
+              background: SettingsHeaderBackground(
+                colors: [colorScheme.primary, colorScheme.primaryContainer],
+                child: SafeArea(
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      width: 64,
+                      height: 64,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.circular(18),
+                      ),
+                      child: const Center(
+                        child: HeroIcon(HeroIcons.cloudArrowUp, size: 30, color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.all(16),
+            sliver: SliverList(
+              delegate: SliverChildListDelegate([
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Choose where your data is stored and synced.',
+                          style: theme.textTheme.bodySmall,
+                        ),
+                        const SizedBox(height: 16),
+                        ...options.map((opt) {
+                          final selected = _selected == opt.key;
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 8),
+                            child: GestureDetector(
+                              onTap: () => setState(() => _selected = opt.key),
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 150),
+                                padding: const EdgeInsets.all(14),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
+                                    color: selected
+                                        ? colorScheme.primary
+                                        : colorScheme.outline.withValues(alpha: 0.5),
+                                    width: selected ? 1.5 : 1,
+                                  ),
+                                  color: selected
+                                      ? colorScheme.primary.withValues(alpha: 0.06)
+                                      : Colors.transparent,
+                                ),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      width: 40,
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        color: selected
+                                            ? colorScheme.primary.withValues(alpha: 0.12)
+                                            : colorScheme.surfaceContainerHighest,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Center(
+                                        child: HeroIcon(
+                                          opt.icon,
+                                          size: 20,
+                                          color: selected
+                                              ? colorScheme.primary
+                                              : colorScheme.onSurfaceVariant,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            opt.label,
+                                            style: theme.textTheme.bodyMedium?.copyWith(
+                                              fontWeight: FontWeight.w600,
+                                              color: selected ? colorScheme.primary : null,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 2),
+                                          Text(opt.desc, style: theme.textTheme.bodySmall),
+                                        ],
+                                      ),
+                                    ),
+                                    if (selected)
+                                      Icon(Icons.check_circle_rounded, color: colorScheme.primary, size: 20),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        }),
+                        if (_selected == _BackupProvider.cloud) ...[
+                          const SizedBox(height: 4),
+                          Container(
                             padding: const EdgeInsets.all(14),
                             decoration: BoxDecoration(
+                              color: colorScheme.primary.withValues(alpha: 0.06),
                               borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                color: selected ? colorScheme.primary : colorScheme.outline.withValues(alpha: 0.5),
-                                width: selected ? 1.5 : 1,
-                              ),
-                              color: selected ? colorScheme.primary.withValues(alpha: 0.06) : Colors.transparent,
+                              border: Border.all(color: colorScheme.primary.withValues(alpha: 0.2)),
                             ),
                             child: Row(
                               children: [
-                                Container(
-                                  width: 36,
-                                  height: 36,
-                                  decoration: BoxDecoration(
-                                    color: selected
-                                        ? colorScheme.primary.withValues(alpha: 0.12)
-                                        : colorScheme.surfaceContainerHighest,
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: Center(
-                                    child: HeroIcon(
-                                      opt.icon,
-                                      size: 18,
-                                      color: selected ? colorScheme.primary : colorScheme.onSurfaceVariant,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 12),
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        opt.label,
+                                        'Almond Cloud',
                                         style: theme.textTheme.bodyMedium?.copyWith(
-                                          fontWeight: FontWeight.w500,
-                                          color: selected ? colorScheme.primary : null,
+                                          fontWeight: FontWeight.w600,
+                                          color: colorScheme.primary,
                                         ),
                                       ),
-                                      Text(opt.desc, style: theme.textTheme.bodySmall),
+                                      const SizedBox(height: 2),
+                                      Text(
+                                        'Secure, encrypted sync. Plans start free.',
+                                        style: theme.textTheme.bodySmall,
+                                      ),
                                     ],
                                   ),
                                 ),
-                                if (selected)
-                                  Icon(Icons.check_circle_rounded, color: colorScheme.primary, size: 20),
+                                FilledButton.icon(
+                                  onPressed: () {},
+                                  icon: const HeroIcon(HeroIcons.arrowTopRightOnSquare, size: 14),
+                                  label: const Text('View plans'),
+                                ),
                               ],
                             ),
                           ),
-                        ),
-                      );
-                    }),
-                    if (_selected == _BackupProvider.cloud) ...[
-                      const SizedBox(height: 8),
-                      Container(
-                        padding: const EdgeInsets.all(14),
-                        decoration: BoxDecoration(
-                          color: colorScheme.primary.withValues(alpha: 0.06),
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: colorScheme.primary.withValues(alpha: 0.2)),
-                        ),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('Almond Cloud', style: theme.textTheme.bodyMedium?.copyWith(
-                                    fontWeight: FontWeight.w600, color: colorScheme.primary,
-                                  )),
-                                  Text('Secure, encrypted sync. Plans start free.', style: theme.textTheme.bodySmall),
-                                ],
-                              ),
-                            ),
-                            FilledButton.icon(
-                              onPressed: () {},
-                              icon: const HeroIcon(HeroIcons.arrowTopRightOnSquare, size: 14),
-                              label: const Text('View plans'),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                    if (_selected == _BackupProvider.selfHosted) ...[
-                      const SizedBox(height: 16),
-                      TextField(
-                        controller: _apiUrlController,
-                        decoration: const InputDecoration(
-                          labelText: 'API Endpoint',
-                          hintText: 'https://sync.example.com/api',
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      TextField(
-                        controller: _apiKeyController,
-                        obscureText: true,
-                        decoration: const InputDecoration(
-                          labelText: 'API Key',
-                          hintText: 'sk-••••••••••••',
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          TextButton.icon(
-                            onPressed: () {},
-                            icon: const HeroIcon(HeroIcons.signal, size: 16),
-                            label: const Text('Test connection'),
-                          ),
-                          FilledButton(onPressed: () {}, child: const Text('Save')),
                         ],
-                      ),
-                    ],
-                  ],
+                        if (_selected == _BackupProvider.selfHosted) ...[
+                          const SizedBox(height: 16),
+                          TextField(
+                            controller: _apiUrlController,
+                            decoration: const InputDecoration(
+                              labelText: 'API Endpoint',
+                              hintText: 'https://sync.example.com/api',
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          TextField(
+                            controller: _apiKeyController,
+                            obscureText: true,
+                            decoration: const InputDecoration(
+                              labelText: 'API Key',
+                              hintText: 'sk-••••••••••••',
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              TextButton.icon(
+                                onPressed: () {},
+                                icon: const HeroIcon(HeroIcons.signal, size: 16),
+                                label: const Text('Test connection'),
+                              ),
+                              FilledButton(onPressed: () {}, child: const Text('Save')),
+                            ],
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
                 ),
-              ),
+                const SizedBox(height: 32),
+              ]),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:heroicons/heroicons.dart';
 
 import '../../theme_notifier.dart';
+import 'settings_header_bg.dart';
 
 class AppearanceSettingsPage extends StatefulWidget {
   const AppearanceSettingsPage({super.key});
@@ -12,163 +14,229 @@ class AppearanceSettingsPage extends StatefulWidget {
 class _AppearanceSettingsPageState extends State<AppearanceSettingsPage> {
   bool get _isDark => themeModeNotifier.value == ThemeMode.dark;
   String _fontSize = 'md';
-
   static const _fontSizes = ['sm', 'md', 'lg'];
-
-  static const _accentColors = [
-    _AccentOption(label: 'Rose', color: Color(0xFFe11d48)),
-    _AccentOption(label: 'Emerald', color: Color(0xFF10b981)),
-    _AccentOption(label: 'Sky', color: Color(0xFF0ea5e9)),
-    _AccentOption(label: 'Amber', color: Color(0xFFf59e0b)),
-  ];
-  int _selectedAccent = 0;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Appearance')),
-      body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: Column(
-                  children: [
-                    // Dark mode
-                    ListTile(
-                      title: const Text('Dark mode'),
-                      subtitle: const Text('Switch between light and dark theme'),
-                      trailing: Transform.scale(
-                        scale: 0.8,
-                        child: ValueListenableBuilder(
-                          valueListenable: themeModeNotifier,
-                          builder: (_, __, ___) => Switch(
-                            value: _isDark,
-                            onChanged: (v) => setState(() {
-                              themeModeNotifier.value = v ? ThemeMode.dark : ThemeMode.light;
-                            }),
-                          ),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 180,
+            pinned: true,
+            flexibleSpace: FlexibleSpaceBar(
+              title: const Text(
+                'Appearance',
+                style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 16),
+              ),
+              titlePadding: const EdgeInsets.only(left: 56, bottom: 16),
+              background: ValueListenableBuilder<AccentSwatch>(
+                valueListenable: accentColorNotifier,
+                builder: (_, accent, __) => SettingsHeaderBackground(
+                  colors: [accent.primary, accent.primaryContainer],
+                  child: SafeArea(
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Container(
+                        width: 64,
+                        height: 64,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(18),
+                        ),
+                        child: const Center(
+                          child: HeroIcon(HeroIcons.paintBrush, size: 30, color: Colors.white),
                         ),
                       ),
                     ),
-                    const Divider(height: 1, indent: 16, endIndent: 16),
-
-                    // Font size
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Font size', style: theme.textTheme.bodyMedium),
-                                const SizedBox(height: 2),
-                                Text('Adjust text size across the app', style: theme.textTheme.bodySmall),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: theme.colorScheme.surfaceContainerHighest,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            padding: const EdgeInsets.all(3),
-                            child: Row(
-                              children: _fontSizes.map((sz) {
-                                final selected = _fontSize == sz;
-                                return GestureDetector(
-                                  onTap: () => setState(() => _fontSize = sz),
-                                  child: AnimatedContainer(
-                                    duration: const Duration(milliseconds: 150),
-                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                                    decoration: BoxDecoration(
-                                      color: selected ? theme.colorScheme.surface : Colors.transparent,
-                                      borderRadius: BorderRadius.circular(6),
-                                      boxShadow: selected
-                                          ? [BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 2)]
-                                          : null,
-                                    ),
-                                    child: Text(
-                                      sz.toUpperCase(),
-                                      style: theme.textTheme.labelSmall?.copyWith(
-                                        fontWeight: FontWeight.w600,
-                                        color: selected
-                                            ? theme.colorScheme.onSurface
-                                            : theme.colorScheme.onSurfaceVariant,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              }).toList(),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Divider(height: 1, indent: 16, endIndent: 16),
-
-                    // Accent color
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Accent color', style: theme.textTheme.bodyMedium),
-                                const SizedBox(height: 2),
-                                Text('Primary highlight color', style: theme.textTheme.bodySmall),
-                              ],
-                            ),
-                          ),
-                          Row(
-                            children: List.generate(_accentColors.length, (i) {
-                              final selected = _selectedAccent == i;
-                              return Padding(
-                                padding: const EdgeInsets.only(left: 8),
-                                child: GestureDetector(
-                                  onTap: () => setState(() => _selectedAccent = i),
-                                  child: AnimatedContainer(
-                                    duration: const Duration(milliseconds: 150),
-                                    width: 26,
-                                    height: 26,
-                                    decoration: BoxDecoration(
-                                      color: _accentColors[i].color,
-                                      shape: BoxShape.circle,
-                                      border: selected
-                                          ? Border.all(color: _accentColors[i].color.withValues(alpha: 0.4), width: 3)
-                                          : null,
-                                      boxShadow: selected
-                                          ? [BoxShadow(color: _accentColors[i].color.withValues(alpha: 0.4), blurRadius: 6)]
-                                          : null,
-                                    ),
-                                  ),
-                                ),
-                              );
-                            }),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.all(16),
+            sliver: SliverList(
+              delegate: SliverChildListDelegate([
+                // Dark mode + Font size card
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Column(
+                      children: [
+                        ValueListenableBuilder<ThemeMode>(
+                          valueListenable: themeModeNotifier,
+                          builder: (_, __, ___) => ListTile(
+                            leading: Container(
+                              width: 36,
+                              height: 36,
+                              decoration: BoxDecoration(
+                                color: colorScheme.primary.withValues(alpha: 0.12),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Center(child: HeroIcon(HeroIcons.moon, size: 18, color: colorScheme.primary)),
+                            ),
+                            title: const Text('Dark mode'),
+                            subtitle: const Text('Switch between light and dark theme'),
+                            trailing: Transform.scale(
+                              scale: 0.8,
+                              child: Switch(
+                                value: _isDark,
+                                onChanged: (v) => setState(() {
+                                  themeModeNotifier.value = v ? ThemeMode.dark : ThemeMode.light;
+                                }),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const Divider(height: 1, indent: 16, endIndent: 16),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                          child: Row(
+                            children: [
+                              Container(
+                                width: 36,
+                                height: 36,
+                                decoration: BoxDecoration(
+                                  color: colorScheme.primary.withValues(alpha: 0.12),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Center(child: HeroIcon(HeroIcons.adjustmentsHorizontal, size: 18, color: colorScheme.primary)),
+                              ),
+                              const SizedBox(width: 14),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Font size', style: theme.textTheme.bodyMedium),
+                                    Text('Adjust text size across the app', style: theme.textTheme.bodySmall),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: colorScheme.surfaceContainerHighest,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                padding: const EdgeInsets.all(3),
+                                child: Row(
+                                  children: _fontSizes.map((sz) {
+                                    final selected = _fontSize == sz;
+                                    return GestureDetector(
+                                      onTap: () => setState(() => _fontSize = sz),
+                                      child: AnimatedContainer(
+                                        duration: const Duration(milliseconds: 150),
+                                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                        decoration: BoxDecoration(
+                                          color: selected ? colorScheme.surface : Colors.transparent,
+                                          borderRadius: BorderRadius.circular(6),
+                                          boxShadow: selected
+                                              ? [BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 2)]
+                                              : null,
+                                        ),
+                                        child: Text(
+                                          sz.toUpperCase(),
+                                          style: theme.textTheme.labelSmall?.copyWith(
+                                            fontWeight: FontWeight.w600,
+                                            color: selected ? colorScheme.onSurface : colorScheme.onSurfaceVariant,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                // Accent color card
+                ValueListenableBuilder<AccentSwatch>(
+                  valueListenable: accentColorNotifier,
+                  builder: (_, selectedAccent, __) => Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                width: 36,
+                                height: 36,
+                                decoration: BoxDecoration(
+                                  color: colorScheme.primary.withValues(alpha: 0.12),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Center(child: HeroIcon(HeroIcons.swatch, size: 18, color: colorScheme.primary)),
+                              ),
+                              const SizedBox(width: 14),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('Accent color', style: theme.textTheme.bodyMedium),
+                                  Text('Primary highlight color', style: theme.textTheme.bodySmall),
+                                ],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: accentSwatches.map((swatch) {
+                              final isSelected = selectedAccent.label == swatch.label;
+                              return GestureDetector(
+                                onTap: () => accentColorNotifier.value = swatch,
+                                child: AnimatedContainer(
+                                  duration: const Duration(milliseconds: 180),
+                                  width: 40,
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                    color: swatch.primary,
+                                    shape: BoxShape.circle,
+                                    border: isSelected
+                                        ? Border.all(color: Colors.white, width: 2.5)
+                                        : null,
+                                    boxShadow: isSelected
+                                        ? [BoxShadow(color: swatch.primary.withValues(alpha: 0.5), blurRadius: 10, spreadRadius: 1)]
+                                        : null,
+                                  ),
+                                  child: isSelected
+                                      ? const Icon(Icons.check_rounded, color: Colors.white, size: 18)
+                                      : null,
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                          const SizedBox(height: 12),
+                          Center(
+                            child: Text(
+                              selectedAccent.label,
+                              style: theme.textTheme.labelMedium?.copyWith(
+                                color: selectedAccent.primary,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 32),
+              ]),
+            ),
+          ),
+        ],
       ),
     );
   }
-}
-
-class _AccentOption {
-  final String label;
-  final Color color;
-  const _AccentOption({required this.label, required this.color});
 }

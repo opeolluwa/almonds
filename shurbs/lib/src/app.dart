@@ -11,12 +11,6 @@ const _onyxSurface = Color(0xFF0a0f1c);
 const _onyxSurfaceVariant = Color(0xFF070b14);
 const _onyxOutline = Color(0xFF5e7aab);
 
-// Rose accent palette
-const _rosePrimary = Color(0xFFd02752);
-const _rosePrimaryContainer = Color(0xFFa11d3f);
-const _roseOnPrimaryContainer = Color(0xFFf9d0d9);
-const _roseSecondary = Color(0xFFed7694);
-
 TextTheme _poppins([TextTheme? base]) {
   return GoogleFonts.poppinsTextTheme(base).copyWith(
     bodyMedium: GoogleFonts.poppins(
@@ -33,21 +27,24 @@ class ShurbsApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ValueListenableBuilder<ThemeMode>(
       valueListenable: themeModeNotifier,
-      builder: (context, mode, child) => MaterialApp(
-        debugShowCheckedModeBanner: false,
-        themeMode: mode,
-        theme: _lightTheme(),
-        darkTheme: _darkTheme(),
-        home: const AppShell(),
+      builder: (context, mode, _) => ValueListenableBuilder<AccentSwatch>(
+        valueListenable: accentColorNotifier,
+        builder: (context, accent, _) => MaterialApp(
+          debugShowCheckedModeBanner: false,
+          themeMode: mode,
+          theme: _lightTheme(accent),
+          darkTheme: _darkTheme(accent),
+          home: const AppShell(),
+        ),
       ),
     );
   }
 }
 
-ThemeData _lightTheme() {
+ThemeData _lightTheme(AccentSwatch accent) {
   return ThemeData(
     colorScheme: ColorScheme.fromSeed(
-      seedColor: _rosePrimary,
+      seedColor: accent.primary,
       brightness: Brightness.light,
     ),
     textTheme: _poppins(),
@@ -59,13 +56,13 @@ ThemeData _lightTheme() {
         borderRadius: BorderRadius.circular(12),
       ),
     ),
-    appBarTheme: const AppBarTheme(
+    appBarTheme: AppBarTheme(
       backgroundColor: Colors.transparent,
-      foregroundColor: _rosePrimary,
+      foregroundColor: accent.primary,
       elevation: 0,
       scrolledUnderElevation: 0,
       surfaceTintColor: Colors.transparent,
-      systemOverlayStyle: SystemUiOverlayStyle(
+      systemOverlayStyle: const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.dark,
         statusBarBrightness: Brightness.light,
@@ -78,14 +75,14 @@ ThemeData _lightTheme() {
   );
 }
 
-ThemeData _darkTheme() {
+ThemeData _darkTheme(AccentSwatch accent) {
   final colorScheme = ColorScheme(
     brightness: Brightness.dark,
-    primary: _rosePrimary,
+    primary: accent.primary,
     onPrimary: Colors.white,
-    primaryContainer: _rosePrimaryContainer,
-    onPrimaryContainer: _roseOnPrimaryContainer,
-    secondary: _roseSecondary,
+    primaryContainer: accent.primaryContainer,
+    onPrimaryContainer: accent.onPrimaryContainer,
+    secondary: accent.secondary,
     onSecondary: Colors.white,
     secondaryContainer: const Color(0xFF5e7aab),
     onSecondaryContainer: const Color(0xFFe0e6f2),
@@ -107,7 +104,7 @@ ThemeData _darkTheme() {
     scrim: Colors.black,
     inverseSurface: const Color(0xFFe0e6f2),
     onInverseSurface: _onyxBackground,
-    inversePrimary: _rosePrimary,
+    inversePrimary: accent.primary,
   );
 
   return ThemeData(
@@ -126,26 +123,26 @@ ThemeData _darkTheme() {
     ),
     navigationBarTheme: NavigationBarThemeData(
       backgroundColor: _onyxSurface,
-      indicatorColor: _rosePrimary.withValues(alpha: 0.2),
+      indicatorColor: accent.primary.withValues(alpha: 0.2),
       iconTheme: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.selected)) {
-          return const IconThemeData(color: _rosePrimary);
+          return IconThemeData(color: accent.primary);
         }
         return const IconThemeData(color: Color(0xFF8a9dc6));
       }),
       labelTextStyle: WidgetStateProperty.resolveWith((states) {
         if (states.contains(WidgetState.selected)) {
-          return const TextStyle(color: _rosePrimary, fontSize: 12, fontWeight: FontWeight.w600);
+          return TextStyle(color: accent.primary, fontSize: 12, fontWeight: FontWeight.w600);
         }
         return const TextStyle(color: Color(0xFF8a9dc6), fontSize: 12);
       }),
     ),
-    appBarTheme: const AppBarTheme(
-      backgroundColor: _rosePrimary,
+    appBarTheme: AppBarTheme(
+      backgroundColor: accent.primary,
       foregroundColor: Colors.white,
       elevation: 0,
       surfaceTintColor: Colors.transparent,
-      systemOverlayStyle: SystemUiOverlayStyle(
+      systemOverlayStyle: const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.light,
       ),
@@ -166,28 +163,28 @@ ThemeData _darkTheme() {
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),
-        borderSide: const BorderSide(color: _rosePrimary, width: 1.5),
+        borderSide: BorderSide(color: accent.primary, width: 1.5),
       ),
     ),
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
-        backgroundColor: _rosePrimary,
+        backgroundColor: accent.primary,
         foregroundColor: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       ),
     ),
     chipTheme: ChipThemeData(
       backgroundColor: _onyxSurfaceVariant,
-      selectedColor: _rosePrimary.withValues(alpha: 0.25),
+      selectedColor: accent.primary.withValues(alpha: 0.25),
       side: const BorderSide(color: Color(0xFF1a2540)),
       labelStyle: const TextStyle(color: Color(0xFFb8c4e0), fontSize: 12),
     ),
     segmentedButtonTheme: SegmentedButtonThemeData(
       style: SegmentedButton.styleFrom(
         backgroundColor: _onyxSurfaceVariant,
-        selectedBackgroundColor: _rosePrimary.withValues(alpha: 0.2),
+        selectedBackgroundColor: accent.primary.withValues(alpha: 0.2),
         foregroundColor: const Color(0xFF8a9dc6),
-        selectedForegroundColor: _rosePrimary,
+        selectedForegroundColor: accent.primary,
         side: const BorderSide(color: Color(0xFF1a2540)),
       ),
     ),
@@ -198,10 +195,10 @@ ThemeData _darkTheme() {
     ),
     switchTheme: SwitchThemeData(
       thumbColor: WidgetStateProperty.resolveWith((states) =>
-          states.contains(WidgetState.selected) ? _rosePrimary : const Color(0xFF5e7aab)),
+          states.contains(WidgetState.selected) ? accent.primary : const Color(0xFF5e7aab)),
       trackColor: WidgetStateProperty.resolveWith((states) =>
           states.contains(WidgetState.selected)
-              ? _rosePrimary.withValues(alpha: 0.3)
+              ? accent.primary.withValues(alpha: 0.3)
               : const Color(0xFF1a2540)),
     ),
   );

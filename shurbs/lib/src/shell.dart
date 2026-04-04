@@ -6,6 +6,7 @@ import 'pages/home_page.dart';
 import 'pages/todo_page.dart';
 import 'pages/alarms_page.dart';
 import 'pages/bookmarks_page.dart';
+import 'pages/notes_page.dart';
 import 'pages/settings_page.dart';
 import 'pages/notifications_page.dart';
 import 'theme_notifier.dart';
@@ -48,6 +49,7 @@ class _AppShellState extends State<AppShell> {
     AlarmsPage(),
     BookmarksPage(),
     SettingsPage(),
+    NotesPage(),
   ];
 
   @override
@@ -230,16 +232,41 @@ class _AppDrawer extends StatelessWidget {
               ),
             ),
 
-            // ── Workspaces ─────────────────────────────────────────────────
+            // ── Nav items ──────────────────────────────────────────────────
+            _DrawerItem(icon: HeroIcons.home, label: 'Home', selected: currentIndex == 0, onTap: () => go(0)),
+            _DrawerItem(icon: HeroIcons.checkCircle, label: 'Todos', selected: currentIndex == 1, onTap: () => go(1)),
+            _DrawerItem(icon: HeroIcons.clock, label: 'Alarms', selected: currentIndex == 2, onTap: () => go(2)),
+            _DrawerItem(icon: HeroIcons.bookmark, label: 'Bookmarks', selected: currentIndex == 3, onTap: () => go(3)),
+            _DrawerItem(icon: HeroIcons.documentText, label: 'Notes', selected: currentIndex == 5, onTap: () => go(5)),
+            _DrawerItem(
+              icon: HeroIcons.bell,
+              label: 'Notifications',
+              selected: false,
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (_) => const NotificationsPage()));
+              },
+            ),
+
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Divider(height: 1),
+            ),
+
+            // ── Workspaces (secondary) ─────────────────────────────────────
             Padding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 6),
-              child: Text(
-                'WORKSPACES',
-                style: theme.textTheme.labelSmall?.copyWith(
-                  color: colorScheme.onSurfaceVariant,
-                  letterSpacing: 1.1,
-                  fontWeight: FontWeight.w600,
-                ),
+              padding: const EdgeInsets.fromLTRB(20, 4, 16, 4),
+              child: Row(
+                children: [
+                  Text(
+                    'WORKSPACES',
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
+                      letterSpacing: 1.0,
+                      fontSize: 10,
+                    ),
+                  ),
+                ],
               ),
             ),
             ValueListenableBuilder<String>(
@@ -247,7 +274,7 @@ class _AppDrawer extends StatelessWidget {
               builder: (context, activeId, _) => Column(
                 children: workspaces
                     .map(
-                      (ws) => _DrawerItem(
+                      (ws) => _WorkspaceItem(
                         icon: ws.icon,
                         label: ws.name,
                         selected: ws.id == activeId,
@@ -257,25 +284,28 @@ class _AppDrawer extends StatelessWidget {
                     .toList(),
               ),
             ),
-
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Divider(height: 1),
-            ),
-
-            // ── Nav items ──────────────────────────────────────────────────
-            _DrawerItem(icon: HeroIcons.home, label: 'Home', selected: currentIndex == 0, onTap: () => go(0)),
-            _DrawerItem(icon: HeroIcons.checkCircle, label: 'Todos', selected: currentIndex == 1, onTap: () => go(1)),
-            _DrawerItem(icon: HeroIcons.clock, label: 'Alarms', selected: currentIndex == 2, onTap: () => go(2)),
-            _DrawerItem(icon: HeroIcons.bookmark, label: 'Bookmarks', selected: currentIndex == 3, onTap: () => go(3)),
-            _DrawerItem(
-              icon: HeroIcons.bell,
-              label: 'Notifications',
-              selected: false,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(context, MaterialPageRoute(builder: (_) => const NotificationsPage()));
-              },
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12, 2, 12, 4),
+              child: SizedBox(
+                width: double.infinity,
+                child: TextButton.icon(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    // TODO: open create workspace dialog
+                  },
+                  icon: HeroIcon(HeroIcons.plus, size: 14, color: colorScheme.onSurfaceVariant),
+                  label: Text(
+                    'New workspace',
+                    style: theme.textTheme.labelSmall?.copyWith(color: colorScheme.onSurfaceVariant),
+                  ),
+                  style: TextButton.styleFrom(
+                    alignment: Alignment.centerLeft,
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                    minimumSize: Size.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                ),
+              ),
             ),
 
             const Spacer(),
@@ -363,6 +393,42 @@ class _ThemeModeToggle extends StatelessWidget {
         const SizedBox(width: 4),
         btn(HeroIcons.moon, ThemeMode.dark),
       ],
+    );
+  }
+}
+
+// ── Workspace item (compact, secondary) ──────────────────────────────────────
+
+class _WorkspaceItem extends StatelessWidget {
+  final HeroIcons icon;
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const _WorkspaceItem({required this.icon, required this.label, required this.selected, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+
+    return ListTile(
+      dense: true,
+      leading: HeroIcon(icon, size: 16, color: selected ? colorScheme.primary : colorScheme.onSurfaceVariant.withValues(alpha: 0.7)),
+      title: Text(
+        label,
+        style: theme.textTheme.bodySmall?.copyWith(
+          color: selected ? colorScheme.primary : colorScheme.onSurfaceVariant.withValues(alpha: 0.8),
+          fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
+        ),
+      ),
+      onTap: onTap,
+      selected: selected,
+      selectedTileColor: colorScheme.primary.withValues(alpha: 0.08),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      horizontalTitleGap: 8,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+      visualDensity: const VisualDensity(vertical: -2),
     );
   }
 }
