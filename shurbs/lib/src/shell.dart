@@ -49,7 +49,6 @@ class _AppShellState extends State<AppShell> {
     AlarmsPage(),
     BookmarksPage(),
     SettingsPage(),
-    NotesPage(),
   ];
 
   @override
@@ -187,158 +186,418 @@ class _AppDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
     void go(int index) {
       Navigator.pop(context);
       onNavigate(index);
     }
 
     return Drawer(
-      child: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // ── User header ────────────────────────────────────────────────
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    radius: 24,
-                    backgroundColor: colorScheme.primary,
-                    child: Text(
-                      'A',
-                      style: TextStyle(
-                        color: colorScheme.onPrimary,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Column(
+      child: Column(
+        children: [
+          // ── Gradient header ────────────────────────────────────────────
+          _DrawerHeader(),
+
+          // ── Scrollable body ────────────────────────────────────────────
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+              children: [
+                _NavTile(icon: HeroIcons.home, label: 'Home', selected: currentIndex == 0, onTap: () => go(0)),
+                _NavTile(icon: HeroIcons.checkCircle, label: 'Todos', selected: currentIndex == 1, onTap: () => go(1)),
+                _NavTile(icon: HeroIcons.clock, label: 'Alarms', selected: currentIndex == 2, onTap: () => go(2)),
+                _NavTile(icon: HeroIcons.bookmark, label: 'Bookmarks', selected: currentIndex == 3, onTap: () => go(3)),
+                _NavTile(
+                  icon: HeroIcons.documentText,
+                  label: 'Notes',
+                  selected: false,
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => const NotesPage()));
+                  },
+                ),
+                _NavTile(
+                  icon: HeroIcons.bell,
+                  label: 'Notifications',
+                  selected: false,
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => const NotificationsPage()));
+                  },
+                ),
+
+                const SizedBox(height: 20),
+
+                // ── Workspaces ─────────────────────────────────────────
+                _WorkspacesSection(),
+              ],
+            ),
+          ),
+
+          // ── Footer ────────────────────────────────────────────────────
+          _DrawerFooter(currentIndex: currentIndex, onNavigate: onNavigate),
+        ],
+      ),
+    );
+  }
+}
+
+// ── Drawer header ─────────────────────────────────────────────────────────────
+
+class _DrawerHeader extends StatelessWidget {
+  const _DrawerHeader();
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<AccentSwatch>(
+      valueListenable: accentColorNotifier,
+      builder: (_, accent, __) {
+        return Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [accent.primary, accent.primaryContainer],
+            ),
+          ),
+          child: Stack(
+            children: [
+              // Dot pattern
+              Positioned.fill(child: CustomPaint(painter: _DotPainter())),
+              // Content
+              SafeArea(
+                bottom: false,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 24, 20, 24),
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Adeoye',
-                        style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                      // App mark
+                      Row(
+                        children: [
+                          Container(
+                            width: 28,
+                            height: 28,
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.2),
+                              borderRadius: BorderRadius.circular(7),
+                            ),
+                            child: const Center(child: HeroIcon(HeroIcons.sparkles, size: 15, color: Colors.white)),
+                          ),
+                          const SizedBox(width: 8),
+                          const Text(
+                            'Shurbs',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 14,
+                              letterSpacing: 0.4,
+                            ),
+                          ),
+                        ],
                       ),
-                      Text('adeoye@example.com', style: theme.textTheme.bodySmall),
+                      const SizedBox(height: 20),
+                      // Avatar + user
+                      Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(2.5),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white.withValues(alpha: 0.25),
+                            ),
+                            child: CircleAvatar(
+                              radius: 22,
+                              backgroundColor: accent.primaryContainer,
+                              child: const Text(
+                                'A',
+                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Adeoye',
+                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 16),
+                              ),
+                              Text(
+                                'adeoye@example.com',
+                                style: TextStyle(color: Colors.white.withValues(alpha: 0.72), fontSize: 12),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ],
-                  ),
-                ],
-              ),
-            ),
-
-            // ── Nav items ──────────────────────────────────────────────────
-            _DrawerItem(icon: HeroIcons.home, label: 'Home', selected: currentIndex == 0, onTap: () => go(0)),
-            _DrawerItem(icon: HeroIcons.checkCircle, label: 'Todos', selected: currentIndex == 1, onTap: () => go(1)),
-            _DrawerItem(icon: HeroIcons.clock, label: 'Alarms', selected: currentIndex == 2, onTap: () => go(2)),
-            _DrawerItem(icon: HeroIcons.bookmark, label: 'Bookmarks', selected: currentIndex == 3, onTap: () => go(3)),
-            _DrawerItem(icon: HeroIcons.documentText, label: 'Notes', selected: currentIndex == 5, onTap: () => go(5)),
-            _DrawerItem(
-              icon: HeroIcons.bell,
-              label: 'Notifications',
-              selected: false,
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.push(context, MaterialPageRoute(builder: (_) => const NotificationsPage()));
-              },
-            ),
-
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Divider(height: 1),
-            ),
-
-            // ── Workspaces (secondary) ─────────────────────────────────────
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 4, 16, 4),
-              child: Row(
-                children: [
-                  Text(
-                    'WORKSPACES',
-                    style: theme.textTheme.labelSmall?.copyWith(
-                      color: colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
-                      letterSpacing: 1.0,
-                      fontSize: 10,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            ValueListenableBuilder<String>(
-              valueListenable: activeWorkspaceNotifier,
-              builder: (context, activeId, _) => Column(
-                children: workspaces
-                    .map(
-                      (ws) => _WorkspaceItem(
-                        icon: ws.icon,
-                        label: ws.name,
-                        selected: ws.id == activeId,
-                        onTap: () => activeWorkspaceNotifier.value = ws.id,
-                      ),
-                    )
-                    .toList(),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(12, 2, 12, 4),
-              child: SizedBox(
-                width: double.infinity,
-                child: TextButton.icon(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    // TODO: open create workspace dialog
-                  },
-                  icon: HeroIcon(HeroIcons.plus, size: 14, color: colorScheme.onSurfaceVariant),
-                  label: Text(
-                    'New workspace',
-                    style: theme.textTheme.labelSmall?.copyWith(color: colorScheme.onSurfaceVariant),
-                  ),
-                  style: TextButton.styleFrom(
-                    alignment: Alignment.centerLeft,
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                    minimumSize: Size.zero,
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
                 ),
               ),
-            ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
 
-            const Spacer(),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Divider(height: 1),
-            ),
+class _DotPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final p = Paint()..color = Colors.white.withValues(alpha: 0.07);
+    const s = 20.0;
+    for (double r = 0; r * s < size.height + s; r++) {
+      final ox = (r % 2 == 0) ? 0.0 : s / 2;
+      for (double c = 0; c * s - ox < size.width + s; c++) {
+        canvas.drawCircle(Offset(c * s - ox + s / 2, r * s + s / 2), 2.0, p);
+      }
+    }
+  }
 
-            // ── Color mode toggle ──────────────────────────────────────────
-            ValueListenableBuilder<ThemeMode>(
-              valueListenable: themeModeNotifier,
-              builder: (context, mode, _) => Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+  @override
+  bool shouldRepaint(_DotPainter _) => false;
+}
+
+// ── Nav tile ──────────────────────────────────────────────────────────────────
+
+class _NavTile extends StatelessWidget {
+  final HeroIcons icon;
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const _NavTile({required this.icon, required this.label, required this.selected, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+
+    return ValueListenableBuilder<AccentSwatch>(
+      valueListenable: accentColorNotifier,
+      builder: (_, accent, __) {
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 2),
+          child: Material(
+            color: selected ? accent.primary.withValues(alpha: 0.1) : Colors.transparent,
+            borderRadius: BorderRadius.circular(10),
+            child: InkWell(
+              onTap: onTap,
+              borderRadius: BorderRadius.circular(10),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 9),
                 child: Row(
                   children: [
-                    HeroIcon(HeroIcons.swatch, size: 18, color: colorScheme.onSurfaceVariant),
-                    const SizedBox(width: 10),
-                    Text('Appearance', style: theme.textTheme.bodySmall),
-                    const Spacer(),
-                    _ThemeModeToggle(current: mode),
+                    // Icon badge
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      width: 34,
+                      height: 34,
+                      decoration: BoxDecoration(
+                        color: selected ? accent.primary : colorScheme.surfaceContainerHighest,
+                        borderRadius: BorderRadius.circular(9),
+                      ),
+                      child: Center(
+                        child: HeroIcon(
+                          icon,
+                          size: 17,
+                          style: selected ? HeroIconStyle.solid : HeroIconStyle.outline,
+                          color: selected ? Colors.white : colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Text(
+                      label,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+                        color: selected ? accent.primary : colorScheme.onSurface,
+                      ),
+                    ),
+                    if (selected) ...[
+                      const Spacer(),
+                      Container(
+                        width: 5,
+                        height: 5,
+                        decoration: BoxDecoration(color: accent.primary, shape: BoxShape.circle),
+                      ),
+                      const SizedBox(width: 2),
+                    ],
                   ],
                 ),
               ),
             ),
+          ),
+        );
+      },
+    );
+  }
+}
 
-            // ── Settings ───────────────────────────────────────────────────
-            _DrawerItem(
-              icon: HeroIcons.cog6Tooth,
-              label: 'Settings',
-              selected: currentIndex == 4,
-              onTap: () => go(4),
+// ── Workspaces section ────────────────────────────────────────────────────────
+
+class _WorkspacesSection extends StatelessWidget {
+  const _WorkspacesSection();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 10, bottom: 8),
+          child: Text(
+            'WORKSPACES',
+            style: theme.textTheme.labelSmall?.copyWith(
+              color: colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
+              letterSpacing: 1.2,
+              fontSize: 10,
+              fontWeight: FontWeight.w600,
             ),
-            const SizedBox(height: 8),
+          ),
+        ),
+        ValueListenableBuilder<AccentSwatch>(
+          valueListenable: accentColorNotifier,
+          builder: (_, accent, __) => ValueListenableBuilder<String>(
+            valueListenable: activeWorkspaceNotifier,
+            builder: (_, activeId, __) => SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  ...workspaces.map((ws) {
+                    final active = ws.id == activeId;
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: GestureDetector(
+                        onTap: () => activeWorkspaceNotifier.value = ws.id,
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 180),
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+                          decoration: BoxDecoration(
+                            color: active ? accent.primary : colorScheme.surfaceContainerHighest,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              HeroIcon(
+                                ws.icon,
+                                size: 13,
+                                style: active ? HeroIconStyle.solid : HeroIconStyle.outline,
+                                color: active ? Colors.white : colorScheme.onSurfaceVariant,
+                              ),
+                              const SizedBox(width: 6),
+                              Text(
+                                ws.name,
+                                style: theme.textTheme.labelSmall?.copyWith(
+                                  color: active ? Colors.white : colorScheme.onSurfaceVariant,
+                                  fontWeight: active ? FontWeight.w700 : FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  }),
+                  // New workspace chip
+                  GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: colorScheme.outlineVariant.withValues(alpha: 0.6),
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          HeroIcon(HeroIcons.plus, size: 12, color: colorScheme.onSurfaceVariant),
+                          const SizedBox(width: 5),
+                          Text(
+                            'New',
+                            style: theme.textTheme.labelSmall?.copyWith(color: colorScheme.onSurfaceVariant),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// ── Drawer footer ─────────────────────────────────────────────────────────────
+
+class _DrawerFooter extends StatelessWidget {
+  final int currentIndex;
+  final ValueChanged<int> onNavigate;
+
+  const _DrawerFooter({required this.currentIndex, required this.onNavigate});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Container(
+      decoration: BoxDecoration(
+        border: Border(top: BorderSide(color: colorScheme.outlineVariant.withValues(alpha: 0.4))),
+      ),
+      padding: const EdgeInsets.fromLTRB(16, 10, 12, 0),
+      child: SafeArea(
+        top: false,
+        child: Row(
+          children: [
+            // Settings
+            Expanded(
+              child: InkWell(
+                onTap: () {
+                  Navigator.pop(context);
+                  onNavigate(4);
+                },
+                borderRadius: BorderRadius.circular(8),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Row(
+                    children: [
+                      HeroIcon(
+                        HeroIcons.cog6Tooth,
+                        size: 18,
+                        style: currentIndex == 4 ? HeroIconStyle.solid : HeroIconStyle.outline,
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        'Settings',
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: colorScheme.onSurfaceVariant,
+                          fontWeight: currentIndex == 4 ? FontWeight.w600 : FontWeight.normal,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            // Theme toggle
+            ValueListenableBuilder<ThemeMode>(
+              valueListenable: themeModeNotifier,
+              builder: (_, mode, __) => _ThemeModeToggle(current: mode),
+            ),
           ],
         ),
       ),
@@ -393,66 +652,6 @@ class _ThemeModeToggle extends StatelessWidget {
         const SizedBox(width: 4),
         btn(HeroIcons.moon, ThemeMode.dark),
       ],
-    );
-  }
-}
-
-// ── Workspace item (compact, secondary) ──────────────────────────────────────
-
-class _WorkspaceItem extends StatelessWidget {
-  final HeroIcons icon;
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
-
-  const _WorkspaceItem({required this.icon, required this.label, required this.selected, required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final theme = Theme.of(context);
-
-    return ListTile(
-      dense: true,
-      leading: HeroIcon(icon, size: 16, color: selected ? colorScheme.primary : colorScheme.onSurfaceVariant.withValues(alpha: 0.7)),
-      title: Text(
-        label,
-        style: theme.textTheme.bodySmall?.copyWith(
-          color: selected ? colorScheme.primary : colorScheme.onSurfaceVariant.withValues(alpha: 0.8),
-          fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
-        ),
-      ),
-      onTap: onTap,
-      selected: selected,
-      selectedTileColor: colorScheme.primary.withValues(alpha: 0.08),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      horizontalTitleGap: 8,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-      visualDensity: const VisualDensity(vertical: -2),
-    );
-  }
-}
-
-// ── Drawer item ───────────────────────────────────────────────────────────────
-
-class _DrawerItem extends StatelessWidget {
-  final HeroIcons icon;
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
-
-  const _DrawerItem({required this.icon, required this.label, required this.selected, required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: HeroIcon(icon, size: 20),
-      title: Text(label),
-      onTap: onTap,
-      selected: selected,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      horizontalTitleGap: 8,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16),
     );
   }
 }
