@@ -3,8 +3,15 @@
 
 // ignore_for_file: unused_import, unused_element, unnecessary_import, duplicate_ignore, invalid_use_of_internal_member, annotate_overrides, non_constant_identifier_names, curly_braces_in_flow_control_structures, prefer_const_literals_to_create_immutables, unused_field
 
-import 'api/json_call.dart';
+import 'api/bookmarks.dart';
+import 'api/notes.dart';
+import 'api/recycle_bin.dart';
+import 'api/reminders.dart';
 import 'api/simple.dart';
+import 'api/snippets.dart';
+import 'api/todo.dart';
+import 'api/user_preference.dart';
+import 'api/workspaces.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'frb_generated.dart';
@@ -67,7 +74,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => 1064427144;
+  int get rustContentHash => 1016656579;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -78,14 +85,345 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
 }
 
 abstract class RustLibApi extends BaseApi {
+  Future<String> crateApiTodoChangeTodoPriority({
+    required String identifier,
+    required String priority,
+    String? metaWorkspaceId,
+  });
+
+  Future<String> crateApiBookmarksCreateBookmark({
+    required String title,
+    required String url,
+    required BookmarkTag tag,
+    String? workspaceIdentifier,
+    String? metaWorkspaceId,
+  });
+
+  Future<String> crateApiNotesCreateNote({
+    required String title,
+    required String content,
+    List<String>? categories,
+    String? workspaceIdentifier,
+    String? metaWorkspaceId,
+  });
+
+  Future<String> crateApiRecycleBinCreateRecycleBinEntry({
+    required String itemId,
+    required String itemType,
+    required String payload,
+    String? metaWorkspaceId,
+  });
+
+  Future<String> crateApiRemindersCreateReminder({
+    required String title,
+    String? description,
+    required String remindAt,
+    required bool recurring,
+    String? recurrenceRule,
+    String? alarmSound,
+    String? workspaceIdentifier,
+    String? metaWorkspaceId,
+  });
+
+  Future<String> crateApiSnippetsCreateSnippet({
+    required String code,
+    String? title,
+    String? language,
+    String? description,
+    required bool isPinned,
+    String? workspaceIdentifier,
+    String? metaWorkspaceId,
+  });
+
+  Future<String> crateApiTodoCreateTodo({
+    required String title,
+    String? description,
+    required String priority,
+    String? dueDate,
+    String? workspaceIdentifier,
+    String? metaWorkspaceId,
+  });
+
+  Future<String> crateApiUserPreferenceCreateUserPreference({
+    required String firstName,
+    required String lastName,
+    required String email,
+    String? metaWorkspaceId,
+  });
+
+  Future<String> crateApiWorkspacesCreateWorkspace({
+    required String name,
+    required String description,
+  });
+
+  Future<void> crateApiBookmarksDeleteBookmark({
+    required String identifier,
+    String? metaWorkspaceId,
+  });
+
+  Future<void> crateApiNotesDeleteNote({
+    required String identifier,
+    String? metaWorkspaceId,
+  });
+
+  Future<void> crateApiRemindersDeleteReminder({
+    required String identifier,
+    String? metaWorkspaceId,
+  });
+
+  Future<void> crateApiSnippetsDeleteSnippet({
+    required String identifier,
+    String? metaWorkspaceId,
+  });
+
+  Future<void> crateApiTodoDeleteTodo({
+    required String identifier,
+    String? metaWorkspaceId,
+  });
+
+  Future<void> crateApiWorkspacesDeleteWorkspace({
+    required String identifier,
+    String? metaWorkspaceId,
+  });
+
+  Future<void> crateApiBookmarksDuplicateBookmark({
+    required String recordIdentifier,
+    required String previousWorkspaceIdentifier,
+    required String targetWorkspaceIdentifier,
+  });
+
+  Future<void> crateApiNotesDuplicateNote({
+    required String recordIdentifier,
+    required String previousWorkspaceIdentifier,
+    required String targetWorkspaceIdentifier,
+  });
+
+  Future<void> crateApiRemindersDuplicateReminder({
+    required String recordIdentifier,
+    required String previousWorkspaceIdentifier,
+    required String targetWorkspaceIdentifier,
+  });
+
+  Future<void> crateApiSnippetsDuplicateSnippet({
+    required String recordIdentifier,
+    required String previousWorkspaceIdentifier,
+    required String targetWorkspaceIdentifier,
+  });
+
+  Future<void> crateApiTodoDuplicateTodo({
+    required String recordIdentifier,
+    required String previousWorkspaceIdentifier,
+    required String targetWorkspaceIdentifier,
+  });
+
+  Future<void> crateApiUserPreferenceDuplicateUserPreference({
+    required String recordIdentifier,
+    required String previousWorkspaceIdentifier,
+    required String targetWorkspaceIdentifier,
+  });
+
+  Future<String> crateApiBookmarksGetAllBookmarks({String? metaWorkspaceId});
+
+  Future<String> crateApiNotesGetAllNotes({String? metaWorkspaceId});
+
+  Future<String> crateApiRecycleBinGetAllRecycleBinEntries({
+    String? metaWorkspaceId,
+  });
+
+  Future<String> crateApiRemindersGetAllReminders({String? metaWorkspaceId});
+
+  Future<String> crateApiSnippetsGetAllSnippets({String? metaWorkspaceId});
+
+  Future<String> crateApiTodoGetAllTodos({String? metaWorkspaceId});
+
+  Future<String?> crateApiBookmarksGetBookmark({
+    required String identifier,
+    String? metaWorkspaceId,
+  });
+
+  Future<String> crateApiBookmarksGetBookmarksByTag({
+    required String tag,
+    String? metaWorkspaceId,
+  });
+
+  Future<String?> crateApiNotesGetNote({
+    required String identifier,
+    String? metaWorkspaceId,
+  });
+
+  Future<String> crateApiBookmarksGetRecentlyAddedBookmarks({
+    String? metaWorkspaceId,
+  });
+
+  Future<String> crateApiNotesGetRecentlyAddedNotes({String? metaWorkspaceId});
+
+  Future<String> crateApiSnippetsGetRecentlyAddedSnippets({
+    String? metaWorkspaceId,
+  });
+
+  Future<String> crateApiRecycleBinGetRecycleBinEntriesByType({
+    required String itemType,
+    String? metaWorkspaceId,
+  });
+
+  Future<String?> crateApiRecycleBinGetRecycleBinEntry({
+    required String identifier,
+    String? metaWorkspaceId,
+  });
+
+  Future<String?> crateApiRemindersGetReminder({
+    required String identifier,
+    String? metaWorkspaceId,
+  });
+
+  Future<String?> crateApiSnippetsGetSnippet({
+    required String identifier,
+    String? metaWorkspaceId,
+  });
+
+  Future<String?> crateApiTodoGetTodo({
+    required String identifier,
+    String? metaWorkspaceId,
+  });
+
+  Future<String?> crateApiUserPreferenceGetUserPreference({
+    String? metaWorkspaceId,
+  });
+
+  Future<String> crateApiWorkspacesGetWorkspaceById({required String id});
+
   String crateApiSimpleGreet({required String name});
 
   Future<void> crateApiSimpleInitApp();
 
-  Future<String> crateApiJsonCallRegister({
-    required String username,
-    required String password,
+  Future<String> crateApiWorkspacesListWorkspaces();
+
+  Future<String> crateApiTodoMarkTodoDone({
+    required String identifier,
+    required bool done,
+    String? metaWorkspaceId,
   });
+
+  Future<void> crateApiRecycleBinPurgeAllRecycleBinEntries({
+    String? metaWorkspaceId,
+  });
+
+  Future<void> crateApiRecycleBinPurgeRecycleBinEntry({
+    required String identifier,
+    String? metaWorkspaceId,
+  });
+
+  Future<void> crateApiBookmarksTransferBookmark({
+    required String recordIdentifier,
+    required String previousWorkspaceIdentifier,
+    required String targetWorkspaceIdentifier,
+  });
+
+  Future<void> crateApiNotesTransferNote({
+    required String recordIdentifier,
+    required String previousWorkspaceIdentifier,
+    required String targetWorkspaceIdentifier,
+  });
+
+  Future<void> crateApiRemindersTransferReminder({
+    required String recordIdentifier,
+    required String previousWorkspaceIdentifier,
+    required String targetWorkspaceIdentifier,
+  });
+
+  Future<void> crateApiSnippetsTransferSnippet({
+    required String recordIdentifier,
+    required String previousWorkspaceIdentifier,
+    required String targetWorkspaceIdentifier,
+  });
+
+  Future<void> crateApiTodoTransferTodo({
+    required String recordIdentifier,
+    required String previousWorkspaceIdentifier,
+    required String targetWorkspaceIdentifier,
+  });
+
+  Future<void> crateApiUserPreferenceTransferUserPreference({
+    required String recordIdentifier,
+    required String previousWorkspaceIdentifier,
+    required String targetWorkspaceIdentifier,
+  });
+
+  Future<String> crateApiBookmarksUpdateBookmark({
+    required String identifier,
+    String? title,
+    String? url,
+    BookmarkTag? tag,
+    String? metaWorkspaceId,
+  });
+
+  Future<String> crateApiNotesUpdateNote({
+    required String identifier,
+    String? title,
+    String? content,
+    List<String>? categories,
+    String? metaWorkspaceId,
+  });
+
+  Future<String> crateApiRemindersUpdateReminder({
+    required String identifier,
+    String? title,
+    String? description,
+    String? remindAt,
+    bool? recurring,
+    String? recurrenceRule,
+    String? alarmSound,
+    String? metaWorkspaceId,
+  });
+
+  Future<String> crateApiSnippetsUpdateSnippet({
+    required String identifier,
+    String? title,
+    String? language,
+    String? code,
+    String? description,
+    bool? isPinned,
+    String? metaWorkspaceId,
+  });
+
+  Future<String> crateApiTodoUpdateTodo({
+    required String identifier,
+    String? title,
+    String? description,
+    String? priority,
+    String? dueDate,
+    String? metaWorkspaceId,
+  });
+
+  Future<String> crateApiTodoUpdateTodoDueDate({
+    required String identifier,
+    String? dueDate,
+    String? metaWorkspaceId,
+  });
+
+  Future<String> crateApiUserPreferenceUpdateUserPreference({
+    required String identifier,
+    String? firstName,
+    String? lastName,
+    String? email,
+    String? metaWorkspaceId,
+  });
+
+  Future<String> crateApiWorkspacesUpdateWorkspace({
+    required String identifier,
+    String? name,
+    String? description,
+    bool? isDefault,
+    bool? isHidden,
+  });
+
+  RustArcIncrementStrongCountFnType
+  get rust_arc_increment_strong_count_BookmarkTag;
+
+  RustArcDecrementStrongCountFnType
+  get rust_arc_decrement_strong_count_BookmarkTag;
+
+  CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_BookmarkTagPtr;
 }
 
 class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
@@ -97,13 +435,1544 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   });
 
   @override
+  Future<String> crateApiTodoChangeTodoPriority({
+    required String identifier,
+    required String priority,
+    String? metaWorkspaceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(identifier, serializer);
+          sse_encode_String(priority, serializer);
+          sse_encode_opt_String(metaWorkspaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 1,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiTodoChangeTodoPriorityConstMeta,
+        argValues: [identifier, priority, metaWorkspaceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiTodoChangeTodoPriorityConstMeta =>
+      const TaskConstMeta(
+        debugName: "change_todo_priority",
+        argNames: ["identifier", "priority", "metaWorkspaceId"],
+      );
+
+  @override
+  Future<String> crateApiBookmarksCreateBookmark({
+    required String title,
+    required String url,
+    required BookmarkTag tag,
+    String? workspaceIdentifier,
+    String? metaWorkspaceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(title, serializer);
+          sse_encode_String(url, serializer);
+          sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBookmarkTag(
+            tag,
+            serializer,
+          );
+          sse_encode_opt_String(workspaceIdentifier, serializer);
+          sse_encode_opt_String(metaWorkspaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 2,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiBookmarksCreateBookmarkConstMeta,
+        argValues: [title, url, tag, workspaceIdentifier, metaWorkspaceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiBookmarksCreateBookmarkConstMeta =>
+      const TaskConstMeta(
+        debugName: "create_bookmark",
+        argNames: [
+          "title",
+          "url",
+          "tag",
+          "workspaceIdentifier",
+          "metaWorkspaceId",
+        ],
+      );
+
+  @override
+  Future<String> crateApiNotesCreateNote({
+    required String title,
+    required String content,
+    List<String>? categories,
+    String? workspaceIdentifier,
+    String? metaWorkspaceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(title, serializer);
+          sse_encode_String(content, serializer);
+          sse_encode_opt_list_String(categories, serializer);
+          sse_encode_opt_String(workspaceIdentifier, serializer);
+          sse_encode_opt_String(metaWorkspaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 3,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiNotesCreateNoteConstMeta,
+        argValues: [
+          title,
+          content,
+          categories,
+          workspaceIdentifier,
+          metaWorkspaceId,
+        ],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiNotesCreateNoteConstMeta => const TaskConstMeta(
+    debugName: "create_note",
+    argNames: [
+      "title",
+      "content",
+      "categories",
+      "workspaceIdentifier",
+      "metaWorkspaceId",
+    ],
+  );
+
+  @override
+  Future<String> crateApiRecycleBinCreateRecycleBinEntry({
+    required String itemId,
+    required String itemType,
+    required String payload,
+    String? metaWorkspaceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(itemId, serializer);
+          sse_encode_String(itemType, serializer);
+          sse_encode_String(payload, serializer);
+          sse_encode_opt_String(metaWorkspaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 4,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiRecycleBinCreateRecycleBinEntryConstMeta,
+        argValues: [itemId, itemType, payload, metaWorkspaceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiRecycleBinCreateRecycleBinEntryConstMeta =>
+      const TaskConstMeta(
+        debugName: "create_recycle_bin_entry",
+        argNames: ["itemId", "itemType", "payload", "metaWorkspaceId"],
+      );
+
+  @override
+  Future<String> crateApiRemindersCreateReminder({
+    required String title,
+    String? description,
+    required String remindAt,
+    required bool recurring,
+    String? recurrenceRule,
+    String? alarmSound,
+    String? workspaceIdentifier,
+    String? metaWorkspaceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(title, serializer);
+          sse_encode_opt_String(description, serializer);
+          sse_encode_String(remindAt, serializer);
+          sse_encode_bool(recurring, serializer);
+          sse_encode_opt_String(recurrenceRule, serializer);
+          sse_encode_opt_String(alarmSound, serializer);
+          sse_encode_opt_String(workspaceIdentifier, serializer);
+          sse_encode_opt_String(metaWorkspaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 5,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiRemindersCreateReminderConstMeta,
+        argValues: [
+          title,
+          description,
+          remindAt,
+          recurring,
+          recurrenceRule,
+          alarmSound,
+          workspaceIdentifier,
+          metaWorkspaceId,
+        ],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiRemindersCreateReminderConstMeta =>
+      const TaskConstMeta(
+        debugName: "create_reminder",
+        argNames: [
+          "title",
+          "description",
+          "remindAt",
+          "recurring",
+          "recurrenceRule",
+          "alarmSound",
+          "workspaceIdentifier",
+          "metaWorkspaceId",
+        ],
+      );
+
+  @override
+  Future<String> crateApiSnippetsCreateSnippet({
+    required String code,
+    String? title,
+    String? language,
+    String? description,
+    required bool isPinned,
+    String? workspaceIdentifier,
+    String? metaWorkspaceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(code, serializer);
+          sse_encode_opt_String(title, serializer);
+          sse_encode_opt_String(language, serializer);
+          sse_encode_opt_String(description, serializer);
+          sse_encode_bool(isPinned, serializer);
+          sse_encode_opt_String(workspaceIdentifier, serializer);
+          sse_encode_opt_String(metaWorkspaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 6,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiSnippetsCreateSnippetConstMeta,
+        argValues: [
+          code,
+          title,
+          language,
+          description,
+          isPinned,
+          workspaceIdentifier,
+          metaWorkspaceId,
+        ],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiSnippetsCreateSnippetConstMeta =>
+      const TaskConstMeta(
+        debugName: "create_snippet",
+        argNames: [
+          "code",
+          "title",
+          "language",
+          "description",
+          "isPinned",
+          "workspaceIdentifier",
+          "metaWorkspaceId",
+        ],
+      );
+
+  @override
+  Future<String> crateApiTodoCreateTodo({
+    required String title,
+    String? description,
+    required String priority,
+    String? dueDate,
+    String? workspaceIdentifier,
+    String? metaWorkspaceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(title, serializer);
+          sse_encode_opt_String(description, serializer);
+          sse_encode_String(priority, serializer);
+          sse_encode_opt_String(dueDate, serializer);
+          sse_encode_opt_String(workspaceIdentifier, serializer);
+          sse_encode_opt_String(metaWorkspaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 7,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiTodoCreateTodoConstMeta,
+        argValues: [
+          title,
+          description,
+          priority,
+          dueDate,
+          workspaceIdentifier,
+          metaWorkspaceId,
+        ],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiTodoCreateTodoConstMeta => const TaskConstMeta(
+    debugName: "create_todo",
+    argNames: [
+      "title",
+      "description",
+      "priority",
+      "dueDate",
+      "workspaceIdentifier",
+      "metaWorkspaceId",
+    ],
+  );
+
+  @override
+  Future<String> crateApiUserPreferenceCreateUserPreference({
+    required String firstName,
+    required String lastName,
+    required String email,
+    String? metaWorkspaceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(firstName, serializer);
+          sse_encode_String(lastName, serializer);
+          sse_encode_String(email, serializer);
+          sse_encode_opt_String(metaWorkspaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 8,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiUserPreferenceCreateUserPreferenceConstMeta,
+        argValues: [firstName, lastName, email, metaWorkspaceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiUserPreferenceCreateUserPreferenceConstMeta =>
+      const TaskConstMeta(
+        debugName: "create_user_preference",
+        argNames: ["firstName", "lastName", "email", "metaWorkspaceId"],
+      );
+
+  @override
+  Future<String> crateApiWorkspacesCreateWorkspace({
+    required String name,
+    required String description,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(name, serializer);
+          sse_encode_String(description, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 9,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiWorkspacesCreateWorkspaceConstMeta,
+        argValues: [name, description],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiWorkspacesCreateWorkspaceConstMeta =>
+      const TaskConstMeta(
+        debugName: "create_workspace",
+        argNames: ["name", "description"],
+      );
+
+  @override
+  Future<void> crateApiBookmarksDeleteBookmark({
+    required String identifier,
+    String? metaWorkspaceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(identifier, serializer);
+          sse_encode_opt_String(metaWorkspaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 10,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiBookmarksDeleteBookmarkConstMeta,
+        argValues: [identifier, metaWorkspaceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiBookmarksDeleteBookmarkConstMeta =>
+      const TaskConstMeta(
+        debugName: "delete_bookmark",
+        argNames: ["identifier", "metaWorkspaceId"],
+      );
+
+  @override
+  Future<void> crateApiNotesDeleteNote({
+    required String identifier,
+    String? metaWorkspaceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(identifier, serializer);
+          sse_encode_opt_String(metaWorkspaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 11,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiNotesDeleteNoteConstMeta,
+        argValues: [identifier, metaWorkspaceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiNotesDeleteNoteConstMeta => const TaskConstMeta(
+    debugName: "delete_note",
+    argNames: ["identifier", "metaWorkspaceId"],
+  );
+
+  @override
+  Future<void> crateApiRemindersDeleteReminder({
+    required String identifier,
+    String? metaWorkspaceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(identifier, serializer);
+          sse_encode_opt_String(metaWorkspaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 12,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiRemindersDeleteReminderConstMeta,
+        argValues: [identifier, metaWorkspaceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiRemindersDeleteReminderConstMeta =>
+      const TaskConstMeta(
+        debugName: "delete_reminder",
+        argNames: ["identifier", "metaWorkspaceId"],
+      );
+
+  @override
+  Future<void> crateApiSnippetsDeleteSnippet({
+    required String identifier,
+    String? metaWorkspaceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(identifier, serializer);
+          sse_encode_opt_String(metaWorkspaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 13,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiSnippetsDeleteSnippetConstMeta,
+        argValues: [identifier, metaWorkspaceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiSnippetsDeleteSnippetConstMeta =>
+      const TaskConstMeta(
+        debugName: "delete_snippet",
+        argNames: ["identifier", "metaWorkspaceId"],
+      );
+
+  @override
+  Future<void> crateApiTodoDeleteTodo({
+    required String identifier,
+    String? metaWorkspaceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(identifier, serializer);
+          sse_encode_opt_String(metaWorkspaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 14,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiTodoDeleteTodoConstMeta,
+        argValues: [identifier, metaWorkspaceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiTodoDeleteTodoConstMeta => const TaskConstMeta(
+    debugName: "delete_todo",
+    argNames: ["identifier", "metaWorkspaceId"],
+  );
+
+  @override
+  Future<void> crateApiWorkspacesDeleteWorkspace({
+    required String identifier,
+    String? metaWorkspaceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(identifier, serializer);
+          sse_encode_opt_String(metaWorkspaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 15,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiWorkspacesDeleteWorkspaceConstMeta,
+        argValues: [identifier, metaWorkspaceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiWorkspacesDeleteWorkspaceConstMeta =>
+      const TaskConstMeta(
+        debugName: "delete_workspace",
+        argNames: ["identifier", "metaWorkspaceId"],
+      );
+
+  @override
+  Future<void> crateApiBookmarksDuplicateBookmark({
+    required String recordIdentifier,
+    required String previousWorkspaceIdentifier,
+    required String targetWorkspaceIdentifier,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(recordIdentifier, serializer);
+          sse_encode_String(previousWorkspaceIdentifier, serializer);
+          sse_encode_String(targetWorkspaceIdentifier, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 16,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiBookmarksDuplicateBookmarkConstMeta,
+        argValues: [
+          recordIdentifier,
+          previousWorkspaceIdentifier,
+          targetWorkspaceIdentifier,
+        ],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiBookmarksDuplicateBookmarkConstMeta =>
+      const TaskConstMeta(
+        debugName: "duplicate_bookmark",
+        argNames: [
+          "recordIdentifier",
+          "previousWorkspaceIdentifier",
+          "targetWorkspaceIdentifier",
+        ],
+      );
+
+  @override
+  Future<void> crateApiNotesDuplicateNote({
+    required String recordIdentifier,
+    required String previousWorkspaceIdentifier,
+    required String targetWorkspaceIdentifier,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(recordIdentifier, serializer);
+          sse_encode_String(previousWorkspaceIdentifier, serializer);
+          sse_encode_String(targetWorkspaceIdentifier, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 17,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiNotesDuplicateNoteConstMeta,
+        argValues: [
+          recordIdentifier,
+          previousWorkspaceIdentifier,
+          targetWorkspaceIdentifier,
+        ],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiNotesDuplicateNoteConstMeta => const TaskConstMeta(
+    debugName: "duplicate_note",
+    argNames: [
+      "recordIdentifier",
+      "previousWorkspaceIdentifier",
+      "targetWorkspaceIdentifier",
+    ],
+  );
+
+  @override
+  Future<void> crateApiRemindersDuplicateReminder({
+    required String recordIdentifier,
+    required String previousWorkspaceIdentifier,
+    required String targetWorkspaceIdentifier,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(recordIdentifier, serializer);
+          sse_encode_String(previousWorkspaceIdentifier, serializer);
+          sse_encode_String(targetWorkspaceIdentifier, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 18,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiRemindersDuplicateReminderConstMeta,
+        argValues: [
+          recordIdentifier,
+          previousWorkspaceIdentifier,
+          targetWorkspaceIdentifier,
+        ],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiRemindersDuplicateReminderConstMeta =>
+      const TaskConstMeta(
+        debugName: "duplicate_reminder",
+        argNames: [
+          "recordIdentifier",
+          "previousWorkspaceIdentifier",
+          "targetWorkspaceIdentifier",
+        ],
+      );
+
+  @override
+  Future<void> crateApiSnippetsDuplicateSnippet({
+    required String recordIdentifier,
+    required String previousWorkspaceIdentifier,
+    required String targetWorkspaceIdentifier,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(recordIdentifier, serializer);
+          sse_encode_String(previousWorkspaceIdentifier, serializer);
+          sse_encode_String(targetWorkspaceIdentifier, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 19,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiSnippetsDuplicateSnippetConstMeta,
+        argValues: [
+          recordIdentifier,
+          previousWorkspaceIdentifier,
+          targetWorkspaceIdentifier,
+        ],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiSnippetsDuplicateSnippetConstMeta =>
+      const TaskConstMeta(
+        debugName: "duplicate_snippet",
+        argNames: [
+          "recordIdentifier",
+          "previousWorkspaceIdentifier",
+          "targetWorkspaceIdentifier",
+        ],
+      );
+
+  @override
+  Future<void> crateApiTodoDuplicateTodo({
+    required String recordIdentifier,
+    required String previousWorkspaceIdentifier,
+    required String targetWorkspaceIdentifier,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(recordIdentifier, serializer);
+          sse_encode_String(previousWorkspaceIdentifier, serializer);
+          sse_encode_String(targetWorkspaceIdentifier, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 20,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiTodoDuplicateTodoConstMeta,
+        argValues: [
+          recordIdentifier,
+          previousWorkspaceIdentifier,
+          targetWorkspaceIdentifier,
+        ],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiTodoDuplicateTodoConstMeta => const TaskConstMeta(
+    debugName: "duplicate_todo",
+    argNames: [
+      "recordIdentifier",
+      "previousWorkspaceIdentifier",
+      "targetWorkspaceIdentifier",
+    ],
+  );
+
+  @override
+  Future<void> crateApiUserPreferenceDuplicateUserPreference({
+    required String recordIdentifier,
+    required String previousWorkspaceIdentifier,
+    required String targetWorkspaceIdentifier,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(recordIdentifier, serializer);
+          sse_encode_String(previousWorkspaceIdentifier, serializer);
+          sse_encode_String(targetWorkspaceIdentifier, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 21,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiUserPreferenceDuplicateUserPreferenceConstMeta,
+        argValues: [
+          recordIdentifier,
+          previousWorkspaceIdentifier,
+          targetWorkspaceIdentifier,
+        ],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiUserPreferenceDuplicateUserPreferenceConstMeta =>
+      const TaskConstMeta(
+        debugName: "duplicate_user_preference",
+        argNames: [
+          "recordIdentifier",
+          "previousWorkspaceIdentifier",
+          "targetWorkspaceIdentifier",
+        ],
+      );
+
+  @override
+  Future<String> crateApiBookmarksGetAllBookmarks({String? metaWorkspaceId}) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_opt_String(metaWorkspaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 22,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiBookmarksGetAllBookmarksConstMeta,
+        argValues: [metaWorkspaceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiBookmarksGetAllBookmarksConstMeta =>
+      const TaskConstMeta(
+        debugName: "get_all_bookmarks",
+        argNames: ["metaWorkspaceId"],
+      );
+
+  @override
+  Future<String> crateApiNotesGetAllNotes({String? metaWorkspaceId}) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_opt_String(metaWorkspaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 23,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiNotesGetAllNotesConstMeta,
+        argValues: [metaWorkspaceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiNotesGetAllNotesConstMeta => const TaskConstMeta(
+    debugName: "get_all_notes",
+    argNames: ["metaWorkspaceId"],
+  );
+
+  @override
+  Future<String> crateApiRecycleBinGetAllRecycleBinEntries({
+    String? metaWorkspaceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_opt_String(metaWorkspaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 24,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiRecycleBinGetAllRecycleBinEntriesConstMeta,
+        argValues: [metaWorkspaceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiRecycleBinGetAllRecycleBinEntriesConstMeta =>
+      const TaskConstMeta(
+        debugName: "get_all_recycle_bin_entries",
+        argNames: ["metaWorkspaceId"],
+      );
+
+  @override
+  Future<String> crateApiRemindersGetAllReminders({String? metaWorkspaceId}) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_opt_String(metaWorkspaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 25,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiRemindersGetAllRemindersConstMeta,
+        argValues: [metaWorkspaceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiRemindersGetAllRemindersConstMeta =>
+      const TaskConstMeta(
+        debugName: "get_all_reminders",
+        argNames: ["metaWorkspaceId"],
+      );
+
+  @override
+  Future<String> crateApiSnippetsGetAllSnippets({String? metaWorkspaceId}) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_opt_String(metaWorkspaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 26,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiSnippetsGetAllSnippetsConstMeta,
+        argValues: [metaWorkspaceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiSnippetsGetAllSnippetsConstMeta =>
+      const TaskConstMeta(
+        debugName: "get_all_snippets",
+        argNames: ["metaWorkspaceId"],
+      );
+
+  @override
+  Future<String> crateApiTodoGetAllTodos({String? metaWorkspaceId}) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_opt_String(metaWorkspaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 27,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiTodoGetAllTodosConstMeta,
+        argValues: [metaWorkspaceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiTodoGetAllTodosConstMeta => const TaskConstMeta(
+    debugName: "get_all_todos",
+    argNames: ["metaWorkspaceId"],
+  );
+
+  @override
+  Future<String?> crateApiBookmarksGetBookmark({
+    required String identifier,
+    String? metaWorkspaceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(identifier, serializer);
+          sse_encode_opt_String(metaWorkspaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 28,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_opt_String,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiBookmarksGetBookmarkConstMeta,
+        argValues: [identifier, metaWorkspaceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiBookmarksGetBookmarkConstMeta =>
+      const TaskConstMeta(
+        debugName: "get_bookmark",
+        argNames: ["identifier", "metaWorkspaceId"],
+      );
+
+  @override
+  Future<String> crateApiBookmarksGetBookmarksByTag({
+    required String tag,
+    String? metaWorkspaceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(tag, serializer);
+          sse_encode_opt_String(metaWorkspaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 29,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiBookmarksGetBookmarksByTagConstMeta,
+        argValues: [tag, metaWorkspaceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiBookmarksGetBookmarksByTagConstMeta =>
+      const TaskConstMeta(
+        debugName: "get_bookmarks_by_tag",
+        argNames: ["tag", "metaWorkspaceId"],
+      );
+
+  @override
+  Future<String?> crateApiNotesGetNote({
+    required String identifier,
+    String? metaWorkspaceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(identifier, serializer);
+          sse_encode_opt_String(metaWorkspaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 30,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_opt_String,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiNotesGetNoteConstMeta,
+        argValues: [identifier, metaWorkspaceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiNotesGetNoteConstMeta => const TaskConstMeta(
+    debugName: "get_note",
+    argNames: ["identifier", "metaWorkspaceId"],
+  );
+
+  @override
+  Future<String> crateApiBookmarksGetRecentlyAddedBookmarks({
+    String? metaWorkspaceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_opt_String(metaWorkspaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 31,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiBookmarksGetRecentlyAddedBookmarksConstMeta,
+        argValues: [metaWorkspaceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiBookmarksGetRecentlyAddedBookmarksConstMeta =>
+      const TaskConstMeta(
+        debugName: "get_recently_added_bookmarks",
+        argNames: ["metaWorkspaceId"],
+      );
+
+  @override
+  Future<String> crateApiNotesGetRecentlyAddedNotes({String? metaWorkspaceId}) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_opt_String(metaWorkspaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 32,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiNotesGetRecentlyAddedNotesConstMeta,
+        argValues: [metaWorkspaceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiNotesGetRecentlyAddedNotesConstMeta =>
+      const TaskConstMeta(
+        debugName: "get_recently_added_notes",
+        argNames: ["metaWorkspaceId"],
+      );
+
+  @override
+  Future<String> crateApiSnippetsGetRecentlyAddedSnippets({
+    String? metaWorkspaceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_opt_String(metaWorkspaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 33,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiSnippetsGetRecentlyAddedSnippetsConstMeta,
+        argValues: [metaWorkspaceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiSnippetsGetRecentlyAddedSnippetsConstMeta =>
+      const TaskConstMeta(
+        debugName: "get_recently_added_snippets",
+        argNames: ["metaWorkspaceId"],
+      );
+
+  @override
+  Future<String> crateApiRecycleBinGetRecycleBinEntriesByType({
+    required String itemType,
+    String? metaWorkspaceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(itemType, serializer);
+          sse_encode_opt_String(metaWorkspaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 34,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiRecycleBinGetRecycleBinEntriesByTypeConstMeta,
+        argValues: [itemType, metaWorkspaceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiRecycleBinGetRecycleBinEntriesByTypeConstMeta =>
+      const TaskConstMeta(
+        debugName: "get_recycle_bin_entries_by_type",
+        argNames: ["itemType", "metaWorkspaceId"],
+      );
+
+  @override
+  Future<String?> crateApiRecycleBinGetRecycleBinEntry({
+    required String identifier,
+    String? metaWorkspaceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(identifier, serializer);
+          sse_encode_opt_String(metaWorkspaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 35,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_opt_String,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiRecycleBinGetRecycleBinEntryConstMeta,
+        argValues: [identifier, metaWorkspaceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiRecycleBinGetRecycleBinEntryConstMeta =>
+      const TaskConstMeta(
+        debugName: "get_recycle_bin_entry",
+        argNames: ["identifier", "metaWorkspaceId"],
+      );
+
+  @override
+  Future<String?> crateApiRemindersGetReminder({
+    required String identifier,
+    String? metaWorkspaceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(identifier, serializer);
+          sse_encode_opt_String(metaWorkspaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 36,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_opt_String,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiRemindersGetReminderConstMeta,
+        argValues: [identifier, metaWorkspaceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiRemindersGetReminderConstMeta =>
+      const TaskConstMeta(
+        debugName: "get_reminder",
+        argNames: ["identifier", "metaWorkspaceId"],
+      );
+
+  @override
+  Future<String?> crateApiSnippetsGetSnippet({
+    required String identifier,
+    String? metaWorkspaceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(identifier, serializer);
+          sse_encode_opt_String(metaWorkspaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 37,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_opt_String,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiSnippetsGetSnippetConstMeta,
+        argValues: [identifier, metaWorkspaceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiSnippetsGetSnippetConstMeta => const TaskConstMeta(
+    debugName: "get_snippet",
+    argNames: ["identifier", "metaWorkspaceId"],
+  );
+
+  @override
+  Future<String?> crateApiTodoGetTodo({
+    required String identifier,
+    String? metaWorkspaceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(identifier, serializer);
+          sse_encode_opt_String(metaWorkspaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 38,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_opt_String,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiTodoGetTodoConstMeta,
+        argValues: [identifier, metaWorkspaceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiTodoGetTodoConstMeta => const TaskConstMeta(
+    debugName: "get_todo",
+    argNames: ["identifier", "metaWorkspaceId"],
+  );
+
+  @override
+  Future<String?> crateApiUserPreferenceGetUserPreference({
+    String? metaWorkspaceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_opt_String(metaWorkspaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 39,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_opt_String,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiUserPreferenceGetUserPreferenceConstMeta,
+        argValues: [metaWorkspaceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiUserPreferenceGetUserPreferenceConstMeta =>
+      const TaskConstMeta(
+        debugName: "get_user_preference",
+        argNames: ["metaWorkspaceId"],
+      );
+
+  @override
+  Future<String> crateApiWorkspacesGetWorkspaceById({required String id}) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(id, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 40,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiWorkspacesGetWorkspaceByIdConstMeta,
+        argValues: [id],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiWorkspacesGetWorkspaceByIdConstMeta =>
+      const TaskConstMeta(debugName: "get_workspace_by_id", argNames: ["id"]);
+
+  @override
   String crateApiSimpleGreet({required String name}) {
     return handler.executeSync(
       SyncTask(
         callFfi: () {
           final serializer = SseSerializer(generalizedFrbRustBinding);
           sse_encode_String(name, serializer);
-          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 1)!;
+          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 41)!;
         },
         codec: SseCodec(
           decodeSuccessData: sse_decode_String,
@@ -128,7 +1997,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 2,
+            funcId: 42,
             port: port_,
           );
         },
@@ -147,20 +2016,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       const TaskConstMeta(debugName: "init_app", argNames: []);
 
   @override
-  Future<String> crateApiJsonCallRegister({
-    required String username,
-    required String password,
-  }) {
+  Future<String> crateApiWorkspacesListWorkspaces() {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
           final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(username, serializer);
-          sse_encode_String(password, serializer);
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 3,
+            funcId: 43,
             port: port_,
           );
         },
@@ -168,17 +2032,816 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           decodeSuccessData: sse_decode_String,
           decodeErrorData: sse_decode_String,
         ),
-        constMeta: kCrateApiJsonCallRegisterConstMeta,
-        argValues: [username, password],
+        constMeta: kCrateApiWorkspacesListWorkspacesConstMeta,
+        argValues: [],
         apiImpl: this,
       ),
     );
   }
 
-  TaskConstMeta get kCrateApiJsonCallRegisterConstMeta => const TaskConstMeta(
-    debugName: "register",
-    argNames: ["username", "password"],
+  TaskConstMeta get kCrateApiWorkspacesListWorkspacesConstMeta =>
+      const TaskConstMeta(debugName: "list_workspaces", argNames: []);
+
+  @override
+  Future<String> crateApiTodoMarkTodoDone({
+    required String identifier,
+    required bool done,
+    String? metaWorkspaceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(identifier, serializer);
+          sse_encode_bool(done, serializer);
+          sse_encode_opt_String(metaWorkspaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 44,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiTodoMarkTodoDoneConstMeta,
+        argValues: [identifier, done, metaWorkspaceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiTodoMarkTodoDoneConstMeta => const TaskConstMeta(
+    debugName: "mark_todo_done",
+    argNames: ["identifier", "done", "metaWorkspaceId"],
   );
+
+  @override
+  Future<void> crateApiRecycleBinPurgeAllRecycleBinEntries({
+    String? metaWorkspaceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_opt_String(metaWorkspaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 45,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiRecycleBinPurgeAllRecycleBinEntriesConstMeta,
+        argValues: [metaWorkspaceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiRecycleBinPurgeAllRecycleBinEntriesConstMeta =>
+      const TaskConstMeta(
+        debugName: "purge_all_recycle_bin_entries",
+        argNames: ["metaWorkspaceId"],
+      );
+
+  @override
+  Future<void> crateApiRecycleBinPurgeRecycleBinEntry({
+    required String identifier,
+    String? metaWorkspaceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(identifier, serializer);
+          sse_encode_opt_String(metaWorkspaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 46,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiRecycleBinPurgeRecycleBinEntryConstMeta,
+        argValues: [identifier, metaWorkspaceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiRecycleBinPurgeRecycleBinEntryConstMeta =>
+      const TaskConstMeta(
+        debugName: "purge_recycle_bin_entry",
+        argNames: ["identifier", "metaWorkspaceId"],
+      );
+
+  @override
+  Future<void> crateApiBookmarksTransferBookmark({
+    required String recordIdentifier,
+    required String previousWorkspaceIdentifier,
+    required String targetWorkspaceIdentifier,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(recordIdentifier, serializer);
+          sse_encode_String(previousWorkspaceIdentifier, serializer);
+          sse_encode_String(targetWorkspaceIdentifier, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 47,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiBookmarksTransferBookmarkConstMeta,
+        argValues: [
+          recordIdentifier,
+          previousWorkspaceIdentifier,
+          targetWorkspaceIdentifier,
+        ],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiBookmarksTransferBookmarkConstMeta =>
+      const TaskConstMeta(
+        debugName: "transfer_bookmark",
+        argNames: [
+          "recordIdentifier",
+          "previousWorkspaceIdentifier",
+          "targetWorkspaceIdentifier",
+        ],
+      );
+
+  @override
+  Future<void> crateApiNotesTransferNote({
+    required String recordIdentifier,
+    required String previousWorkspaceIdentifier,
+    required String targetWorkspaceIdentifier,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(recordIdentifier, serializer);
+          sse_encode_String(previousWorkspaceIdentifier, serializer);
+          sse_encode_String(targetWorkspaceIdentifier, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 48,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiNotesTransferNoteConstMeta,
+        argValues: [
+          recordIdentifier,
+          previousWorkspaceIdentifier,
+          targetWorkspaceIdentifier,
+        ],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiNotesTransferNoteConstMeta => const TaskConstMeta(
+    debugName: "transfer_note",
+    argNames: [
+      "recordIdentifier",
+      "previousWorkspaceIdentifier",
+      "targetWorkspaceIdentifier",
+    ],
+  );
+
+  @override
+  Future<void> crateApiRemindersTransferReminder({
+    required String recordIdentifier,
+    required String previousWorkspaceIdentifier,
+    required String targetWorkspaceIdentifier,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(recordIdentifier, serializer);
+          sse_encode_String(previousWorkspaceIdentifier, serializer);
+          sse_encode_String(targetWorkspaceIdentifier, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 49,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiRemindersTransferReminderConstMeta,
+        argValues: [
+          recordIdentifier,
+          previousWorkspaceIdentifier,
+          targetWorkspaceIdentifier,
+        ],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiRemindersTransferReminderConstMeta =>
+      const TaskConstMeta(
+        debugName: "transfer_reminder",
+        argNames: [
+          "recordIdentifier",
+          "previousWorkspaceIdentifier",
+          "targetWorkspaceIdentifier",
+        ],
+      );
+
+  @override
+  Future<void> crateApiSnippetsTransferSnippet({
+    required String recordIdentifier,
+    required String previousWorkspaceIdentifier,
+    required String targetWorkspaceIdentifier,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(recordIdentifier, serializer);
+          sse_encode_String(previousWorkspaceIdentifier, serializer);
+          sse_encode_String(targetWorkspaceIdentifier, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 50,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiSnippetsTransferSnippetConstMeta,
+        argValues: [
+          recordIdentifier,
+          previousWorkspaceIdentifier,
+          targetWorkspaceIdentifier,
+        ],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiSnippetsTransferSnippetConstMeta =>
+      const TaskConstMeta(
+        debugName: "transfer_snippet",
+        argNames: [
+          "recordIdentifier",
+          "previousWorkspaceIdentifier",
+          "targetWorkspaceIdentifier",
+        ],
+      );
+
+  @override
+  Future<void> crateApiTodoTransferTodo({
+    required String recordIdentifier,
+    required String previousWorkspaceIdentifier,
+    required String targetWorkspaceIdentifier,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(recordIdentifier, serializer);
+          sse_encode_String(previousWorkspaceIdentifier, serializer);
+          sse_encode_String(targetWorkspaceIdentifier, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 51,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiTodoTransferTodoConstMeta,
+        argValues: [
+          recordIdentifier,
+          previousWorkspaceIdentifier,
+          targetWorkspaceIdentifier,
+        ],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiTodoTransferTodoConstMeta => const TaskConstMeta(
+    debugName: "transfer_todo",
+    argNames: [
+      "recordIdentifier",
+      "previousWorkspaceIdentifier",
+      "targetWorkspaceIdentifier",
+    ],
+  );
+
+  @override
+  Future<void> crateApiUserPreferenceTransferUserPreference({
+    required String recordIdentifier,
+    required String previousWorkspaceIdentifier,
+    required String targetWorkspaceIdentifier,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(recordIdentifier, serializer);
+          sse_encode_String(previousWorkspaceIdentifier, serializer);
+          sse_encode_String(targetWorkspaceIdentifier, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 52,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiUserPreferenceTransferUserPreferenceConstMeta,
+        argValues: [
+          recordIdentifier,
+          previousWorkspaceIdentifier,
+          targetWorkspaceIdentifier,
+        ],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiUserPreferenceTransferUserPreferenceConstMeta =>
+      const TaskConstMeta(
+        debugName: "transfer_user_preference",
+        argNames: [
+          "recordIdentifier",
+          "previousWorkspaceIdentifier",
+          "targetWorkspaceIdentifier",
+        ],
+      );
+
+  @override
+  Future<String> crateApiBookmarksUpdateBookmark({
+    required String identifier,
+    String? title,
+    String? url,
+    BookmarkTag? tag,
+    String? metaWorkspaceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(identifier, serializer);
+          sse_encode_opt_String(title, serializer);
+          sse_encode_opt_String(url, serializer);
+          sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBookmarkTag(
+            tag,
+            serializer,
+          );
+          sse_encode_opt_String(metaWorkspaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 53,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiBookmarksUpdateBookmarkConstMeta,
+        argValues: [identifier, title, url, tag, metaWorkspaceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiBookmarksUpdateBookmarkConstMeta =>
+      const TaskConstMeta(
+        debugName: "update_bookmark",
+        argNames: ["identifier", "title", "url", "tag", "metaWorkspaceId"],
+      );
+
+  @override
+  Future<String> crateApiNotesUpdateNote({
+    required String identifier,
+    String? title,
+    String? content,
+    List<String>? categories,
+    String? metaWorkspaceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(identifier, serializer);
+          sse_encode_opt_String(title, serializer);
+          sse_encode_opt_String(content, serializer);
+          sse_encode_opt_list_String(categories, serializer);
+          sse_encode_opt_String(metaWorkspaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 54,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiNotesUpdateNoteConstMeta,
+        argValues: [identifier, title, content, categories, metaWorkspaceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiNotesUpdateNoteConstMeta => const TaskConstMeta(
+    debugName: "update_note",
+    argNames: [
+      "identifier",
+      "title",
+      "content",
+      "categories",
+      "metaWorkspaceId",
+    ],
+  );
+
+  @override
+  Future<String> crateApiRemindersUpdateReminder({
+    required String identifier,
+    String? title,
+    String? description,
+    String? remindAt,
+    bool? recurring,
+    String? recurrenceRule,
+    String? alarmSound,
+    String? metaWorkspaceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(identifier, serializer);
+          sse_encode_opt_String(title, serializer);
+          sse_encode_opt_String(description, serializer);
+          sse_encode_opt_String(remindAt, serializer);
+          sse_encode_opt_box_autoadd_bool(recurring, serializer);
+          sse_encode_opt_String(recurrenceRule, serializer);
+          sse_encode_opt_String(alarmSound, serializer);
+          sse_encode_opt_String(metaWorkspaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 55,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiRemindersUpdateReminderConstMeta,
+        argValues: [
+          identifier,
+          title,
+          description,
+          remindAt,
+          recurring,
+          recurrenceRule,
+          alarmSound,
+          metaWorkspaceId,
+        ],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiRemindersUpdateReminderConstMeta =>
+      const TaskConstMeta(
+        debugName: "update_reminder",
+        argNames: [
+          "identifier",
+          "title",
+          "description",
+          "remindAt",
+          "recurring",
+          "recurrenceRule",
+          "alarmSound",
+          "metaWorkspaceId",
+        ],
+      );
+
+  @override
+  Future<String> crateApiSnippetsUpdateSnippet({
+    required String identifier,
+    String? title,
+    String? language,
+    String? code,
+    String? description,
+    bool? isPinned,
+    String? metaWorkspaceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(identifier, serializer);
+          sse_encode_opt_String(title, serializer);
+          sse_encode_opt_String(language, serializer);
+          sse_encode_opt_String(code, serializer);
+          sse_encode_opt_String(description, serializer);
+          sse_encode_opt_box_autoadd_bool(isPinned, serializer);
+          sse_encode_opt_String(metaWorkspaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 56,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiSnippetsUpdateSnippetConstMeta,
+        argValues: [
+          identifier,
+          title,
+          language,
+          code,
+          description,
+          isPinned,
+          metaWorkspaceId,
+        ],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiSnippetsUpdateSnippetConstMeta =>
+      const TaskConstMeta(
+        debugName: "update_snippet",
+        argNames: [
+          "identifier",
+          "title",
+          "language",
+          "code",
+          "description",
+          "isPinned",
+          "metaWorkspaceId",
+        ],
+      );
+
+  @override
+  Future<String> crateApiTodoUpdateTodo({
+    required String identifier,
+    String? title,
+    String? description,
+    String? priority,
+    String? dueDate,
+    String? metaWorkspaceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(identifier, serializer);
+          sse_encode_opt_String(title, serializer);
+          sse_encode_opt_String(description, serializer);
+          sse_encode_opt_String(priority, serializer);
+          sse_encode_opt_String(dueDate, serializer);
+          sse_encode_opt_String(metaWorkspaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 57,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiTodoUpdateTodoConstMeta,
+        argValues: [
+          identifier,
+          title,
+          description,
+          priority,
+          dueDate,
+          metaWorkspaceId,
+        ],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiTodoUpdateTodoConstMeta => const TaskConstMeta(
+    debugName: "update_todo",
+    argNames: [
+      "identifier",
+      "title",
+      "description",
+      "priority",
+      "dueDate",
+      "metaWorkspaceId",
+    ],
+  );
+
+  @override
+  Future<String> crateApiTodoUpdateTodoDueDate({
+    required String identifier,
+    String? dueDate,
+    String? metaWorkspaceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(identifier, serializer);
+          sse_encode_opt_String(dueDate, serializer);
+          sse_encode_opt_String(metaWorkspaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 58,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiTodoUpdateTodoDueDateConstMeta,
+        argValues: [identifier, dueDate, metaWorkspaceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiTodoUpdateTodoDueDateConstMeta =>
+      const TaskConstMeta(
+        debugName: "update_todo_due_date",
+        argNames: ["identifier", "dueDate", "metaWorkspaceId"],
+      );
+
+  @override
+  Future<String> crateApiUserPreferenceUpdateUserPreference({
+    required String identifier,
+    String? firstName,
+    String? lastName,
+    String? email,
+    String? metaWorkspaceId,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(identifier, serializer);
+          sse_encode_opt_String(firstName, serializer);
+          sse_encode_opt_String(lastName, serializer);
+          sse_encode_opt_String(email, serializer);
+          sse_encode_opt_String(metaWorkspaceId, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 59,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiUserPreferenceUpdateUserPreferenceConstMeta,
+        argValues: [identifier, firstName, lastName, email, metaWorkspaceId],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiUserPreferenceUpdateUserPreferenceConstMeta =>
+      const TaskConstMeta(
+        debugName: "update_user_preference",
+        argNames: [
+          "identifier",
+          "firstName",
+          "lastName",
+          "email",
+          "metaWorkspaceId",
+        ],
+      );
+
+  @override
+  Future<String> crateApiWorkspacesUpdateWorkspace({
+    required String identifier,
+    String? name,
+    String? description,
+    bool? isDefault,
+    bool? isHidden,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(identifier, serializer);
+          sse_encode_opt_String(name, serializer);
+          sse_encode_opt_String(description, serializer);
+          sse_encode_opt_box_autoadd_bool(isDefault, serializer);
+          sse_encode_opt_box_autoadd_bool(isHidden, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 60,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_String,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiWorkspacesUpdateWorkspaceConstMeta,
+        argValues: [identifier, name, description, isDefault, isHidden],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiWorkspacesUpdateWorkspaceConstMeta =>
+      const TaskConstMeta(
+        debugName: "update_workspace",
+        argNames: [
+          "identifier",
+          "name",
+          "description",
+          "isDefault",
+          "isHidden",
+        ],
+      );
+
+  RustArcIncrementStrongCountFnType
+  get rust_arc_increment_strong_count_BookmarkTag => wire
+      .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBookmarkTag;
+
+  RustArcDecrementStrongCountFnType
+  get rust_arc_decrement_strong_count_BookmarkTag => wire
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBookmarkTag;
+
+  @protected
+  BookmarkTag
+  dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBookmarkTag(
+    dynamic raw,
+  ) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return BookmarkTagImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  BookmarkTag
+  dco_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBookmarkTag(
+    dynamic raw,
+  ) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return BookmarkTagImpl.frbInternalDcoDecode(raw as List<dynamic>);
+  }
 
   @protected
   String dco_decode_String(dynamic raw) {
@@ -187,9 +2850,69 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  bool dco_decode_bool(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw as bool;
+  }
+
+  @protected
+  BookmarkTag
+  dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBookmarkTag(
+    dynamic raw,
+  ) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBookmarkTag(
+      raw,
+    );
+  }
+
+  @protected
+  bool dco_decode_box_autoadd_bool(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw as bool;
+  }
+
+  @protected
+  List<String> dco_decode_list_String(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>).map(dco_decode_String).toList();
+  }
+
+  @protected
   Uint8List dco_decode_list_prim_u_8_strict(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw as Uint8List;
+  }
+
+  @protected
+  String? dco_decode_opt_String(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null ? null : dco_decode_String(raw);
+  }
+
+  @protected
+  BookmarkTag?
+  dco_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBookmarkTag(
+    dynamic raw,
+  ) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null
+        ? null
+        : dco_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBookmarkTag(
+            raw,
+          );
+  }
+
+  @protected
+  bool? dco_decode_opt_box_autoadd_bool(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null ? null : dco_decode_box_autoadd_bool(raw);
+  }
+
+  @protected
+  List<String>? dco_decode_opt_list_String(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw == null ? null : dco_decode_list_String(raw);
   }
 
   @protected
@@ -205,6 +2928,36 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  BigInt dco_decode_usize(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dcoDecodeU64(raw);
+  }
+
+  @protected
+  BookmarkTag
+  sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBookmarkTag(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return BookmarkTagImpl.frbInternalSseDecode(
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
+  }
+
+  @protected
+  BookmarkTag
+  sse_decode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBookmarkTag(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return BookmarkTagImpl.frbInternalSseDecode(
+      sse_decode_usize(deserializer),
+      sse_decode_i_32(deserializer),
+    );
+  }
+
+  @protected
   String sse_decode_String(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var inner = sse_decode_list_prim_u_8_strict(deserializer);
@@ -212,10 +2965,94 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  bool sse_decode_bool(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return deserializer.buffer.getUint8() != 0;
+  }
+
+  @protected
+  BookmarkTag
+  sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBookmarkTag(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBookmarkTag(
+      deserializer,
+    ));
+  }
+
+  @protected
+  bool sse_decode_box_autoadd_bool(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_bool(deserializer));
+  }
+
+  @protected
+  List<String> sse_decode_list_String(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var len_ = sse_decode_i_32(deserializer);
+    var ans_ = <String>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_String(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
   Uint8List sse_decode_list_prim_u_8_strict(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var len_ = sse_decode_i_32(deserializer);
     return deserializer.buffer.getUint8List(len_);
+  }
+
+  @protected
+  String? sse_decode_opt_String(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_String(deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  BookmarkTag?
+  sse_decode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBookmarkTag(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBookmarkTag(
+        deserializer,
+      ));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  bool? sse_decode_opt_box_autoadd_bool(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_bool(deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  List<String>? sse_decode_opt_list_String(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_list_String(deserializer));
+    } else {
+      return null;
+    }
   }
 
   @protected
@@ -230,21 +3067,81 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  BigInt sse_decode_usize(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return deserializer.buffer.getBigUint64();
+  }
+
+  @protected
   int sse_decode_i_32(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return deserializer.buffer.getInt32();
   }
 
   @protected
-  bool sse_decode_bool(SseDeserializer deserializer) {
+  void
+  sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBookmarkTag(
+    BookmarkTag self,
+    SseSerializer serializer,
+  ) {
     // Codec=Sse (Serialization based), see doc to use other codecs
-    return deserializer.buffer.getUint8() != 0;
+    sse_encode_usize(
+      (self as BookmarkTagImpl).frbInternalSseEncode(move: true),
+      serializer,
+    );
+  }
+
+  @protected
+  void
+  sse_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBookmarkTag(
+    BookmarkTag self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_usize(
+      (self as BookmarkTagImpl).frbInternalSseEncode(move: null),
+      serializer,
+    );
   }
 
   @protected
   void sse_encode_String(String self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_list_prim_u_8_strict(utf8.encoder.convert(self), serializer);
+  }
+
+  @protected
+  void sse_encode_bool(bool self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    serializer.buffer.putUint8(self ? 1 : 0);
+  }
+
+  @protected
+  void
+  sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBookmarkTag(
+    BookmarkTag self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBookmarkTag(
+      self,
+      serializer,
+    );
+  }
+
+  @protected
+  void sse_encode_box_autoadd_bool(bool self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_bool(self, serializer);
+  }
+
+  @protected
+  void sse_encode_list_String(List<String> self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_String(item, serializer);
+    }
   }
 
   @protected
@@ -255,6 +3152,56 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_i_32(self.length, serializer);
     serializer.buffer.putUint8List(self);
+  }
+
+  @protected
+  void sse_encode_opt_String(String? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_String(self, serializer);
+    }
+  }
+
+  @protected
+  void
+  sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBookmarkTag(
+    BookmarkTag? self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBookmarkTag(
+        self,
+        serializer,
+      );
+    }
+  }
+
+  @protected
+  void sse_encode_opt_box_autoadd_bool(bool? self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_bool(self, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_opt_list_String(
+    List<String>? self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_list_String(self, serializer);
+    }
   }
 
   @protected
@@ -269,14 +3216,34 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_usize(BigInt self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    serializer.buffer.putBigUint64(self);
+  }
+
+  @protected
   void sse_encode_i_32(int self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     serializer.buffer.putInt32(self);
   }
+}
 
-  @protected
-  void sse_encode_bool(bool self, SseSerializer serializer) {
-    // Codec=Sse (Serialization based), see doc to use other codecs
-    serializer.buffer.putUint8(self ? 1 : 0);
-  }
+@sealed
+class BookmarkTagImpl extends RustOpaque implements BookmarkTag {
+  // Not to be used by end users
+  BookmarkTagImpl.frbInternalDcoDecode(List<dynamic> wire)
+    : super.frbInternalDcoDecode(wire, _kStaticData);
+
+  // Not to be used by end users
+  BookmarkTagImpl.frbInternalSseDecode(BigInt ptr, int externalSizeOnNative)
+    : super.frbInternalSseDecode(ptr, externalSizeOnNative, _kStaticData);
+
+  static final _kStaticData = RustArcStaticData(
+    rustArcIncrementStrongCount:
+        RustLib.instance.api.rust_arc_increment_strong_count_BookmarkTag,
+    rustArcDecrementStrongCount:
+        RustLib.instance.api.rust_arc_decrement_strong_count_BookmarkTag,
+    rustArcDecrementStrongCountPtr:
+        RustLib.instance.api.rust_arc_decrement_strong_count_BookmarkTagPtr,
+  );
 }
