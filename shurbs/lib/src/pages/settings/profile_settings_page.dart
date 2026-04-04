@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
 
+import 'settings_header_bg.dart';
+
 class ProfileSettingsPage extends StatefulWidget {
   const ProfileSettingsPage({super.key});
 
@@ -41,17 +43,8 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
             expandedHeight: 220,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
-              background: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      colorScheme.primary,
-                      colorScheme.primary.withValues(alpha: 0.7),
-                    ],
-                  ),
-                ),
+              background: SettingsHeaderBackground(
+                colors: [colorScheme.primary, colorScheme.primary.withValues(alpha: 0.7)],
                 child: SafeArea(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,

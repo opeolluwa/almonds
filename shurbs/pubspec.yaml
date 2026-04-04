@@ -39,6 +39,7 @@ dependencies:
     path: rust_builder
   flutter_rust_bridge: 2.11.1
   heroicons: ^0.11.0
+  flutter_markdown: ^0.7.0
 
 
 dev_dependencies:
