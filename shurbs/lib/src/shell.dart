@@ -8,6 +8,7 @@ import 'pages/alarms_page.dart';
 import 'pages/bookmarks_page.dart';
 import 'pages/settings_page.dart';
 import 'pages/notifications_page.dart';
+import 'theme_notifier.dart';
 
 class AppShell extends StatefulWidget {
   const AppShell({super.key});
@@ -87,92 +88,94 @@ class _AppShellState extends State<AppShell> {
         systemNavigationBarColor: Colors.transparent,
       ),
       child: Scaffold(
-      drawer: _AppDrawer(
-        currentIndex: _currentIndex,
-        onNavigate: (index) => setState(() => _currentIndex = index),
-      ),
-      body: Column(
-        children: [
-          SafeArea(
-            bottom: false,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(4, 8, 8, 8),
-              child: Row(
-                children: [
-                  Builder(
-                    builder: (ctx) => IconButton(
-                      icon: const HeroIcon(HeroIcons.bars3, size: 20),
-                      onPressed: () => Scaffold.of(ctx).openDrawer(),
+        drawer: _AppDrawer(
+          currentIndex: _currentIndex,
+          onNavigate: (index) => setState(() => _currentIndex = index),
+        ),
+        body: Column(
+          children: [
+            SafeArea(
+              bottom: false,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(4, 8, 8, 8),
+                child: Row(
+                  children: [
+                    Builder(
+                      builder: (ctx) => IconButton(
+                        icon: const HeroIcon(HeroIcons.bars3, size: 20),
+                        onPressed: () => Scaffold.of(ctx).openDrawer(),
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: SearchAnchor.bar(
-                      searchController: _searchController,
-                      barHintText: 'Search todos, alarms, bookmarks…',
-                      barLeading: const HeroIcon(HeroIcons.magnifyingGlass, size: 20),
-                      suggestionsBuilder: _buildSuggestions,
+                    Expanded(
+                      child: SearchAnchor.bar(
+                        searchController: _searchController,
+                        barHintText: 'Search todos, alarms, bookmarks…',
+                        barLeading: const HeroIcon(HeroIcons.magnifyingGlass, size: 20),
+                        suggestionsBuilder: _buildSuggestions,
+                      ),
                     ),
-                  ),
-                  IconButton(
-                    icon: const HeroIcon(HeroIcons.bell, size: 20),
-                    tooltip: 'Notifications',
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => const NotificationsPage()),
+                    IconButton(
+                      icon: const HeroIcon(HeroIcons.bell, size: 20),
+                      tooltip: 'Notifications',
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const NotificationsPage()),
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 4),
-                    child: GestureDetector(
-                      onTap: () => setState(() => _currentIndex = 4),
-                      child: CircleAvatar(
-                        radius: 18,
-                        backgroundColor: colorScheme.primaryContainer,
-                        child: Text(
-                          'A',
-                          style: TextStyle(
-                            color: colorScheme.onPrimaryContainer,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
+                    Padding(
+                      padding: const EdgeInsets.only(right: 4),
+                      child: GestureDetector(
+                        onTap: () => setState(() => _currentIndex = 4),
+                        child: CircleAvatar(
+                          radius: 18,
+                          backgroundColor: colorScheme.primaryContainer,
+                          child: Text(
+                            'A',
+                            style: TextStyle(
+                              color: colorScheme.onPrimaryContainer,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-          Expanded(
-            child: MediaQuery(
-              data: MediaQuery.of(context).copyWith(
-                padding: MediaQuery.of(context).padding.copyWith(top: 0),
-              ),
-              child: IndexedStack(
-                index: _currentIndex,
-                children: _pages,
+            Expanded(
+              child: MediaQuery(
+                data: MediaQuery.of(context).copyWith(
+                  padding: MediaQuery.of(context).padding.copyWith(top: 0),
+                ),
+                child: IndexedStack(
+                  index: _currentIndex,
+                  children: _pages,
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
+        bottomNavigationBar: NavigationBar(
+          selectedIndex: _currentIndex,
+          onDestinationSelected: (index) => setState(() => _currentIndex = index),
+          destinations: _navItems
+              .map(
+                (item) => NavigationDestination(
+                  icon: HeroIcon(item.icon, style: HeroIconStyle.outline),
+                  selectedIcon: HeroIcon(item.icon, style: HeroIconStyle.solid),
+                  label: item.label,
+                ),
+              )
+              .toList(),
+        ),
       ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _currentIndex,
-        onDestinationSelected: (index) => setState(() => _currentIndex = index),
-        destinations: _navItems
-            .map(
-              (item) => NavigationDestination(
-                icon: HeroIcon(item.icon, style: HeroIconStyle.outline),
-                selectedIcon: HeroIcon(item.icon, style: HeroIconStyle.solid),
-                label: item.label,
-              ),
-            )
-            .toList(),
-      ),
-    ),
     );
   }
 }
+
+// ── Drawer ────────────────────────────────────────────────────────────────────
 
 class _AppDrawer extends StatelessWidget {
   final int currentIndex;
@@ -182,7 +185,8 @@ class _AppDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
     void go(int index) {
       Navigator.pop(context);
@@ -192,18 +196,20 @@ class _AppDrawer extends StatelessWidget {
     return Drawer(
       child: SafeArea(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            // ── User header ────────────────────────────────────────────────
             Padding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
               child: Row(
                 children: [
                   CircleAvatar(
                     radius: 24,
-                    backgroundColor: colorScheme.primaryContainer,
+                    backgroundColor: colorScheme.primary,
                     child: Text(
                       'A',
                       style: TextStyle(
-                        color: colorScheme.onPrimaryContainer,
+                        color: colorScheme.onPrimary,
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
                       ),
@@ -213,15 +219,51 @@ class _AppDrawer extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Adeoye', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
-                      Text('adeoye@example.com', style: Theme.of(context).textTheme.bodySmall),
+                      Text(
+                        'Adeoye',
+                        style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                      Text('adeoye@example.com', style: theme.textTheme.bodySmall),
                     ],
                   ),
                 ],
               ),
             ),
-            const Divider(height: 1),
-            const SizedBox(height: 8),
+
+            // ── Workspaces ─────────────────────────────────────────────────
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 6),
+              child: Text(
+                'WORKSPACES',
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                  letterSpacing: 1.1,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            ValueListenableBuilder<String>(
+              valueListenable: activeWorkspaceNotifier,
+              builder: (context, activeId, _) => Column(
+                children: workspaces
+                    .map(
+                      (ws) => _DrawerItem(
+                        icon: ws.icon,
+                        label: ws.name,
+                        selected: ws.id == activeId,
+                        onTap: () => activeWorkspaceNotifier.value = ws.id,
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
+
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Divider(height: 1),
+            ),
+
+            // ── Nav items ──────────────────────────────────────────────────
             _DrawerItem(icon: HeroIcons.home, label: 'Home', selected: currentIndex == 0, onTap: () => go(0)),
             _DrawerItem(icon: HeroIcons.checkCircle, label: 'Todos', selected: currentIndex == 1, onTap: () => go(1)),
             _DrawerItem(icon: HeroIcons.clock, label: 'Alarms', selected: currentIndex == 2, onTap: () => go(2)),
@@ -235,9 +277,37 @@ class _AppDrawer extends StatelessWidget {
                 Navigator.push(context, MaterialPageRoute(builder: (_) => const NotificationsPage()));
               },
             ),
+
             const Spacer(),
-            const Divider(height: 1),
-            _DrawerItem(icon: HeroIcons.cog6Tooth, label: 'Settings', selected: currentIndex == 4, onTap: () => go(4)),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Divider(height: 1),
+            ),
+
+            // ── Color mode toggle ──────────────────────────────────────────
+            ValueListenableBuilder<ThemeMode>(
+              valueListenable: themeModeNotifier,
+              builder: (context, mode, _) => Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                child: Row(
+                  children: [
+                    HeroIcon(HeroIcons.swatch, size: 18, color: colorScheme.onSurfaceVariant),
+                    const SizedBox(width: 10),
+                    Text('Appearance', style: theme.textTheme.bodySmall),
+                    const Spacer(),
+                    _ThemeModeToggle(current: mode),
+                  ],
+                ),
+              ),
+            ),
+
+            // ── Settings ───────────────────────────────────────────────────
+            _DrawerItem(
+              icon: HeroIcons.cog6Tooth,
+              label: 'Settings',
+              selected: currentIndex == 4,
+              onTap: () => go(4),
+            ),
             const SizedBox(height: 8),
           ],
         ),
@@ -245,6 +315,59 @@ class _AppDrawer extends StatelessWidget {
     );
   }
 }
+
+// ── Theme mode toggle (sun / auto / moon) ─────────────────────────────────────
+
+class _ThemeModeToggle extends StatelessWidget {
+  final ThemeMode current;
+  const _ThemeModeToggle({required this.current});
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    Widget btn(HeroIcons icon, ThemeMode mode) {
+      final active = current == mode;
+      return GestureDetector(
+        onTap: () => themeModeNotifier.value = mode,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 180),
+          curve: Curves.easeInOut,
+          width: 32,
+          height: 28,
+          decoration: BoxDecoration(
+            color: active ? colorScheme.primary.withValues(alpha: 0.15) : Colors.transparent,
+            borderRadius: BorderRadius.circular(7),
+            border: Border.all(
+              color: active ? colorScheme.primary : Colors.transparent,
+              width: 1,
+            ),
+          ),
+          child: Center(
+            child: HeroIcon(
+              icon,
+              size: 15,
+              color: active ? colorScheme.primary : colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        btn(HeroIcons.sun, ThemeMode.light),
+        const SizedBox(width: 4),
+        btn(HeroIcons.computerDesktop, ThemeMode.system),
+        const SizedBox(width: 4),
+        btn(HeroIcons.moon, ThemeMode.dark),
+      ],
+    );
+  }
+}
+
+// ── Drawer item ───────────────────────────────────────────────────────────────
 
 class _DrawerItem extends StatelessWidget {
   final HeroIcons icon;
@@ -268,6 +391,8 @@ class _DrawerItem extends StatelessWidget {
   }
 }
 
+// ── Models ────────────────────────────────────────────────────────────────────
+
 class _SearchItem {
   final String title;
   final String section;
@@ -286,8 +411,5 @@ class _NavItem {
   final HeroIcons icon;
   final String label;
 
-  const _NavItem({
-    required this.icon,
-    required this.label,
-  });
+  const _NavItem({required this.icon, required this.label});
 }
