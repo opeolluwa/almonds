@@ -8,3 +8,11 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
 String greet({required String name}) =>
     RustLib.instance.api.crateApiSimpleGreet(name: name);
+
+/// Initialise the kernel (opens the database and runs migrations).
+/// Call this once from Flutter before using any other API.
+/// `database_url` examples:
+///   - SQLite file : `"sqlite:///path/to/shurbs.db?mode=rwc"`
+///   - In-memory   : `"sqlite::memory:"`
+Future<void> initKernel({required String databaseUrl}) =>
+    RustLib.instance.api.crateApiSimpleInitKernel(databaseUrl: databaseUrl);

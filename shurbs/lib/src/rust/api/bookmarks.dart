@@ -90,5 +90,5 @@ Future<void> transferBookmark({
   targetWorkspaceIdentifier: targetWorkspaceIdentifier,
 );
 
-// Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<BookmarkTag>>
+// Rust type: RustOpaqueNom<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<BookmarkTag>>
 abstract class BookmarkTag implements RustOpaqueInterface {}

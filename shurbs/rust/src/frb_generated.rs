@@ -33,12 +33,12 @@ use flutter_rust_bridge::{Handler, IntoIntoDart};
 // Section: boilerplate
 
 flutter_rust_bridge::frb_generated_boilerplate!(
-    default_stream_sink_codec = SseCodec,
-    default_rust_opaque = RustOpaqueMoi,
-    default_rust_auto_opaque = RustAutoOpaqueMoi,
+    default_stream_sink_codec = DcoCodec,
+    default_rust_opaque = RustOpaqueNom,
+    default_rust_auto_opaque = RustAutoOpaqueNom,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.11.1";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 1016656579;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -450783549;
 
 // Section: executor
 
@@ -48,32 +48,22 @@ flutter_rust_bridge::frb_generated_default_handler!();
 
 fn wire__crate__api__todo__change_todo_priority_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    identifier: impl CstDecode<String>,
+    priority: impl CstDecode<String>,
+    meta_workspace_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "change_todo_priority",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_identifier = <String>::sse_decode(&mut deserializer);
-            let api_priority = <String>::sse_decode(&mut deserializer);
-            let api_meta_workspace_id = <Option<String>>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_identifier = identifier.cst_decode();
+            let api_priority = priority.cst_decode();
+            let api_meta_workspace_id = meta_workspace_id.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::todo::change_todo_priority(
                             api_identifier,
@@ -91,34 +81,26 @@ fn wire__crate__api__todo__change_todo_priority_impl(
 }
 fn wire__crate__api__bookmarks__create_bookmark_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    title: impl CstDecode<String>,
+    url: impl CstDecode<String>,
+    tag: impl CstDecode<BookmarkTag>,
+    workspace_identifier: impl CstDecode<Option<String>>,
+    meta_workspace_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "create_bookmark",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_title = <String>::sse_decode(&mut deserializer);
-            let api_url = <String>::sse_decode(&mut deserializer);
-            let api_tag = <BookmarkTag>::sse_decode(&mut deserializer);
-            let api_workspace_identifier = <Option<String>>::sse_decode(&mut deserializer);
-            let api_meta_workspace_id = <Option<String>>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_title = title.cst_decode();
+            let api_url = url.cst_decode();
+            let api_tag = tag.cst_decode();
+            let api_workspace_identifier = workspace_identifier.cst_decode();
+            let api_meta_workspace_id = meta_workspace_id.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::bookmarks::create_bookmark(
                             api_title,
@@ -138,34 +120,26 @@ fn wire__crate__api__bookmarks__create_bookmark_impl(
 }
 fn wire__crate__api__notes__create_note_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    title: impl CstDecode<String>,
+    content: impl CstDecode<String>,
+    categories: impl CstDecode<Option<Vec<String>>>,
+    workspace_identifier: impl CstDecode<Option<String>>,
+    meta_workspace_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "create_note",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_title = <String>::sse_decode(&mut deserializer);
-            let api_content = <String>::sse_decode(&mut deserializer);
-            let api_categories = <Option<Vec<String>>>::sse_decode(&mut deserializer);
-            let api_workspace_identifier = <Option<String>>::sse_decode(&mut deserializer);
-            let api_meta_workspace_id = <Option<String>>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_title = title.cst_decode();
+            let api_content = content.cst_decode();
+            let api_categories = categories.cst_decode();
+            let api_workspace_identifier = workspace_identifier.cst_decode();
+            let api_meta_workspace_id = meta_workspace_id.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::notes::create_note(
                             api_title,
@@ -185,33 +159,24 @@ fn wire__crate__api__notes__create_note_impl(
 }
 fn wire__crate__api__recycle_bin__create_recycle_bin_entry_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    item_id: impl CstDecode<String>,
+    item_type: impl CstDecode<String>,
+    payload: impl CstDecode<String>,
+    meta_workspace_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "create_recycle_bin_entry",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_item_id = <String>::sse_decode(&mut deserializer);
-            let api_item_type = <String>::sse_decode(&mut deserializer);
-            let api_payload = <String>::sse_decode(&mut deserializer);
-            let api_meta_workspace_id = <Option<String>>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_item_id = item_id.cst_decode();
+            let api_item_type = item_type.cst_decode();
+            let api_payload = payload.cst_decode();
+            let api_meta_workspace_id = meta_workspace_id.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::recycle_bin::create_recycle_bin_entry(
                             api_item_id,
@@ -230,37 +195,32 @@ fn wire__crate__api__recycle_bin__create_recycle_bin_entry_impl(
 }
 fn wire__crate__api__reminders__create_reminder_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    title: impl CstDecode<String>,
+    description: impl CstDecode<Option<String>>,
+    remind_at: impl CstDecode<String>,
+    recurring: impl CstDecode<bool>,
+    recurrence_rule: impl CstDecode<Option<String>>,
+    alarm_sound: impl CstDecode<Option<String>>,
+    workspace_identifier: impl CstDecode<Option<String>>,
+    meta_workspace_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "create_reminder",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_title = <String>::sse_decode(&mut deserializer);
-            let api_description = <Option<String>>::sse_decode(&mut deserializer);
-            let api_remind_at = <String>::sse_decode(&mut deserializer);
-            let api_recurring = <bool>::sse_decode(&mut deserializer);
-            let api_recurrence_rule = <Option<String>>::sse_decode(&mut deserializer);
-            let api_alarm_sound = <Option<String>>::sse_decode(&mut deserializer);
-            let api_workspace_identifier = <Option<String>>::sse_decode(&mut deserializer);
-            let api_meta_workspace_id = <Option<String>>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_title = title.cst_decode();
+            let api_description = description.cst_decode();
+            let api_remind_at = remind_at.cst_decode();
+            let api_recurring = recurring.cst_decode();
+            let api_recurrence_rule = recurrence_rule.cst_decode();
+            let api_alarm_sound = alarm_sound.cst_decode();
+            let api_workspace_identifier = workspace_identifier.cst_decode();
+            let api_meta_workspace_id = meta_workspace_id.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::reminders::create_reminder(
                             api_title,
@@ -283,36 +243,30 @@ fn wire__crate__api__reminders__create_reminder_impl(
 }
 fn wire__crate__api__snippets__create_snippet_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    code: impl CstDecode<String>,
+    title: impl CstDecode<Option<String>>,
+    language: impl CstDecode<Option<String>>,
+    description: impl CstDecode<Option<String>>,
+    is_pinned: impl CstDecode<bool>,
+    workspace_identifier: impl CstDecode<Option<String>>,
+    meta_workspace_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "create_snippet",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_code = <String>::sse_decode(&mut deserializer);
-            let api_title = <Option<String>>::sse_decode(&mut deserializer);
-            let api_language = <Option<String>>::sse_decode(&mut deserializer);
-            let api_description = <Option<String>>::sse_decode(&mut deserializer);
-            let api_is_pinned = <bool>::sse_decode(&mut deserializer);
-            let api_workspace_identifier = <Option<String>>::sse_decode(&mut deserializer);
-            let api_meta_workspace_id = <Option<String>>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_code = code.cst_decode();
+            let api_title = title.cst_decode();
+            let api_language = language.cst_decode();
+            let api_description = description.cst_decode();
+            let api_is_pinned = is_pinned.cst_decode();
+            let api_workspace_identifier = workspace_identifier.cst_decode();
+            let api_meta_workspace_id = meta_workspace_id.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::snippets::create_snippet(
                             api_code,
@@ -334,35 +288,28 @@ fn wire__crate__api__snippets__create_snippet_impl(
 }
 fn wire__crate__api__todo__create_todo_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    title: impl CstDecode<String>,
+    description: impl CstDecode<Option<String>>,
+    priority: impl CstDecode<String>,
+    due_date: impl CstDecode<Option<String>>,
+    workspace_identifier: impl CstDecode<Option<String>>,
+    meta_workspace_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "create_todo",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_title = <String>::sse_decode(&mut deserializer);
-            let api_description = <Option<String>>::sse_decode(&mut deserializer);
-            let api_priority = <String>::sse_decode(&mut deserializer);
-            let api_due_date = <Option<String>>::sse_decode(&mut deserializer);
-            let api_workspace_identifier = <Option<String>>::sse_decode(&mut deserializer);
-            let api_meta_workspace_id = <Option<String>>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_title = title.cst_decode();
+            let api_description = description.cst_decode();
+            let api_priority = priority.cst_decode();
+            let api_due_date = due_date.cst_decode();
+            let api_workspace_identifier = workspace_identifier.cst_decode();
+            let api_meta_workspace_id = meta_workspace_id.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::todo::create_todo(
                             api_title,
@@ -383,33 +330,24 @@ fn wire__crate__api__todo__create_todo_impl(
 }
 fn wire__crate__api__user_preference__create_user_preference_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    first_name: impl CstDecode<String>,
+    last_name: impl CstDecode<String>,
+    email: impl CstDecode<String>,
+    meta_workspace_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "create_user_preference",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_first_name = <String>::sse_decode(&mut deserializer);
-            let api_last_name = <String>::sse_decode(&mut deserializer);
-            let api_email = <String>::sse_decode(&mut deserializer);
-            let api_meta_workspace_id = <Option<String>>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_first_name = first_name.cst_decode();
+            let api_last_name = last_name.cst_decode();
+            let api_email = email.cst_decode();
+            let api_meta_workspace_id = meta_workspace_id.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::user_preference::create_user_preference(
                             api_first_name,
@@ -428,31 +366,20 @@ fn wire__crate__api__user_preference__create_user_preference_impl(
 }
 fn wire__crate__api__workspaces__create_workspace_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    name: impl CstDecode<String>,
+    description: impl CstDecode<String>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "create_workspace",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_name = <String>::sse_decode(&mut deserializer);
-            let api_description = <String>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_name = name.cst_decode();
+            let api_description = description.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok =
                             crate::api::workspaces::create_workspace(api_name, api_description)
@@ -467,31 +394,20 @@ fn wire__crate__api__workspaces__create_workspace_impl(
 }
 fn wire__crate__api__bookmarks__delete_bookmark_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    identifier: impl CstDecode<String>,
+    meta_workspace_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "delete_bookmark",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_identifier = <String>::sse_decode(&mut deserializer);
-            let api_meta_workspace_id = <Option<String>>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_identifier = identifier.cst_decode();
+            let api_meta_workspace_id = meta_workspace_id.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::bookmarks::delete_bookmark(
                             api_identifier,
@@ -508,31 +424,20 @@ fn wire__crate__api__bookmarks__delete_bookmark_impl(
 }
 fn wire__crate__api__notes__delete_note_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    identifier: impl CstDecode<String>,
+    meta_workspace_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "delete_note",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_identifier = <String>::sse_decode(&mut deserializer);
-            let api_meta_workspace_id = <Option<String>>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_identifier = identifier.cst_decode();
+            let api_meta_workspace_id = meta_workspace_id.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok =
                             crate::api::notes::delete_note(api_identifier, api_meta_workspace_id)
@@ -547,31 +452,20 @@ fn wire__crate__api__notes__delete_note_impl(
 }
 fn wire__crate__api__reminders__delete_reminder_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    identifier: impl CstDecode<String>,
+    meta_workspace_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "delete_reminder",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_identifier = <String>::sse_decode(&mut deserializer);
-            let api_meta_workspace_id = <Option<String>>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_identifier = identifier.cst_decode();
+            let api_meta_workspace_id = meta_workspace_id.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::reminders::delete_reminder(
                             api_identifier,
@@ -588,31 +482,20 @@ fn wire__crate__api__reminders__delete_reminder_impl(
 }
 fn wire__crate__api__snippets__delete_snippet_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    identifier: impl CstDecode<String>,
+    meta_workspace_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "delete_snippet",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_identifier = <String>::sse_decode(&mut deserializer);
-            let api_meta_workspace_id = <Option<String>>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_identifier = identifier.cst_decode();
+            let api_meta_workspace_id = meta_workspace_id.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::snippets::delete_snippet(
                             api_identifier,
@@ -629,31 +512,20 @@ fn wire__crate__api__snippets__delete_snippet_impl(
 }
 fn wire__crate__api__todo__delete_todo_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    identifier: impl CstDecode<String>,
+    meta_workspace_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "delete_todo",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_identifier = <String>::sse_decode(&mut deserializer);
-            let api_meta_workspace_id = <Option<String>>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_identifier = identifier.cst_decode();
+            let api_meta_workspace_id = meta_workspace_id.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok =
                             crate::api::todo::delete_todo(api_identifier, api_meta_workspace_id)
@@ -668,31 +540,20 @@ fn wire__crate__api__todo__delete_todo_impl(
 }
 fn wire__crate__api__workspaces__delete_workspace_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    identifier: impl CstDecode<String>,
+    meta_workspace_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "delete_workspace",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_identifier = <String>::sse_decode(&mut deserializer);
-            let api_meta_workspace_id = <Option<String>>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_identifier = identifier.cst_decode();
+            let api_meta_workspace_id = meta_workspace_id.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::workspaces::delete_workspace(
                             api_identifier,
@@ -709,32 +570,22 @@ fn wire__crate__api__workspaces__delete_workspace_impl(
 }
 fn wire__crate__api__bookmarks__duplicate_bookmark_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    record_identifier: impl CstDecode<String>,
+    previous_workspace_identifier: impl CstDecode<String>,
+    target_workspace_identifier: impl CstDecode<String>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "duplicate_bookmark",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_record_identifier = <String>::sse_decode(&mut deserializer);
-            let api_previous_workspace_identifier = <String>::sse_decode(&mut deserializer);
-            let api_target_workspace_identifier = <String>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_record_identifier = record_identifier.cst_decode();
+            let api_previous_workspace_identifier = previous_workspace_identifier.cst_decode();
+            let api_target_workspace_identifier = target_workspace_identifier.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::bookmarks::duplicate_bookmark(
                             api_record_identifier,
@@ -752,32 +603,22 @@ fn wire__crate__api__bookmarks__duplicate_bookmark_impl(
 }
 fn wire__crate__api__notes__duplicate_note_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    record_identifier: impl CstDecode<String>,
+    previous_workspace_identifier: impl CstDecode<String>,
+    target_workspace_identifier: impl CstDecode<String>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "duplicate_note",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_record_identifier = <String>::sse_decode(&mut deserializer);
-            let api_previous_workspace_identifier = <String>::sse_decode(&mut deserializer);
-            let api_target_workspace_identifier = <String>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_record_identifier = record_identifier.cst_decode();
+            let api_previous_workspace_identifier = previous_workspace_identifier.cst_decode();
+            let api_target_workspace_identifier = target_workspace_identifier.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::notes::duplicate_note(
                             api_record_identifier,
@@ -795,32 +636,22 @@ fn wire__crate__api__notes__duplicate_note_impl(
 }
 fn wire__crate__api__reminders__duplicate_reminder_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    record_identifier: impl CstDecode<String>,
+    previous_workspace_identifier: impl CstDecode<String>,
+    target_workspace_identifier: impl CstDecode<String>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "duplicate_reminder",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_record_identifier = <String>::sse_decode(&mut deserializer);
-            let api_previous_workspace_identifier = <String>::sse_decode(&mut deserializer);
-            let api_target_workspace_identifier = <String>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_record_identifier = record_identifier.cst_decode();
+            let api_previous_workspace_identifier = previous_workspace_identifier.cst_decode();
+            let api_target_workspace_identifier = target_workspace_identifier.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::reminders::duplicate_reminder(
                             api_record_identifier,
@@ -838,32 +669,22 @@ fn wire__crate__api__reminders__duplicate_reminder_impl(
 }
 fn wire__crate__api__snippets__duplicate_snippet_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    record_identifier: impl CstDecode<String>,
+    previous_workspace_identifier: impl CstDecode<String>,
+    target_workspace_identifier: impl CstDecode<String>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "duplicate_snippet",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_record_identifier = <String>::sse_decode(&mut deserializer);
-            let api_previous_workspace_identifier = <String>::sse_decode(&mut deserializer);
-            let api_target_workspace_identifier = <String>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_record_identifier = record_identifier.cst_decode();
+            let api_previous_workspace_identifier = previous_workspace_identifier.cst_decode();
+            let api_target_workspace_identifier = target_workspace_identifier.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::snippets::duplicate_snippet(
                             api_record_identifier,
@@ -881,32 +702,22 @@ fn wire__crate__api__snippets__duplicate_snippet_impl(
 }
 fn wire__crate__api__todo__duplicate_todo_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    record_identifier: impl CstDecode<String>,
+    previous_workspace_identifier: impl CstDecode<String>,
+    target_workspace_identifier: impl CstDecode<String>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "duplicate_todo",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_record_identifier = <String>::sse_decode(&mut deserializer);
-            let api_previous_workspace_identifier = <String>::sse_decode(&mut deserializer);
-            let api_target_workspace_identifier = <String>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_record_identifier = record_identifier.cst_decode();
+            let api_previous_workspace_identifier = previous_workspace_identifier.cst_decode();
+            let api_target_workspace_identifier = target_workspace_identifier.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::todo::duplicate_todo(
                             api_record_identifier,
@@ -924,32 +735,22 @@ fn wire__crate__api__todo__duplicate_todo_impl(
 }
 fn wire__crate__api__user_preference__duplicate_user_preference_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    record_identifier: impl CstDecode<String>,
+    previous_workspace_identifier: impl CstDecode<String>,
+    target_workspace_identifier: impl CstDecode<String>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "duplicate_user_preference",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_record_identifier = <String>::sse_decode(&mut deserializer);
-            let api_previous_workspace_identifier = <String>::sse_decode(&mut deserializer);
-            let api_target_workspace_identifier = <String>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_record_identifier = record_identifier.cst_decode();
+            let api_previous_workspace_identifier = previous_workspace_identifier.cst_decode();
+            let api_target_workspace_identifier = target_workspace_identifier.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::user_preference::duplicate_user_preference(
                             api_record_identifier,
@@ -967,30 +768,18 @@ fn wire__crate__api__user_preference__duplicate_user_preference_impl(
 }
 fn wire__crate__api__bookmarks__get_all_bookmarks_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    meta_workspace_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "get_all_bookmarks",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_meta_workspace_id = <Option<String>>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_meta_workspace_id = meta_workspace_id.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok =
                             crate::api::bookmarks::get_all_bookmarks(api_meta_workspace_id).await?;
@@ -1004,30 +793,18 @@ fn wire__crate__api__bookmarks__get_all_bookmarks_impl(
 }
 fn wire__crate__api__notes__get_all_notes_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    meta_workspace_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "get_all_notes",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_meta_workspace_id = <Option<String>>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_meta_workspace_id = meta_workspace_id.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok =
                             crate::api::notes::get_all_notes(api_meta_workspace_id).await?;
@@ -1041,30 +818,18 @@ fn wire__crate__api__notes__get_all_notes_impl(
 }
 fn wire__crate__api__recycle_bin__get_all_recycle_bin_entries_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    meta_workspace_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "get_all_recycle_bin_entries",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_meta_workspace_id = <Option<String>>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_meta_workspace_id = meta_workspace_id.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::recycle_bin::get_all_recycle_bin_entries(
                             api_meta_workspace_id,
@@ -1080,30 +845,18 @@ fn wire__crate__api__recycle_bin__get_all_recycle_bin_entries_impl(
 }
 fn wire__crate__api__reminders__get_all_reminders_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    meta_workspace_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "get_all_reminders",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_meta_workspace_id = <Option<String>>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_meta_workspace_id = meta_workspace_id.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok =
                             crate::api::reminders::get_all_reminders(api_meta_workspace_id).await?;
@@ -1117,30 +870,18 @@ fn wire__crate__api__reminders__get_all_reminders_impl(
 }
 fn wire__crate__api__snippets__get_all_snippets_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    meta_workspace_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "get_all_snippets",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_meta_workspace_id = <Option<String>>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_meta_workspace_id = meta_workspace_id.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok =
                             crate::api::snippets::get_all_snippets(api_meta_workspace_id).await?;
@@ -1154,30 +895,18 @@ fn wire__crate__api__snippets__get_all_snippets_impl(
 }
 fn wire__crate__api__todo__get_all_todos_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    meta_workspace_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "get_all_todos",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_meta_workspace_id = <Option<String>>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_meta_workspace_id = meta_workspace_id.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok =
                             crate::api::todo::get_all_todos(api_meta_workspace_id).await?;
@@ -1191,31 +920,20 @@ fn wire__crate__api__todo__get_all_todos_impl(
 }
 fn wire__crate__api__bookmarks__get_bookmark_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    identifier: impl CstDecode<String>,
+    meta_workspace_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "get_bookmark",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_identifier = <String>::sse_decode(&mut deserializer);
-            let api_meta_workspace_id = <Option<String>>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_identifier = identifier.cst_decode();
+            let api_meta_workspace_id = meta_workspace_id.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::bookmarks::get_bookmark(
                             api_identifier,
@@ -1232,31 +950,20 @@ fn wire__crate__api__bookmarks__get_bookmark_impl(
 }
 fn wire__crate__api__bookmarks__get_bookmarks_by_tag_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    tag: impl CstDecode<String>,
+    meta_workspace_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "get_bookmarks_by_tag",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_tag = <String>::sse_decode(&mut deserializer);
-            let api_meta_workspace_id = <Option<String>>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_tag = tag.cst_decode();
+            let api_meta_workspace_id = meta_workspace_id.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::bookmarks::get_bookmarks_by_tag(
                             api_tag,
@@ -1273,31 +980,20 @@ fn wire__crate__api__bookmarks__get_bookmarks_by_tag_impl(
 }
 fn wire__crate__api__notes__get_note_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    identifier: impl CstDecode<String>,
+    meta_workspace_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "get_note",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_identifier = <String>::sse_decode(&mut deserializer);
-            let api_meta_workspace_id = <Option<String>>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_identifier = identifier.cst_decode();
+            let api_meta_workspace_id = meta_workspace_id.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok =
                             crate::api::notes::get_note(api_identifier, api_meta_workspace_id)
@@ -1312,30 +1008,18 @@ fn wire__crate__api__notes__get_note_impl(
 }
 fn wire__crate__api__bookmarks__get_recently_added_bookmarks_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    meta_workspace_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "get_recently_added_bookmarks",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_meta_workspace_id = <Option<String>>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_meta_workspace_id = meta_workspace_id.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::bookmarks::get_recently_added_bookmarks(
                             api_meta_workspace_id,
@@ -1351,30 +1035,18 @@ fn wire__crate__api__bookmarks__get_recently_added_bookmarks_impl(
 }
 fn wire__crate__api__notes__get_recently_added_notes_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    meta_workspace_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "get_recently_added_notes",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_meta_workspace_id = <Option<String>>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_meta_workspace_id = meta_workspace_id.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok =
                             crate::api::notes::get_recently_added_notes(api_meta_workspace_id)
@@ -1389,30 +1061,18 @@ fn wire__crate__api__notes__get_recently_added_notes_impl(
 }
 fn wire__crate__api__snippets__get_recently_added_snippets_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    meta_workspace_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "get_recently_added_snippets",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_meta_workspace_id = <Option<String>>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_meta_workspace_id = meta_workspace_id.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::snippets::get_recently_added_snippets(
                             api_meta_workspace_id,
@@ -1428,31 +1088,20 @@ fn wire__crate__api__snippets__get_recently_added_snippets_impl(
 }
 fn wire__crate__api__recycle_bin__get_recycle_bin_entries_by_type_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    item_type: impl CstDecode<String>,
+    meta_workspace_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "get_recycle_bin_entries_by_type",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_item_type = <String>::sse_decode(&mut deserializer);
-            let api_meta_workspace_id = <Option<String>>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_item_type = item_type.cst_decode();
+            let api_meta_workspace_id = meta_workspace_id.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::recycle_bin::get_recycle_bin_entries_by_type(
                             api_item_type,
@@ -1469,31 +1118,20 @@ fn wire__crate__api__recycle_bin__get_recycle_bin_entries_by_type_impl(
 }
 fn wire__crate__api__recycle_bin__get_recycle_bin_entry_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    identifier: impl CstDecode<String>,
+    meta_workspace_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "get_recycle_bin_entry",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_identifier = <String>::sse_decode(&mut deserializer);
-            let api_meta_workspace_id = <Option<String>>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_identifier = identifier.cst_decode();
+            let api_meta_workspace_id = meta_workspace_id.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::recycle_bin::get_recycle_bin_entry(
                             api_identifier,
@@ -1510,31 +1148,20 @@ fn wire__crate__api__recycle_bin__get_recycle_bin_entry_impl(
 }
 fn wire__crate__api__reminders__get_reminder_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    identifier: impl CstDecode<String>,
+    meta_workspace_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "get_reminder",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_identifier = <String>::sse_decode(&mut deserializer);
-            let api_meta_workspace_id = <Option<String>>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_identifier = identifier.cst_decode();
+            let api_meta_workspace_id = meta_workspace_id.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::reminders::get_reminder(
                             api_identifier,
@@ -1551,31 +1178,20 @@ fn wire__crate__api__reminders__get_reminder_impl(
 }
 fn wire__crate__api__snippets__get_snippet_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    identifier: impl CstDecode<String>,
+    meta_workspace_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "get_snippet",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_identifier = <String>::sse_decode(&mut deserializer);
-            let api_meta_workspace_id = <Option<String>>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_identifier = identifier.cst_decode();
+            let api_meta_workspace_id = meta_workspace_id.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::snippets::get_snippet(
                             api_identifier,
@@ -1592,31 +1208,20 @@ fn wire__crate__api__snippets__get_snippet_impl(
 }
 fn wire__crate__api__todo__get_todo_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    identifier: impl CstDecode<String>,
+    meta_workspace_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "get_todo",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_identifier = <String>::sse_decode(&mut deserializer);
-            let api_meta_workspace_id = <Option<String>>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_identifier = identifier.cst_decode();
+            let api_meta_workspace_id = meta_workspace_id.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok =
                             crate::api::todo::get_todo(api_identifier, api_meta_workspace_id)
@@ -1631,30 +1236,18 @@ fn wire__crate__api__todo__get_todo_impl(
 }
 fn wire__crate__api__user_preference__get_user_preference_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    meta_workspace_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "get_user_preference",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_meta_workspace_id = <Option<String>>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_meta_workspace_id = meta_workspace_id.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok =
                             crate::api::user_preference::get_user_preference(api_meta_workspace_id)
@@ -1669,30 +1262,18 @@ fn wire__crate__api__user_preference__get_user_preference_impl(
 }
 fn wire__crate__api__workspaces__get_workspace_by_id_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    id: impl CstDecode<String>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "get_workspace_by_id",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_id = <String>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_id = id.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::workspaces::get_workspace_by_id(api_id).await?;
                         Ok(output_ok)
@@ -1704,60 +1285,33 @@ fn wire__crate__api__workspaces__get_workspace_by_id_impl(
     )
 }
 fn wire__crate__api__simple__greet_impl(
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
-) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
+    name: impl CstDecode<String>,
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::DcoCodec, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "greet",
             port: None,
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_name = <String>::sse_decode(&mut deserializer);
-            deserializer.end();
-            transform_result_sse::<_, ()>((move || {
+            let api_name = name.cst_decode();
+            transform_result_dco::<_, _, ()>((move || {
                 let output_ok = Result::<_, ()>::Ok(crate::api::simple::greet(api_name))?;
                 Ok(output_ok)
             })())
         },
     )
 }
-fn wire__crate__api__simple__init_app_impl(
-    port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
-) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::SseCodec, _, _>(
+fn wire__crate__api__simple__init_app_impl(port_: flutter_rust_bridge::for_generated::MessagePort) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "init_app",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            deserializer.end();
             move |context| {
-                transform_result_sse::<_, ()>((move || {
+                transform_result_dco::<_, _, ()>((move || {
                     let output_ok = Result::<_, ()>::Ok({
                         crate::api::simple::init_app();
                     })?;
@@ -1767,31 +1321,42 @@ fn wire__crate__api__simple__init_app_impl(
         },
     )
 }
+fn wire__crate__api__simple__init_kernel_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    database_url: impl CstDecode<String>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "init_kernel",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_database_url = database_url.cst_decode();
+            move |context| async move {
+                transform_result_dco::<_, _, String>(
+                    (move || async move {
+                        let output_ok = crate::api::simple::init_kernel(api_database_url).await?;
+                        Ok(output_ok)
+                    })()
+                    .await,
+                )
+            }
+        },
+    )
+}
 fn wire__crate__api__workspaces__list_workspaces_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "list_workspaces",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            deserializer.end();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::workspaces::list_workspaces().await?;
                         Ok(output_ok)
@@ -1804,32 +1369,22 @@ fn wire__crate__api__workspaces__list_workspaces_impl(
 }
 fn wire__crate__api__todo__mark_todo_done_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    identifier: impl CstDecode<String>,
+    done: impl CstDecode<bool>,
+    meta_workspace_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "mark_todo_done",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_identifier = <String>::sse_decode(&mut deserializer);
-            let api_done = <bool>::sse_decode(&mut deserializer);
-            let api_meta_workspace_id = <Option<String>>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_identifier = identifier.cst_decode();
+            let api_done = done.cst_decode();
+            let api_meta_workspace_id = meta_workspace_id.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::todo::mark_todo_done(
                             api_identifier,
@@ -1847,30 +1402,18 @@ fn wire__crate__api__todo__mark_todo_done_impl(
 }
 fn wire__crate__api__recycle_bin__purge_all_recycle_bin_entries_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    meta_workspace_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "purge_all_recycle_bin_entries",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_meta_workspace_id = <Option<String>>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_meta_workspace_id = meta_workspace_id.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::recycle_bin::purge_all_recycle_bin_entries(
                             api_meta_workspace_id,
@@ -1886,31 +1429,20 @@ fn wire__crate__api__recycle_bin__purge_all_recycle_bin_entries_impl(
 }
 fn wire__crate__api__recycle_bin__purge_recycle_bin_entry_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    identifier: impl CstDecode<String>,
+    meta_workspace_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "purge_recycle_bin_entry",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_identifier = <String>::sse_decode(&mut deserializer);
-            let api_meta_workspace_id = <Option<String>>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_identifier = identifier.cst_decode();
+            let api_meta_workspace_id = meta_workspace_id.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::recycle_bin::purge_recycle_bin_entry(
                             api_identifier,
@@ -1927,32 +1459,22 @@ fn wire__crate__api__recycle_bin__purge_recycle_bin_entry_impl(
 }
 fn wire__crate__api__bookmarks__transfer_bookmark_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    record_identifier: impl CstDecode<String>,
+    previous_workspace_identifier: impl CstDecode<String>,
+    target_workspace_identifier: impl CstDecode<String>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "transfer_bookmark",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_record_identifier = <String>::sse_decode(&mut deserializer);
-            let api_previous_workspace_identifier = <String>::sse_decode(&mut deserializer);
-            let api_target_workspace_identifier = <String>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_record_identifier = record_identifier.cst_decode();
+            let api_previous_workspace_identifier = previous_workspace_identifier.cst_decode();
+            let api_target_workspace_identifier = target_workspace_identifier.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::bookmarks::transfer_bookmark(
                             api_record_identifier,
@@ -1970,32 +1492,22 @@ fn wire__crate__api__bookmarks__transfer_bookmark_impl(
 }
 fn wire__crate__api__notes__transfer_note_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    record_identifier: impl CstDecode<String>,
+    previous_workspace_identifier: impl CstDecode<String>,
+    target_workspace_identifier: impl CstDecode<String>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "transfer_note",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_record_identifier = <String>::sse_decode(&mut deserializer);
-            let api_previous_workspace_identifier = <String>::sse_decode(&mut deserializer);
-            let api_target_workspace_identifier = <String>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_record_identifier = record_identifier.cst_decode();
+            let api_previous_workspace_identifier = previous_workspace_identifier.cst_decode();
+            let api_target_workspace_identifier = target_workspace_identifier.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::notes::transfer_note(
                             api_record_identifier,
@@ -2013,32 +1525,22 @@ fn wire__crate__api__notes__transfer_note_impl(
 }
 fn wire__crate__api__reminders__transfer_reminder_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    record_identifier: impl CstDecode<String>,
+    previous_workspace_identifier: impl CstDecode<String>,
+    target_workspace_identifier: impl CstDecode<String>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "transfer_reminder",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_record_identifier = <String>::sse_decode(&mut deserializer);
-            let api_previous_workspace_identifier = <String>::sse_decode(&mut deserializer);
-            let api_target_workspace_identifier = <String>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_record_identifier = record_identifier.cst_decode();
+            let api_previous_workspace_identifier = previous_workspace_identifier.cst_decode();
+            let api_target_workspace_identifier = target_workspace_identifier.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::reminders::transfer_reminder(
                             api_record_identifier,
@@ -2056,32 +1558,22 @@ fn wire__crate__api__reminders__transfer_reminder_impl(
 }
 fn wire__crate__api__snippets__transfer_snippet_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    record_identifier: impl CstDecode<String>,
+    previous_workspace_identifier: impl CstDecode<String>,
+    target_workspace_identifier: impl CstDecode<String>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "transfer_snippet",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_record_identifier = <String>::sse_decode(&mut deserializer);
-            let api_previous_workspace_identifier = <String>::sse_decode(&mut deserializer);
-            let api_target_workspace_identifier = <String>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_record_identifier = record_identifier.cst_decode();
+            let api_previous_workspace_identifier = previous_workspace_identifier.cst_decode();
+            let api_target_workspace_identifier = target_workspace_identifier.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::snippets::transfer_snippet(
                             api_record_identifier,
@@ -2099,32 +1591,22 @@ fn wire__crate__api__snippets__transfer_snippet_impl(
 }
 fn wire__crate__api__todo__transfer_todo_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    record_identifier: impl CstDecode<String>,
+    previous_workspace_identifier: impl CstDecode<String>,
+    target_workspace_identifier: impl CstDecode<String>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "transfer_todo",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_record_identifier = <String>::sse_decode(&mut deserializer);
-            let api_previous_workspace_identifier = <String>::sse_decode(&mut deserializer);
-            let api_target_workspace_identifier = <String>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_record_identifier = record_identifier.cst_decode();
+            let api_previous_workspace_identifier = previous_workspace_identifier.cst_decode();
+            let api_target_workspace_identifier = target_workspace_identifier.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::todo::transfer_todo(
                             api_record_identifier,
@@ -2142,32 +1624,22 @@ fn wire__crate__api__todo__transfer_todo_impl(
 }
 fn wire__crate__api__user_preference__transfer_user_preference_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    record_identifier: impl CstDecode<String>,
+    previous_workspace_identifier: impl CstDecode<String>,
+    target_workspace_identifier: impl CstDecode<String>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "transfer_user_preference",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_record_identifier = <String>::sse_decode(&mut deserializer);
-            let api_previous_workspace_identifier = <String>::sse_decode(&mut deserializer);
-            let api_target_workspace_identifier = <String>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_record_identifier = record_identifier.cst_decode();
+            let api_previous_workspace_identifier = previous_workspace_identifier.cst_decode();
+            let api_target_workspace_identifier = target_workspace_identifier.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::user_preference::transfer_user_preference(
                             api_record_identifier,
@@ -2185,34 +1657,26 @@ fn wire__crate__api__user_preference__transfer_user_preference_impl(
 }
 fn wire__crate__api__bookmarks__update_bookmark_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    identifier: impl CstDecode<String>,
+    title: impl CstDecode<Option<String>>,
+    url: impl CstDecode<Option<String>>,
+    tag: impl CstDecode<Option<BookmarkTag>>,
+    meta_workspace_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "update_bookmark",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_identifier = <String>::sse_decode(&mut deserializer);
-            let api_title = <Option<String>>::sse_decode(&mut deserializer);
-            let api_url = <Option<String>>::sse_decode(&mut deserializer);
-            let api_tag = <Option<BookmarkTag>>::sse_decode(&mut deserializer);
-            let api_meta_workspace_id = <Option<String>>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_identifier = identifier.cst_decode();
+            let api_title = title.cst_decode();
+            let api_url = url.cst_decode();
+            let api_tag = tag.cst_decode();
+            let api_meta_workspace_id = meta_workspace_id.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::bookmarks::update_bookmark(
                             api_identifier,
@@ -2232,34 +1696,26 @@ fn wire__crate__api__bookmarks__update_bookmark_impl(
 }
 fn wire__crate__api__notes__update_note_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    identifier: impl CstDecode<String>,
+    title: impl CstDecode<Option<String>>,
+    content: impl CstDecode<Option<String>>,
+    categories: impl CstDecode<Option<Vec<String>>>,
+    meta_workspace_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "update_note",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_identifier = <String>::sse_decode(&mut deserializer);
-            let api_title = <Option<String>>::sse_decode(&mut deserializer);
-            let api_content = <Option<String>>::sse_decode(&mut deserializer);
-            let api_categories = <Option<Vec<String>>>::sse_decode(&mut deserializer);
-            let api_meta_workspace_id = <Option<String>>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_identifier = identifier.cst_decode();
+            let api_title = title.cst_decode();
+            let api_content = content.cst_decode();
+            let api_categories = categories.cst_decode();
+            let api_meta_workspace_id = meta_workspace_id.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::notes::update_note(
                             api_identifier,
@@ -2279,37 +1735,32 @@ fn wire__crate__api__notes__update_note_impl(
 }
 fn wire__crate__api__reminders__update_reminder_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    identifier: impl CstDecode<String>,
+    title: impl CstDecode<Option<String>>,
+    description: impl CstDecode<Option<String>>,
+    remind_at: impl CstDecode<Option<String>>,
+    recurring: impl CstDecode<Option<bool>>,
+    recurrence_rule: impl CstDecode<Option<String>>,
+    alarm_sound: impl CstDecode<Option<String>>,
+    meta_workspace_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "update_reminder",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_identifier = <String>::sse_decode(&mut deserializer);
-            let api_title = <Option<String>>::sse_decode(&mut deserializer);
-            let api_description = <Option<String>>::sse_decode(&mut deserializer);
-            let api_remind_at = <Option<String>>::sse_decode(&mut deserializer);
-            let api_recurring = <Option<bool>>::sse_decode(&mut deserializer);
-            let api_recurrence_rule = <Option<String>>::sse_decode(&mut deserializer);
-            let api_alarm_sound = <Option<String>>::sse_decode(&mut deserializer);
-            let api_meta_workspace_id = <Option<String>>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_identifier = identifier.cst_decode();
+            let api_title = title.cst_decode();
+            let api_description = description.cst_decode();
+            let api_remind_at = remind_at.cst_decode();
+            let api_recurring = recurring.cst_decode();
+            let api_recurrence_rule = recurrence_rule.cst_decode();
+            let api_alarm_sound = alarm_sound.cst_decode();
+            let api_meta_workspace_id = meta_workspace_id.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::reminders::update_reminder(
                             api_identifier,
@@ -2332,36 +1783,30 @@ fn wire__crate__api__reminders__update_reminder_impl(
 }
 fn wire__crate__api__snippets__update_snippet_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    identifier: impl CstDecode<String>,
+    title: impl CstDecode<Option<String>>,
+    language: impl CstDecode<Option<String>>,
+    code: impl CstDecode<Option<String>>,
+    description: impl CstDecode<Option<String>>,
+    is_pinned: impl CstDecode<Option<bool>>,
+    meta_workspace_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "update_snippet",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_identifier = <String>::sse_decode(&mut deserializer);
-            let api_title = <Option<String>>::sse_decode(&mut deserializer);
-            let api_language = <Option<String>>::sse_decode(&mut deserializer);
-            let api_code = <Option<String>>::sse_decode(&mut deserializer);
-            let api_description = <Option<String>>::sse_decode(&mut deserializer);
-            let api_is_pinned = <Option<bool>>::sse_decode(&mut deserializer);
-            let api_meta_workspace_id = <Option<String>>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_identifier = identifier.cst_decode();
+            let api_title = title.cst_decode();
+            let api_language = language.cst_decode();
+            let api_code = code.cst_decode();
+            let api_description = description.cst_decode();
+            let api_is_pinned = is_pinned.cst_decode();
+            let api_meta_workspace_id = meta_workspace_id.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::snippets::update_snippet(
                             api_identifier,
@@ -2383,35 +1828,28 @@ fn wire__crate__api__snippets__update_snippet_impl(
 }
 fn wire__crate__api__todo__update_todo_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    identifier: impl CstDecode<String>,
+    title: impl CstDecode<Option<String>>,
+    description: impl CstDecode<Option<String>>,
+    priority: impl CstDecode<Option<String>>,
+    due_date: impl CstDecode<Option<String>>,
+    meta_workspace_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "update_todo",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_identifier = <String>::sse_decode(&mut deserializer);
-            let api_title = <Option<String>>::sse_decode(&mut deserializer);
-            let api_description = <Option<String>>::sse_decode(&mut deserializer);
-            let api_priority = <Option<String>>::sse_decode(&mut deserializer);
-            let api_due_date = <Option<String>>::sse_decode(&mut deserializer);
-            let api_meta_workspace_id = <Option<String>>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_identifier = identifier.cst_decode();
+            let api_title = title.cst_decode();
+            let api_description = description.cst_decode();
+            let api_priority = priority.cst_decode();
+            let api_due_date = due_date.cst_decode();
+            let api_meta_workspace_id = meta_workspace_id.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::todo::update_todo(
                             api_identifier,
@@ -2432,32 +1870,22 @@ fn wire__crate__api__todo__update_todo_impl(
 }
 fn wire__crate__api__todo__update_todo_due_date_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    identifier: impl CstDecode<String>,
+    due_date: impl CstDecode<Option<String>>,
+    meta_workspace_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "update_todo_due_date",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_identifier = <String>::sse_decode(&mut deserializer);
-            let api_due_date = <Option<String>>::sse_decode(&mut deserializer);
-            let api_meta_workspace_id = <Option<String>>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_identifier = identifier.cst_decode();
+            let api_due_date = due_date.cst_decode();
+            let api_meta_workspace_id = meta_workspace_id.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::todo::update_todo_due_date(
                             api_identifier,
@@ -2475,34 +1903,26 @@ fn wire__crate__api__todo__update_todo_due_date_impl(
 }
 fn wire__crate__api__user_preference__update_user_preference_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    identifier: impl CstDecode<String>,
+    first_name: impl CstDecode<Option<String>>,
+    last_name: impl CstDecode<Option<String>>,
+    email: impl CstDecode<Option<String>>,
+    meta_workspace_id: impl CstDecode<Option<String>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "update_user_preference",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_identifier = <String>::sse_decode(&mut deserializer);
-            let api_first_name = <Option<String>>::sse_decode(&mut deserializer);
-            let api_last_name = <Option<String>>::sse_decode(&mut deserializer);
-            let api_email = <Option<String>>::sse_decode(&mut deserializer);
-            let api_meta_workspace_id = <Option<String>>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_identifier = identifier.cst_decode();
+            let api_first_name = first_name.cst_decode();
+            let api_last_name = last_name.cst_decode();
+            let api_email = email.cst_decode();
+            let api_meta_workspace_id = meta_workspace_id.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::user_preference::update_user_preference(
                             api_identifier,
@@ -2522,34 +1942,26 @@ fn wire__crate__api__user_preference__update_user_preference_impl(
 }
 fn wire__crate__api__workspaces__update_workspace_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
-    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
-    rust_vec_len_: i32,
-    data_len_: i32,
+    identifier: impl CstDecode<String>,
+    name: impl CstDecode<Option<String>>,
+    description: impl CstDecode<Option<String>>,
+    is_default: impl CstDecode<Option<bool>>,
+    is_hidden: impl CstDecode<Option<bool>>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::SseCodec, _, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "update_workspace",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
         move || {
-            let message = unsafe {
-                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(
-                    ptr_,
-                    rust_vec_len_,
-                    data_len_,
-                )
-            };
-            let mut deserializer =
-                flutter_rust_bridge::for_generated::SseDeserializer::new(message);
-            let api_identifier = <String>::sse_decode(&mut deserializer);
-            let api_name = <Option<String>>::sse_decode(&mut deserializer);
-            let api_description = <Option<String>>::sse_decode(&mut deserializer);
-            let api_is_default = <Option<bool>>::sse_decode(&mut deserializer);
-            let api_is_hidden = <Option<bool>>::sse_decode(&mut deserializer);
-            deserializer.end();
+            let api_identifier = identifier.cst_decode();
+            let api_name = name.cst_decode();
+            let api_description = description.cst_decode();
+            let api_is_default = is_default.cst_decode();
+            let api_is_hidden = is_hidden.cst_decode();
             move |context| async move {
-                transform_result_sse::<_, String>(
+                transform_result_dco::<_, _, String>(
                     (move || async move {
                         let output_ok = crate::api::workspaces::update_workspace(
                             api_identifier,
@@ -2568,18 +1980,30 @@ fn wire__crate__api__workspaces__update_workspace_impl(
     )
 }
 
-// Section: related_funcs
-
-flutter_rust_bridge::frb_generated_moi_arc_impl_value!(
-    flutter_rust_bridge::for_generated::RustAutoOpaqueInner<BookmarkTag>
-);
-
 // Section: dart2rust
 
+impl CstDecode<bool> for bool {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> bool {
+        self
+    }
+}
+impl CstDecode<u8> for u8 {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> u8 {
+        self
+    }
+}
+impl CstDecode<usize> for usize {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    fn cst_decode(self) -> usize {
+        self
+    }
+}
 impl SseDecode for BookmarkTag {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        let mut inner = <RustOpaqueMoi<
+        let mut inner = <RustOpaqueNom<
             flutter_rust_bridge::for_generated::RustAutoOpaqueInner<BookmarkTag>,
         >>::sse_decode(deserializer);
         return flutter_rust_bridge::for_generated::rust_auto_opaque_decode_owned(inner);
@@ -2587,12 +2011,12 @@ impl SseDecode for BookmarkTag {
 }
 
 impl SseDecode
-    for RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<BookmarkTag>>
+    for RustOpaqueNom<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<BookmarkTag>>
 {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut inner = <usize>::sse_decode(deserializer);
-        return decode_rust_opaque_moi(inner);
+        return unsafe { decode_rust_opaque_nom(inner) };
     }
 }
 
@@ -2714,161 +2138,6 @@ fn pde_ffi_dispatcher_primary_impl(
 ) {
     // Codec=Pde (Serialization + dispatch), see doc to use other codecs
     match func_id {
-        1 => wire__crate__api__todo__change_todo_priority_impl(port, ptr, rust_vec_len, data_len),
-        2 => wire__crate__api__bookmarks__create_bookmark_impl(port, ptr, rust_vec_len, data_len),
-        3 => wire__crate__api__notes__create_note_impl(port, ptr, rust_vec_len, data_len),
-        4 => wire__crate__api__recycle_bin__create_recycle_bin_entry_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        5 => wire__crate__api__reminders__create_reminder_impl(port, ptr, rust_vec_len, data_len),
-        6 => wire__crate__api__snippets__create_snippet_impl(port, ptr, rust_vec_len, data_len),
-        7 => wire__crate__api__todo__create_todo_impl(port, ptr, rust_vec_len, data_len),
-        8 => wire__crate__api__user_preference__create_user_preference_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        9 => wire__crate__api__workspaces__create_workspace_impl(port, ptr, rust_vec_len, data_len),
-        10 => wire__crate__api__bookmarks__delete_bookmark_impl(port, ptr, rust_vec_len, data_len),
-        11 => wire__crate__api__notes__delete_note_impl(port, ptr, rust_vec_len, data_len),
-        12 => wire__crate__api__reminders__delete_reminder_impl(port, ptr, rust_vec_len, data_len),
-        13 => wire__crate__api__snippets__delete_snippet_impl(port, ptr, rust_vec_len, data_len),
-        14 => wire__crate__api__todo__delete_todo_impl(port, ptr, rust_vec_len, data_len),
-        15 => {
-            wire__crate__api__workspaces__delete_workspace_impl(port, ptr, rust_vec_len, data_len)
-        }
-        16 => {
-            wire__crate__api__bookmarks__duplicate_bookmark_impl(port, ptr, rust_vec_len, data_len)
-        }
-        17 => wire__crate__api__notes__duplicate_note_impl(port, ptr, rust_vec_len, data_len),
-        18 => {
-            wire__crate__api__reminders__duplicate_reminder_impl(port, ptr, rust_vec_len, data_len)
-        }
-        19 => wire__crate__api__snippets__duplicate_snippet_impl(port, ptr, rust_vec_len, data_len),
-        20 => wire__crate__api__todo__duplicate_todo_impl(port, ptr, rust_vec_len, data_len),
-        21 => wire__crate__api__user_preference__duplicate_user_preference_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        22 => {
-            wire__crate__api__bookmarks__get_all_bookmarks_impl(port, ptr, rust_vec_len, data_len)
-        }
-        23 => wire__crate__api__notes__get_all_notes_impl(port, ptr, rust_vec_len, data_len),
-        24 => wire__crate__api__recycle_bin__get_all_recycle_bin_entries_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        25 => {
-            wire__crate__api__reminders__get_all_reminders_impl(port, ptr, rust_vec_len, data_len)
-        }
-        26 => wire__crate__api__snippets__get_all_snippets_impl(port, ptr, rust_vec_len, data_len),
-        27 => wire__crate__api__todo__get_all_todos_impl(port, ptr, rust_vec_len, data_len),
-        28 => wire__crate__api__bookmarks__get_bookmark_impl(port, ptr, rust_vec_len, data_len),
-        29 => wire__crate__api__bookmarks__get_bookmarks_by_tag_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        30 => wire__crate__api__notes__get_note_impl(port, ptr, rust_vec_len, data_len),
-        31 => wire__crate__api__bookmarks__get_recently_added_bookmarks_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        32 => wire__crate__api__notes__get_recently_added_notes_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        33 => wire__crate__api__snippets__get_recently_added_snippets_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        34 => wire__crate__api__recycle_bin__get_recycle_bin_entries_by_type_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        35 => wire__crate__api__recycle_bin__get_recycle_bin_entry_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        36 => wire__crate__api__reminders__get_reminder_impl(port, ptr, rust_vec_len, data_len),
-        37 => wire__crate__api__snippets__get_snippet_impl(port, ptr, rust_vec_len, data_len),
-        38 => wire__crate__api__todo__get_todo_impl(port, ptr, rust_vec_len, data_len),
-        39 => wire__crate__api__user_preference__get_user_preference_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        40 => wire__crate__api__workspaces__get_workspace_by_id_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        42 => wire__crate__api__simple__init_app_impl(port, ptr, rust_vec_len, data_len),
-        43 => wire__crate__api__workspaces__list_workspaces_impl(port, ptr, rust_vec_len, data_len),
-        44 => wire__crate__api__todo__mark_todo_done_impl(port, ptr, rust_vec_len, data_len),
-        45 => wire__crate__api__recycle_bin__purge_all_recycle_bin_entries_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        46 => wire__crate__api__recycle_bin__purge_recycle_bin_entry_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        47 => {
-            wire__crate__api__bookmarks__transfer_bookmark_impl(port, ptr, rust_vec_len, data_len)
-        }
-        48 => wire__crate__api__notes__transfer_note_impl(port, ptr, rust_vec_len, data_len),
-        49 => {
-            wire__crate__api__reminders__transfer_reminder_impl(port, ptr, rust_vec_len, data_len)
-        }
-        50 => wire__crate__api__snippets__transfer_snippet_impl(port, ptr, rust_vec_len, data_len),
-        51 => wire__crate__api__todo__transfer_todo_impl(port, ptr, rust_vec_len, data_len),
-        52 => wire__crate__api__user_preference__transfer_user_preference_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        53 => wire__crate__api__bookmarks__update_bookmark_impl(port, ptr, rust_vec_len, data_len),
-        54 => wire__crate__api__notes__update_note_impl(port, ptr, rust_vec_len, data_len),
-        55 => wire__crate__api__reminders__update_reminder_impl(port, ptr, rust_vec_len, data_len),
-        56 => wire__crate__api__snippets__update_snippet_impl(port, ptr, rust_vec_len, data_len),
-        57 => wire__crate__api__todo__update_todo_impl(port, ptr, rust_vec_len, data_len),
-        58 => wire__crate__api__todo__update_todo_due_date_impl(port, ptr, rust_vec_len, data_len),
-        59 => wire__crate__api__user_preference__update_user_preference_impl(
-            port,
-            ptr,
-            rust_vec_len,
-            data_len,
-        ),
-        60 => {
-            wire__crate__api__workspaces__update_workspace_impl(port, ptr, rust_vec_len, data_len)
-        }
         _ => unreachable!(),
     }
 }
@@ -2881,7 +2150,6 @@ fn pde_ffi_dispatcher_sync_impl(
 ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
     // Codec=Pde (Serialization + dispatch), see doc to use other codecs
     match func_id {
-        41 => wire__crate__api__simple__greet_impl(ptr, rust_vec_len, data_len),
         _ => unreachable!(),
     }
 }
@@ -2891,7 +2159,7 @@ fn pde_ffi_dispatcher_sync_impl(
 // Codec=Dco (DartCObject based), see doc to use other codecs
 impl flutter_rust_bridge::IntoDart for FrbWrapper<BookmarkTag> {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
-        flutter_rust_bridge::for_generated::rust_auto_opaque_encode::<_, MoiArc<_>>(self.0)
+        flutter_rust_bridge::for_generated::rust_auto_opaque_encode::<_, StdArc<_>>(self.0)
             .into_dart()
     }
 }
@@ -2906,12 +2174,12 @@ impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<BookmarkTag>> for BookmarkTag 
 impl SseEncode for BookmarkTag {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        <RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<BookmarkTag>>>::sse_encode(flutter_rust_bridge::for_generated::rust_auto_opaque_encode::<_, MoiArc<_>>(self), serializer);
+        <RustOpaqueNom<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<BookmarkTag>>>::sse_encode(flutter_rust_bridge::for_generated::rust_auto_opaque_encode::<_, StdArc<_>>(self), serializer);
     }
 }
 
 impl SseEncode
-    for RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<BookmarkTag>>
+    for RustOpaqueNom<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<BookmarkTag>>
 {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -3043,18 +2311,918 @@ mod io {
 
     flutter_rust_bridge::frb_generated_boilerplate_io!();
 
+    // Section: dart2rust
+
+    impl CstDecode<BookmarkTag> for usize {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> BookmarkTag {
+            flutter_rust_bridge::for_generated::rust_auto_opaque_decode_owned(CstDecode::<
+                RustOpaqueNom<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<BookmarkTag>>,
+            >::cst_decode(
+                self
+            ))
+        }
+    }
+    impl
+        CstDecode<
+            RustOpaqueNom<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<BookmarkTag>>,
+        > for usize
+    {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(
+            self,
+        ) -> RustOpaqueNom<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<BookmarkTag>>
+        {
+            unsafe { decode_rust_opaque_nom(self as _) }
+        }
+    }
+    impl CstDecode<String> for *mut wire_cst_list_prim_u_8_strict {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> String {
+            let vec: Vec<u8> = self.cst_decode();
+            String::from_utf8(vec).unwrap()
+        }
+    }
+    impl CstDecode<BookmarkTag> for *mut usize {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> BookmarkTag {
+            let wrap = unsafe { flutter_rust_bridge::for_generated::box_from_leak_ptr(self) };
+            CstDecode::<BookmarkTag>::cst_decode(*wrap).into()
+        }
+    }
+    impl CstDecode<bool> for *mut bool {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> bool {
+            unsafe { *flutter_rust_bridge::for_generated::box_from_leak_ptr(self) }
+        }
+    }
+    impl CstDecode<Vec<String>> for *mut wire_cst_list_String {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> Vec<String> {
+            let vec = unsafe {
+                let wrap = flutter_rust_bridge::for_generated::box_from_leak_ptr(self);
+                flutter_rust_bridge::for_generated::vec_from_leak_ptr(wrap.ptr, wrap.len)
+            };
+            vec.into_iter().map(CstDecode::cst_decode).collect()
+        }
+    }
+    impl CstDecode<Vec<u8>> for *mut wire_cst_list_prim_u_8_strict {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> Vec<u8> {
+            unsafe {
+                let wrap = flutter_rust_bridge::for_generated::box_from_leak_ptr(self);
+                flutter_rust_bridge::for_generated::vec_from_leak_ptr(wrap.ptr, wrap.len)
+            }
+        }
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__todo__change_todo_priority(
+        port_: i64,
+        identifier: *mut wire_cst_list_prim_u_8_strict,
+        priority: *mut wire_cst_list_prim_u_8_strict,
+        meta_workspace_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__todo__change_todo_priority_impl(
+            port_,
+            identifier,
+            priority,
+            meta_workspace_id,
+        )
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__bookmarks__create_bookmark(
+        port_: i64,
+        title: *mut wire_cst_list_prim_u_8_strict,
+        url: *mut wire_cst_list_prim_u_8_strict,
+        tag: usize,
+        workspace_identifier: *mut wire_cst_list_prim_u_8_strict,
+        meta_workspace_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__bookmarks__create_bookmark_impl(
+            port_,
+            title,
+            url,
+            tag,
+            workspace_identifier,
+            meta_workspace_id,
+        )
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__notes__create_note(
+        port_: i64,
+        title: *mut wire_cst_list_prim_u_8_strict,
+        content: *mut wire_cst_list_prim_u_8_strict,
+        categories: *mut wire_cst_list_String,
+        workspace_identifier: *mut wire_cst_list_prim_u_8_strict,
+        meta_workspace_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__notes__create_note_impl(
+            port_,
+            title,
+            content,
+            categories,
+            workspace_identifier,
+            meta_workspace_id,
+        )
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__recycle_bin__create_recycle_bin_entry(
+        port_: i64,
+        item_id: *mut wire_cst_list_prim_u_8_strict,
+        item_type: *mut wire_cst_list_prim_u_8_strict,
+        payload: *mut wire_cst_list_prim_u_8_strict,
+        meta_workspace_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__recycle_bin__create_recycle_bin_entry_impl(
+            port_,
+            item_id,
+            item_type,
+            payload,
+            meta_workspace_id,
+        )
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__reminders__create_reminder(
+        port_: i64,
+        title: *mut wire_cst_list_prim_u_8_strict,
+        description: *mut wire_cst_list_prim_u_8_strict,
+        remind_at: *mut wire_cst_list_prim_u_8_strict,
+        recurring: bool,
+        recurrence_rule: *mut wire_cst_list_prim_u_8_strict,
+        alarm_sound: *mut wire_cst_list_prim_u_8_strict,
+        workspace_identifier: *mut wire_cst_list_prim_u_8_strict,
+        meta_workspace_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__reminders__create_reminder_impl(
+            port_,
+            title,
+            description,
+            remind_at,
+            recurring,
+            recurrence_rule,
+            alarm_sound,
+            workspace_identifier,
+            meta_workspace_id,
+        )
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__snippets__create_snippet(
+        port_: i64,
+        code: *mut wire_cst_list_prim_u_8_strict,
+        title: *mut wire_cst_list_prim_u_8_strict,
+        language: *mut wire_cst_list_prim_u_8_strict,
+        description: *mut wire_cst_list_prim_u_8_strict,
+        is_pinned: bool,
+        workspace_identifier: *mut wire_cst_list_prim_u_8_strict,
+        meta_workspace_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__snippets__create_snippet_impl(
+            port_,
+            code,
+            title,
+            language,
+            description,
+            is_pinned,
+            workspace_identifier,
+            meta_workspace_id,
+        )
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__todo__create_todo(
+        port_: i64,
+        title: *mut wire_cst_list_prim_u_8_strict,
+        description: *mut wire_cst_list_prim_u_8_strict,
+        priority: *mut wire_cst_list_prim_u_8_strict,
+        due_date: *mut wire_cst_list_prim_u_8_strict,
+        workspace_identifier: *mut wire_cst_list_prim_u_8_strict,
+        meta_workspace_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__todo__create_todo_impl(
+            port_,
+            title,
+            description,
+            priority,
+            due_date,
+            workspace_identifier,
+            meta_workspace_id,
+        )
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__user_preference__create_user_preference(
+        port_: i64,
+        first_name: *mut wire_cst_list_prim_u_8_strict,
+        last_name: *mut wire_cst_list_prim_u_8_strict,
+        email: *mut wire_cst_list_prim_u_8_strict,
+        meta_workspace_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__user_preference__create_user_preference_impl(
+            port_,
+            first_name,
+            last_name,
+            email,
+            meta_workspace_id,
+        )
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__workspaces__create_workspace(
+        port_: i64,
+        name: *mut wire_cst_list_prim_u_8_strict,
+        description: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__workspaces__create_workspace_impl(port_, name, description)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__bookmarks__delete_bookmark(
+        port_: i64,
+        identifier: *mut wire_cst_list_prim_u_8_strict,
+        meta_workspace_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__bookmarks__delete_bookmark_impl(port_, identifier, meta_workspace_id)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__notes__delete_note(
+        port_: i64,
+        identifier: *mut wire_cst_list_prim_u_8_strict,
+        meta_workspace_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__notes__delete_note_impl(port_, identifier, meta_workspace_id)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__reminders__delete_reminder(
+        port_: i64,
+        identifier: *mut wire_cst_list_prim_u_8_strict,
+        meta_workspace_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__reminders__delete_reminder_impl(port_, identifier, meta_workspace_id)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__snippets__delete_snippet(
+        port_: i64,
+        identifier: *mut wire_cst_list_prim_u_8_strict,
+        meta_workspace_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__snippets__delete_snippet_impl(port_, identifier, meta_workspace_id)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__todo__delete_todo(
+        port_: i64,
+        identifier: *mut wire_cst_list_prim_u_8_strict,
+        meta_workspace_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__todo__delete_todo_impl(port_, identifier, meta_workspace_id)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__workspaces__delete_workspace(
+        port_: i64,
+        identifier: *mut wire_cst_list_prim_u_8_strict,
+        meta_workspace_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__workspaces__delete_workspace_impl(port_, identifier, meta_workspace_id)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__bookmarks__duplicate_bookmark(
+        port_: i64,
+        record_identifier: *mut wire_cst_list_prim_u_8_strict,
+        previous_workspace_identifier: *mut wire_cst_list_prim_u_8_strict,
+        target_workspace_identifier: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__bookmarks__duplicate_bookmark_impl(
+            port_,
+            record_identifier,
+            previous_workspace_identifier,
+            target_workspace_identifier,
+        )
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__notes__duplicate_note(
+        port_: i64,
+        record_identifier: *mut wire_cst_list_prim_u_8_strict,
+        previous_workspace_identifier: *mut wire_cst_list_prim_u_8_strict,
+        target_workspace_identifier: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__notes__duplicate_note_impl(
+            port_,
+            record_identifier,
+            previous_workspace_identifier,
+            target_workspace_identifier,
+        )
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__reminders__duplicate_reminder(
+        port_: i64,
+        record_identifier: *mut wire_cst_list_prim_u_8_strict,
+        previous_workspace_identifier: *mut wire_cst_list_prim_u_8_strict,
+        target_workspace_identifier: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__reminders__duplicate_reminder_impl(
+            port_,
+            record_identifier,
+            previous_workspace_identifier,
+            target_workspace_identifier,
+        )
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__snippets__duplicate_snippet(
+        port_: i64,
+        record_identifier: *mut wire_cst_list_prim_u_8_strict,
+        previous_workspace_identifier: *mut wire_cst_list_prim_u_8_strict,
+        target_workspace_identifier: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__snippets__duplicate_snippet_impl(
+            port_,
+            record_identifier,
+            previous_workspace_identifier,
+            target_workspace_identifier,
+        )
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__todo__duplicate_todo(
+        port_: i64,
+        record_identifier: *mut wire_cst_list_prim_u_8_strict,
+        previous_workspace_identifier: *mut wire_cst_list_prim_u_8_strict,
+        target_workspace_identifier: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__todo__duplicate_todo_impl(
+            port_,
+            record_identifier,
+            previous_workspace_identifier,
+            target_workspace_identifier,
+        )
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__user_preference__duplicate_user_preference(
+        port_: i64,
+        record_identifier: *mut wire_cst_list_prim_u_8_strict,
+        previous_workspace_identifier: *mut wire_cst_list_prim_u_8_strict,
+        target_workspace_identifier: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__user_preference__duplicate_user_preference_impl(
+            port_,
+            record_identifier,
+            previous_workspace_identifier,
+            target_workspace_identifier,
+        )
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__bookmarks__get_all_bookmarks(
+        port_: i64,
+        meta_workspace_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__bookmarks__get_all_bookmarks_impl(port_, meta_workspace_id)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__notes__get_all_notes(
+        port_: i64,
+        meta_workspace_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__notes__get_all_notes_impl(port_, meta_workspace_id)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__recycle_bin__get_all_recycle_bin_entries(
+        port_: i64,
+        meta_workspace_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__recycle_bin__get_all_recycle_bin_entries_impl(port_, meta_workspace_id)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__reminders__get_all_reminders(
+        port_: i64,
+        meta_workspace_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__reminders__get_all_reminders_impl(port_, meta_workspace_id)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__snippets__get_all_snippets(
+        port_: i64,
+        meta_workspace_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__snippets__get_all_snippets_impl(port_, meta_workspace_id)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__todo__get_all_todos(
+        port_: i64,
+        meta_workspace_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__todo__get_all_todos_impl(port_, meta_workspace_id)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__bookmarks__get_bookmark(
+        port_: i64,
+        identifier: *mut wire_cst_list_prim_u_8_strict,
+        meta_workspace_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__bookmarks__get_bookmark_impl(port_, identifier, meta_workspace_id)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__bookmarks__get_bookmarks_by_tag(
+        port_: i64,
+        tag: *mut wire_cst_list_prim_u_8_strict,
+        meta_workspace_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__bookmarks__get_bookmarks_by_tag_impl(port_, tag, meta_workspace_id)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__notes__get_note(
+        port_: i64,
+        identifier: *mut wire_cst_list_prim_u_8_strict,
+        meta_workspace_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__notes__get_note_impl(port_, identifier, meta_workspace_id)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__bookmarks__get_recently_added_bookmarks(
+        port_: i64,
+        meta_workspace_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__bookmarks__get_recently_added_bookmarks_impl(port_, meta_workspace_id)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__notes__get_recently_added_notes(
+        port_: i64,
+        meta_workspace_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__notes__get_recently_added_notes_impl(port_, meta_workspace_id)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__snippets__get_recently_added_snippets(
+        port_: i64,
+        meta_workspace_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__snippets__get_recently_added_snippets_impl(port_, meta_workspace_id)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__recycle_bin__get_recycle_bin_entries_by_type(
+        port_: i64,
+        item_type: *mut wire_cst_list_prim_u_8_strict,
+        meta_workspace_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__recycle_bin__get_recycle_bin_entries_by_type_impl(
+            port_,
+            item_type,
+            meta_workspace_id,
+        )
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__recycle_bin__get_recycle_bin_entry(
+        port_: i64,
+        identifier: *mut wire_cst_list_prim_u_8_strict,
+        meta_workspace_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__recycle_bin__get_recycle_bin_entry_impl(
+            port_,
+            identifier,
+            meta_workspace_id,
+        )
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__reminders__get_reminder(
+        port_: i64,
+        identifier: *mut wire_cst_list_prim_u_8_strict,
+        meta_workspace_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__reminders__get_reminder_impl(port_, identifier, meta_workspace_id)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__snippets__get_snippet(
+        port_: i64,
+        identifier: *mut wire_cst_list_prim_u_8_strict,
+        meta_workspace_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__snippets__get_snippet_impl(port_, identifier, meta_workspace_id)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__todo__get_todo(
+        port_: i64,
+        identifier: *mut wire_cst_list_prim_u_8_strict,
+        meta_workspace_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__todo__get_todo_impl(port_, identifier, meta_workspace_id)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__user_preference__get_user_preference(
+        port_: i64,
+        meta_workspace_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__user_preference__get_user_preference_impl(port_, meta_workspace_id)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__workspaces__get_workspace_by_id(
+        port_: i64,
+        id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__workspaces__get_workspace_by_id_impl(port_, id)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__simple__greet(
+        name: *mut wire_cst_list_prim_u_8_strict,
+    ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
+        wire__crate__api__simple__greet_impl(name)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__simple__init_app(port_: i64) {
+        wire__crate__api__simple__init_app_impl(port_)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__simple__init_kernel(
+        port_: i64,
+        database_url: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__simple__init_kernel_impl(port_, database_url)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__workspaces__list_workspaces(port_: i64) {
+        wire__crate__api__workspaces__list_workspaces_impl(port_)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__todo__mark_todo_done(
+        port_: i64,
+        identifier: *mut wire_cst_list_prim_u_8_strict,
+        done: bool,
+        meta_workspace_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__todo__mark_todo_done_impl(port_, identifier, done, meta_workspace_id)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__recycle_bin__purge_all_recycle_bin_entries(
+        port_: i64,
+        meta_workspace_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__recycle_bin__purge_all_recycle_bin_entries_impl(port_, meta_workspace_id)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__recycle_bin__purge_recycle_bin_entry(
+        port_: i64,
+        identifier: *mut wire_cst_list_prim_u_8_strict,
+        meta_workspace_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__recycle_bin__purge_recycle_bin_entry_impl(
+            port_,
+            identifier,
+            meta_workspace_id,
+        )
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__bookmarks__transfer_bookmark(
+        port_: i64,
+        record_identifier: *mut wire_cst_list_prim_u_8_strict,
+        previous_workspace_identifier: *mut wire_cst_list_prim_u_8_strict,
+        target_workspace_identifier: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__bookmarks__transfer_bookmark_impl(
+            port_,
+            record_identifier,
+            previous_workspace_identifier,
+            target_workspace_identifier,
+        )
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__notes__transfer_note(
+        port_: i64,
+        record_identifier: *mut wire_cst_list_prim_u_8_strict,
+        previous_workspace_identifier: *mut wire_cst_list_prim_u_8_strict,
+        target_workspace_identifier: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__notes__transfer_note_impl(
+            port_,
+            record_identifier,
+            previous_workspace_identifier,
+            target_workspace_identifier,
+        )
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__reminders__transfer_reminder(
+        port_: i64,
+        record_identifier: *mut wire_cst_list_prim_u_8_strict,
+        previous_workspace_identifier: *mut wire_cst_list_prim_u_8_strict,
+        target_workspace_identifier: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__reminders__transfer_reminder_impl(
+            port_,
+            record_identifier,
+            previous_workspace_identifier,
+            target_workspace_identifier,
+        )
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__snippets__transfer_snippet(
+        port_: i64,
+        record_identifier: *mut wire_cst_list_prim_u_8_strict,
+        previous_workspace_identifier: *mut wire_cst_list_prim_u_8_strict,
+        target_workspace_identifier: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__snippets__transfer_snippet_impl(
+            port_,
+            record_identifier,
+            previous_workspace_identifier,
+            target_workspace_identifier,
+        )
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__todo__transfer_todo(
+        port_: i64,
+        record_identifier: *mut wire_cst_list_prim_u_8_strict,
+        previous_workspace_identifier: *mut wire_cst_list_prim_u_8_strict,
+        target_workspace_identifier: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__todo__transfer_todo_impl(
+            port_,
+            record_identifier,
+            previous_workspace_identifier,
+            target_workspace_identifier,
+        )
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__user_preference__transfer_user_preference(
+        port_: i64,
+        record_identifier: *mut wire_cst_list_prim_u_8_strict,
+        previous_workspace_identifier: *mut wire_cst_list_prim_u_8_strict,
+        target_workspace_identifier: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__user_preference__transfer_user_preference_impl(
+            port_,
+            record_identifier,
+            previous_workspace_identifier,
+            target_workspace_identifier,
+        )
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__bookmarks__update_bookmark(
+        port_: i64,
+        identifier: *mut wire_cst_list_prim_u_8_strict,
+        title: *mut wire_cst_list_prim_u_8_strict,
+        url: *mut wire_cst_list_prim_u_8_strict,
+        tag: *mut usize,
+        meta_workspace_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__bookmarks__update_bookmark_impl(
+            port_,
+            identifier,
+            title,
+            url,
+            tag,
+            meta_workspace_id,
+        )
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__notes__update_note(
+        port_: i64,
+        identifier: *mut wire_cst_list_prim_u_8_strict,
+        title: *mut wire_cst_list_prim_u_8_strict,
+        content: *mut wire_cst_list_prim_u_8_strict,
+        categories: *mut wire_cst_list_String,
+        meta_workspace_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__notes__update_note_impl(
+            port_,
+            identifier,
+            title,
+            content,
+            categories,
+            meta_workspace_id,
+        )
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__reminders__update_reminder(
+        port_: i64,
+        identifier: *mut wire_cst_list_prim_u_8_strict,
+        title: *mut wire_cst_list_prim_u_8_strict,
+        description: *mut wire_cst_list_prim_u_8_strict,
+        remind_at: *mut wire_cst_list_prim_u_8_strict,
+        recurring: *mut bool,
+        recurrence_rule: *mut wire_cst_list_prim_u_8_strict,
+        alarm_sound: *mut wire_cst_list_prim_u_8_strict,
+        meta_workspace_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__reminders__update_reminder_impl(
+            port_,
+            identifier,
+            title,
+            description,
+            remind_at,
+            recurring,
+            recurrence_rule,
+            alarm_sound,
+            meta_workspace_id,
+        )
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__snippets__update_snippet(
+        port_: i64,
+        identifier: *mut wire_cst_list_prim_u_8_strict,
+        title: *mut wire_cst_list_prim_u_8_strict,
+        language: *mut wire_cst_list_prim_u_8_strict,
+        code: *mut wire_cst_list_prim_u_8_strict,
+        description: *mut wire_cst_list_prim_u_8_strict,
+        is_pinned: *mut bool,
+        meta_workspace_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__snippets__update_snippet_impl(
+            port_,
+            identifier,
+            title,
+            language,
+            code,
+            description,
+            is_pinned,
+            meta_workspace_id,
+        )
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__todo__update_todo(
+        port_: i64,
+        identifier: *mut wire_cst_list_prim_u_8_strict,
+        title: *mut wire_cst_list_prim_u_8_strict,
+        description: *mut wire_cst_list_prim_u_8_strict,
+        priority: *mut wire_cst_list_prim_u_8_strict,
+        due_date: *mut wire_cst_list_prim_u_8_strict,
+        meta_workspace_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__todo__update_todo_impl(
+            port_,
+            identifier,
+            title,
+            description,
+            priority,
+            due_date,
+            meta_workspace_id,
+        )
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__todo__update_todo_due_date(
+        port_: i64,
+        identifier: *mut wire_cst_list_prim_u_8_strict,
+        due_date: *mut wire_cst_list_prim_u_8_strict,
+        meta_workspace_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__todo__update_todo_due_date_impl(
+            port_,
+            identifier,
+            due_date,
+            meta_workspace_id,
+        )
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__user_preference__update_user_preference(
+        port_: i64,
+        identifier: *mut wire_cst_list_prim_u_8_strict,
+        first_name: *mut wire_cst_list_prim_u_8_strict,
+        last_name: *mut wire_cst_list_prim_u_8_strict,
+        email: *mut wire_cst_list_prim_u_8_strict,
+        meta_workspace_id: *mut wire_cst_list_prim_u_8_strict,
+    ) {
+        wire__crate__api__user_preference__update_user_preference_impl(
+            port_,
+            identifier,
+            first_name,
+            last_name,
+            email,
+            meta_workspace_id,
+        )
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_wire__crate__api__workspaces__update_workspace(
+        port_: i64,
+        identifier: *mut wire_cst_list_prim_u_8_strict,
+        name: *mut wire_cst_list_prim_u_8_strict,
+        description: *mut wire_cst_list_prim_u_8_strict,
+        is_default: *mut bool,
+        is_hidden: *mut bool,
+    ) {
+        wire__crate__api__workspaces__update_workspace_impl(
+            port_,
+            identifier,
+            name,
+            description,
+            is_default,
+            is_hidden,
+        )
+    }
+
     #[unsafe(no_mangle)]
     pub extern "C" fn frbgen_shurbs_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBookmarkTag(
         ptr: *const std::ffi::c_void,
     ) {
-        MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<BookmarkTag>>::increment_strong_count(ptr as _);
+        unsafe {
+            StdArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<BookmarkTag>>::increment_strong_count(ptr as _);
+        }
     }
 
     #[unsafe(no_mangle)]
     pub extern "C" fn frbgen_shurbs_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBookmarkTag(
         ptr: *const std::ffi::c_void,
     ) {
-        MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<BookmarkTag>>::decrement_strong_count(ptr as _);
+        unsafe {
+            StdArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<BookmarkTag>>::decrement_strong_count(ptr as _);
+        }
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_cst_new_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBookmarkTag(
+        value: usize,
+    ) -> *mut usize {
+        flutter_rust_bridge::for_generated::new_leak_box_ptr(value)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_cst_new_box_autoadd_bool(value: bool) -> *mut bool {
+        flutter_rust_bridge::for_generated::new_leak_box_ptr(value)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_cst_new_list_String(len: i32) -> *mut wire_cst_list_String {
+        let wrap = wire_cst_list_String {
+            ptr: flutter_rust_bridge::for_generated::new_leak_vec_ptr(
+                <*mut wire_cst_list_prim_u_8_strict>::new_with_null_ptr(),
+                len,
+            ),
+            len,
+        };
+        flutter_rust_bridge::for_generated::new_leak_box_ptr(wrap)
+    }
+
+    #[unsafe(no_mangle)]
+    pub extern "C" fn frbgen_shurbs_cst_new_list_prim_u_8_strict(
+        len: i32,
+    ) -> *mut wire_cst_list_prim_u_8_strict {
+        let ans = wire_cst_list_prim_u_8_strict {
+            ptr: flutter_rust_bridge::for_generated::new_leak_vec_ptr(Default::default(), len),
+            len,
+        };
+        flutter_rust_bridge::for_generated::new_leak_box_ptr(ans)
+    }
+
+    #[repr(C)]
+    #[derive(Clone, Copy)]
+    pub struct wire_cst_list_String {
+        ptr: *mut *mut wire_cst_list_prim_u_8_strict,
+        len: i32,
+    }
+    #[repr(C)]
+    #[derive(Clone, Copy)]
+    pub struct wire_cst_list_prim_u_8_strict {
+        ptr: *mut u8,
+        len: i32,
     }
 }
 #[cfg(not(target_family = "wasm"))]
@@ -3082,18 +3250,899 @@ mod web {
 
     flutter_rust_bridge::frb_generated_boilerplate_web!();
 
+    // Section: dart2rust
+
+    impl CstDecode<String> for String {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> String {
+            self
+        }
+    }
+    impl CstDecode<Vec<String>> for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> Vec<String> {
+            self.dyn_into::<flutter_rust_bridge::for_generated::js_sys::Array>()
+                .unwrap()
+                .iter()
+                .map(CstDecode::cst_decode)
+                .collect()
+        }
+    }
+    impl CstDecode<Vec<u8>> for Box<[u8]> {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> Vec<u8> {
+            self.into_vec()
+        }
+    }
+    impl CstDecode<Option<String>> for Option<String> {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> Option<String> {
+            self.map(CstDecode::cst_decode)
+        }
+    }
+    impl CstDecode<BookmarkTag> for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> BookmarkTag {
+            flutter_rust_bridge::for_generated::rust_auto_opaque_decode_owned(CstDecode::<
+                RustOpaqueNom<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<BookmarkTag>>,
+            >::cst_decode(
+                self
+            ))
+        }
+    }
+    impl
+        CstDecode<
+            RustOpaqueNom<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<BookmarkTag>>,
+        > for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
+    {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(
+            self,
+        ) -> RustOpaqueNom<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<BookmarkTag>>
+        {
+            #[cfg(target_pointer_width = "64")]
+            {
+                compile_error!("64-bit pointers are not supported.");
+            }
+            unsafe { decode_rust_opaque_nom((self.as_f64().unwrap() as usize) as _) }
+        }
+    }
+    impl CstDecode<String> for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> String {
+            self.as_string().expect("non-UTF-8 string, or not a string")
+        }
+    }
+    impl CstDecode<bool> for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> bool {
+            self.is_truthy()
+        }
+    }
+    impl CstDecode<Vec<u8>> for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> Vec<u8> {
+            self.unchecked_into::<flutter_rust_bridge::for_generated::js_sys::Uint8Array>()
+                .to_vec()
+                .into()
+        }
+    }
+    impl CstDecode<u8> for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> u8 {
+            self.unchecked_into_f64() as _
+        }
+    }
+    impl CstDecode<usize> for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue {
+        // Codec=Cst (C-struct based), see doc to use other codecs
+        fn cst_decode(self) -> usize {
+            ::std::convert::TryInto::<u64>::try_into(self).unwrap() as _
+        }
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__todo__change_todo_priority(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        identifier: String,
+        priority: String,
+        meta_workspace_id: Option<String>,
+    ) {
+        wire__crate__api__todo__change_todo_priority_impl(
+            port_,
+            identifier,
+            priority,
+            meta_workspace_id,
+        )
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__bookmarks__create_bookmark(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        title: String,
+        url: String,
+        tag: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+        workspace_identifier: Option<String>,
+        meta_workspace_id: Option<String>,
+    ) {
+        wire__crate__api__bookmarks__create_bookmark_impl(
+            port_,
+            title,
+            url,
+            tag,
+            workspace_identifier,
+            meta_workspace_id,
+        )
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__notes__create_note(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        title: String,
+        content: String,
+        categories: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+        workspace_identifier: Option<String>,
+        meta_workspace_id: Option<String>,
+    ) {
+        wire__crate__api__notes__create_note_impl(
+            port_,
+            title,
+            content,
+            categories,
+            workspace_identifier,
+            meta_workspace_id,
+        )
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__recycle_bin__create_recycle_bin_entry(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        item_id: String,
+        item_type: String,
+        payload: String,
+        meta_workspace_id: Option<String>,
+    ) {
+        wire__crate__api__recycle_bin__create_recycle_bin_entry_impl(
+            port_,
+            item_id,
+            item_type,
+            payload,
+            meta_workspace_id,
+        )
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__reminders__create_reminder(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        title: String,
+        description: Option<String>,
+        remind_at: String,
+        recurring: bool,
+        recurrence_rule: Option<String>,
+        alarm_sound: Option<String>,
+        workspace_identifier: Option<String>,
+        meta_workspace_id: Option<String>,
+    ) {
+        wire__crate__api__reminders__create_reminder_impl(
+            port_,
+            title,
+            description,
+            remind_at,
+            recurring,
+            recurrence_rule,
+            alarm_sound,
+            workspace_identifier,
+            meta_workspace_id,
+        )
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__snippets__create_snippet(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        code: String,
+        title: Option<String>,
+        language: Option<String>,
+        description: Option<String>,
+        is_pinned: bool,
+        workspace_identifier: Option<String>,
+        meta_workspace_id: Option<String>,
+    ) {
+        wire__crate__api__snippets__create_snippet_impl(
+            port_,
+            code,
+            title,
+            language,
+            description,
+            is_pinned,
+            workspace_identifier,
+            meta_workspace_id,
+        )
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__todo__create_todo(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        title: String,
+        description: Option<String>,
+        priority: String,
+        due_date: Option<String>,
+        workspace_identifier: Option<String>,
+        meta_workspace_id: Option<String>,
+    ) {
+        wire__crate__api__todo__create_todo_impl(
+            port_,
+            title,
+            description,
+            priority,
+            due_date,
+            workspace_identifier,
+            meta_workspace_id,
+        )
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__user_preference__create_user_preference(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        first_name: String,
+        last_name: String,
+        email: String,
+        meta_workspace_id: Option<String>,
+    ) {
+        wire__crate__api__user_preference__create_user_preference_impl(
+            port_,
+            first_name,
+            last_name,
+            email,
+            meta_workspace_id,
+        )
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__workspaces__create_workspace(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        name: String,
+        description: String,
+    ) {
+        wire__crate__api__workspaces__create_workspace_impl(port_, name, description)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__bookmarks__delete_bookmark(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        identifier: String,
+        meta_workspace_id: Option<String>,
+    ) {
+        wire__crate__api__bookmarks__delete_bookmark_impl(port_, identifier, meta_workspace_id)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__notes__delete_note(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        identifier: String,
+        meta_workspace_id: Option<String>,
+    ) {
+        wire__crate__api__notes__delete_note_impl(port_, identifier, meta_workspace_id)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__reminders__delete_reminder(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        identifier: String,
+        meta_workspace_id: Option<String>,
+    ) {
+        wire__crate__api__reminders__delete_reminder_impl(port_, identifier, meta_workspace_id)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__snippets__delete_snippet(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        identifier: String,
+        meta_workspace_id: Option<String>,
+    ) {
+        wire__crate__api__snippets__delete_snippet_impl(port_, identifier, meta_workspace_id)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__todo__delete_todo(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        identifier: String,
+        meta_workspace_id: Option<String>,
+    ) {
+        wire__crate__api__todo__delete_todo_impl(port_, identifier, meta_workspace_id)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__workspaces__delete_workspace(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        identifier: String,
+        meta_workspace_id: Option<String>,
+    ) {
+        wire__crate__api__workspaces__delete_workspace_impl(port_, identifier, meta_workspace_id)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__bookmarks__duplicate_bookmark(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        record_identifier: String,
+        previous_workspace_identifier: String,
+        target_workspace_identifier: String,
+    ) {
+        wire__crate__api__bookmarks__duplicate_bookmark_impl(
+            port_,
+            record_identifier,
+            previous_workspace_identifier,
+            target_workspace_identifier,
+        )
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__notes__duplicate_note(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        record_identifier: String,
+        previous_workspace_identifier: String,
+        target_workspace_identifier: String,
+    ) {
+        wire__crate__api__notes__duplicate_note_impl(
+            port_,
+            record_identifier,
+            previous_workspace_identifier,
+            target_workspace_identifier,
+        )
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__reminders__duplicate_reminder(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        record_identifier: String,
+        previous_workspace_identifier: String,
+        target_workspace_identifier: String,
+    ) {
+        wire__crate__api__reminders__duplicate_reminder_impl(
+            port_,
+            record_identifier,
+            previous_workspace_identifier,
+            target_workspace_identifier,
+        )
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__snippets__duplicate_snippet(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        record_identifier: String,
+        previous_workspace_identifier: String,
+        target_workspace_identifier: String,
+    ) {
+        wire__crate__api__snippets__duplicate_snippet_impl(
+            port_,
+            record_identifier,
+            previous_workspace_identifier,
+            target_workspace_identifier,
+        )
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__todo__duplicate_todo(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        record_identifier: String,
+        previous_workspace_identifier: String,
+        target_workspace_identifier: String,
+    ) {
+        wire__crate__api__todo__duplicate_todo_impl(
+            port_,
+            record_identifier,
+            previous_workspace_identifier,
+            target_workspace_identifier,
+        )
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__user_preference__duplicate_user_preference(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        record_identifier: String,
+        previous_workspace_identifier: String,
+        target_workspace_identifier: String,
+    ) {
+        wire__crate__api__user_preference__duplicate_user_preference_impl(
+            port_,
+            record_identifier,
+            previous_workspace_identifier,
+            target_workspace_identifier,
+        )
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__bookmarks__get_all_bookmarks(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        meta_workspace_id: Option<String>,
+    ) {
+        wire__crate__api__bookmarks__get_all_bookmarks_impl(port_, meta_workspace_id)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__notes__get_all_notes(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        meta_workspace_id: Option<String>,
+    ) {
+        wire__crate__api__notes__get_all_notes_impl(port_, meta_workspace_id)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__recycle_bin__get_all_recycle_bin_entries(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        meta_workspace_id: Option<String>,
+    ) {
+        wire__crate__api__recycle_bin__get_all_recycle_bin_entries_impl(port_, meta_workspace_id)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__reminders__get_all_reminders(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        meta_workspace_id: Option<String>,
+    ) {
+        wire__crate__api__reminders__get_all_reminders_impl(port_, meta_workspace_id)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__snippets__get_all_snippets(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        meta_workspace_id: Option<String>,
+    ) {
+        wire__crate__api__snippets__get_all_snippets_impl(port_, meta_workspace_id)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__todo__get_all_todos(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        meta_workspace_id: Option<String>,
+    ) {
+        wire__crate__api__todo__get_all_todos_impl(port_, meta_workspace_id)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__bookmarks__get_bookmark(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        identifier: String,
+        meta_workspace_id: Option<String>,
+    ) {
+        wire__crate__api__bookmarks__get_bookmark_impl(port_, identifier, meta_workspace_id)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__bookmarks__get_bookmarks_by_tag(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        tag: String,
+        meta_workspace_id: Option<String>,
+    ) {
+        wire__crate__api__bookmarks__get_bookmarks_by_tag_impl(port_, tag, meta_workspace_id)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__notes__get_note(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        identifier: String,
+        meta_workspace_id: Option<String>,
+    ) {
+        wire__crate__api__notes__get_note_impl(port_, identifier, meta_workspace_id)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__bookmarks__get_recently_added_bookmarks(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        meta_workspace_id: Option<String>,
+    ) {
+        wire__crate__api__bookmarks__get_recently_added_bookmarks_impl(port_, meta_workspace_id)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__notes__get_recently_added_notes(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        meta_workspace_id: Option<String>,
+    ) {
+        wire__crate__api__notes__get_recently_added_notes_impl(port_, meta_workspace_id)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__snippets__get_recently_added_snippets(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        meta_workspace_id: Option<String>,
+    ) {
+        wire__crate__api__snippets__get_recently_added_snippets_impl(port_, meta_workspace_id)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__recycle_bin__get_recycle_bin_entries_by_type(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        item_type: String,
+        meta_workspace_id: Option<String>,
+    ) {
+        wire__crate__api__recycle_bin__get_recycle_bin_entries_by_type_impl(
+            port_,
+            item_type,
+            meta_workspace_id,
+        )
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__recycle_bin__get_recycle_bin_entry(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        identifier: String,
+        meta_workspace_id: Option<String>,
+    ) {
+        wire__crate__api__recycle_bin__get_recycle_bin_entry_impl(
+            port_,
+            identifier,
+            meta_workspace_id,
+        )
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__reminders__get_reminder(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        identifier: String,
+        meta_workspace_id: Option<String>,
+    ) {
+        wire__crate__api__reminders__get_reminder_impl(port_, identifier, meta_workspace_id)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__snippets__get_snippet(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        identifier: String,
+        meta_workspace_id: Option<String>,
+    ) {
+        wire__crate__api__snippets__get_snippet_impl(port_, identifier, meta_workspace_id)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__todo__get_todo(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        identifier: String,
+        meta_workspace_id: Option<String>,
+    ) {
+        wire__crate__api__todo__get_todo_impl(port_, identifier, meta_workspace_id)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__user_preference__get_user_preference(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        meta_workspace_id: Option<String>,
+    ) {
+        wire__crate__api__user_preference__get_user_preference_impl(port_, meta_workspace_id)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__workspaces__get_workspace_by_id(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        id: String,
+    ) {
+        wire__crate__api__workspaces__get_workspace_by_id_impl(port_, id)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__simple__greet(
+        name: String,
+    ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
+        wire__crate__api__simple__greet_impl(name)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__simple__init_app(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+    ) {
+        wire__crate__api__simple__init_app_impl(port_)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__simple__init_kernel(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        database_url: String,
+    ) {
+        wire__crate__api__simple__init_kernel_impl(port_, database_url)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__workspaces__list_workspaces(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+    ) {
+        wire__crate__api__workspaces__list_workspaces_impl(port_)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__todo__mark_todo_done(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        identifier: String,
+        done: bool,
+        meta_workspace_id: Option<String>,
+    ) {
+        wire__crate__api__todo__mark_todo_done_impl(port_, identifier, done, meta_workspace_id)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__recycle_bin__purge_all_recycle_bin_entries(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        meta_workspace_id: Option<String>,
+    ) {
+        wire__crate__api__recycle_bin__purge_all_recycle_bin_entries_impl(port_, meta_workspace_id)
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__recycle_bin__purge_recycle_bin_entry(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        identifier: String,
+        meta_workspace_id: Option<String>,
+    ) {
+        wire__crate__api__recycle_bin__purge_recycle_bin_entry_impl(
+            port_,
+            identifier,
+            meta_workspace_id,
+        )
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__bookmarks__transfer_bookmark(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        record_identifier: String,
+        previous_workspace_identifier: String,
+        target_workspace_identifier: String,
+    ) {
+        wire__crate__api__bookmarks__transfer_bookmark_impl(
+            port_,
+            record_identifier,
+            previous_workspace_identifier,
+            target_workspace_identifier,
+        )
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__notes__transfer_note(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        record_identifier: String,
+        previous_workspace_identifier: String,
+        target_workspace_identifier: String,
+    ) {
+        wire__crate__api__notes__transfer_note_impl(
+            port_,
+            record_identifier,
+            previous_workspace_identifier,
+            target_workspace_identifier,
+        )
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__reminders__transfer_reminder(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        record_identifier: String,
+        previous_workspace_identifier: String,
+        target_workspace_identifier: String,
+    ) {
+        wire__crate__api__reminders__transfer_reminder_impl(
+            port_,
+            record_identifier,
+            previous_workspace_identifier,
+            target_workspace_identifier,
+        )
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__snippets__transfer_snippet(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        record_identifier: String,
+        previous_workspace_identifier: String,
+        target_workspace_identifier: String,
+    ) {
+        wire__crate__api__snippets__transfer_snippet_impl(
+            port_,
+            record_identifier,
+            previous_workspace_identifier,
+            target_workspace_identifier,
+        )
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__todo__transfer_todo(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        record_identifier: String,
+        previous_workspace_identifier: String,
+        target_workspace_identifier: String,
+    ) {
+        wire__crate__api__todo__transfer_todo_impl(
+            port_,
+            record_identifier,
+            previous_workspace_identifier,
+            target_workspace_identifier,
+        )
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__user_preference__transfer_user_preference(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        record_identifier: String,
+        previous_workspace_identifier: String,
+        target_workspace_identifier: String,
+    ) {
+        wire__crate__api__user_preference__transfer_user_preference_impl(
+            port_,
+            record_identifier,
+            previous_workspace_identifier,
+            target_workspace_identifier,
+        )
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__bookmarks__update_bookmark(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        identifier: String,
+        title: Option<String>,
+        url: Option<String>,
+        tag: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+        meta_workspace_id: Option<String>,
+    ) {
+        wire__crate__api__bookmarks__update_bookmark_impl(
+            port_,
+            identifier,
+            title,
+            url,
+            tag,
+            meta_workspace_id,
+        )
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__notes__update_note(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        identifier: String,
+        title: Option<String>,
+        content: Option<String>,
+        categories: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+        meta_workspace_id: Option<String>,
+    ) {
+        wire__crate__api__notes__update_note_impl(
+            port_,
+            identifier,
+            title,
+            content,
+            categories,
+            meta_workspace_id,
+        )
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__reminders__update_reminder(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        identifier: String,
+        title: Option<String>,
+        description: Option<String>,
+        remind_at: Option<String>,
+        recurring: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+        recurrence_rule: Option<String>,
+        alarm_sound: Option<String>,
+        meta_workspace_id: Option<String>,
+    ) {
+        wire__crate__api__reminders__update_reminder_impl(
+            port_,
+            identifier,
+            title,
+            description,
+            remind_at,
+            recurring,
+            recurrence_rule,
+            alarm_sound,
+            meta_workspace_id,
+        )
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__snippets__update_snippet(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        identifier: String,
+        title: Option<String>,
+        language: Option<String>,
+        code: Option<String>,
+        description: Option<String>,
+        is_pinned: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+        meta_workspace_id: Option<String>,
+    ) {
+        wire__crate__api__snippets__update_snippet_impl(
+            port_,
+            identifier,
+            title,
+            language,
+            code,
+            description,
+            is_pinned,
+            meta_workspace_id,
+        )
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__todo__update_todo(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        identifier: String,
+        title: Option<String>,
+        description: Option<String>,
+        priority: Option<String>,
+        due_date: Option<String>,
+        meta_workspace_id: Option<String>,
+    ) {
+        wire__crate__api__todo__update_todo_impl(
+            port_,
+            identifier,
+            title,
+            description,
+            priority,
+            due_date,
+            meta_workspace_id,
+        )
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__todo__update_todo_due_date(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        identifier: String,
+        due_date: Option<String>,
+        meta_workspace_id: Option<String>,
+    ) {
+        wire__crate__api__todo__update_todo_due_date_impl(
+            port_,
+            identifier,
+            due_date,
+            meta_workspace_id,
+        )
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__user_preference__update_user_preference(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        identifier: String,
+        first_name: Option<String>,
+        last_name: Option<String>,
+        email: Option<String>,
+        meta_workspace_id: Option<String>,
+    ) {
+        wire__crate__api__user_preference__update_user_preference_impl(
+            port_,
+            identifier,
+            first_name,
+            last_name,
+            email,
+            meta_workspace_id,
+        )
+    }
+
+    #[wasm_bindgen]
+    pub fn wire__crate__api__workspaces__update_workspace(
+        port_: flutter_rust_bridge::for_generated::MessagePort,
+        identifier: String,
+        name: Option<String>,
+        description: Option<String>,
+        is_default: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+        is_hidden: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    ) {
+        wire__crate__api__workspaces__update_workspace_impl(
+            port_,
+            identifier,
+            name,
+            description,
+            is_default,
+            is_hidden,
+        )
+    }
+
     #[wasm_bindgen]
     pub fn rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBookmarkTag(
         ptr: *const std::ffi::c_void,
     ) {
-        MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<BookmarkTag>>::increment_strong_count(ptr as _);
+        unsafe {
+            StdArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<BookmarkTag>>::increment_strong_count(ptr as _);
+        }
     }
 
     #[wasm_bindgen]
     pub fn rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBookmarkTag(
         ptr: *const std::ffi::c_void,
     ) {
-        MoiArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<BookmarkTag>>::decrement_strong_count(ptr as _);
+        unsafe {
+            StdArc::<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<BookmarkTag>>::decrement_strong_count(ptr as _);
+        }
     }
 }
 #[cfg(target_family = "wasm")]

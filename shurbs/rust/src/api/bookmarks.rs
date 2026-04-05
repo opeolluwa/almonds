@@ -1,6 +1,7 @@
+pub use almond_kernel::adapters::bookmarks::BookmarkTag;
 use almond_kernel::{
     adapters::{
-        bookmarks::{BookmarkTag, CreateBookmark, UpdateBookmark},
+        bookmarks::{CreateBookmark, UpdateBookmark},
         meta::RequestMeta,
     },
     repositories::bookmarks::BookmarkRepositoryExt,

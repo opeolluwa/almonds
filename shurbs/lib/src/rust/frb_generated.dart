@@ -74,7 +74,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => 1016656579;
+  int get rustContentHash => -450783549;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -296,6 +296,8 @@ abstract class RustLibApi extends BaseApi {
 
   Future<void> crateApiSimpleInitApp();
 
+  Future<void> crateApiSimpleInitKernel({required String databaseUrl});
+
   Future<String> crateApiWorkspacesListWorkspaces();
 
   Future<String> crateApiTodoMarkTodoDone({
@@ -443,20 +445,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(identifier, serializer);
-          sse_encode_String(priority, serializer);
-          sse_encode_opt_String(metaWorkspaceId, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 1,
-            port: port_,
+          var arg0 = cst_encode_String(identifier);
+          var arg1 = cst_encode_String(priority);
+          var arg2 = cst_encode_opt_String(metaWorkspaceId);
+          return wire.wire__crate__api__todo__change_todo_priority(
+            port_,
+            arg0,
+            arg1,
+            arg2,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_String,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_String,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiTodoChangeTodoPriorityConstMeta,
         argValues: [identifier, priority, metaWorkspaceId],
@@ -482,25 +483,26 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(title, serializer);
-          sse_encode_String(url, serializer);
-          sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBookmarkTag(
-            tag,
-            serializer,
-          );
-          sse_encode_opt_String(workspaceIdentifier, serializer);
-          sse_encode_opt_String(metaWorkspaceId, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 2,
-            port: port_,
+          var arg0 = cst_encode_String(title);
+          var arg1 = cst_encode_String(url);
+          var arg2 =
+              cst_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBookmarkTag(
+                tag,
+              );
+          var arg3 = cst_encode_opt_String(workspaceIdentifier);
+          var arg4 = cst_encode_opt_String(metaWorkspaceId);
+          return wire.wire__crate__api__bookmarks__create_bookmark(
+            port_,
+            arg0,
+            arg1,
+            arg2,
+            arg3,
+            arg4,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_String,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_String,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiBookmarksCreateBookmarkConstMeta,
         argValues: [title, url, tag, workspaceIdentifier, metaWorkspaceId],
@@ -532,22 +534,23 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(title, serializer);
-          sse_encode_String(content, serializer);
-          sse_encode_opt_list_String(categories, serializer);
-          sse_encode_opt_String(workspaceIdentifier, serializer);
-          sse_encode_opt_String(metaWorkspaceId, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 3,
-            port: port_,
+          var arg0 = cst_encode_String(title);
+          var arg1 = cst_encode_String(content);
+          var arg2 = cst_encode_opt_list_String(categories);
+          var arg3 = cst_encode_opt_String(workspaceIdentifier);
+          var arg4 = cst_encode_opt_String(metaWorkspaceId);
+          return wire.wire__crate__api__notes__create_note(
+            port_,
+            arg0,
+            arg1,
+            arg2,
+            arg3,
+            arg4,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_String,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_String,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiNotesCreateNoteConstMeta,
         argValues: [
@@ -583,21 +586,21 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(itemId, serializer);
-          sse_encode_String(itemType, serializer);
-          sse_encode_String(payload, serializer);
-          sse_encode_opt_String(metaWorkspaceId, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 4,
-            port: port_,
+          var arg0 = cst_encode_String(itemId);
+          var arg1 = cst_encode_String(itemType);
+          var arg2 = cst_encode_String(payload);
+          var arg3 = cst_encode_opt_String(metaWorkspaceId);
+          return wire.wire__crate__api__recycle_bin__create_recycle_bin_entry(
+            port_,
+            arg0,
+            arg1,
+            arg2,
+            arg3,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_String,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_String,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiRecycleBinCreateRecycleBinEntryConstMeta,
         argValues: [itemId, itemType, payload, metaWorkspaceId],
@@ -626,25 +629,29 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(title, serializer);
-          sse_encode_opt_String(description, serializer);
-          sse_encode_String(remindAt, serializer);
-          sse_encode_bool(recurring, serializer);
-          sse_encode_opt_String(recurrenceRule, serializer);
-          sse_encode_opt_String(alarmSound, serializer);
-          sse_encode_opt_String(workspaceIdentifier, serializer);
-          sse_encode_opt_String(metaWorkspaceId, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 5,
-            port: port_,
+          var arg0 = cst_encode_String(title);
+          var arg1 = cst_encode_opt_String(description);
+          var arg2 = cst_encode_String(remindAt);
+          var arg3 = cst_encode_bool(recurring);
+          var arg4 = cst_encode_opt_String(recurrenceRule);
+          var arg5 = cst_encode_opt_String(alarmSound);
+          var arg6 = cst_encode_opt_String(workspaceIdentifier);
+          var arg7 = cst_encode_opt_String(metaWorkspaceId);
+          return wire.wire__crate__api__reminders__create_reminder(
+            port_,
+            arg0,
+            arg1,
+            arg2,
+            arg3,
+            arg4,
+            arg5,
+            arg6,
+            arg7,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_String,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_String,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiRemindersCreateReminderConstMeta,
         argValues: [
@@ -690,24 +697,27 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(code, serializer);
-          sse_encode_opt_String(title, serializer);
-          sse_encode_opt_String(language, serializer);
-          sse_encode_opt_String(description, serializer);
-          sse_encode_bool(isPinned, serializer);
-          sse_encode_opt_String(workspaceIdentifier, serializer);
-          sse_encode_opt_String(metaWorkspaceId, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 6,
-            port: port_,
+          var arg0 = cst_encode_String(code);
+          var arg1 = cst_encode_opt_String(title);
+          var arg2 = cst_encode_opt_String(language);
+          var arg3 = cst_encode_opt_String(description);
+          var arg4 = cst_encode_bool(isPinned);
+          var arg5 = cst_encode_opt_String(workspaceIdentifier);
+          var arg6 = cst_encode_opt_String(metaWorkspaceId);
+          return wire.wire__crate__api__snippets__create_snippet(
+            port_,
+            arg0,
+            arg1,
+            arg2,
+            arg3,
+            arg4,
+            arg5,
+            arg6,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_String,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_String,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiSnippetsCreateSnippetConstMeta,
         argValues: [
@@ -750,23 +760,25 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(title, serializer);
-          sse_encode_opt_String(description, serializer);
-          sse_encode_String(priority, serializer);
-          sse_encode_opt_String(dueDate, serializer);
-          sse_encode_opt_String(workspaceIdentifier, serializer);
-          sse_encode_opt_String(metaWorkspaceId, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 7,
-            port: port_,
+          var arg0 = cst_encode_String(title);
+          var arg1 = cst_encode_opt_String(description);
+          var arg2 = cst_encode_String(priority);
+          var arg3 = cst_encode_opt_String(dueDate);
+          var arg4 = cst_encode_opt_String(workspaceIdentifier);
+          var arg5 = cst_encode_opt_String(metaWorkspaceId);
+          return wire.wire__crate__api__todo__create_todo(
+            port_,
+            arg0,
+            arg1,
+            arg2,
+            arg3,
+            arg4,
+            arg5,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_String,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_String,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiTodoCreateTodoConstMeta,
         argValues: [
@@ -804,21 +816,21 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(firstName, serializer);
-          sse_encode_String(lastName, serializer);
-          sse_encode_String(email, serializer);
-          sse_encode_opt_String(metaWorkspaceId, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 8,
-            port: port_,
+          var arg0 = cst_encode_String(firstName);
+          var arg1 = cst_encode_String(lastName);
+          var arg2 = cst_encode_String(email);
+          var arg3 = cst_encode_opt_String(metaWorkspaceId);
+          return wire.wire__crate__api__user_preference__create_user_preference(
+            port_,
+            arg0,
+            arg1,
+            arg2,
+            arg3,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_String,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_String,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiUserPreferenceCreateUserPreferenceConstMeta,
         argValues: [firstName, lastName, email, metaWorkspaceId],
@@ -841,19 +853,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(name, serializer);
-          sse_encode_String(description, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 9,
-            port: port_,
+          var arg0 = cst_encode_String(name);
+          var arg1 = cst_encode_String(description);
+          return wire.wire__crate__api__workspaces__create_workspace(
+            port_,
+            arg0,
+            arg1,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_String,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_String,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiWorkspacesCreateWorkspaceConstMeta,
         argValues: [name, description],
@@ -876,19 +886,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(identifier, serializer);
-          sse_encode_opt_String(metaWorkspaceId, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 10,
-            port: port_,
+          var arg0 = cst_encode_String(identifier);
+          var arg1 = cst_encode_opt_String(metaWorkspaceId);
+          return wire.wire__crate__api__bookmarks__delete_bookmark(
+            port_,
+            arg0,
+            arg1,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_unit,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_unit,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiBookmarksDeleteBookmarkConstMeta,
         argValues: [identifier, metaWorkspaceId],
@@ -911,19 +919,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(identifier, serializer);
-          sse_encode_opt_String(metaWorkspaceId, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 11,
-            port: port_,
-          );
+          var arg0 = cst_encode_String(identifier);
+          var arg1 = cst_encode_opt_String(metaWorkspaceId);
+          return wire.wire__crate__api__notes__delete_note(port_, arg0, arg1);
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_unit,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_unit,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiNotesDeleteNoteConstMeta,
         argValues: [identifier, metaWorkspaceId],
@@ -945,19 +947,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(identifier, serializer);
-          sse_encode_opt_String(metaWorkspaceId, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 12,
-            port: port_,
+          var arg0 = cst_encode_String(identifier);
+          var arg1 = cst_encode_opt_String(metaWorkspaceId);
+          return wire.wire__crate__api__reminders__delete_reminder(
+            port_,
+            arg0,
+            arg1,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_unit,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_unit,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiRemindersDeleteReminderConstMeta,
         argValues: [identifier, metaWorkspaceId],
@@ -980,19 +980,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(identifier, serializer);
-          sse_encode_opt_String(metaWorkspaceId, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 13,
-            port: port_,
+          var arg0 = cst_encode_String(identifier);
+          var arg1 = cst_encode_opt_String(metaWorkspaceId);
+          return wire.wire__crate__api__snippets__delete_snippet(
+            port_,
+            arg0,
+            arg1,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_unit,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_unit,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiSnippetsDeleteSnippetConstMeta,
         argValues: [identifier, metaWorkspaceId],
@@ -1015,19 +1013,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(identifier, serializer);
-          sse_encode_opt_String(metaWorkspaceId, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 14,
-            port: port_,
-          );
+          var arg0 = cst_encode_String(identifier);
+          var arg1 = cst_encode_opt_String(metaWorkspaceId);
+          return wire.wire__crate__api__todo__delete_todo(port_, arg0, arg1);
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_unit,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_unit,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiTodoDeleteTodoConstMeta,
         argValues: [identifier, metaWorkspaceId],
@@ -1049,19 +1041,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(identifier, serializer);
-          sse_encode_opt_String(metaWorkspaceId, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 15,
-            port: port_,
+          var arg0 = cst_encode_String(identifier);
+          var arg1 = cst_encode_opt_String(metaWorkspaceId);
+          return wire.wire__crate__api__workspaces__delete_workspace(
+            port_,
+            arg0,
+            arg1,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_unit,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_unit,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiWorkspacesDeleteWorkspaceConstMeta,
         argValues: [identifier, metaWorkspaceId],
@@ -1085,20 +1075,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(recordIdentifier, serializer);
-          sse_encode_String(previousWorkspaceIdentifier, serializer);
-          sse_encode_String(targetWorkspaceIdentifier, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 16,
-            port: port_,
+          var arg0 = cst_encode_String(recordIdentifier);
+          var arg1 = cst_encode_String(previousWorkspaceIdentifier);
+          var arg2 = cst_encode_String(targetWorkspaceIdentifier);
+          return wire.wire__crate__api__bookmarks__duplicate_bookmark(
+            port_,
+            arg0,
+            arg1,
+            arg2,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_unit,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_unit,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiBookmarksDuplicateBookmarkConstMeta,
         argValues: [
@@ -1130,20 +1119,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(recordIdentifier, serializer);
-          sse_encode_String(previousWorkspaceIdentifier, serializer);
-          sse_encode_String(targetWorkspaceIdentifier, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 17,
-            port: port_,
+          var arg0 = cst_encode_String(recordIdentifier);
+          var arg1 = cst_encode_String(previousWorkspaceIdentifier);
+          var arg2 = cst_encode_String(targetWorkspaceIdentifier);
+          return wire.wire__crate__api__notes__duplicate_note(
+            port_,
+            arg0,
+            arg1,
+            arg2,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_unit,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_unit,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiNotesDuplicateNoteConstMeta,
         argValues: [
@@ -1174,20 +1162,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(recordIdentifier, serializer);
-          sse_encode_String(previousWorkspaceIdentifier, serializer);
-          sse_encode_String(targetWorkspaceIdentifier, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 18,
-            port: port_,
+          var arg0 = cst_encode_String(recordIdentifier);
+          var arg1 = cst_encode_String(previousWorkspaceIdentifier);
+          var arg2 = cst_encode_String(targetWorkspaceIdentifier);
+          return wire.wire__crate__api__reminders__duplicate_reminder(
+            port_,
+            arg0,
+            arg1,
+            arg2,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_unit,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_unit,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiRemindersDuplicateReminderConstMeta,
         argValues: [
@@ -1219,20 +1206,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(recordIdentifier, serializer);
-          sse_encode_String(previousWorkspaceIdentifier, serializer);
-          sse_encode_String(targetWorkspaceIdentifier, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 19,
-            port: port_,
+          var arg0 = cst_encode_String(recordIdentifier);
+          var arg1 = cst_encode_String(previousWorkspaceIdentifier);
+          var arg2 = cst_encode_String(targetWorkspaceIdentifier);
+          return wire.wire__crate__api__snippets__duplicate_snippet(
+            port_,
+            arg0,
+            arg1,
+            arg2,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_unit,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_unit,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiSnippetsDuplicateSnippetConstMeta,
         argValues: [
@@ -1264,20 +1250,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(recordIdentifier, serializer);
-          sse_encode_String(previousWorkspaceIdentifier, serializer);
-          sse_encode_String(targetWorkspaceIdentifier, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 20,
-            port: port_,
+          var arg0 = cst_encode_String(recordIdentifier);
+          var arg1 = cst_encode_String(previousWorkspaceIdentifier);
+          var arg2 = cst_encode_String(targetWorkspaceIdentifier);
+          return wire.wire__crate__api__todo__duplicate_todo(
+            port_,
+            arg0,
+            arg1,
+            arg2,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_unit,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_unit,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiTodoDuplicateTodoConstMeta,
         argValues: [
@@ -1308,20 +1293,20 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(recordIdentifier, serializer);
-          sse_encode_String(previousWorkspaceIdentifier, serializer);
-          sse_encode_String(targetWorkspaceIdentifier, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 21,
-            port: port_,
-          );
+          var arg0 = cst_encode_String(recordIdentifier);
+          var arg1 = cst_encode_String(previousWorkspaceIdentifier);
+          var arg2 = cst_encode_String(targetWorkspaceIdentifier);
+          return wire
+              .wire__crate__api__user_preference__duplicate_user_preference(
+                port_,
+                arg0,
+                arg1,
+                arg2,
+              );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_unit,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_unit,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiUserPreferenceDuplicateUserPreferenceConstMeta,
         argValues: [
@@ -1349,18 +1334,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_opt_String(metaWorkspaceId, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 22,
-            port: port_,
+          var arg0 = cst_encode_opt_String(metaWorkspaceId);
+          return wire.wire__crate__api__bookmarks__get_all_bookmarks(
+            port_,
+            arg0,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_String,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_String,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiBookmarksGetAllBookmarksConstMeta,
         argValues: [metaWorkspaceId],
@@ -1380,18 +1362,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_opt_String(metaWorkspaceId, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 23,
-            port: port_,
-          );
+          var arg0 = cst_encode_opt_String(metaWorkspaceId);
+          return wire.wire__crate__api__notes__get_all_notes(port_, arg0);
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_String,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_String,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiNotesGetAllNotesConstMeta,
         argValues: [metaWorkspaceId],
@@ -1412,18 +1388,16 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_opt_String(metaWorkspaceId, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 24,
-            port: port_,
-          );
+          var arg0 = cst_encode_opt_String(metaWorkspaceId);
+          return wire
+              .wire__crate__api__recycle_bin__get_all_recycle_bin_entries(
+                port_,
+                arg0,
+              );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_String,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_String,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiRecycleBinGetAllRecycleBinEntriesConstMeta,
         argValues: [metaWorkspaceId],
@@ -1443,18 +1417,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_opt_String(metaWorkspaceId, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 25,
-            port: port_,
+          var arg0 = cst_encode_opt_String(metaWorkspaceId);
+          return wire.wire__crate__api__reminders__get_all_reminders(
+            port_,
+            arg0,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_String,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_String,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiRemindersGetAllRemindersConstMeta,
         argValues: [metaWorkspaceId],
@@ -1474,18 +1445,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_opt_String(metaWorkspaceId, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 26,
-            port: port_,
-          );
+          var arg0 = cst_encode_opt_String(metaWorkspaceId);
+          return wire.wire__crate__api__snippets__get_all_snippets(port_, arg0);
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_String,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_String,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiSnippetsGetAllSnippetsConstMeta,
         argValues: [metaWorkspaceId],
@@ -1505,18 +1470,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_opt_String(metaWorkspaceId, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 27,
-            port: port_,
-          );
+          var arg0 = cst_encode_opt_String(metaWorkspaceId);
+          return wire.wire__crate__api__todo__get_all_todos(port_, arg0);
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_String,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_String,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiTodoGetAllTodosConstMeta,
         argValues: [metaWorkspaceId],
@@ -1538,19 +1497,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(identifier, serializer);
-          sse_encode_opt_String(metaWorkspaceId, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 28,
-            port: port_,
+          var arg0 = cst_encode_String(identifier);
+          var arg1 = cst_encode_opt_String(metaWorkspaceId);
+          return wire.wire__crate__api__bookmarks__get_bookmark(
+            port_,
+            arg0,
+            arg1,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_opt_String,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_opt_String,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiBookmarksGetBookmarkConstMeta,
         argValues: [identifier, metaWorkspaceId],
@@ -1573,19 +1530,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(tag, serializer);
-          sse_encode_opt_String(metaWorkspaceId, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 29,
-            port: port_,
+          var arg0 = cst_encode_String(tag);
+          var arg1 = cst_encode_opt_String(metaWorkspaceId);
+          return wire.wire__crate__api__bookmarks__get_bookmarks_by_tag(
+            port_,
+            arg0,
+            arg1,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_String,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_String,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiBookmarksGetBookmarksByTagConstMeta,
         argValues: [tag, metaWorkspaceId],
@@ -1608,19 +1563,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(identifier, serializer);
-          sse_encode_opt_String(metaWorkspaceId, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 30,
-            port: port_,
-          );
+          var arg0 = cst_encode_String(identifier);
+          var arg1 = cst_encode_opt_String(metaWorkspaceId);
+          return wire.wire__crate__api__notes__get_note(port_, arg0, arg1);
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_opt_String,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_opt_String,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiNotesGetNoteConstMeta,
         argValues: [identifier, metaWorkspaceId],
@@ -1641,18 +1590,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_opt_String(metaWorkspaceId, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 31,
-            port: port_,
+          var arg0 = cst_encode_opt_String(metaWorkspaceId);
+          return wire.wire__crate__api__bookmarks__get_recently_added_bookmarks(
+            port_,
+            arg0,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_String,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_String,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiBookmarksGetRecentlyAddedBookmarksConstMeta,
         argValues: [metaWorkspaceId],
@@ -1672,18 +1618,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_opt_String(metaWorkspaceId, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 32,
-            port: port_,
+          var arg0 = cst_encode_opt_String(metaWorkspaceId);
+          return wire.wire__crate__api__notes__get_recently_added_notes(
+            port_,
+            arg0,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_String,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_String,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiNotesGetRecentlyAddedNotesConstMeta,
         argValues: [metaWorkspaceId],
@@ -1705,18 +1648,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_opt_String(metaWorkspaceId, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 33,
-            port: port_,
+          var arg0 = cst_encode_opt_String(metaWorkspaceId);
+          return wire.wire__crate__api__snippets__get_recently_added_snippets(
+            port_,
+            arg0,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_String,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_String,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiSnippetsGetRecentlyAddedSnippetsConstMeta,
         argValues: [metaWorkspaceId],
@@ -1739,19 +1679,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(itemType, serializer);
-          sse_encode_opt_String(metaWorkspaceId, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 34,
-            port: port_,
-          );
+          var arg0 = cst_encode_String(itemType);
+          var arg1 = cst_encode_opt_String(metaWorkspaceId);
+          return wire
+              .wire__crate__api__recycle_bin__get_recycle_bin_entries_by_type(
+                port_,
+                arg0,
+                arg1,
+              );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_String,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_String,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiRecycleBinGetRecycleBinEntriesByTypeConstMeta,
         argValues: [itemType, metaWorkspaceId],
@@ -1774,19 +1713,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(identifier, serializer);
-          sse_encode_opt_String(metaWorkspaceId, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 35,
-            port: port_,
+          var arg0 = cst_encode_String(identifier);
+          var arg1 = cst_encode_opt_String(metaWorkspaceId);
+          return wire.wire__crate__api__recycle_bin__get_recycle_bin_entry(
+            port_,
+            arg0,
+            arg1,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_opt_String,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_opt_String,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiRecycleBinGetRecycleBinEntryConstMeta,
         argValues: [identifier, metaWorkspaceId],
@@ -1809,19 +1746,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(identifier, serializer);
-          sse_encode_opt_String(metaWorkspaceId, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 36,
-            port: port_,
+          var arg0 = cst_encode_String(identifier);
+          var arg1 = cst_encode_opt_String(metaWorkspaceId);
+          return wire.wire__crate__api__reminders__get_reminder(
+            port_,
+            arg0,
+            arg1,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_opt_String,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_opt_String,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiRemindersGetReminderConstMeta,
         argValues: [identifier, metaWorkspaceId],
@@ -1844,19 +1779,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(identifier, serializer);
-          sse_encode_opt_String(metaWorkspaceId, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 37,
-            port: port_,
+          var arg0 = cst_encode_String(identifier);
+          var arg1 = cst_encode_opt_String(metaWorkspaceId);
+          return wire.wire__crate__api__snippets__get_snippet(
+            port_,
+            arg0,
+            arg1,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_opt_String,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_opt_String,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiSnippetsGetSnippetConstMeta,
         argValues: [identifier, metaWorkspaceId],
@@ -1878,19 +1811,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(identifier, serializer);
-          sse_encode_opt_String(metaWorkspaceId, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 38,
-            port: port_,
-          );
+          var arg0 = cst_encode_String(identifier);
+          var arg1 = cst_encode_opt_String(metaWorkspaceId);
+          return wire.wire__crate__api__todo__get_todo(port_, arg0, arg1);
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_opt_String,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_opt_String,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiTodoGetTodoConstMeta,
         argValues: [identifier, metaWorkspaceId],
@@ -1911,18 +1838,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_opt_String(metaWorkspaceId, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 39,
-            port: port_,
+          var arg0 = cst_encode_opt_String(metaWorkspaceId);
+          return wire.wire__crate__api__user_preference__get_user_preference(
+            port_,
+            arg0,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_opt_String,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_opt_String,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiUserPreferenceGetUserPreferenceConstMeta,
         argValues: [metaWorkspaceId],
@@ -1942,18 +1866,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(id, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 40,
-            port: port_,
+          var arg0 = cst_encode_String(id);
+          return wire.wire__crate__api__workspaces__get_workspace_by_id(
+            port_,
+            arg0,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_String,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_String,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiWorkspacesGetWorkspaceByIdConstMeta,
         argValues: [id],
@@ -1970,12 +1891,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeSync(
       SyncTask(
         callFfi: () {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(name, serializer);
-          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 41)!;
+          var arg0 = cst_encode_String(name);
+          return wire.wire__crate__api__simple__greet(arg0);
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_String,
           decodeErrorData: null,
         ),
         constMeta: kCrateApiSimpleGreetConstMeta,
@@ -1993,16 +1913,10 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 42,
-            port: port_,
-          );
+          return wire.wire__crate__api__simple__init_app(port_);
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_unit,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_unit,
           decodeErrorData: null,
         ),
         constMeta: kCrateApiSimpleInitAppConstMeta,
@@ -2016,21 +1930,37 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       const TaskConstMeta(debugName: "init_app", argNames: []);
 
   @override
+  Future<void> crateApiSimpleInitKernel({required String databaseUrl}) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          var arg0 = cst_encode_String(databaseUrl);
+          return wire.wire__crate__api__simple__init_kernel(port_, arg0);
+        },
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_unit,
+          decodeErrorData: dco_decode_String,
+        ),
+        constMeta: kCrateApiSimpleInitKernelConstMeta,
+        argValues: [databaseUrl],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiSimpleInitKernelConstMeta =>
+      const TaskConstMeta(debugName: "init_kernel", argNames: ["databaseUrl"]);
+
+  @override
   Future<String> crateApiWorkspacesListWorkspaces() {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 43,
-            port: port_,
-          );
+          return wire.wire__crate__api__workspaces__list_workspaces(port_);
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_String,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_String,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiWorkspacesListWorkspacesConstMeta,
         argValues: [],
@@ -2051,20 +1981,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(identifier, serializer);
-          sse_encode_bool(done, serializer);
-          sse_encode_opt_String(metaWorkspaceId, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 44,
-            port: port_,
+          var arg0 = cst_encode_String(identifier);
+          var arg1 = cst_encode_bool(done);
+          var arg2 = cst_encode_opt_String(metaWorkspaceId);
+          return wire.wire__crate__api__todo__mark_todo_done(
+            port_,
+            arg0,
+            arg1,
+            arg2,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_String,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_String,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiTodoMarkTodoDoneConstMeta,
         argValues: [identifier, done, metaWorkspaceId],
@@ -2085,18 +2014,16 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_opt_String(metaWorkspaceId, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 45,
-            port: port_,
-          );
+          var arg0 = cst_encode_opt_String(metaWorkspaceId);
+          return wire
+              .wire__crate__api__recycle_bin__purge_all_recycle_bin_entries(
+                port_,
+                arg0,
+              );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_unit,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_unit,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiRecycleBinPurgeAllRecycleBinEntriesConstMeta,
         argValues: [metaWorkspaceId],
@@ -2119,19 +2046,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(identifier, serializer);
-          sse_encode_opt_String(metaWorkspaceId, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 46,
-            port: port_,
+          var arg0 = cst_encode_String(identifier);
+          var arg1 = cst_encode_opt_String(metaWorkspaceId);
+          return wire.wire__crate__api__recycle_bin__purge_recycle_bin_entry(
+            port_,
+            arg0,
+            arg1,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_unit,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_unit,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiRecycleBinPurgeRecycleBinEntryConstMeta,
         argValues: [identifier, metaWorkspaceId],
@@ -2155,20 +2080,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(recordIdentifier, serializer);
-          sse_encode_String(previousWorkspaceIdentifier, serializer);
-          sse_encode_String(targetWorkspaceIdentifier, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 47,
-            port: port_,
+          var arg0 = cst_encode_String(recordIdentifier);
+          var arg1 = cst_encode_String(previousWorkspaceIdentifier);
+          var arg2 = cst_encode_String(targetWorkspaceIdentifier);
+          return wire.wire__crate__api__bookmarks__transfer_bookmark(
+            port_,
+            arg0,
+            arg1,
+            arg2,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_unit,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_unit,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiBookmarksTransferBookmarkConstMeta,
         argValues: [
@@ -2200,20 +2124,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(recordIdentifier, serializer);
-          sse_encode_String(previousWorkspaceIdentifier, serializer);
-          sse_encode_String(targetWorkspaceIdentifier, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 48,
-            port: port_,
+          var arg0 = cst_encode_String(recordIdentifier);
+          var arg1 = cst_encode_String(previousWorkspaceIdentifier);
+          var arg2 = cst_encode_String(targetWorkspaceIdentifier);
+          return wire.wire__crate__api__notes__transfer_note(
+            port_,
+            arg0,
+            arg1,
+            arg2,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_unit,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_unit,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiNotesTransferNoteConstMeta,
         argValues: [
@@ -2244,20 +2167,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(recordIdentifier, serializer);
-          sse_encode_String(previousWorkspaceIdentifier, serializer);
-          sse_encode_String(targetWorkspaceIdentifier, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 49,
-            port: port_,
+          var arg0 = cst_encode_String(recordIdentifier);
+          var arg1 = cst_encode_String(previousWorkspaceIdentifier);
+          var arg2 = cst_encode_String(targetWorkspaceIdentifier);
+          return wire.wire__crate__api__reminders__transfer_reminder(
+            port_,
+            arg0,
+            arg1,
+            arg2,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_unit,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_unit,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiRemindersTransferReminderConstMeta,
         argValues: [
@@ -2289,20 +2211,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(recordIdentifier, serializer);
-          sse_encode_String(previousWorkspaceIdentifier, serializer);
-          sse_encode_String(targetWorkspaceIdentifier, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 50,
-            port: port_,
+          var arg0 = cst_encode_String(recordIdentifier);
+          var arg1 = cst_encode_String(previousWorkspaceIdentifier);
+          var arg2 = cst_encode_String(targetWorkspaceIdentifier);
+          return wire.wire__crate__api__snippets__transfer_snippet(
+            port_,
+            arg0,
+            arg1,
+            arg2,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_unit,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_unit,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiSnippetsTransferSnippetConstMeta,
         argValues: [
@@ -2334,20 +2255,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(recordIdentifier, serializer);
-          sse_encode_String(previousWorkspaceIdentifier, serializer);
-          sse_encode_String(targetWorkspaceIdentifier, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 51,
-            port: port_,
+          var arg0 = cst_encode_String(recordIdentifier);
+          var arg1 = cst_encode_String(previousWorkspaceIdentifier);
+          var arg2 = cst_encode_String(targetWorkspaceIdentifier);
+          return wire.wire__crate__api__todo__transfer_todo(
+            port_,
+            arg0,
+            arg1,
+            arg2,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_unit,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_unit,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiTodoTransferTodoConstMeta,
         argValues: [
@@ -2378,20 +2298,20 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(recordIdentifier, serializer);
-          sse_encode_String(previousWorkspaceIdentifier, serializer);
-          sse_encode_String(targetWorkspaceIdentifier, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 52,
-            port: port_,
-          );
+          var arg0 = cst_encode_String(recordIdentifier);
+          var arg1 = cst_encode_String(previousWorkspaceIdentifier);
+          var arg2 = cst_encode_String(targetWorkspaceIdentifier);
+          return wire
+              .wire__crate__api__user_preference__transfer_user_preference(
+                port_,
+                arg0,
+                arg1,
+                arg2,
+              );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_unit,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_unit,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiUserPreferenceTransferUserPreferenceConstMeta,
         argValues: [
@@ -2425,25 +2345,26 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(identifier, serializer);
-          sse_encode_opt_String(title, serializer);
-          sse_encode_opt_String(url, serializer);
-          sse_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBookmarkTag(
-            tag,
-            serializer,
-          );
-          sse_encode_opt_String(metaWorkspaceId, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 53,
-            port: port_,
+          var arg0 = cst_encode_String(identifier);
+          var arg1 = cst_encode_opt_String(title);
+          var arg2 = cst_encode_opt_String(url);
+          var arg3 =
+              cst_encode_opt_box_autoadd_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBookmarkTag(
+                tag,
+              );
+          var arg4 = cst_encode_opt_String(metaWorkspaceId);
+          return wire.wire__crate__api__bookmarks__update_bookmark(
+            port_,
+            arg0,
+            arg1,
+            arg2,
+            arg3,
+            arg4,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_String,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_String,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiBookmarksUpdateBookmarkConstMeta,
         argValues: [identifier, title, url, tag, metaWorkspaceId],
@@ -2469,22 +2390,23 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(identifier, serializer);
-          sse_encode_opt_String(title, serializer);
-          sse_encode_opt_String(content, serializer);
-          sse_encode_opt_list_String(categories, serializer);
-          sse_encode_opt_String(metaWorkspaceId, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 54,
-            port: port_,
+          var arg0 = cst_encode_String(identifier);
+          var arg1 = cst_encode_opt_String(title);
+          var arg2 = cst_encode_opt_String(content);
+          var arg3 = cst_encode_opt_list_String(categories);
+          var arg4 = cst_encode_opt_String(metaWorkspaceId);
+          return wire.wire__crate__api__notes__update_note(
+            port_,
+            arg0,
+            arg1,
+            arg2,
+            arg3,
+            arg4,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_String,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_String,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiNotesUpdateNoteConstMeta,
         argValues: [identifier, title, content, categories, metaWorkspaceId],
@@ -2518,25 +2440,29 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(identifier, serializer);
-          sse_encode_opt_String(title, serializer);
-          sse_encode_opt_String(description, serializer);
-          sse_encode_opt_String(remindAt, serializer);
-          sse_encode_opt_box_autoadd_bool(recurring, serializer);
-          sse_encode_opt_String(recurrenceRule, serializer);
-          sse_encode_opt_String(alarmSound, serializer);
-          sse_encode_opt_String(metaWorkspaceId, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 55,
-            port: port_,
+          var arg0 = cst_encode_String(identifier);
+          var arg1 = cst_encode_opt_String(title);
+          var arg2 = cst_encode_opt_String(description);
+          var arg3 = cst_encode_opt_String(remindAt);
+          var arg4 = cst_encode_opt_box_autoadd_bool(recurring);
+          var arg5 = cst_encode_opt_String(recurrenceRule);
+          var arg6 = cst_encode_opt_String(alarmSound);
+          var arg7 = cst_encode_opt_String(metaWorkspaceId);
+          return wire.wire__crate__api__reminders__update_reminder(
+            port_,
+            arg0,
+            arg1,
+            arg2,
+            arg3,
+            arg4,
+            arg5,
+            arg6,
+            arg7,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_String,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_String,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiRemindersUpdateReminderConstMeta,
         argValues: [
@@ -2582,24 +2508,27 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(identifier, serializer);
-          sse_encode_opt_String(title, serializer);
-          sse_encode_opt_String(language, serializer);
-          sse_encode_opt_String(code, serializer);
-          sse_encode_opt_String(description, serializer);
-          sse_encode_opt_box_autoadd_bool(isPinned, serializer);
-          sse_encode_opt_String(metaWorkspaceId, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 56,
-            port: port_,
+          var arg0 = cst_encode_String(identifier);
+          var arg1 = cst_encode_opt_String(title);
+          var arg2 = cst_encode_opt_String(language);
+          var arg3 = cst_encode_opt_String(code);
+          var arg4 = cst_encode_opt_String(description);
+          var arg5 = cst_encode_opt_box_autoadd_bool(isPinned);
+          var arg6 = cst_encode_opt_String(metaWorkspaceId);
+          return wire.wire__crate__api__snippets__update_snippet(
+            port_,
+            arg0,
+            arg1,
+            arg2,
+            arg3,
+            arg4,
+            arg5,
+            arg6,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_String,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_String,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiSnippetsUpdateSnippetConstMeta,
         argValues: [
@@ -2642,23 +2571,25 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(identifier, serializer);
-          sse_encode_opt_String(title, serializer);
-          sse_encode_opt_String(description, serializer);
-          sse_encode_opt_String(priority, serializer);
-          sse_encode_opt_String(dueDate, serializer);
-          sse_encode_opt_String(metaWorkspaceId, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 57,
-            port: port_,
+          var arg0 = cst_encode_String(identifier);
+          var arg1 = cst_encode_opt_String(title);
+          var arg2 = cst_encode_opt_String(description);
+          var arg3 = cst_encode_opt_String(priority);
+          var arg4 = cst_encode_opt_String(dueDate);
+          var arg5 = cst_encode_opt_String(metaWorkspaceId);
+          return wire.wire__crate__api__todo__update_todo(
+            port_,
+            arg0,
+            arg1,
+            arg2,
+            arg3,
+            arg4,
+            arg5,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_String,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_String,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiTodoUpdateTodoConstMeta,
         argValues: [
@@ -2695,20 +2626,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(identifier, serializer);
-          sse_encode_opt_String(dueDate, serializer);
-          sse_encode_opt_String(metaWorkspaceId, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 58,
-            port: port_,
+          var arg0 = cst_encode_String(identifier);
+          var arg1 = cst_encode_opt_String(dueDate);
+          var arg2 = cst_encode_opt_String(metaWorkspaceId);
+          return wire.wire__crate__api__todo__update_todo_due_date(
+            port_,
+            arg0,
+            arg1,
+            arg2,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_String,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_String,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiTodoUpdateTodoDueDateConstMeta,
         argValues: [identifier, dueDate, metaWorkspaceId],
@@ -2734,22 +2664,23 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(identifier, serializer);
-          sse_encode_opt_String(firstName, serializer);
-          sse_encode_opt_String(lastName, serializer);
-          sse_encode_opt_String(email, serializer);
-          sse_encode_opt_String(metaWorkspaceId, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 59,
-            port: port_,
+          var arg0 = cst_encode_String(identifier);
+          var arg1 = cst_encode_opt_String(firstName);
+          var arg2 = cst_encode_opt_String(lastName);
+          var arg3 = cst_encode_opt_String(email);
+          var arg4 = cst_encode_opt_String(metaWorkspaceId);
+          return wire.wire__crate__api__user_preference__update_user_preference(
+            port_,
+            arg0,
+            arg1,
+            arg2,
+            arg3,
+            arg4,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_String,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_String,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiUserPreferenceUpdateUserPreferenceConstMeta,
         argValues: [identifier, firstName, lastName, email, metaWorkspaceId],
@@ -2781,22 +2712,23 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
-          final serializer = SseSerializer(generalizedFrbRustBinding);
-          sse_encode_String(identifier, serializer);
-          sse_encode_opt_String(name, serializer);
-          sse_encode_opt_String(description, serializer);
-          sse_encode_opt_box_autoadd_bool(isDefault, serializer);
-          sse_encode_opt_box_autoadd_bool(isHidden, serializer);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 60,
-            port: port_,
+          var arg0 = cst_encode_String(identifier);
+          var arg1 = cst_encode_opt_String(name);
+          var arg2 = cst_encode_opt_String(description);
+          var arg3 = cst_encode_opt_box_autoadd_bool(isDefault);
+          var arg4 = cst_encode_opt_box_autoadd_bool(isHidden);
+          return wire.wire__crate__api__workspaces__update_workspace(
+            port_,
+            arg0,
+            arg1,
+            arg2,
+            arg3,
+            arg4,
           );
         },
-        codec: SseCodec(
-          decodeSuccessData: sse_decode_String,
-          decodeErrorData: sse_decode_String,
+        codec: DcoCodec(
+          decodeSuccessData: dco_decode_String,
+          decodeErrorData: dco_decode_String,
         ),
         constMeta: kCrateApiWorkspacesUpdateWorkspaceConstMeta,
         argValues: [identifier, name, description, isDefault, isHidden],
@@ -3076,6 +3008,44 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   int sse_decode_i_32(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return deserializer.buffer.getInt32();
+  }
+
+  @protected
+  int
+  cst_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBookmarkTag(
+    BookmarkTag raw,
+  ) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    // ignore: invalid_use_of_internal_member
+    return (raw as BookmarkTagImpl).frbInternalCstEncode(move: true);
+  }
+
+  @protected
+  int
+  cst_encode_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerBookmarkTag(
+    BookmarkTag raw,
+  ) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    // ignore: invalid_use_of_internal_member
+    return (raw as BookmarkTagImpl).frbInternalCstEncode();
+  }
+
+  @protected
+  bool cst_encode_bool(bool raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    return raw;
+  }
+
+  @protected
+  int cst_encode_u_8(int raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    return raw;
+  }
+
+  @protected
+  void cst_encode_unit(void raw) {
+    // Codec=Cst (C-struct based), see doc to use other codecs
+    return raw;
   }
 
   @protected
