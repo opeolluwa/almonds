@@ -9,19 +9,3 @@ query SyncQueueView {
     }
   }
 }
-
-# query syncQueue(
-# filters: SyncQueueFilterInput
-# having: SyncQueueHavingInput
-# orderBy: SyncQueueOrderInput
-# pagination: PaginationInput
-# ): SyncQueueConnection!
-
-# query syncQueueUpdate(
-# data: SyncQueueUpdateInput!
-# filter: SyncQueueFilterInput
-# ): [SyncQueueBasic!]!
-
-# query syncQueueDelete(
-# filter: SyncQueueFilterInput
-# ): Int!

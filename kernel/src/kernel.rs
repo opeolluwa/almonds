@@ -6,6 +6,7 @@ use migration::{Migrator, MigratorTrait};
 
 use crate::error::KernelError;
 
+
 pub struct Kernel {
     database_connection: DatabaseConnection,
 }
