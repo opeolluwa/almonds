@@ -1,0 +1,70 @@
+experimental = []
+
+[cargo]
+global_args = []
+
+[cargo.command_args]
+
+[package]
+name = "almond_kernel"
+
+[targets.apple]
+enabled = true
+output = "ffi/apple"
+deployment_target = "16.0"
+include_macos = false
+
+[targets.apple.swift]
+module_name = "AlmondKernel"
+tools_version = "5.9"
+error_style = "throwing"
+
+[targets.apple.swift.type_mappings]
+
+[targets.apple.header]
+
+[targets.apple.xcframework]
+
+[targets.apple.spm]
+distribution = "local"
+layout = "ffi-only"
+skip_package_swift = false
+
+[targets.android]
+enabled = true
+output = "ffi/android"
+min_sdk = 24
+
+[targets.android.kotlin]
+package = "com.example.almond_kernel"
+api_style = "top_level"
+error_style = "throwing"
+factory_style = "constructors"
+
+[targets.android.kotlin.type_mappings]
+
+[targets.android.header]
+
+[targets.android.pack]
+
+[targets.wasm]
+enabled = true
+triple = "wasm32-unknown-unknown"
+profile = "release"
+output = "ffi/wasm"
+
+[targets.wasm.optimize]
+
+[targets.wasm.typescript.type_mappings]
+
+[targets.wasm.npm]
+package_name = "almond-kernel"
+
+[targets.java.jvm]
+enabled = false
+output = "dist/java"
+
+[targets.java.android]
+enabled = false
+output = "dist/java/android"
+min_sdk = 24
