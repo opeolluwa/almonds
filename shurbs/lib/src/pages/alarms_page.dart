@@ -1,5 +1,43 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
+
+import '../rust/api/reminders.dart';
+
+class _Reminder {
+  final String id;
+  String title;
+  String? description;
+  DateTime remindAt;
+  bool recurring;
+  String? recurrenceRule;
+
+  _Reminder({
+    required this.id,
+    required this.title,
+    this.description,
+    required this.remindAt,
+    this.recurring = false,
+    this.recurrenceRule,
+  });
+
+  factory _Reminder.fromJson(Map<String, dynamic> j) => _Reminder(
+        id: j['identifier'] as String,
+        title: j['title'] as String,
+        description: j['description'] as String?,
+        remindAt: DateTime.parse(j['remindAt'] as String),
+        recurring: j['recurring'] as bool? ?? false,
+        recurrenceRule: j['recurrenceRule'] as String?,
+      );
+
+  TimeOfDay get time => TimeOfDay(hour: remindAt.hour, minute: remindAt.minute);
+
+  List<String> get days {
+    if (recurrenceRule == null || recurrenceRule!.isEmpty) return [];
+    return recurrenceRule!.split(',').where((d) => d.isNotEmpty).toList();
+  }
+}
 
 class AlarmsPage extends StatefulWidget {
   const AlarmsPage({super.key});
@@ -9,13 +47,45 @@ class AlarmsPage extends StatefulWidget {
 }
 
 class _AlarmsPageState extends State<AlarmsPage> {
-  final List<_Alarm> _alarms = [
-    _Alarm(id: 1, title: 'Morning standup', time: TimeOfDay(hour: 9, minute: 0), days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']),
-    _Alarm(id: 2, title: 'Lunch break', time: TimeOfDay(hour: 13, minute: 0), days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'], enabled: false),
-    _Alarm(id: 3, title: 'Evening workout', time: TimeOfDay(hour: 18, minute: 30), days: ['Mon', 'Wed', 'Fri']),
-  ];
+  List<_Reminder> _reminders = [];
+  bool _loading = true;
 
-  void _addAlarm() {
+  @override
+  void initState() {
+    super.initState();
+    _loadReminders();
+  }
+
+  Future<void> _loadReminders() async {
+    try {
+      final raw = await getAllReminders();
+      final list = (jsonDecode(raw) as List).cast<Map<String, dynamic>>();
+      setState(() {
+        _reminders = list.map(_Reminder.fromJson).toList();
+        _loading = false;
+      });
+    } catch (_) {
+      setState(() => _loading = false);
+    }
+  }
+
+  Future<void> _deleteReminder(_Reminder r) async {
+    try {
+      await deleteReminder(identifier: r.id);
+      setState(() => _reminders.removeWhere((x) => x.id == r.id));
+    } catch (_) {}
+  }
+
+  Future<void> _toggleReminder(_Reminder r) async {
+    // Toggle recurring flag as a proxy for enabled/disabled
+    try {
+      final newRecurring = !r.recurring;
+      await updateReminder(identifier: r.id, recurring: newRecurring);
+      setState(() => r.recurring = newRecurring);
+    } catch (_) {}
+  }
+
+  void _addReminder() {
     final controller = TextEditingController();
     TimeOfDay selectedTime = TimeOfDay.now();
     final selectedDays = <String>{};
@@ -35,13 +105,13 @@ class _AlarmsPageState extends State<AlarmsPage> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('New Alarm', style: Theme.of(ctx).textTheme.titleLarge),
+              Text('New Reminder', style: Theme.of(ctx).textTheme.titleLarge),
               const SizedBox(height: 16),
               TextField(
                 controller: controller,
                 autofocus: true,
                 decoration: const InputDecoration(
-                  hintText: 'Alarm label',
+                  hintText: 'Reminder label',
                   border: OutlineInputBorder(),
                 ),
               ),
@@ -70,20 +140,26 @@ class _AlarmsPageState extends State<AlarmsPage> {
               SizedBox(
                 width: double.infinity,
                 child: FilledButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (controller.text.trim().isNotEmpty) {
-                      setState(() {
-                        _alarms.add(_Alarm(
-                          id: DateTime.now().millisecondsSinceEpoch,
-                          title: controller.text.trim(),
-                          time: selectedTime,
-                          days: selectedDays.toList(),
-                        ));
-                      });
                       Navigator.pop(ctx);
+                      try {
+                        final now = DateTime.now();
+                        final dt = DateTime(now.year, now.month, now.day, selectedTime.hour, selectedTime.minute);
+                        final remindAt = dt.toIso8601String();
+                        final rule = selectedDays.join(',');
+                        final raw = await createReminder(
+                          title: controller.text.trim(),
+                          remindAt: remindAt,
+                          recurring: selectedDays.isNotEmpty,
+                          recurrenceRule: rule.isEmpty ? null : rule,
+                        );
+                        final json = jsonDecode(raw) as Map<String, dynamic>;
+                        setState(() => _reminders.add(_Reminder.fromJson(json)));
+                      } catch (_) {}
                     }
                   },
-                  child: const Text('Save Alarm'),
+                  child: const Text('Save Reminder'),
                 ),
               ),
             ],
@@ -95,11 +171,15 @@ class _AlarmsPageState extends State<AlarmsPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (_loading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
     return Scaffold(
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
-            _alarms.isEmpty
+            _reminders.isEmpty
                 ? SliverFillRemaining(
                     child: Center(
                       child: Column(
@@ -107,7 +187,7 @@ class _AlarmsPageState extends State<AlarmsPage> {
                         children: [
                           HeroIcon(HeroIcons.clock, size: 64, color: Theme.of(context).colorScheme.outlineVariant),
                           const SizedBox(height: 12),
-                          const Text('No alarms set'),
+                          const Text('No reminders set'),
                         ],
                       ),
                     ),
@@ -116,12 +196,12 @@ class _AlarmsPageState extends State<AlarmsPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     sliver: SliverList(
                       delegate: SliverChildBuilderDelegate(
-                        (ctx, i) => _AlarmTile(
-                          alarm: _alarms[i],
-                          onToggle: () => setState(() => _alarms[i].enabled = !_alarms[i].enabled),
-                          onDelete: () => setState(() => _alarms.removeAt(i)),
+                        (ctx, i) => _ReminderTile(
+                          reminder: _reminders[i],
+                          onToggle: () => _toggleReminder(_reminders[i]),
+                          onDelete: () => _deleteReminder(_reminders[i]),
                         ),
-                        childCount: _alarms.length,
+                        childCount: _reminders.length,
                       ),
                     ),
                   ),
@@ -129,33 +209,25 @@ class _AlarmsPageState extends State<AlarmsPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _addAlarm,
+        onPressed: _addReminder,
         child: const HeroIcon(HeroIcons.plus),
       ),
     );
   }
 }
 
-class _Alarm {
-  final int id;
-  final String title;
-  final TimeOfDay time;
-  final List<String> days;
-  bool enabled;
-
-  _Alarm({required this.id, required this.title, required this.time, required this.days, this.enabled = true});
-}
-
-class _AlarmTile extends StatelessWidget {
-  final _Alarm alarm;
+class _ReminderTile extends StatelessWidget {
+  final _Reminder reminder;
   final VoidCallback onToggle;
   final VoidCallback onDelete;
 
-  const _AlarmTile({required this.alarm, required this.onToggle, required this.onDelete});
+  const _ReminderTile({required this.reminder, required this.onToggle, required this.onDelete});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final enabled = reminder.recurring;
+    final time = reminder.time;
 
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
@@ -168,25 +240,26 @@ class _AlarmTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    alarm.time.format(context),
+                    '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}',
                     style: theme.textTheme.headlineMedium?.copyWith(
-                      color: alarm.enabled ? theme.colorScheme.onSurface : theme.colorScheme.outline,
+                      color: enabled ? theme.colorScheme.onSurface : theme.colorScheme.outline,
                     ),
                   ),
                   const SizedBox(height: 4),
-                  Text(alarm.title, style: theme.textTheme.bodyMedium),
-                  const SizedBox(height: 4),
-                  if (alarm.days.isNotEmpty)
+                  Text(reminder.title, style: theme.textTheme.bodyMedium),
+                  if (reminder.days.isNotEmpty) ...[
+                    const SizedBox(height: 4),
                     Text(
-                      alarm.days.join(' · '),
+                      reminder.days.join(' · '),
                       style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.primary),
                     ),
+                  ],
                 ],
               ),
             ),
             Transform.scale(
               scale: 0.75,
-              child: Switch(value: alarm.enabled, onChanged: (_) => onToggle()),
+              child: Switch(value: enabled, onChanged: (_) => onToggle()),
             ),
             IconButton(icon: const HeroIcon(HeroIcons.trash, size: 20), onPressed: onDelete),
           ],

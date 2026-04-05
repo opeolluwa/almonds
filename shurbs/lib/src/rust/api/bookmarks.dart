@@ -11,7 +11,7 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 Future<String> createBookmark({
   required String title,
   required String url,
-  required BookmarkTag tag,
+  required String tag,
   String? workspaceIdentifier,
   String? metaWorkspaceId,
 }) => RustLib.instance.api.crateApiBookmarksCreateBookmark(
@@ -52,7 +52,7 @@ Future<String> updateBookmark({
   required String identifier,
   String? title,
   String? url,
-  BookmarkTag? tag,
+  String? tag,
   String? metaWorkspaceId,
 }) => RustLib.instance.api.crateApiBookmarksUpdateBookmark(
   identifier: identifier,
@@ -89,6 +89,3 @@ Future<void> transferBookmark({
   previousWorkspaceIdentifier: previousWorkspaceIdentifier,
   targetWorkspaceIdentifier: targetWorkspaceIdentifier,
 );
-
-// Rust type: RustOpaqueNom<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<BookmarkTag>>
-abstract class BookmarkTag implements RustOpaqueInterface {}

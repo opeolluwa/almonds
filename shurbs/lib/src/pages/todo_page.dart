@@ -1,5 +1,25 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
+
+import '../rust/api/todo.dart';
+
+class _Todo {
+  final String id;
+  String title;
+  String priority;
+  bool completed;
+
+  _Todo({required this.id, required this.title, required this.priority, this.completed = false});
+
+  factory _Todo.fromJson(Map<String, dynamic> j) => _Todo(
+        id: j['identifier'] as String,
+        title: j['title'] as String,
+        priority: j['priority'] as String? ?? 'medium',
+        completed: j['done'] as bool? ?? false,
+      );
+}
 
 class TodoPage extends StatefulWidget {
   const TodoPage({super.key});
@@ -9,20 +29,28 @@ class TodoPage extends StatefulWidget {
 }
 
 class _TodoPageState extends State<TodoPage> {
-  final List<_Todo> _todos = [
-    _Todo(id: 1, title: 'Buy groceries', priority: 'high'),
-    _Todo(id: 2, title: 'Review pull request', priority: 'medium'),
-    _Todo(id: 3, title: 'Read Flutter docs', priority: 'low', completed: true),
-  ];
-
+  List<_Todo> _todos = [];
+  bool _loading = true;
   String _filter = 'all';
   String _search = '';
-  final _searchController = TextEditingController();
 
   @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
+  void initState() {
+    super.initState();
+    _loadTodos();
+  }
+
+  Future<void> _loadTodos() async {
+    try {
+      final raw = await getAllTodos();
+      final list = (jsonDecode(raw) as List).cast<Map<String, dynamic>>();
+      setState(() {
+        _todos = list.map(_Todo.fromJson).toList();
+        _loading = false;
+      });
+    } catch (_) {
+      setState(() => _loading = false);
+    }
   }
 
   List<_Todo> get _filtered {
@@ -35,12 +63,26 @@ class _TodoPageState extends State<TodoPage> {
         list = _todos.where((t) => t.completed).toList();
         break;
       default:
-        list = _todos;
+        list = List.from(_todos);
     }
     if (_search.trim().isNotEmpty) {
       list = list.where((t) => t.title.toLowerCase().contains(_search.toLowerCase())).toList();
     }
     return list;
+  }
+
+  Future<void> _toggleDone(_Todo todo) async {
+    try {
+      await markTodoDone(identifier: todo.id, done: !todo.completed);
+      setState(() => todo.completed = !todo.completed);
+    } catch (_) {}
+  }
+
+  Future<void> _deleteTodo(_Todo todo) async {
+    try {
+      await deleteTodo(identifier: todo.id);
+      setState(() => _todos.removeWhere((t) => t.id == todo.id));
+    } catch (_) {}
   }
 
   void _addTodo() {
@@ -86,19 +128,17 @@ class _TodoPageState extends State<TodoPage> {
               SizedBox(
                 width: double.infinity,
                 child: FilledButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (controller.text.trim().isNotEmpty) {
-                      setState(() {
-                        _todos.insert(
-                          0,
-                          _Todo(
-                            id: DateTime.now().millisecondsSinceEpoch,
-                            title: controller.text.trim(),
-                            priority: priority,
-                          ),
-                        );
-                      });
                       Navigator.pop(ctx);
+                      try {
+                        final raw = await createTodo(
+                          title: controller.text.trim(),
+                          priority: priority,
+                        );
+                        final json = jsonDecode(raw) as Map<String, dynamic>;
+                        setState(() => _todos.insert(0, _Todo.fromJson(json)));
+                      } catch (_) {}
                     }
                   },
                   child: const Text('Add Todo'),
@@ -114,6 +154,12 @@ class _TodoPageState extends State<TodoPage> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+
+    if (_loading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+
+    final filtered = _filtered;
 
     return Scaffold(
       body: CustomScrollView(
@@ -135,7 +181,7 @@ class _TodoPageState extends State<TodoPage> {
           const SliverPadding(padding: EdgeInsets.only(top: 12)),
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            sliver: _filtered.isEmpty
+            sliver: filtered.isEmpty
                 ? SliverToBoxAdapter(
                     child: Center(
                       child: Padding(
@@ -153,11 +199,11 @@ class _TodoPageState extends State<TodoPage> {
                 : SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (ctx, i) => _TodoTile(
-                        todo: _filtered[i],
-                        onToggle: () => setState(() => _filtered[i].completed = !_filtered[i].completed),
-                        onDelete: () => setState(() => _todos.remove(_filtered[i])),
+                        todo: filtered[i],
+                        onToggle: () => _toggleDone(filtered[i]),
+                        onDelete: () => _deleteTodo(filtered[i]),
                       ),
-                      childCount: _filtered.length,
+                      childCount: filtered.length,
                     ),
                   ),
           ),
@@ -169,15 +215,6 @@ class _TodoPageState extends State<TodoPage> {
       ),
     );
   }
-}
-
-class _Todo {
-  final int id;
-  final String title;
-  final String priority;
-  bool completed;
-
-  _Todo({required this.id, required this.title, required this.priority, this.completed = false});
 }
 
 class _TodoTile extends StatelessWidget {

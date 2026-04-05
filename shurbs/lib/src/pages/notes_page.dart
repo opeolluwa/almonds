@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:heroicons/heroicons.dart';
 
-// ── Module-level state ────────────────────────────────────────────────────────
+import '../rust/api/notes.dart';
+
+// ── Model ─────────────────────────────────────────────────────────────────────
 
 class _Note {
   final String id;
@@ -11,26 +15,14 @@ class _Note {
   DateTime updatedAt;
 
   _Note({required this.id, required this.title, required this.content, required this.updatedAt});
+
+  factory _Note.fromJson(Map<String, dynamic> j) => _Note(
+        id: j['identifier'] as String,
+        title: j['title'] as String,
+        content: j['content'] as String,
+        updatedAt: DateTime.parse(j['updatedAt'] as String),
+      );
 }
-
-final _notesNotifier = ValueNotifier<List<_Note>>([
-  _Note(
-    id: '1',
-    title: 'Getting started',
-    content:
-        '# Getting Started\n\nWelcome to **Shurbs Notes** — your markdown-powered notebook.\n\n## Features\n\n- Write in **Markdown**\n- Live **preview** toggle\n- Quick formatting toolbar\n\n## Shortcuts\n\n| Action | Toolbar |\n|--------|--------|\n| Bold | **B** |\n| Italic | *I* |\n| Heading | H |\n| List | • |\n\n> Start writing to see the magic.',
-    updatedAt: DateTime.now().subtract(const Duration(hours: 2)),
-  ),
-  _Note(
-    id: '2',
-    title: 'Meeting notes',
-    content:
-        '# Meeting Notes\n\n**Date:** 2026-04-04\n\n## Agenda\n\n1. Project status\n2. Blockers\n3. Next steps\n\n## Action items\n\n- [ ] Follow up with design team\n- [ ] Review PR #42\n- [x] Update documentation',
-    updatedAt: DateTime.now().subtract(const Duration(days: 1)),
-  ),
-]);
-
-int _nextNoteId = 3;
 
 // ── Notes list page ───────────────────────────────────────────────────────────
 
@@ -42,35 +34,75 @@ class NotesPage extends StatefulWidget {
 }
 
 class _NotesPageState extends State<NotesPage> {
+  List<_Note> _notes = [];
+  bool _loading = true;
   String _search = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadNotes();
+  }
+
+  Future<void> _loadNotes() async {
+    try {
+      final raw = await getAllNotes();
+      final list = (jsonDecode(raw) as List).cast<Map<String, dynamic>>();
+      setState(() {
+        _notes = list.map(_Note.fromJson).toList();
+        _loading = false;
+      });
+    } catch (_) {
+      setState(() => _loading = false);
+    }
+  }
 
   void _openNote(_Note note) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => _NoteEditorPage(note: note)),
+      MaterialPageRoute(
+        builder: (_) => _NoteEditorPage(
+          note: note,
+          onSaved: (title, content) => _persistNote(note, title, content),
+        ),
+      ),
     ).then((_) => setState(() {}));
   }
 
-  void _createNote() {
-    final note = _Note(
-      id: '${_nextNoteId++}',
-      title: 'Untitled',
-      content: '',
-      updatedAt: DateTime.now(),
-    );
-    _notesNotifier.value = [..._notesNotifier.value, note];
-    _openNote(note);
+  Future<void> _persistNote(_Note note, String title, String content) async {
+    try {
+      await updateNote(identifier: note.id, title: title, content: content);
+      note.title = title;
+      note.content = content;
+      note.updatedAt = DateTime.now();
+    } catch (_) {}
   }
 
-  void _deleteNote(_Note note) {
-    _notesNotifier.value = _notesNotifier.value.where((n) => n.id != note.id).toList();
-    setState(() {});
+  Future<void> _createNote() async {
+    try {
+      final raw = await createNote(title: 'Untitled', content: '');
+      final json = jsonDecode(raw) as Map<String, dynamic>;
+      final note = _Note.fromJson(json);
+      setState(() => _notes.insert(0, note));
+      _openNote(note);
+    } catch (_) {}
+  }
+
+  Future<void> _deleteNote(_Note note) async {
+    try {
+      await deleteNote(identifier: note.id);
+      setState(() => _notes.removeWhere((n) => n.id == note.id));
+    } catch (_) {}
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+
+    if (_loading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
 
     return Scaffold(
       body: SafeArea(
@@ -101,50 +133,47 @@ class _NotesPageState extends State<NotesPage> {
 
             // ── List ───────────────────────────────────────────────────────
             Expanded(
-              child: ValueListenableBuilder<List<_Note>>(
-                valueListenable: _notesNotifier,
-                builder: (_, notes, __) {
-                  final filtered = _search.trim().isEmpty
-                      ? notes
-                      : notes
-                            .where(
-                              (n) =>
-                                  n.title.toLowerCase().contains(_search.toLowerCase()) ||
-                                  n.content.toLowerCase().contains(_search.toLowerCase()),
-                            )
-                            .toList();
+              child: Builder(builder: (_) {
+                final filtered = _search.trim().isEmpty
+                    ? _notes
+                    : _notes
+                          .where(
+                            (n) =>
+                                n.title.toLowerCase().contains(_search.toLowerCase()) ||
+                                n.content.toLowerCase().contains(_search.toLowerCase()),
+                          )
+                          .toList();
 
-                  if (filtered.isEmpty) {
-                    return Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          HeroIcon(HeroIcons.documentText, size: 48, color: colorScheme.onSurfaceVariant.withValues(alpha: 0.3)),
-                          const SizedBox(height: 12),
-                          Text(
-                            _search.isEmpty ? 'No notes yet' : 'No results',
-                            style: theme.textTheme.bodyLarge?.copyWith(color: colorScheme.onSurfaceVariant),
-                          ),
-                        ],
-                      ),
-                    );
-                  }
-
-                  return ListView.separated(
-                    padding: const EdgeInsets.fromLTRB(16, 4, 16, 100),
-                    itemCount: filtered.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 8),
-                    itemBuilder: (_, i) {
-                      final note = filtered[i];
-                      return _NoteCard(
-                        note: note,
-                        onTap: () => _openNote(note),
-                        onDelete: () => _deleteNote(note),
-                      );
-                    },
+                if (filtered.isEmpty) {
+                  return Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        HeroIcon(HeroIcons.documentText, size: 48, color: colorScheme.onSurfaceVariant.withValues(alpha: 0.3)),
+                        const SizedBox(height: 12),
+                        Text(
+                          _search.isEmpty ? 'No notes yet' : 'No results',
+                          style: theme.textTheme.bodyLarge?.copyWith(color: colorScheme.onSurfaceVariant),
+                        ),
+                      ],
+                    ),
                   );
-                },
-              ),
+                }
+
+                return ListView.separated(
+                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 100),
+                  itemCount: filtered.length,
+                  separatorBuilder: (_, __) => const SizedBox(height: 8),
+                  itemBuilder: (_, i) {
+                    final note = filtered[i];
+                    return _NoteCard(
+                      note: note,
+                      onTap: () => _openNote(note),
+                      onDelete: () => _deleteNote(note),
+                    );
+                  },
+                );
+              }),
             ),
           ],
         ),
@@ -245,7 +274,9 @@ class _NoteCard extends StatelessWidget {
 
 class _NoteEditorPage extends StatefulWidget {
   final _Note note;
-  const _NoteEditorPage({super.key, required this.note});
+  final Future<void> Function(String title, String content) onSaved;
+
+  const _NoteEditorPage({super.key, required this.note, required this.onSaved});
 
   @override
   State<_NoteEditorPage> createState() => _NoteEditorPageState();
@@ -261,26 +292,14 @@ class _NoteEditorPageState extends State<_NoteEditorPage> {
     super.initState();
     _titleController = TextEditingController(text: widget.note.title);
     _contentController = TextEditingController(text: widget.note.content);
-
-    _titleController.addListener(_persist);
-    _contentController.addListener(_persist);
   }
 
   @override
   void dispose() {
-    _titleController.removeListener(_persist);
-    _contentController.removeListener(_persist);
+    widget.onSaved(_titleController.text, _contentController.text);
     _titleController.dispose();
     _contentController.dispose();
     super.dispose();
-  }
-
-  void _persist() {
-    widget.note.title = _titleController.text;
-    widget.note.content = _contentController.text;
-    widget.note.updatedAt = DateTime.now();
-    // Notify listeners so the list updates
-    _notesNotifier.value = List.from(_notesNotifier.value);
   }
 
   // ── Toolbar helpers ──────────────────────────────────────────────────────
@@ -342,7 +361,6 @@ class _NoteEditorPageState extends State<_NoteEditorPage> {
           textInputAction: TextInputAction.next,
         ),
         actions: [
-          // Word count
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: ValueListenableBuilder(
@@ -360,7 +378,6 @@ class _NoteEditorPageState extends State<_NoteEditorPage> {
               },
             ),
           ),
-          // Edit / Preview toggle
           IconButton(
             tooltip: _previewing ? 'Edit' : 'Preview',
             icon: HeroIcon(_previewing ? HeroIcons.pencil : HeroIcons.eye, size: 20),
@@ -370,7 +387,6 @@ class _NoteEditorPageState extends State<_NoteEditorPage> {
       ),
       body: Column(
         children: [
-          // ── Markdown toolbar (editor only) ─────────────────────────────
           if (!_previewing)
             _MarkdownToolbar(
               onBold: () => _wrapSelection('**', '**'),
@@ -382,8 +398,6 @@ class _NoteEditorPageState extends State<_NoteEditorPage> {
               onQuote: () => _insertAtLineStart('> '),
               onHr: () => _insertSnippet('\n---\n'),
             ),
-
-          // ── Editor / Preview ───────────────────────────────────────────
           Expanded(
             child: _previewing
                 ? Markdown(

@@ -40,6 +40,7 @@ dependencies:
   flutter_rust_bridge: 2.11.1
   heroicons: ^0.11.0
   flutter_markdown: ^0.7.0
+  path_provider: ^2.1.5
 
 
 dev_dependencies:

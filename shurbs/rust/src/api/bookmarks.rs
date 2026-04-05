@@ -1,4 +1,4 @@
-pub use almond_kernel::adapters::bookmarks::BookmarkTag;
+use almond_kernel::adapters::bookmarks::BookmarkTag;
 use almond_kernel::{
     adapters::{
         bookmarks::{CreateBookmark, UpdateBookmark},
@@ -24,14 +24,14 @@ fn parse_tag(tag: &str) -> BookmarkTag {
 pub async fn create_bookmark(
     title: String,
     url: String,
-    tag: BookmarkTag,
+    tag: String,
     workspace_identifier: Option<String>,
     meta_workspace_id: Option<String>,
 ) -> Result<String, String> {
     let meta = make_meta(meta_workspace_id).map_err(|e| e.to_string())?;
 
 
-    let payload = CreateBookmark { title, url, tag };
+    let payload = CreateBookmark { title, url, tag: parse_tag(&tag) };
     let bookmark = app_state()
         .bookmarks
         .create(&payload, &meta)
@@ -106,12 +106,12 @@ pub async fn update_bookmark(
     identifier: String,
     title: Option<String>,
     url: Option<String>,
-    tag: Option<BookmarkTag>,
+    tag: Option<String>,
     meta_workspace_id: Option<String>,
 ) -> Result<String, String> {
     let id = parse_uuid(&identifier).map_err(|e| e.to_string())?;
     let meta = make_meta(meta_workspace_id).map_err(|e| e.to_string())?;
-    let payload = UpdateBookmark { title, url, tag };
+    let payload = UpdateBookmark { title, url, tag: tag.as_deref().map(parse_tag) };
 
     let bookmark = app_state()
         .bookmarks
