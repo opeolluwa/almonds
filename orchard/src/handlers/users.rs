@@ -72,35 +72,3 @@ pub async fn update_profile(
         .message("profile updated successfully")
         .build())
 }
-
-pub async fn toggle_2fa(
-    State(user_service): State<UserService>,
-    claims: Claims,
-) -> Result<ApiResponse<()>, ServiceError> {
-    let response = user_service.toggle_2fa(&claims.user_identifier).await?;
-
-    let message = if response.enable_biometrics {
-        "Two-factor authentication enabled successfully"
-    } else {
-        "Two-factor authentication disabled successfully"
-    };
-
-    Ok(ApiResponseBuilder::new().data(()).message(message).build())
-}
-
-pub async fn toggle_biometrics(
-    State(user_service): State<UserService>,
-    claims: Claims,
-) -> Result<ApiResponse<()>, ServiceError> {
-    let response = user_service
-        .toggle_biometrics(&claims.user_identifier)
-        .await?;
-
-    let message = if response.enable_biometrics {
-        "biometrics enabled successfully"
-    } else {
-        "biometrics disabled successfully"
-    };
-
-    Ok(ApiResponseBuilder::new().data(()).message(message).build())
-}

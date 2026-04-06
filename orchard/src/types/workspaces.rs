@@ -36,6 +36,7 @@ impl Into<ActiveModel> for CreateWorkspaceInput {
             description: Set(self.description),
             created_at: Set(Utc::now().fixed_offset()),
             updated_at: Set(Utc::now().fixed_offset()),
+            ..Default::default()
         }
     }
 }

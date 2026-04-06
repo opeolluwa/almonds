@@ -6,11 +6,15 @@ use migration::{Migrator, MigratorTrait};
 
 use crate::error::KernelError;
 
-pub struct Kernel {
+pub struct DataEngine {
     database_connection: DatabaseConnection,
 }
 
-impl Kernel {
+/// Deprecated: use [`DataEngine`] instead.
+#[deprecated(since = "0.1.0", note = "renamed to `DataEngine`")]
+pub type Kernel = DataEngine;
+
+impl DataEngine {
     pub async fn new(database_url: &str) -> Result<Self, KernelError> {
         let mut opt = ConnectOptions::new(database_url);
         opt.max_connections(100)

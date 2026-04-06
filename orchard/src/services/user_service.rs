@@ -57,11 +57,6 @@ pub(crate) trait UserServiceTrait {
         request: &PartialUserProfile,
         user_identifier: &Uuid,
     ) -> Result<users::Model, ServiceError>;
-
-    async fn toggle_2fa(&self, user_identifier: &Uuid) -> Result<users::Model, ServiceError>;
-
-    async fn toggle_biometrics(&self, user_identifier: &Uuid)
-        -> Result<users::Model, ServiceError>;
 }
 
 impl UserServiceTrait for UserService {
@@ -147,23 +142,5 @@ impl UserServiceTrait for UserService {
             .await?;
 
         Ok(profile)
-    }
-
-    async fn toggle_2fa(&self, user_identifier: &Uuid) -> Result<users::Model, ServiceError> {
-        let update = self.user_repository.toggle_2fa(user_identifier).await?;
-
-        Ok(update)
-    }
-
-    async fn toggle_biometrics(
-        &self,
-        user_identifier: &Uuid,
-    ) -> Result<users::Model, ServiceError> {
-        let update = self
-            .user_repository
-            .toggle_biometrics(user_identifier)
-            .await?;
-
-        Ok(update)
     }
 }

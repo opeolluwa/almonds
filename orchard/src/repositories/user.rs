@@ -65,13 +65,6 @@ pub(crate) trait UserRepositoryTrait {
         user_identifier: &Uuid,
         request: &OnboardingRequest,
     ) -> Result<(), DatabaseError>;
-
-    async fn toggle_2fa(&self, user_identifier: &Uuid) -> Result<users::Model, DatabaseError>;
-
-    async fn toggle_biometrics(
-        &self,
-        user_identifier: &Uuid,
-    ) -> Result<users::Model, DatabaseError>;
 }
 
 impl UserRepositoryTrait for UserRepository {
@@ -239,37 +232,5 @@ impl UserRepositoryTrait for UserRepository {
         user.update(self.db_conn.as_ref()).await?;
 
         Ok(())
-    }
-
-    async fn toggle_2fa(&self, user_identifier: &Uuid) -> Result<users::Model, DatabaseError> {
-        let user = self
-            .find_by_identifier(user_identifier)
-            .await
-            .ok_or(DatabaseError::RecordNotFound)?;
-
-        let prev_value = user.enable_biometrics;
-        let mut user: users::ActiveModel = user.into();
-        user.enable_2fa = Set(!prev_value);
-        let update = user.update(self.db_conn.as_ref()).await?;
-
-        Ok(update)
-    }
-
-    async fn toggle_biometrics(
-        &self,
-        user_identifier: &Uuid,
-    ) -> Result<users::Model, DatabaseError> {
-        let user = self
-            .find_by_identifier(user_identifier)
-            .await
-            .ok_or(DatabaseError::RecordNotFound)?;
-
-        let prev_value = user.enable_biometrics;
-        let mut user: users::ActiveModel = user.into();
-        user.enable_biometrics = Set(!prev_value);
-
-        let update = user.update(self.db_conn.as_ref()).await?;
-
-        Ok(update)
     }
 }

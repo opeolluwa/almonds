@@ -1,10 +1,9 @@
 use std::fmt;
 
+use almond_kernel::entities::notifications;
 use chrono::{DateTime, Local};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
-
-use crate::entities::notifications;
 
 #[derive(Debug, Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]

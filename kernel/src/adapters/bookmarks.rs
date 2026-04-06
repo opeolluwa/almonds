@@ -1,40 +1,38 @@
-use std::fmt;
-
 use chrono::Utc;
 use sea_orm::ActiveValue::Set;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
+#[cfg(feature = "postgres")]
+use crate::entities::sea_orm_active_enums::Tag;
 use crate::entities::{self, bookmark::ActiveModel};
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub enum BookmarkTag {
-    Development,
-    Inspiration,
-    Design,
-    Research,
-}
-
-impl fmt::Display for BookmarkTag {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            BookmarkTag::Development => write!(f, "development"),
-            BookmarkTag::Inspiration => write!(f, "inspiration"),
-            BookmarkTag::Design => write!(f, "design"),
-            BookmarkTag::Research => write!(f, "research"),
-        }
-    }
-}
+#[cfg(feature = "sqlite")]
+use crate::enums::Tag;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CreateBookmark {
     pub title: String,
     pub url: String,
-    pub tag: BookmarkTag,
+    pub tag: Tag,
 }
 
+#[cfg(feature = "postgres")]
+impl Into<entities::bookmark::ActiveModel> for CreateBookmark {
+    fn into(self) -> entities::bookmark::ActiveModel {
+        ActiveModel {
+            identifier: Set(Uuid::new_v4()),
+            title: Set(self.title),
+            url: Set(self.url),
+            tag: Set(self.tag),
+            created_at: Set(Utc::now().fixed_offset()),
+            updated_at: Set(Utc::now().fixed_offset()),
+            ..Default::default()
+        }
+    }
+}
+
+#[cfg(feature = "sqlite")]
 impl Into<entities::bookmark::ActiveModel> for CreateBookmark {
     fn into(self) -> entities::bookmark::ActiveModel {
         ActiveModel {
@@ -54,5 +52,5 @@ impl Into<entities::bookmark::ActiveModel> for CreateBookmark {
 pub struct UpdateBookmark {
     pub title: Option<String>,
     pub url: Option<String>,
-    pub tag: Option<BookmarkTag>,
+    pub tag: Option<Tag>,
 }

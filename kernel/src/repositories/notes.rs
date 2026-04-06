@@ -8,11 +8,15 @@ use sea_orm::{
 };
 use uuid::Uuid;
 
+#[cfg(feature = "postgres")]
+use crate::entities::sea_orm_active_enums::ItemType;
+#[cfg(feature = "sqlite")]
+use crate::enums::ItemType;
 use crate::{
     adapters::{
         meta::RequestMeta,
         notes::{CreateNote, UpdateNote},
-        recycle_bin::{CreateRecycleBinEntry, RecycleBinItemType},
+        recycle_bin::CreateRecycleBinEntry,
     },
     entities::notes,
     error::KernelError,
@@ -145,7 +149,7 @@ impl NotesRepositoryExt for NotesRepository {
             .store(
                 &CreateRecycleBinEntry {
                     item_id: model.identifier,
-                    item_type: RecycleBinItemType::Note,
+                    item_type: ItemType::Note,
                     payload,
                     workspace_identifier: model.workspace_identifier,
                 },

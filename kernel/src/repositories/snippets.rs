@@ -8,10 +8,14 @@ use sea_orm::{
 };
 use uuid::Uuid;
 
+#[cfg(feature = "postgres")]
+use crate::entities::sea_orm_active_enums::ItemType;
+#[cfg(feature = "sqlite")]
+use crate::enums::ItemType;
 use crate::{
     adapters::{
         meta::RequestMeta,
-        recycle_bin::{CreateRecycleBinEntry, RecycleBinItemType},
+        recycle_bin::CreateRecycleBinEntry,
         snippets::{CreateSnippet, UpdateSnippet},
     },
     entities::snippets,
@@ -151,7 +155,7 @@ impl SnippetRepositoryExt for SnippetRepository {
             .store(
                 &CreateRecycleBinEntry {
                     item_id: model.identifier,
-                    item_type: RecycleBinItemType::Snippet,
+                    item_type: ItemType::Snippet,
                     workspace_identifier: model.workspace_identifier,
                     payload,
                 },

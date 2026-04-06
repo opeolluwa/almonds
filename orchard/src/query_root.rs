@@ -1,8 +1,11 @@
+use almond_kernel::entities::*;
 use async_graphql::dynamic::*;
 use sea_orm::DatabaseConnection;
 use seaography::{async_graphql, lazy_static::lazy_static, Builder, BuilderContext};
 
-use crate::{entities::*, mutations, types};
+use crate::entities::register_active_enums;
+use crate::entities::register_entity_modules;
+use crate::{mutations, types};
 
 lazy_static! {
     static ref CONTEXT: BuilderContext = BuilderContext::default();
@@ -35,8 +38,6 @@ pub fn schema_builder(
             types::reminder::CreateReminderInput,
             types::snippets::CreateSnippetInput,
             types::bookmark::CreateBookmarkInput,
-            types::playlist::CreatePlaylistInput,
-            types::audio_book::CreateAudioBookInput,
             types::recycle_bin::CreateRecycleBinItemInput,
             types::note_category::CreateNoteCategoryInput,
             types::ollama_conversation_history::CreateOllamaConversationHistoryInput,
@@ -58,8 +59,6 @@ pub fn schema_builder(
             mutations::reminder::CreateReminder,
             mutations::snippets::CreateSnippet,
             mutations::bookmark::CreateBookmark,
-            mutations::playlist::CreatePlaylist,
-            mutations::audio_book::CreateAudioBook,
             mutations::recycle_bin::CreateRecycleBinItem,
             mutations::note_category::CreateNoteCategory,
             mutations::ollama_conversation_history::CreateOllamaConversationHistory,

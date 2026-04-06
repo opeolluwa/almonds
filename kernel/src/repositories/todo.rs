@@ -10,11 +10,15 @@ use sea_orm::{
 use uuid::Uuid;
 
 use crate::adapters::meta::RequestMeta;
+#[cfg(feature = "postgres")]
+use crate::entities::sea_orm_active_enums::{ItemType, Priority};
+#[cfg(feature = "sqlite")]
+use crate::enums::{ItemType, Priority};
 use crate::utils::extract_req_meta;
 use crate::{
     adapters::{
-        recycle_bin::{CreateRecycleBinEntry, RecycleBinItemType},
-        todo::{CreateTodo, TodoPriority, UpdateTodo},
+        recycle_bin::CreateRecycleBinEntry,
+        todo::{CreateTodo, UpdateTodo},
     },
     entities::todo,
     error::KernelError,
@@ -66,7 +70,7 @@ pub trait TodoRepositoryExt {
     async fn change_priority(
         &self,
         identifier: &Uuid,
-        priority: &TodoPriority,
+        priority: &Priority,
         meta: &Option<RequestMeta>,
     ) -> Result<todo::Model, KernelError>;
 
@@ -193,7 +197,7 @@ impl TodoRepositoryExt for TodoRepository {
             .store(
                 &CreateRecycleBinEntry {
                     item_id: model.identifier,
-                    item_type: RecycleBinItemType::Todo,
+                    item_type: ItemType::Todo,
                     workspace_identifier: model.workspace_identifier,
                     payload,
                 },
@@ -209,10 +213,38 @@ impl TodoRepositoryExt for TodoRepository {
         Ok(())
     }
 
+    #[cfg(feature = "postgres")]
     async fn change_priority(
         &self,
         identifier: &Uuid,
-        priority: &TodoPriority,
+        priority: &Priority,
+        meta: &Option<RequestMeta>,
+    ) -> Result<todo::Model, KernelError> {
+        let meta = extract_req_meta(meta)?;
+
+        let model = todo::Entity::find()
+            .filter(todo::Column::Identifier.eq(*identifier))
+            .filter(todo::Column::WorkspaceIdentifier.eq(meta.workspace_identifier))
+            .one(self.conn.as_ref())
+            .await
+            .map_err(|err| KernelError::DbOperationError(err.to_string()))?
+            .ok_or_else(|| KernelError::DbOperationError("todo not found".to_string()))?;
+
+        let mut active_model = model.into_active_model();
+        active_model.priority = Set(priority.to_owned());
+        active_model.updated_at = Set(Utc::now().fixed_offset());
+
+        active_model
+            .update(self.conn.as_ref())
+            .await
+            .map_err(|err| KernelError::DbOperationError(err.to_string()))
+    }
+
+    #[cfg(feature = "sqlite")]
+    async fn change_priority(
+        &self,
+        identifier: &Uuid,
+        priority: &Priority,
         meta: &Option<RequestMeta>,
     ) -> Result<todo::Model, KernelError> {
         let meta = extract_req_meta(meta)?;

@@ -15,5 +15,7 @@ Cargo.lock
 
 test.sqlite
 
-almond.*.db
+almond*.db
 
+
+almond.db

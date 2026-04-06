@@ -8,10 +8,14 @@ use sea_orm::{
 };
 use uuid::Uuid;
 
+#[cfg(feature = "postgres")]
+use crate::entities::sea_orm_active_enums::ItemType;
+#[cfg(feature = "sqlite")]
+use crate::enums::ItemType;
 use crate::{
     adapters::{
         meta::RequestMeta,
-        recycle_bin::{CreateRecycleBinEntry, RecycleBinItemType},
+        recycle_bin::CreateRecycleBinEntry,
         reminder::{CreateReminder, UpdateReminder},
     },
     entities::reminder,
@@ -189,7 +193,7 @@ impl ReminderRepositoryExt for ReminderRepository {
             .store(
                 &CreateRecycleBinEntry {
                     item_id: model.identifier,
-                    item_type: RecycleBinItemType::Reminder,
+                    item_type: ItemType::Reminder,
                     workspace_identifier: model.workspace_identifier,
                     payload,
                 },

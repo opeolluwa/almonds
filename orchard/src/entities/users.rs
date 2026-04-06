@@ -20,49 +20,14 @@ pub struct Model {
     pub profile_picture: Option<String>,
     #[sea_orm(unique)]
     pub username: Option<String>,
-    pub country_identifier: Option<String>,
-    pub enable_2fa: bool,
-    pub enable_biometrics: bool,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
-    #[sea_orm(has_many = "super::audio_books::Entity")]
-    AudioBooks,
-    #[sea_orm(has_many = "super::backup_emails::Entity")]
-    BackupEmails,
-    #[sea_orm(
-        belongs_to = "super::countries::Entity",
-        from = "Column::CountryIdentifier",
-        to = "super::countries::Column::Identifier",
-        on_update = "NoAction",
-        on_delete = "NoAction"
-    )]
-    Countries,
     #[sea_orm(has_many = "super::notifications::Entity")]
     Notifications,
     #[sea_orm(has_many = "super::one_time_passwords::Entity")]
     OneTimePasswords,
-    #[sea_orm(has_many = "super::playlists::Entity")]
-    Playlists,
-}
-
-impl Related<super::audio_books::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::AudioBooks.def()
-    }
-}
-
-impl Related<super::backup_emails::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::BackupEmails.def()
-    }
-}
-
-impl Related<super::countries::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::Countries.def()
-    }
 }
 
 impl Related<super::notifications::Entity> for Entity {
@@ -77,26 +42,12 @@ impl Related<super::one_time_passwords::Entity> for Entity {
     }
 }
 
-impl Related<super::playlists::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::Playlists.def()
-    }
-}
-
 impl ActiveModelBehavior for ActiveModel {}
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelatedEntity)]
 pub enum RelatedEntity {
-    #[sea_orm(entity = "super::audio_books::Entity")]
-    AudioBooks,
-    #[sea_orm(entity = "super::backup_emails::Entity")]
-    BackupEmails,
-    #[sea_orm(entity = "super::countries::Entity")]
-    Countries,
     #[sea_orm(entity = "super::notifications::Entity")]
     Notifications,
     #[sea_orm(entity = "super::one_time_passwords::Entity")]
     OneTimePasswords,
-    #[sea_orm(entity = "super::playlists::Entity")]
-    Playlists,
 }

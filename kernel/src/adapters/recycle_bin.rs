@@ -1,45 +1,37 @@
-use std::fmt;
-
 use chrono::Utc;
 use sea_orm::ActiveValue::Set;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
+#[cfg(feature = "postgres")]
+use crate::entities::sea_orm_active_enums::ItemType;
 use crate::entities::{self, recycle_bin::ActiveModel};
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub enum RecycleBinItemType {
-    Todo,
-    Note,
-    Reminder,
-    Snippet,
-    Bookmark,
-    Workspace,
-}
-
-impl fmt::Display for RecycleBinItemType {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            RecycleBinItemType::Todo => write!(f, "todo"),
-            RecycleBinItemType::Note => write!(f, "note"),
-            RecycleBinItemType::Reminder => write!(f, "reminder"),
-            RecycleBinItemType::Snippet => write!(f, "snippet"),
-            RecycleBinItemType::Bookmark => write!(f, "bookmark"),
-            RecycleBinItemType::Workspace => write!(f, "workspace"),
-        }
-    }
-}
+#[cfg(feature = "sqlite")]
+use crate::enums::ItemType;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CreateRecycleBinEntry {
     pub item_id: Uuid,
-    pub item_type: RecycleBinItemType,
+    pub item_type: ItemType,
     pub payload: String,
     pub workspace_identifier: Option<Uuid>,
 }
 
+#[cfg(feature = "postgres")]
+impl Into<entities::recycle_bin::ActiveModel> for CreateRecycleBinEntry {
+    fn into(self) -> entities::recycle_bin::ActiveModel {
+        ActiveModel {
+            identifier: Set(Uuid::new_v4()),
+            item_id: Set(self.item_id),
+            item_type: Set(self.item_type),
+            payload: Set(self.payload),
+            workspace_identifier: Set(self.workspace_identifier),
+            deleted_at: Set(Utc::now().fixed_offset()),
+        }
+    }
+}
+#[cfg(feature = "sqlite")]
 impl Into<entities::recycle_bin::ActiveModel> for CreateRecycleBinEntry {
     fn into(self) -> entities::recycle_bin::ActiveModel {
         ActiveModel {

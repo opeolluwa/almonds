@@ -2,7 +2,7 @@ pub mod adapters;
 pub mod cli;
 pub mod config;
 pub mod dto;
-pub mod entities;
+mod entities;
 pub mod errors;
 pub mod handlers;
 pub mod middlewares;

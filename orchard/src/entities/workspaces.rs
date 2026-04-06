@@ -13,6 +13,11 @@ pub struct Model {
     pub description: String,
     pub created_at: DateTimeWithTimeZone,
     pub updated_at: DateTimeWithTimeZone,
+    pub is_default: bool,
+    pub is_hidden: bool,
+    pub is_secured: bool,
+    #[sea_orm(column_type = "Text", nullable)]
+    pub password_hash: Option<String>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
@@ -29,6 +34,8 @@ pub enum Relation {
     Snippets,
     #[sea_orm(has_many = "super::todo::Entity")]
     Todo,
+    #[sea_orm(has_many = "super::user_preference::Entity")]
+    UserPreference,
 }
 
 impl Related<super::bookmark::Entity> for Entity {
@@ -67,6 +74,12 @@ impl Related<super::todo::Entity> for Entity {
     }
 }
 
+impl Related<super::user_preference::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::UserPreference.def()
+    }
+}
+
 impl ActiveModelBehavior for ActiveModel {}
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelatedEntity)]
@@ -83,4 +96,6 @@ pub enum RelatedEntity {
     Snippets,
     #[sea_orm(entity = "super::todo::Entity")]
     Todo,
+    #[sea_orm(entity = "super::user_preference::Entity")]
+    UserPreference,
 }

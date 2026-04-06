@@ -29,3 +29,23 @@ test-orchard:
 		--with-serde both \
 		--model-extra-attributes 'serde(rename_all="camelCase")' \
 		-o src/entities
+
+# Pull schema and generate entities + seaography bindings for PostgreSQL
+[working-directory: 'orchard']
+@generate-orchard-entities:
+	sea-orm-cli generate entity \
+		--database-url {{DATABASE_URL}} \
+		--with-serde both \
+		--model-extra-attributes 'serde(rename_all="camelCase")' \
+		--seaography \
+		-o src/entities
+
+# Pull schema and generate entities + seaography bindings for MySQL (muted)
+# [working-directory: 'orchard']
+# @generate-orchard-entities-mysql:
+# 	sea-orm-cli generate entity \
+# 		--database-url {{DATABASE_URL}} \
+# 		--with-serde both \
+# 		--model-extra-attributes 'serde(rename_all="camelCase")' \
+# 		--seaography \
+# 		-o src/entities
