@@ -20,8 +20,8 @@ TextTheme _poppins([TextTheme? base]) {
   );
 }
 
-class ShurbsApp extends StatelessWidget {
-  const ShurbsApp({super.key});
+class App extends StatelessWidget {
+  const App({super.key});
 
   @override
   Widget build(BuildContext context) {

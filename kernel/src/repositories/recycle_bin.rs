@@ -119,13 +119,27 @@ impl RecycleBinRepositoryExt for RecycleBinRepository {
     ) -> Result<Vec<recycle_bin::Model>, KernelError> {
         let meta = extract_req_meta(meta)?;
 
-        recycle_bin::Entity::find()
-            .filter(recycle_bin::Column::WorkspaceIdentifier.eq(meta.workspace_identifier))
-            .filter(recycle_bin::Column::ItemType.eq(item_type.to_owned()))
-            .order_by_desc(recycle_bin::Column::DeletedAt)
-            .all(self.conn.as_ref())
-            .await
-            .map_err(|err| KernelError::DbOperationError(err.to_string()))
+        #[cfg(feature = "sqlite")]
+        {
+            recycle_bin::Entity::find()
+                .filter(recycle_bin::Column::WorkspaceIdentifier.eq(meta.workspace_identifier))
+                .filter(recycle_bin::Column::ItemType.eq(item_type.to_string()))
+                .order_by_desc(recycle_bin::Column::DeletedAt)
+                .all(self.conn.as_ref())
+                .await
+                .map_err(|err| KernelError::DbOperationError(err.to_string()))
+        }
+
+        #[cfg(feature = "postgres")]
+        {
+            recycle_bin::Entity::find()
+                .filter(recycle_bin::Column::WorkspaceIdentifier.eq(meta.workspace_identifier))
+                .filter(recycle_bin::Column::ItemType.eq(item_type.to_owned()))
+                .order_by_desc(recycle_bin::Column::DeletedAt)
+                .all(self.conn.as_ref())
+                .await
+                .map_err(|err| KernelError::DbOperationError(err.to_string()))
+        }
     }
 
     async fn purge(

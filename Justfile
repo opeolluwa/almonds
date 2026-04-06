@@ -10,6 +10,7 @@ import 'scripts/orchard.just'
 import 'scripts/docs.just'
 import 'scripts/grove.just'
 import 'scripts/release.just'
+import 'scripts/shurbs.just'
 
 
 DB_PATH := "sqlite://../../test.sqlite?mode=rwc"
