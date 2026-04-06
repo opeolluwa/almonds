@@ -3,13 +3,11 @@ use sea_orm::ActiveValue::Set;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-#[cfg(feature = "sqlite")]
-use crate::enums::Tag;
 #[cfg(feature = "postgres")]
 use crate::entities::sea_orm_active_enums::Tag;
-
 use crate::entities::{self, bookmark::ActiveModel};
-
+#[cfg(feature = "sqlite")]
+use crate::enums::Tag;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]

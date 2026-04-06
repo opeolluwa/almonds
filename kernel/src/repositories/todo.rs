@@ -10,10 +10,10 @@ use sea_orm::{
 use uuid::Uuid;
 
 use crate::adapters::meta::RequestMeta;
-#[cfg(feature = "sqlite")]
-use crate::enums::{ItemType, Priority};
 #[cfg(feature = "postgres")]
 use crate::entities::sea_orm_active_enums::{ItemType, Priority};
+#[cfg(feature = "sqlite")]
+use crate::enums::{ItemType, Priority};
 use crate::utils::extract_req_meta;
 use crate::{
     adapters::{

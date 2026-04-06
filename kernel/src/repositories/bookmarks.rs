@@ -8,10 +8,10 @@ use sea_orm::{
 };
 use uuid::Uuid;
 
-#[cfg(feature = "sqlite")]
-use crate::enums::{ItemType, Tag};
 #[cfg(feature = "postgres")]
 use crate::entities::sea_orm_active_enums::{ItemType, Tag};
+#[cfg(feature = "sqlite")]
+use crate::enums::{ItemType, Tag};
 use crate::{
     adapters::{
         bookmarks::{CreateBookmark, UpdateBookmark},

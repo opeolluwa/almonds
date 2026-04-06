@@ -1,18 +1,13 @@
-
 use chrono::Utc;
 use sea_orm::ActiveValue::Set;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-
-#[cfg(feature = "sqlite")]
-use crate::enums::ItemType;
-
 #[cfg(feature = "postgres")]
 use crate::entities::sea_orm_active_enums::ItemType;
 use crate::entities::{self, recycle_bin::ActiveModel};
-
-
+#[cfg(feature = "sqlite")]
+use crate::enums::ItemType;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]

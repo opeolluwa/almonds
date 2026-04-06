@@ -7,10 +7,10 @@ use sea_orm::{
 };
 use uuid::Uuid;
 
-#[cfg(feature = "sqlite")]
-use crate::enums::ItemType;
 #[cfg(feature = "postgres")]
 use crate::entities::sea_orm_active_enums::ItemType;
+#[cfg(feature = "sqlite")]
+use crate::enums::ItemType;
 use crate::{
     adapters::{meta::RequestMeta, recycle_bin::CreateRecycleBinEntry},
     entities::recycle_bin,

@@ -1,4 +1,3 @@
-
 pub mod adapters;
 pub mod entities;
 pub mod error;
@@ -9,7 +8,7 @@ pub mod sync_engine;
 pub mod utils;
 pub use kernel::DataEngine;
 mod enums;
-pub use graphql_ws_client::*;
 
+pub use graphql_ws_client::*;
 
 pub use migration;
