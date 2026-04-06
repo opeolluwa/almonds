@@ -8,6 +8,9 @@ use sea_orm::{
 };
 use uuid::Uuid;
 
+#[cfg(feature = "sqlite")]
+use crate::enums::ItemType;
+#[cfg(feature = "postgres")]
 use crate::entities::sea_orm_active_enums::ItemType;
 use crate::{
     adapters::{

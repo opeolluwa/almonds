@@ -1,25 +1,18 @@
-use std::fmt;
 
 use chrono::Utc;
 use sea_orm::ActiveValue::Set;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
+
+#[cfg(feature = "sqlite")]
+use crate::enums::ItemType;
+
+#[cfg(feature = "postgres")]
 use crate::entities::sea_orm_active_enums::ItemType;
 use crate::entities::{self, recycle_bin::ActiveModel};
 
-impl fmt::Display for ItemType {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            ItemType::Todo => write!(f, "todo"),
-            ItemType::Note => write!(f, "note"),
-            ItemType::Reminder => write!(f, "reminder"),
-            ItemType::Snippet => write!(f, "snippet"),
-            ItemType::Bookmark => write!(f, "bookmark"),
-            // ItemType::Workspace => write!(f, "workspace"),
-        }
-    }
-}
+
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]

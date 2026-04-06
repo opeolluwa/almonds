@@ -3,20 +3,13 @@ use sea_orm::ActiveValue::Set;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
+#[cfg(feature = "sqlite")]
+use crate::enums::Tag;
+#[cfg(feature = "postgres")]
 use crate::entities::sea_orm_active_enums::Tag;
+
 use crate::entities::{self, bookmark::ActiveModel};
 
-#[cfg(feature = "sqlite")]
-impl fmt::Display for Tag {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            Tag::Development => write!(f, "development"),
-            Tag::Inspiration => write!(f, "inspiration"),
-            Tag::Design => write!(f, "design"),
-            Tag::Research => write!(f, "research"),
-        }
-    }
-}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]

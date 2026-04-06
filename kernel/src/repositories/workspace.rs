@@ -11,12 +11,10 @@ use uuid::Uuid;
 use crate::{
     adapters::{
         meta::RequestMeta,
-        recycle_bin::CreateRecycleBinEntry,
         workspace::{CreateWorkspace, UpdateWorkspace, hash_password, verify_password},
     },
     entities::workspaces,
     error::KernelError,
-    repositories::{prelude::RecycleBinRepositoryExt, recycle_bin::RecycleBinRepository},
     utils::extract_req_meta,
 };
 
@@ -101,7 +99,7 @@ impl WorkspaceRepositoryExt for WorkspaceRepository {
         identifier: &Uuid,
         meta: &Option<RequestMeta>,
     ) -> Result<(), KernelError> {
-        let meta = extract_req_meta(meta)?;
+        let _meta = extract_req_meta(meta)?;
 
         let model = workspaces::Entity::find()
             .filter(workspaces::Column::Identifier.eq(*identifier))
@@ -116,7 +114,7 @@ impl WorkspaceRepositoryExt for WorkspaceRepository {
             ));
         }
 
-        let payload = serde_json::to_string(&model)
+        let _payload = serde_json::to_string(&model)
             .map_err(|err| KernelError::DbOperationError(err.to_string()))?;
 
         //TODO: Consider moving this logic to a service layer if it becomes more complex or if we need to handle related entities (e.g., todos, bookmarks) in the recycle bin entry. For now, it serves the purpose of keeping a record of deleted workspaces.
