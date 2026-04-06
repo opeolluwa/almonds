@@ -121,7 +121,7 @@ impl RecycleBinRepositoryExt for RecycleBinRepository {
 
         recycle_bin::Entity::find()
             .filter(recycle_bin::Column::WorkspaceIdentifier.eq(meta.workspace_identifier))
-            .filter(recycle_bin::Column::ItemType.eq(item_type.to_string()))
+            .filter(recycle_bin::Column::ItemType.eq(item_type.to_owned()))
             .order_by_desc(recycle_bin::Column::DeletedAt)
             .all(self.conn.as_ref())
             .await

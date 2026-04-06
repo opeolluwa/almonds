@@ -7,6 +7,7 @@ pub mod repositories;
 pub mod sync_engine;
 pub mod utils;
 pub use kernel::DataEngine;
+#[cfg(feature = "sqlite")]
 mod enums;
 
 pub use graphql_ws_client::*;
