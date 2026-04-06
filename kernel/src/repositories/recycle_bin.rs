@@ -7,11 +7,9 @@ use sea_orm::{
 };
 use uuid::Uuid;
 
+use crate::entities::sea_orm_active_enums::ItemType;
 use crate::{
-    adapters::{
-        meta::RequestMeta,
-        recycle_bin::{CreateRecycleBinEntry, RecycleBinItemType},
-    },
+    adapters::{meta::RequestMeta, recycle_bin::CreateRecycleBinEntry},
     entities::recycle_bin,
     error::KernelError,
     utils::extract_req_meta,
@@ -45,7 +43,7 @@ pub trait RecycleBinRepositoryExt {
 
     async fn find_by_item_type(
         &self,
-        item_type: &RecycleBinItemType,
+        item_type: &ItemType,
         meta: &Option<RequestMeta>,
     ) -> Result<Vec<recycle_bin::Model>, KernelError>;
 
@@ -113,7 +111,7 @@ impl RecycleBinRepositoryExt for RecycleBinRepository {
 
     async fn find_by_item_type(
         &self,
-        item_type: &RecycleBinItemType,
+        item_type: &ItemType,
         meta: &Option<RequestMeta>,
     ) -> Result<Vec<recycle_bin::Model>, KernelError> {
         let meta = extract_req_meta(meta)?;

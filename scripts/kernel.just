@@ -21,9 +21,7 @@ db-clean:
 
 # --- Migrations -------------------------------------------------------
 
-POSTGRES_URL := "postgres://almond:almond@localhost:5433/almond"
-MYSQL_URL    := "mysql://almond:almond@localhost:3307/almond"
-SQLITE_URL   := "sqlite://./almond.db?mode=rwc"
+
 
 [working-directory: 'kernel']
 @migrate-add target:
@@ -37,6 +35,12 @@ SQLITE_URL   := "sqlite://./almond.db?mode=rwc"
 [working-directory: 'kernel']
 @migrate-up-postgres:
 	sea-orm-cli migrate up --database-url {{POSTGRES_URL}}
+
+
+# Run pending migrations against postgres (docker)
+[working-directory: 'orchard']
+@migrate-up-orchard:
+	sea-orm-cli migrate up --database-url {{DATABASE_URL}}
 
 # Run pending migrations against sqlite
 [working-directory: 'kernel']
@@ -105,6 +109,7 @@ db-pull sqlite_url=SQLITE_URL:
 	just migrate-up
 	just db-pull-sqlite {{sqlite_url}}
 	just db-pull-postgres
+	just db-pull-orchard
 
 [working-directory: 'orchard']
 @generate-graphql-bindings url:
@@ -117,3 +122,7 @@ db-pull sqlite_url=SQLITE_URL:
 [working-directory:'kernel']
 test-kernel:
     cargo test
+
+db-pull-orchard:
+	just migrate-up-orchard
+	just generate-orchard-entities

@@ -8,11 +8,13 @@ use sea_orm::{
 };
 use uuid::Uuid;
 
+use crate::entities::sea_orm_active_enums::ItemType;
+use crate::entities::sea_orm_active_enums::Tag;
 use crate::{
     adapters::{
-        bookmarks::{BookmarkTag, CreateBookmark, UpdateBookmark},
+        bookmarks::{CreateBookmark, UpdateBookmark},
         meta::RequestMeta,
-        recycle_bin::{CreateRecycleBinEntry, RecycleBinItemType},
+        recycle_bin::CreateRecycleBinEntry,
     },
     entities::bookmark,
     error::KernelError,
@@ -54,7 +56,7 @@ pub trait BookmarkRepositoryExt {
 
     async fn find_by_tag(
         &self,
-        tag: &BookmarkTag,
+        tag: &Tag,
         meta: &Option<RequestMeta>,
     ) -> Result<Vec<bookmark::Model>, KernelError>;
 
@@ -139,17 +141,29 @@ impl BookmarkRepositoryExt for BookmarkRepository {
 
     async fn find_by_tag(
         &self,
-        tag: &BookmarkTag,
+        tag: &Tag,
         meta: &Option<RequestMeta>,
     ) -> Result<Vec<bookmark::Model>, KernelError> {
         let meta = extract_req_meta(meta)?;
 
-        bookmark::Entity::find()
-            .filter(bookmark::Column::Tag.eq(tag.to_string()))
-            .filter(bookmark::Column::WorkspaceIdentifier.eq(meta.workspace_identifier))
-            .all(self.conn.as_ref())
-            .await
-            .map_err(|err| KernelError::DbOperationError(err.to_string()))
+        #[cfg(feature = "sqlite")]
+        {
+            bookmark::Entity::find()
+                .filter(bookmark::Column::Tag.eq(tag.to_string()))
+                .filter(bookmark::Column::WorkspaceIdentifier.eq(meta.workspace_identifier))
+                .all(self.conn.as_ref())
+                .await
+                .map_err(|err| KernelError::DbOperationError(err.to_string()))
+        }
+        #[cfg(feature = "postgres")]
+        {
+            bookmark::Entity::find()
+                .filter(bookmark::Column::Tag.eq(tag.to_owned()))
+                .filter(bookmark::Column::WorkspaceIdentifier.eq(meta.workspace_identifier))
+                .all(self.conn.as_ref())
+                .await
+                .map_err(|err| KernelError::DbOperationError(err.to_string()))
+        }
     }
 
     async fn recently_added(
@@ -191,8 +205,18 @@ impl BookmarkRepositoryExt for BookmarkRepository {
         if let Some(url) = &payload.url {
             active_model.url = Set(url.clone());
         }
-        if let Some(tag) = &payload.tag {
-            active_model.tag = Set(tag.to_string());
+
+        #[cfg(feature = "sqlite")]
+        {
+            if let Some(tag) = &payload.tag {
+                active_model.tag = Set(tag.to_string());
+            }
+        }
+        #[cfg(feature = "postgres")]
+        {
+            if let Some(tag) = &payload.tag {
+                active_model.tag = Set(tag.to_owned());
+            }
         }
         active_model.updated_at = Set(Utc::now().fixed_offset());
 
@@ -224,7 +248,7 @@ impl BookmarkRepositoryExt for BookmarkRepository {
             .store(
                 &CreateRecycleBinEntry {
                     item_id: model.identifier,
-                    item_type: RecycleBinItemType::Bookmark,
+                    item_type: ItemType::Bookmark,
                     workspace_identifier: model.workspace_identifier,
                     payload,
                 },

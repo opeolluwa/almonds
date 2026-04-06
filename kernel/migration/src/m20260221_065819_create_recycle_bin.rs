@@ -45,6 +45,7 @@ impl MigrationTrait for Migration {
                                     ItemType::Reminder,
                                     ItemType::Snippet,
                                     ItemType::Bookmark,
+                                    ItemType::Workspace,
                                 ],
                             )
                             .not_null(),
@@ -82,4 +83,5 @@ pub enum ItemType {
     Reminder,
     Snippet,
     Bookmark,
+    Workspace,
 }

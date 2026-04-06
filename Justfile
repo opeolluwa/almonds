@@ -12,8 +12,12 @@ import 'scripts/grove.just'
 import 'scripts/release.just'
 
 
-DB_PATH := "sqlite:://../../test.sqlite?mode=rwc"
+DB_PATH := "sqlite://../../test.sqlite?mode=rwc"
 DOCKER_CMD := "docker compose -f docker-compose.yaml"
+POSTGRES_URL := "postgres://almond:almond@localhost:5433/almond"
+MYSQL_URL    := "mysql://almond:almond@localhost:3307/almond"
+SQLITE_URL   := "sqlite://./almond.db?mode=rwc"
+DATABASE_URL :="postgres://orchard:orchard@localhost:6543/orchard"
 
 set dotenv-required := true
 set dotenv-load := true
@@ -63,10 +67,6 @@ test target:
 @migrate-run:
 	DATABASE_URL={{DB_PATH}} sea-orm-cli  migrate up
 
-db-pull:
-	just migrate-run
-	just generate-entities {{DB_PATH}}
-	just generate-graphql-bindings {{DB_PATH}}
 
 [working-directory:'.']
 release target:

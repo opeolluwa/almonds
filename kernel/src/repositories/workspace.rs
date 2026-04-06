@@ -11,7 +11,7 @@ use uuid::Uuid;
 use crate::{
     adapters::{
         meta::RequestMeta,
-        recycle_bin::{CreateRecycleBinEntry, RecycleBinItemType},
+        recycle_bin::CreateRecycleBinEntry,
         workspace::{CreateWorkspace, UpdateWorkspace, hash_password, verify_password},
     },
     entities::workspaces,
@@ -119,17 +119,18 @@ impl WorkspaceRepositoryExt for WorkspaceRepository {
         let payload = serde_json::to_string(&model)
             .map_err(|err| KernelError::DbOperationError(err.to_string()))?;
 
-        RecycleBinRepository::new(self.conn.clone())
-            .store(
-                &CreateRecycleBinEntry {
-                    item_id: model.identifier,
-                    item_type: RecycleBinItemType::Workspace,
-                    workspace_identifier: None,
-                    payload,
-                },
-                &Some(meta.clone()),
-            )
-            .await?;
+        //TODO: Consider moving this logic to a service layer if it becomes more complex or if we need to handle related entities (e.g., todos, bookmarks) in the recycle bin entry. For now, it serves the purpose of keeping a record of deleted workspaces.
+        // RecycleBinRepository::new(self.conn.clone())
+        //     .store(
+        //         &CreateRecycleBinEntry {
+        //             item_id: model.identifier,
+        //             item_type: ItemType::Workspace,
+        //             workspace_identifier: None,
+        //             payload,
+        //         },
+        //         &Some(meta.clone()),
+        //     )
+        //     .await?;
 
         let result = workspaces::Entity::delete_by_id(*identifier)
             .exec(self.conn.as_ref())
