@@ -184,17 +184,15 @@ class _TodoPageState extends State<TodoPage> {
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             sliver: filtered.isEmpty
-                ? SliverToBoxAdapter(
+                ? SliverFillRemaining(
                     child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 80),
-                        child: Column(
-                          children: [
-                            HeroIcon(HeroIcons.checkCircle, size: 64, color: colorScheme.outlineVariant),
-                            const SizedBox(height: 12),
-                            Text('No todos here', style: Theme.of(context).textTheme.bodyLarge),
-                          ],
-                        ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          HeroIcon(HeroIcons.checkCircle, size: 64, color: colorScheme.outlineVariant),
+                          const SizedBox(height: 12),
+                          Text('No todos here', style: Theme.of(context).textTheme.bodyLarge),
+                        ],
                       ),
                     ),
                   )
