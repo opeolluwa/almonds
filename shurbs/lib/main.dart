@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import 'src/app.dart';
 import 'src/rust/api/kernel.dart';
 import 'src/rust/frb_generated.dart';
+import 'src/services/notification_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,6 +17,8 @@ Future<void> main() async {
   final dir = await getApplicationDocumentsDirectory();
   final dbPath = '${dir.path}${Platform.pathSeparator}shurbs.db';
   await initKernel(databaseUrl: 'sqlite://$dbPath?mode=rwc');
+
+  await NotificationService.instance.init();
 
   runApp(const App());
 }

@@ -42,12 +42,16 @@ class TodoController extends ChangeNotifier {
     return high.isNotEmpty ? high.first : active.first;
   }
 
+  static List<Todo> _parse(String raw) {
+    final list = (jsonDecode(raw) as List).cast<Map<String, dynamic>>();
+    return list.map(Todo.fromJson).toList();
+  }
+
   Future<void> load(String workspaceId) async {
     _workspaceId = workspaceId;
     try {
       final raw = await getAllTodos(metaWorkspaceId: workspaceId);
-      final list = (jsonDecode(raw) as List).cast<Map<String, dynamic>>();
-      _todos = list.map(Todo.fromJson).toList();
+      _todos = await compute(_parse, raw);
     } catch (e) {
       debugPrint('TodoController.load error: $e');
     }
