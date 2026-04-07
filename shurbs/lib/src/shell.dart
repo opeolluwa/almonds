@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:heroicons/heroicons.dart';
 
 import 'controllers/bookmark_controller.dart';
+import 'controllers/calendar_controller.dart';
 import 'controllers/home_controller.dart';
 import 'controllers/note_controller.dart';
 import 'controllers/reminder_controller.dart';
@@ -11,6 +12,7 @@ import 'controllers/workspace_controller.dart';
 import 'pages/home_page.dart';
 import 'pages/todo_page.dart';
 import 'pages/reminders_page.dart';
+import 'pages/calendar_page.dart';
 import 'pages/bookmarks_page.dart';
 import 'pages/notes_page.dart';
 import 'pages/settings_page.dart';
@@ -34,6 +36,7 @@ class _AppShellState extends State<AppShell> {
   late final BookmarkController _bookmarkController;
   late final ReminderController _reminderController;
   late final HomeController _homeController;
+  late final CalendarController _calendarController;
 
   @override
   void initState() {
@@ -47,6 +50,10 @@ class _AppShellState extends State<AppShell> {
       todoController: _todoController,
       noteController: _noteController,
       bookmarkController: _bookmarkController,
+      reminderController: _reminderController,
+    );
+    _calendarController = CalendarController(
+      todoController: _todoController,
       reminderController: _reminderController,
     );
 
@@ -69,6 +76,7 @@ class _AppShellState extends State<AppShell> {
   void dispose() {
     _searchController.dispose();
     _homeController.dispose();
+    _calendarController.dispose();
     _workspaceController.dispose();
     _todoController.dispose();
     _noteController.dispose();
@@ -77,10 +85,11 @@ class _AppShellState extends State<AppShell> {
     super.dispose();
   }
 
+  // Nav indices: 0=Home 1=Todo 2=Reminders 3=Bookmarks 4=Settings
   final List<_NavItem> _navItems = const [
     _NavItem(icon: HeroIcons.home, label: 'Home'),
     _NavItem(icon: HeroIcons.checkCircle, label: 'Todo'),
-    _NavItem(icon: HeroIcons.clock, label: 'Alarms'),
+    _NavItem(icon: HeroIcons.clock, label: 'Reminders'),
     _NavItem(icon: HeroIcons.bookmark, label: 'Bookmarks'),
     _NavItem(icon: HeroIcons.cog6Tooth, label: 'Settings'),
   ];
@@ -108,7 +117,7 @@ class _AppShellState extends State<AppShell> {
     }
     for (final reminder in _reminderController.reminders) {
       if (reminder.title.toLowerCase().contains(query)) {
-        results.add(_SearchResult(title: reminder.title, section: 'Alarms', sectionIndex: 2, icon: HeroIcons.clock));
+        results.add(_SearchResult(title: reminder.title, section: 'Reminders', sectionIndex: 2, icon: HeroIcons.clock));
       }
     }
 
@@ -135,7 +144,7 @@ class _AppShellState extends State<AppShell> {
     final pages = [
       HomePage(controller: _homeController),
       TodoPage(controller: _todoController),
-      AlarmsPage(controller: _reminderController),
+      RemindersPage(controller: _reminderController),
       BookmarksPage(controller: _bookmarkController),
       const SettingsPage(),
     ];
@@ -175,7 +184,7 @@ class _AppShellState extends State<AppShell> {
                     Expanded(
                       child: SearchAnchor.bar(
                         searchController: _searchController,
-                        barHintText: 'Search todos, alarms, bookmarks…',
+                        barHintText: 'Search todos, reminders, bookmarks…',
                         barLeading: const HeroIcon(HeroIcons.magnifyingGlass, size: 20),
                         suggestionsBuilder: _buildSuggestions,
                       ),
@@ -272,7 +281,7 @@ class _AppDrawer extends StatelessWidget {
               children: [
                 _NavTile(icon: HeroIcons.home, label: 'Home', selected: currentIndex == 0, onTap: () => go(0)),
                 _NavTile(icon: HeroIcons.checkCircle, label: 'Todos', selected: currentIndex == 1, onTap: () => go(1)),
-                _NavTile(icon: HeroIcons.clock, label: 'Alarms', selected: currentIndex == 2, onTap: () => go(2)),
+                _NavTile(icon: HeroIcons.clock, label: 'Reminders', selected: currentIndex == 2, onTap: () => go(2)),
                 _NavTile(icon: HeroIcons.bookmark, label: 'Bookmarks', selected: currentIndex == 3, onTap: () => go(3)),
                 _NavTile(
                   icon: HeroIcons.documentText,

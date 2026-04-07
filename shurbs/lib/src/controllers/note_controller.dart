@@ -23,12 +23,16 @@ class NoteController extends ChangeNotifier {
         .toList();
   }
 
+  static List<Note> _parse(String raw) {
+    final list = (jsonDecode(raw) as List).cast<Map<String, dynamic>>();
+    return list.map(Note.fromJson).toList();
+  }
+
   Future<void> load(String workspaceId) async {
     _workspaceId = workspaceId;
     try {
       final raw = await getAllNotes(metaWorkspaceId: workspaceId);
-      final list = (jsonDecode(raw) as List).cast<Map<String, dynamic>>();
-      _notes = list.map(Note.fromJson).toList();
+      _notes = await compute(_parse, raw);
     } catch (e) {
       debugPrint('NoteController.load error: $e');
     }

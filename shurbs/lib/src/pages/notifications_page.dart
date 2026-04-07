@@ -4,35 +4,17 @@ import 'package:heroicons/heroicons.dart';
 class NotificationsPage extends StatelessWidget {
   const NotificationsPage({super.key});
 
-  static const _notifications = [
-    _NotifItem(
-      icon: HeroIcons.checkCircle,
-      title: 'Todo completed',
-      body: 'You completed "Buy groceries"',
-      time: '2h ago',
-      color: Colors.green,
-    ),
-    _NotifItem(
-      icon: HeroIcons.clock,
-      title: 'Reminder triggered',
-      body: 'Morning standup reminder went off',
-      time: '5h ago',
-      color: Colors.orange,
-    ),
-    _NotifItem(
-      icon: HeroIcons.bookmark,
-      title: 'New bookmark',
-      body: 'Flutter docs added to bookmarks',
-      time: 'Yesterday',
-      color: Colors.purple,
-    ),
-  ];
+  static const _notifications = <_NotifItem>[];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Notifications'),
+        title: const Text(
+          'Notifications',
+          style: TextStyle(color: Colors.black),
+        ),
+        iconTheme: const IconThemeData(color: Colors.black),
         centerTitle: false,
       ),
       body: _notifications.isEmpty

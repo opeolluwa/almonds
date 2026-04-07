@@ -24,12 +24,16 @@ class BookmarkController extends ChangeNotifier {
     return _bookmarks.where((b) => b.tag == activeTag).toList();
   }
 
+  static List<Bookmark> _parse(String raw) {
+    final list = (jsonDecode(raw) as List).cast<Map<String, dynamic>>();
+    return list.map(Bookmark.fromJson).toList();
+  }
+
   Future<void> load(String workspaceId) async {
     _workspaceId = workspaceId;
     try {
       final raw = await getAllBookmarks(metaWorkspaceId: workspaceId);
-      final list = (jsonDecode(raw) as List).cast<Map<String, dynamic>>();
-      _bookmarks = list.map(Bookmark.fromJson).toList();
+      _bookmarks = await compute(_parse, raw);
     } catch (e) {
       debugPrint('BookmarkController.load error: $e');
     }
