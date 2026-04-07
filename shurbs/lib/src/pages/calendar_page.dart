@@ -121,36 +121,30 @@ class _CalendarPageState extends State<CalendarPage> {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
+    final screenH = MediaQuery.of(context).size.height;
 
     return ListenableBuilder(
       listenable: widget.controller,
       builder: (context, _) => Scaffold(
-        body: Column(
+        body: SafeArea(
+          child: Column(
           children: [
-            // ── Google banner ───────────────────────────────────────────────
-            _GoogleBanner(controller: widget.controller),
-
             // ── View toggle ─────────────────────────────────────────────────
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: SegmentedButton<_View>(
-                      segments: const [
-                        ButtonSegment(value: _View.monthly, label: Text('Month')),
-                        ButtonSegment(value: _View.weekly, label: Text('Week')),
-                        ButtonSegment(value: _View.daily, label: Text('Day')),
-                      ],
-                      selected: {_view},
-                      onSelectionChanged: (s) => setState(() => _view = s.first),
-                      style: ButtonStyle(
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        visualDensity: VisualDensity.compact,
-                      ),
-                    ),
-                  ),
+              child: SegmentedButton<_View>(
+                segments: const [
+                  ButtonSegment(value: _View.daily, label: Text('Day')),
+                  ButtonSegment(value: _View.weekly, label: Text('Week')),
+                  ButtonSegment(value: _View.monthly, label: Text('Month')),
                 ],
+                selected: {_view},
+                onSelectionChanged: (s) => setState(() => _view = s.first),
+                style: const ButtonStyle(
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  visualDensity: VisualDensity.compact,
+                ),
+                expandedInsets: EdgeInsets.zero,
               ),
             ),
 
@@ -189,28 +183,33 @@ class _CalendarPageState extends State<CalendarPage> {
             ),
 
             // ── Calendar body ───────────────────────────────────────────────
-            Expanded(
-              child: switch (_view) {
-                _View.monthly => _MonthView(
-                    focused: _focused,
-                    selected: _selected,
-                    controller: widget.controller,
-                    onDayTap: _onDayTap,
-                  ),
-                _View.weekly => _WeekView(
-                    focused: _focused,
-                    selected: _selected,
-                    controller: widget.controller,
-                    onDayTap: (d) => setState(() => _selected = d),
-                  ),
-                _View.daily => _DayView(
-                    day: _selected,
-                    controller: widget.controller,
-                    onAddEvent: _showAddEventSheet,
-                  ),
-              },
-            ),
+            if (_view == _View.monthly)
+              SizedBox(
+                height: screenH * 0.35,
+                child: _MonthView(
+                  focused: _focused,
+                  selected: _selected,
+                  controller: widget.controller,
+                  onDayTap: _onDayTap,
+                ),
+              )
+            else
+              Expanded(
+                child: _view == _View.weekly
+                    ? _WeekView(
+                        focused: _focused,
+                        selected: _selected,
+                        controller: widget.controller,
+                        onDayTap: (d) => setState(() => _selected = d),
+                      )
+                    : _DayView(
+                        day: _selected,
+                        controller: widget.controller,
+                        onAddEvent: _showAddEventSheet,
+                      ),
+              ),
           ],
+          ),
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () => _showAddEventSheet(),
@@ -221,156 +220,6 @@ class _CalendarPageState extends State<CalendarPage> {
       ),
     );
   }
-}
-
-// ── Google banner ─────────────────────────────────────────────────────────────
-
-class _GoogleBanner extends StatelessWidget {
-  final CalendarController controller;
-  const _GoogleBanner({required this.controller});
-
-  @override
-  Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
-    final theme = Theme.of(context);
-
-    if (controller.googleConnected) {
-      return Container(
-        margin: const EdgeInsets.fromLTRB(16, 10, 16, 0),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-        decoration: BoxDecoration(
-          color: const Color(0xFF10B981).withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: const Color(0xFF10B981).withValues(alpha: 0.3)),
-        ),
-        child: Row(
-          children: [
-            const _GoogleIcon(size: 18),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Google Calendar connected',
-                    style: theme.textTheme.labelMedium?.copyWith(
-                      color: const Color(0xFF10B981),
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  if (controller.googleEmail != null)
-                    Text(
-                      controller.googleEmail!,
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        color: cs.onSurfaceVariant,
-                      ),
-                    ),
-                ],
-              ),
-            ),
-            TextButton(
-              onPressed: controller.disconnectGoogle,
-              style: TextButton.styleFrom(
-                foregroundColor: cs.error,
-                visualDensity: VisualDensity.compact,
-                padding: EdgeInsets.zero,
-              ),
-              child: const Text('Disconnect'),
-            ),
-          ],
-        ),
-      );
-    }
-
-    return Container(
-      margin: const EdgeInsets.fromLTRB(16, 10, 16, 0),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-      decoration: BoxDecoration(
-        color: cs.surfaceContainerHighest.withValues(alpha: 0.5),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: cs.outlineVariant.withValues(alpha: 0.5)),
-      ),
-      child: Row(
-        children: [
-          const _GoogleIcon(size: 18),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Text(
-              'Connect Google Calendar',
-              style: theme.textTheme.labelMedium?.copyWith(
-                color: cs.onSurfaceVariant,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-          controller.googleLoading
-              ? const SizedBox(
-                  width: 18,
-                  height: 18,
-                  child: CircularProgressIndicator(strokeWidth: 2),
-                )
-              : FilledButton.tonal(
-                  onPressed: controller.connectGoogle,
-                  style: FilledButton.styleFrom(
-                    visualDensity: VisualDensity.compact,
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                  ),
-                  child: const Text('Connect'),
-                ),
-        ],
-      ),
-    );
-  }
-}
-
-// Simple hand-drawn Google "G" icon using a colored circle
-class _GoogleIcon extends StatelessWidget {
-  final double size;
-  const _GoogleIcon({required this.size});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: size,
-      height: size,
-      child: CustomPaint(painter: _GoogleIconPainter()),
-    );
-  }
-}
-
-class _GoogleIconPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final center = Offset(size.width / 2, size.height / 2);
-    final r = size.width / 2;
-
-    final colors = [
-      const Color(0xFF4285F4),
-      const Color(0xFFEA4335),
-      const Color(0xFFFBBC05),
-      const Color(0xFF34A853),
-    ];
-    final sweeps = [90.0, 90.0, 90.0, 90.0];
-    final starts = [-90.0, 0.0, 90.0, 180.0];
-
-    for (int i = 0; i < 4; i++) {
-      final paint = Paint()
-        ..color = colors[i]
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = size.width * 0.22
-        ..strokeCap = StrokeCap.butt;
-      canvas.drawArc(
-        Rect.fromCircle(center: center, radius: r * 0.72),
-        starts[i] * 3.14159 / 180,
-        sweeps[i] * 3.14159 / 180,
-        false,
-        paint,
-      );
-    }
-  }
-
-  @override
-  bool shouldRepaint(_GoogleIconPainter _) => false;
 }
 
 // ── Month view ────────────────────────────────────────────────────────────────

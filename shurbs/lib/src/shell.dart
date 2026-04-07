@@ -166,6 +166,7 @@ class _AppShellState extends State<AppShell> {
           currentIndex: _currentIndex,
           onNavigate: (index) => setState(() => _currentIndex = index),
           noteController: _noteController,
+          calendarController: _calendarController,
         ),
         body: Column(
           children: [
@@ -257,11 +258,13 @@ class _AppDrawer extends StatelessWidget {
   final int currentIndex;
   final ValueChanged<int> onNavigate;
   final NoteController noteController;
+  final CalendarController calendarController;
 
   const _AppDrawer({
     required this.currentIndex,
     required this.onNavigate,
     required this.noteController,
+    required this.calendarController,
   });
 
   @override
@@ -283,6 +286,20 @@ class _AppDrawer extends StatelessWidget {
                 _NavTile(icon: HeroIcons.checkCircle, label: 'Todos', selected: currentIndex == 1, onTap: () => go(1)),
                 _NavTile(icon: HeroIcons.clock, label: 'Reminders', selected: currentIndex == 2, onTap: () => go(2)),
                 _NavTile(icon: HeroIcons.bookmark, label: 'Bookmarks', selected: currentIndex == 3, onTap: () => go(3)),
+                _NavTile(
+                  icon: HeroIcons.calendarDays,
+                  label: 'Calendar',
+                  selected: false,
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => CalendarPage(controller: calendarController),
+                      ),
+                    );
+                  },
+                ),
                 _NavTile(
                   icon: HeroIcons.documentText,
                   label: 'Notes',
