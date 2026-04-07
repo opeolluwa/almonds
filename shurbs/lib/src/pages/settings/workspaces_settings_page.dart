@@ -78,7 +78,10 @@ class _WorkspacesSettingsPageState extends State<WorkspacesSettingsPage> {
     final colorScheme = theme.colorScheme;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Workspaces')),
+      appBar: AppBar(
+        title: const Text('Workspaces'),
+        foregroundColor: Colors.black,
+      ),
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.all(16),

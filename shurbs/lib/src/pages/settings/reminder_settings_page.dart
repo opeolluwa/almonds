@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
 
 
-class AlarmSettingsPage extends StatefulWidget {
-  const AlarmSettingsPage({super.key});
+class ReminderSettingsPage extends StatefulWidget {
+  const ReminderSettingsPage({super.key});
 
   @override
-  State<AlarmSettingsPage> createState() => _AlarmSettingsPageState();
+  State<ReminderSettingsPage> createState() => _ReminderSettingsPageState();
 }
 
-class _AlarmSettingsPageState extends State<AlarmSettingsPage> {
+class _ReminderSettingsPageState extends State<ReminderSettingsPage> {
   String? _defaultSound;
   int _leadTimeMinutes = 0;
   int _snoozeDurationMinutes = 5;
-  bool _repeatAlarm = false;
+  bool _repeatReminder = false;
 
   static const _sounds = ['Chime', 'Bell', 'Digital', 'Nature'];
 
@@ -38,7 +38,7 @@ class _AlarmSettingsPageState extends State<AlarmSettingsPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Alarm', style: TextStyle(color: Colors.black)),
+        title: const Text('Reminder', style: TextStyle(color: Colors.black)),
         foregroundColor: Colors.black,
       ),
       body: ListView(
@@ -130,7 +130,7 @@ class _AlarmSettingsPageState extends State<AlarmSettingsPage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text('Remind me before', style: theme.textTheme.bodyMedium),
-                                    Text('How early to trigger the alarm', style: theme.textTheme.bodySmall),
+                                    Text('How early to trigger the reminder', style: theme.textTheme.bodySmall),
                                   ],
                                 ),
                               ),
@@ -187,13 +187,13 @@ class _AlarmSettingsPageState extends State<AlarmSettingsPage> {
                             ),
                             child: Center(child: HeroIcon(HeroIcons.arrowPath, size: 18, color: colorScheme.primary)),
                           ),
-                          title: const Text('Repeat alarm'),
+                          title: const Text('Repeat reminder'),
                           subtitle: const Text('Keep alerting until manually dismissed'),
                           trailing: Transform.scale(
                             scale: 0.8,
                             child: Switch(
-                              value: _repeatAlarm,
-                              onChanged: (v) => setState(() => _repeatAlarm = v),
+                              value: _repeatReminder,
+                              onChanged: (v) => setState(() => _repeatReminder = v),
                             ),
                           ),
                         ),

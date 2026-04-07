@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-import 'settings_header_bg.dart';
 
 class AboutSettingsPage extends StatelessWidget {
   const AboutSettingsPage({super.key});
@@ -19,57 +19,13 @@ class AboutSettingsPage extends StatelessWidget {
     ];
 
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            expandedHeight: 200,
-            pinned: true,
-            flexibleSpace: FlexibleSpaceBar(
-              background: SettingsHeaderBackground(
-                colors: [colorScheme.primary, colorScheme.primaryContainer],
-                child: SafeArea(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const SizedBox(height: 32),
-                      Container(
-                        width: 72,
-                        height: 72,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.15),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: const Center(
-                          child: HeroIcon(HeroIcons.sparkles, size: 34, color: Colors.white),
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      const Text(
-                        'Wild Almonds',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'Your personal productivity suite',
-                        style: TextStyle(
-                          color: Colors.white.withValues(alpha: 0.75),
-                          fontSize: 13,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-          SliverPadding(
-            padding: const EdgeInsets.all(16),
-            sliver: SliverList(
-              delegate: SliverChildListDelegate([
+      appBar: AppBar(
+        title: const Text('About', style: TextStyle(color: Colors.black)),
+        foregroundColor: Colors.black,
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
                 Card(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8),
@@ -117,13 +73,31 @@ class AboutSettingsPage extends StatelessWidget {
                     onTap: () {},
                   ),
                 ),
+                const SizedBox(height: 12),
+                Card(
+                  child: ListTile(
+                    leading: Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: colorScheme.primary.withValues(alpha: 0.12),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Center(child: HeroIcon(HeroIcons.codeBracket, size: 18, color: colorScheme.primary)),
+                    ),
+                    title: const Text('Built openly on GitHub'),
+                    subtitle: const Text('MIT License · github.com/opeolluwa/almonds'),
+                    trailing: HeroIcon(HeroIcons.arrowTopRightOnSquare, size: 16, color: colorScheme.onSurfaceVariant),
+                    onTap: () => launchUrl(
+                      Uri.parse('https://github.com/opeolluwa/almonds'),
+                      mode: LaunchMode.externalApplication,
+                    ),
+                  ),
+                ),
                 const SizedBox(height: 32),
-              ]),
+              ],
             ),
-          ),
-        ],
-      ),
-    );
+          );
   }
 }
 

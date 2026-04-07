@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
 
-import 'settings_header_bg.dart';
 
 class NotificationsSettingsPage extends StatefulWidget {
   const NotificationsSettingsPage({super.key});
@@ -53,42 +52,13 @@ class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
     ];
 
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            expandedHeight: 180,
-            pinned: true,
-            flexibleSpace: FlexibleSpaceBar(
-              title: const Text(
-                'Notifications',
-                style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 16),
-              ),
-              titlePadding: const EdgeInsets.only(left: 56, bottom: 16),
-              background: SettingsHeaderBackground(
-                colors: [colorScheme.primary, colorScheme.primaryContainer],
-                child: SafeArea(
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Container(
-                      width: 64,
-                      height: 64,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.15),
-                        borderRadius: BorderRadius.circular(18),
-                      ),
-                      child: const Center(
-                        child: HeroIcon(HeroIcons.bell, size: 30, color: Colors.white),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          SliverPadding(
-            padding: const EdgeInsets.all(16),
-            sliver: SliverList(
-              delegate: SliverChildListDelegate([
+      appBar: AppBar(
+        title: const Text('Notifications', style: TextStyle(color: Colors.black)),
+        foregroundColor: Colors.black,
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
                 Card(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8),
@@ -119,9 +89,6 @@ class _NotificationsSettingsPageState extends State<NotificationsSettingsPage> {
                   ),
                 ),
                 const SizedBox(height: 32),
-              ]),
-            ),
-          ),
         ],
       ),
     );

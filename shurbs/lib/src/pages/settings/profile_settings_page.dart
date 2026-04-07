@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
 
-import 'settings_header_bg.dart';
-
 class ProfileSettingsPage extends StatefulWidget {
   const ProfileSettingsPage({super.key});
 
@@ -34,71 +32,15 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            expandedHeight: 220,
-            pinned: true,
-            flexibleSpace: FlexibleSpaceBar(
-              background: SettingsHeaderBackground(
-                colors: [colorScheme.primary, colorScheme.primary.withValues(alpha: 0.7)],
-                child: SafeArea(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const SizedBox(height: 32),
-                      Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Container(
-                            width: 84,
-                            height: 84,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white.withValues(alpha: 0.15),
-                            ),
-                          ),
-                          CircleAvatar(
-                            radius: 36,
-                            backgroundColor: Colors.white.withValues(alpha: 0.25),
-                            child: Text(
-                              'A',
-                              style: theme.textTheme.headlineMedium?.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 12),
-                      Text(
-                        '${_firstNameController.text} ${_lastNameController.text}',
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        _emailController.text,
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: Colors.white.withValues(alpha: 0.8),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-          SliverPadding(
-            padding: const EdgeInsets.all(16),
-            sliver: SliverList(
-              delegate: SliverChildListDelegate([
+      appBar: AppBar(
+        title: const Text('Profile', style: TextStyle(color: Colors.black)),
+        foregroundColor: Colors.black,
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
                 _SectionLabel('Personal info'),
                 const SizedBox(height: 8),
                 Card(
@@ -173,9 +115,6 @@ class _ProfileSettingsPageState extends State<ProfileSettingsPage> {
                   ),
                 ),
                 const SizedBox(height: 32),
-              ]),
-            ),
-          ),
         ],
       ),
     );

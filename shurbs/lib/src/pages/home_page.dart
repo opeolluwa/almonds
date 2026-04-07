@@ -228,20 +228,23 @@ class _StatsRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final stats = [
       _Stat('Todos', '$todoCount', HeroIcons.checkCircle, const Color(0xFF6366F1)),
-      _Stat('Alarms', '$reminderCount', HeroIcons.clock, const Color(0xFFF59E0B)),
+      _Stat('Reminders', '$reminderCount', HeroIcons.clock, const Color(0xFFF59E0B)),
       _Stat('Bookmarks', '$bookmarkCount', HeroIcons.bookmark, const Color(0xFF8B5CF6)),
       _Stat('Notes', '$noteCount', HeroIcons.documentText, const Color(0xFF10B981)),
     ];
 
-    return Row(
-      children: stats
-          .map((s) => Expanded(
-                child: Padding(
-                  padding: EdgeInsets.only(right: s == stats.last ? 0 : 10),
-                  child: _StatCard(stat: s),
-                ),
-              ))
-          .toList(),
+    return IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: stats
+            .map((s) => Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(right: s == stats.last ? 0 : 10),
+                    child: _StatCard(stat: s),
+                  ),
+                ))
+            .toList(),
+      ),
     );
   }
 }
@@ -286,6 +289,8 @@ class _StatCard extends StatelessWidget {
           Text(
             stat.label,
             style: Theme.of(context).textTheme.labelSmall?.copyWith(color: cs.onSurfaceVariant),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
           const SizedBox(height: 8),
           Container(

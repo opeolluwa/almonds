@@ -10,7 +10,7 @@ import 'controllers/todo_controller.dart';
 import 'controllers/workspace_controller.dart';
 import 'pages/home_page.dart';
 import 'pages/todo_page.dart';
-import 'pages/alarms_page.dart';
+import 'pages/reminders_page.dart';
 import 'pages/bookmarks_page.dart';
 import 'pages/notes_page.dart';
 import 'pages/settings_page.dart';
@@ -302,7 +302,6 @@ class _AppDrawer extends StatelessWidget {
               ],
             ),
           ),
-          _DrawerFooter(currentIndex: currentIndex, onNavigate: onNavigate),
         ],
       ),
     );
@@ -338,30 +337,6 @@ class _DrawerHeader extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          Container(
-                            width: 28,
-                            height: 28,
-                            decoration: BoxDecoration(
-                              color: Colors.white.withValues(alpha: 0.2),
-                              borderRadius: BorderRadius.circular(7),
-                            ),
-                            child: const Center(child: HeroIcon(HeroIcons.sparkles, size: 15, color: Colors.white)),
-                          ),
-                          const SizedBox(width: 8),
-                          const Text(
-                            'Shurbs',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 14,
-                              letterSpacing: 0.4,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
                       Row(
                         children: [
                           Container(
@@ -602,119 +577,6 @@ class _WorkspacesSection extends StatelessWidget {
   }
 }
 
-// ── Drawer footer ─────────────────────────────────────────────────────────────
-
-class _DrawerFooter extends StatelessWidget {
-  final int currentIndex;
-  final ValueChanged<int> onNavigate;
-
-  const _DrawerFooter({required this.currentIndex, required this.onNavigate});
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
-    return Container(
-      decoration: BoxDecoration(
-        border: Border(top: BorderSide(color: colorScheme.outlineVariant.withValues(alpha: 0.4))),
-      ),
-      padding: const EdgeInsets.fromLTRB(16, 10, 12, 0),
-      child: SafeArea(
-        top: false,
-        child: Row(
-          children: [
-            Expanded(
-              child: InkWell(
-                onTap: () {
-                  Navigator.pop(context);
-                  onNavigate(4);
-                },
-                borderRadius: BorderRadius.circular(8),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  child: Row(
-                    children: [
-                      HeroIcon(
-                        HeroIcons.cog6Tooth,
-                        size: 18,
-                        style: currentIndex == 4 ? HeroIconStyle.solid : HeroIconStyle.outline,
-                        color: colorScheme.onSurfaceVariant,
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        'Settings',
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: colorScheme.onSurfaceVariant,
-                          fontWeight: currentIndex == 4 ? FontWeight.w600 : FontWeight.normal,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            ValueListenableBuilder<ThemeMode>(
-              valueListenable: themeModeNotifier,
-              builder: (_, mode, __) => _ThemeModeToggle(current: mode),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// ── Theme mode toggle ─────────────────────────────────────────────────────────
-
-class _ThemeModeToggle extends StatelessWidget {
-  final ThemeMode current;
-  const _ThemeModeToggle({required this.current});
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    Widget btn(HeroIcons icon, ThemeMode mode) {
-      final active = current == mode;
-      return GestureDetector(
-        onTap: () => themeModeNotifier.value = mode,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 180),
-          curve: Curves.easeInOut,
-          width: 32,
-          height: 28,
-          decoration: BoxDecoration(
-            color: active ? colorScheme.primary.withValues(alpha: 0.15) : Colors.transparent,
-            borderRadius: BorderRadius.circular(7),
-            border: Border.all(
-              color: active ? colorScheme.primary : Colors.transparent,
-              width: 1,
-            ),
-          ),
-          child: Center(
-            child: HeroIcon(
-              icon,
-              size: 15,
-              color: active ? colorScheme.primary : colorScheme.onSurfaceVariant,
-            ),
-          ),
-        ),
-      );
-    }
-
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        btn(HeroIcons.sun, ThemeMode.light),
-        const SizedBox(width: 4),
-        btn(HeroIcons.computerDesktop, ThemeMode.system),
-        const SizedBox(width: 4),
-        btn(HeroIcons.moon, ThemeMode.dark),
-      ],
-    );
-  }
-}
 
 // ── Models ────────────────────────────────────────────────────────────────────
 

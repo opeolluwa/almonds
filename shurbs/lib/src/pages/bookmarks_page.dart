@@ -121,7 +121,7 @@ class _BookmarksView extends StatelessWidget {
                               onSelected: (_) => c.setActiveTag(null),
                             ),
                             const SizedBox(width: 8),
-                            ...c.tags.map((tag) => Padding(
+                            ..._validTags.map((tag) => Padding(
                                   padding: const EdgeInsets.only(right: 8),
                                   child: FilterChip(
                                     label: Text(tag),

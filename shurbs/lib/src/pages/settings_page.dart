@@ -8,7 +8,7 @@ import 'settings/workspaces_settings_page.dart';
 import 'settings/backup_settings_page.dart';
 import 'settings/ai_settings_page.dart';
 import 'settings/notifications_settings_page.dart';
-import 'settings/alarm_settings_page.dart';
+import 'settings/reminder_settings_page.dart';
 import 'settings/about_settings_page.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -88,10 +88,10 @@ class SettingsPage extends StatelessWidget {
                 ),
                 _SettingsItem(
                   icon: HeroIcons.clock,
-                  label: 'Alarm',
+                  label: 'Reminder',
                   subtitle: 'Default ringtone & snooze',
                   color: const Color(0xFFCA8A04),
-                  onTap: () => go(const AlarmSettingsPage()),
+                  onTap: () => go(const ReminderSettingsPage()),
                 ),
               ],
             ),

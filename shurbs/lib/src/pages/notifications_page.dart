@@ -14,8 +14,8 @@ class NotificationsPage extends StatelessWidget {
     ),
     _NotifItem(
       icon: HeroIcons.clock,
-      title: 'Alarm triggered',
-      body: 'Morning standup alarm went off',
+      title: 'Reminder triggered',
+      body: 'Morning standup reminder went off',
       time: '5h ago',
       color: Colors.orange,
     ),
