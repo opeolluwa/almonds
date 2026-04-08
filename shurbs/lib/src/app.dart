@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'shell.dart';
 import 'theme.dart';
 import 'theme_notifier.dart';
+import 'pages/onboarding_page.dart';
 
 class App extends StatelessWidget {
-  const App({super.key});
+  final bool showOnboarding;
+  const App({super.key, this.showOnboarding = false});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +20,7 @@ class App extends StatelessWidget {
           themeMode: mode,
           theme: lightTheme(accent),
           darkTheme: darkTheme(accent),
-          home: const AppShell(),
+          home: showOnboarding ? const OnboardingPage() : const AppShell(),
         ),
       ),
     );

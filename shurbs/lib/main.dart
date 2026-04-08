@@ -8,6 +8,7 @@ import 'src/rust/api/kernel.dart';
 import 'src/rust/frb_generated.dart';
 import 'src/services/notification_service.dart';
 import 'src/profile_notifier.dart';
+import 'src/pages/onboarding_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,5 +23,7 @@ Future<void> main() async {
   await NotificationService.instance.init();
   await ProfileNotifier.instance.load();
 
-  runApp(const App());
+  final seenOnboarding = await hasSeenOnboarding();
+
+  runApp(App(showOnboarding: !seenOnboarding));
 }

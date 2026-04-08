@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:heroicons/heroicons.dart';
 
-import '../../theme_notifier.dart';
+import '../../theme_notifier.dart' show themeModeNotifier;
 
 class AppearanceSettingsPage extends StatefulWidget {
   const AppearanceSettingsPage({super.key});
@@ -120,81 +120,6 @@ class _AppearanceSettingsPageState extends State<AppearanceSettingsPage> {
                           ),
                         ),
                       ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                // Accent color card
-                ValueListenableBuilder<AccentSwatch>(
-                  valueListenable: accentColorNotifier,
-                  builder: (_, selectedAccent, __) => Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Container(
-                                width: 36,
-                                height: 36,
-                                decoration: BoxDecoration(
-                                  color: colorScheme.primary.withValues(alpha: 0.12),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Center(child: HeroIcon(HeroIcons.swatch, size: 18, color: colorScheme.primary)),
-                              ),
-                              const SizedBox(width: 14),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('Accent color', style: theme.textTheme.bodyMedium),
-                                  Text('Primary highlight color', style: theme.textTheme.bodySmall),
-                                ],
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 16),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: accentSwatches.map((swatch) {
-                              final isSelected = selectedAccent.label == swatch.label;
-                              return GestureDetector(
-                                onTap: () => accentColorNotifier.value = swatch,
-                                child: AnimatedContainer(
-                                  duration: const Duration(milliseconds: 180),
-                                  width: 40,
-                                  height: 40,
-                                  decoration: BoxDecoration(
-                                    color: swatch.primary,
-                                    shape: BoxShape.circle,
-                                    border: isSelected
-                                        ? Border.all(color: Colors.white, width: 2.5)
-                                        : null,
-                                    boxShadow: isSelected
-                                        ? [BoxShadow(color: swatch.primary.withValues(alpha: 0.5), blurRadius: 10, spreadRadius: 1)]
-                                        : null,
-                                  ),
-                                  child: isSelected
-                                      ? const Icon(Icons.check_rounded, color: Colors.white, size: 18)
-                                      : null,
-                                ),
-                              );
-                            }).toList(),
-                          ),
-                          const SizedBox(height: 12),
-                          Center(
-                            child: Text(
-                              selectedAccent.label,
-                              style: theme.textTheme.labelMedium?.copyWith(
-                                color: selectedAccent.primary,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
                     ),
                   ),
                 ),
