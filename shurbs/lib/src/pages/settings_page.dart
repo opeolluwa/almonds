@@ -143,29 +143,12 @@ class _ProfileCard extends StatelessWidget {
     final colorScheme = theme.colorScheme;
     final isDark = theme.brightness == Brightness.dark;
 
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
-        child: Ink(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            gradient: LinearGradient(
-              colors: isDark
-                  ? [const Color(0xFF1a1030), const Color(0xFF0d1220)]
-                  : [colorScheme.primaryContainer, colorScheme.primaryContainer.withValues(alpha: 0.5)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            border: Border.all(
-              color: isDark
-                  ? const Color(0xFF2a1a4a)
-                  : colorScheme.primary.withValues(alpha: 0.2),
-            ),
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
-          child: ListenableBuilder(
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
+        child: ListenableBuilder(
             listenable: ProfileNotifier.instance,
             builder: (_, __) {
               final profile = ProfileNotifier.instance;
@@ -205,12 +188,11 @@ class _ProfileCard extends StatelessWidget {
             },
           ),
         ),
-      ),
-    );
+      );
   }
 }
 
-// ── Section label ─────────────────────────────────────────────────────────────
+// ── Section label ──────────────────────────────────────────────────────────────
 
 class _SectionLabel extends StatelessWidget {
   final String text;
