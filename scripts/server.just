@@ -1,29 +1,29 @@
-[working-directory:'orchard']
-orchard-init url:
+[working-directory:'server']
+server-init url:
     seaography-cli -e ./src/entities  --output-dir . --database-url={{url}} --framework axum orchard
 
 
-[working-directory:'orchard']
-watch-orchard:
+[working-directory:'server']
+watch-server:
     cargo watch -qcx run 
 
 
-[working-directory:'orchard']
-test-orchard:
+[working-directory:'server']
+test-server:
     echo "TBD"
 
 
-[working-directory: 'orchard']
-@migrate-orchard-add target:
+[working-directory: 'server']
+@migrate-server-add target:
 	@sea-orm-cli migrate generate "{{target}}"
 
-[working-directory: 'orchard']
-@migrate-orchard-init:
+[working-directory: 'server']
+@migrate-server-init:
 	@sea-orm-cli migrate init
 
 
-[working-directory: 'orchard']
-@generate--orchard-entities url:
+[working-directory: 'server']
+@generate--server-entities url:
 	sea-orm-cli generate entity \
 		--database-url {{url}} \
 		--with-serde both \
@@ -31,8 +31,8 @@ test-orchard:
 		-o src/entities
 
 # Pull schema and generate entities + seaography bindings for PostgreSQL
-[working-directory: 'orchard']
-@generate-orchard-entities:
+[working-directory: 'server']
+@generate-server-entities:
 	sea-orm-cli generate entity \
 		--database-url {{DATABASE_URL}} \
 		--with-serde both \
@@ -41,8 +41,8 @@ test-orchard:
 		-o src/entities
 
 # Pull schema and generate entities + seaography bindings for MySQL (muted)
-# [working-directory: 'orchard']
-# @generate-orchard-entities-mysql:
+# [working-directory: 'server']
+# @generate-server-entities-mysql:
 # 	sea-orm-cli generate entity \
 # 		--database-url {{DATABASE_URL}} \
 # 		--with-serde both \

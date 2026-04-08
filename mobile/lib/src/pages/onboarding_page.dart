@@ -95,18 +95,20 @@ class _OnboardingPageState extends State<OnboardingPage> {
   @override
   Widget build(BuildContext context) {
     final isLast = _page == _slides.length - 1;
-    final accent = Theme.of(context).colorScheme.primary;
+    final colorScheme = Theme.of(context).colorScheme;
+    final accent = colorScheme.primary;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     final statusBarHeight = MediaQuery.of(context).padding.top;
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(
         statusBarColor: accent,
-        statusBarIconBrightness: Brightness.light,
-        statusBarBrightness: Brightness.dark,
+        statusBarIconBrightness: isDark ? Brightness.light : Brightness.light,
+        statusBarBrightness: isDark ? Brightness.dark : Brightness.dark,
       ),
       child: Scaffold(
-      backgroundColor: const Color(0xFFF8F6F2),
+      backgroundColor: colorScheme.surface,
       body: Stack(
         children: [
           // ── Slides ─────────────────────────────────────────────────────────

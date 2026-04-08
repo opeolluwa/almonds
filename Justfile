@@ -1,16 +1,16 @@
 import 'scripts/kernel.just'
 import 'scripts/misc.just'
-import 'scripts/almond.just'
+import 'scripts/desktop.just'
 import 'scripts/lint.just'
 import 'scripts/build.just'
 import 'scripts/test.just'
 import 'scripts/clean.just'
 import 'scripts/android.just'
-import 'scripts/orchard.just'
+import 'scripts/server.just'
 import 'scripts/docs.just'
-import 'scripts/grove.just'
+import 'scripts/website.just'
 import 'scripts/release.just'
-import 'scripts/shurbs.just'
+import 'scripts/mobile.just'
 
 
 DB_PATH := "sqlite://../../test.sqlite?mode=rwc"
@@ -44,10 +44,10 @@ build target:
 lint target:
 	#!/usr/bin/env bash
 	if [ "{{target}}" = "all" ]; then
-		just lint-almonds
+		just lint-desktop
 		just lint-kernel
-		just lint-orchard
-		just lint-tauri
+		just lint-server
+		just lint-desktop-tauri
 	else
 		just lint-{{target}}
 	fi
@@ -56,10 +56,10 @@ lint target:
 test target:
 	#!/usr/bin/env bash
 	if [ "{{target}}" = "all" ]; then
-		just test-almonds
+		just test-desktop
 		just test-kernel
-		just test-orchard
-		just test-tauri
+		just test-server
+		just test-desktop-tauri
 	else
 		just test-{{target}}
 	fi

@@ -38,8 +38,8 @@ db-clean:
 
 
 # Run pending migrations against postgres (docker)
-[working-directory: 'orchard']
-@migrate-up-orchard:
+[working-directory: 'server']
+@migrate-up-server:
 	sea-orm-cli migrate up --database-url {{DATABASE_URL}}
 
 # Run pending migrations against sqlite
@@ -109,9 +109,9 @@ db-pull sqlite_url=SQLITE_URL:
 	just migrate-up
 	just db-pull-sqlite {{sqlite_url}}
 	just db-pull-postgres
-	just db-pull-orchard
+	just db-pull-server
 
-[working-directory: 'orchard']
+[working-directory: 'server']
 @generate-graphql-bindings url:
 	sea-orm-cli generate entity \
 		--database-url {{url}} \
@@ -123,6 +123,6 @@ db-pull sqlite_url=SQLITE_URL:
 test-kernel:
     cargo test
 
-db-pull-orchard:
-	just migrate-up-orchard
-	just generate-orchard-entities
+db-pull-server:
+	just migrate-up-server
+	just generate-server-entities

@@ -1,5 +1,5 @@
-[working-directory:'orchard']
-lint-orchard:
+[working-directory:'server']
+lint-server:
     sh ../scripts/format
 
 [working-directory:'kernel']
@@ -7,13 +7,13 @@ lint-kernel:
     sh ../scripts/format
 
 
-[working-directory:'almonds/src-tauri']
-lint-tauri:
+[working-directory:'desktop/src-tauri']
+lint-desktop-tauri:
     sh ../../scripts/format
 
 
-[working-directory:'almonds']
-lint-almonds:
+[working-directory:'desktop']
+lint-desktop:
     npm run format
     npm run lint:fix
 
