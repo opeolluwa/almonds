@@ -11,7 +11,11 @@ pub use kernel::DataEngine;
 #[cfg(feature = "markdown2pdf")]
 pub mod markdown2pdf;
 
-pub use graphql_ws_client::*;
+#[cfg(feature = "sync_engine")]
+pub mod sync_engine;
+#[cfg(feature = "sync_engine")]
+mod sync_queue_query;
+
 pub use sea_orm;
 
 pub use migration;
