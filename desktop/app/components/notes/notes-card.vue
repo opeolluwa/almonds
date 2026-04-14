@@ -36,17 +36,8 @@ async function confirmDelete() {
   await noteStore.deleteNote(props.identifier);
 }
 
-function downloadMarkdown() {
-  const filename = (props.title || "untitled").replace(/[^a-z0-9_\- ]/gi, "_");
-  const blob = new Blob([props.content], {
-    type: "text/markdown;charset=utf-8",
-  });
-  const url = URL.createObjectURL(blob);
-  const anchor = document.createElement("a");
-  anchor.href = url;
-  anchor.download = `${filename}.md`;
-  anchor.click();
-  URL.revokeObjectURL(url);
+async function downloadMarkdown() {
+  await noteStore.exportAsPdf(props.identifier, currentWorkspaceId.value);
 }
 const workspaceStore = useWorkspacesStore();
 const currentWorkspaceId = computed(() => workspaceStore.activeWorkspaceId);

@@ -1,4 +1,4 @@
-use almond_kernel::{error::KernelError, kernel::Kernel};
+use almond_kernel::{data_engine::Kernel, error::KernelError};
 
 static DATABASE_PATH: &'static str = "sqlite://almond.dev.test.db?mode=rwc";
 

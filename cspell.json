@@ -1,10 +1,13 @@
 {
   "words": [
+    "lucide",
     "rgba",
     "tauri",
-    "thiserror"
+    "thiserror",
+    "seaography"
   ],
   "userWords": [
-    "Nuxt"
+    "Nuxt",
+    "seaography"
   ]
 }

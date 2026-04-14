@@ -22,9 +22,9 @@ COPY . .
 
 RUN cargo install cargo-watch
 
-WORKDIR /app/orchard
+WORKDIR /app/server
 
-RUN cargo build 
+RUN cargo build
 
 VOLUME ["/app", "/cargo-target", "/usr/local/cargo/registry"]
 

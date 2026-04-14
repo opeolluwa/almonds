@@ -2,12 +2,9 @@ import 'scripts/kernel.just'
 import 'scripts/misc.just'
 import 'scripts/desktop.just'
 import 'scripts/lint.just'
-import 'scripts/build.just'
 import 'scripts/test.just'
 import 'scripts/clean.just'
-import 'scripts/android.just'
 import 'scripts/server.just'
-import 'scripts/docs.just'
 import 'scripts/website.just'
 import 'scripts/release.just'
 import 'scripts/mobile.just'
@@ -72,21 +69,6 @@ test target:
 [working-directory:'.']
 release target:
 	@just release-{{target}}
-
-
-
-@server-logs:
-    {{ DOCKER_CMD }} logs -f --tail='30' app
-
-
-@server-dev:
-    {{ DOCKER_CMD }} up -d 
-    @just server-logs
-
-
-[working-directory:'kernel']
-gph-pull:
-	graphql-client generate  --schema-path .graphql/schema.graphql .graphql/sync_queue_query.graphql --output-directory src/contracts 
 
 
 

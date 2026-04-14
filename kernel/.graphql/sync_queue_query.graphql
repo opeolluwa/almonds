@@ -1,3 +1,4 @@
+
 query SyncQueueView {
   syncQueue {
     nodes {
@@ -9,3 +10,17 @@ query SyncQueueView {
     }
   }
 }
+
+
+# type SyncQueue {
+#   identifier: String!
+#   tableName: String!
+#   recordIdentifier: String!
+#   operation: String!
+#   createdAt: String!
+# }
+
+
+# mutation UpSyncDataInQueue{
+# upSyncDataInQueue($data: SyncQueue ) 
+# }

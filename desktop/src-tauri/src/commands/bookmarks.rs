@@ -1,6 +1,7 @@
 use almond_kernel::{
-    adapters::{bookmarks::BookmarkTag, meta::RequestMeta},
+    adapters::meta::RequestMeta,
     entities::bookmark,
+    enums::Tag as BookmarkTag,
     repositories::bookmarks::BookmarkRepositoryExt,
     repositories::workspace_manager::{DuplicateRecord, TransferRecord},
 };

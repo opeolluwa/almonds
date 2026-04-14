@@ -3,9 +3,14 @@ server-init url:
     seaography-cli -e ./src/entities  --output-dir . --database-url={{url}} --framework axum orchard
 
 
-[working-directory:'server']
-watch-server:
-    cargo watch -qcx run 
+@server-logs:
+    {{ DOCKER_CMD }} logs -f --tail='30' app
+
+
+@watch-server:
+    {{ DOCKER_CMD }} up -d 
+    @just server-logs
+
 
 
 [working-directory:'server']

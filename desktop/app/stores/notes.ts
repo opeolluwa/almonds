@@ -126,5 +126,16 @@ export const useNoteStore = defineStore("notes_store", {
         (n) => n.identifier !== recordIdentifier,
       );
     },
+
+    async exportAsPdf(
+      recordIdentifier: string,
+      previousWorkspaceIdentifier: string,
+    ) {
+      await invoke("export_notes_as_pdf", {
+        recordIdentifier,
+        previousWorkspaceIdentifier,
+        meta: await getWorkspaceMeta(),
+      });
+    },
   },
 });

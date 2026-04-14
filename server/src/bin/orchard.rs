@@ -4,7 +4,7 @@ use std::{
     time::Duration,
 };
 
-use almond_kernel::{error::KernelError, kernel};
+use almond_kernel::{data_engine, error::KernelError};
 use async_graphql::http::{playground_source, GraphQLPlaygroundConfig};
 use async_graphql_axum::{GraphQLRequest, GraphQLResponse};
 use axum::{
@@ -40,9 +40,10 @@ async fn graphql_playground(
 #[axum::debug_handler]
 async fn graphql_handler(
     State(GraphQlState { schema, .. }): State<GraphQlState>,
+    headers: axum::http::HeaderMap,
     req: GraphQLRequest,
 ) -> GraphQLResponse {
-    let req = req.into_inner();
+    let req = req.into_inner().data(headers);
     schema.execute(req).await.into()
 }
 
@@ -77,7 +78,7 @@ async fn main() -> Result<(), AppError> {
             .allow_headers(Any)
     };
 
-    let kernel = kernel::Kernel::new(&app_config.database_url).await?;
+    let kernel = data_engine::DataEngine::new(&app_config.database_url).await?;
 
     kernel.run_migrations().await?;
 
@@ -93,14 +94,14 @@ async fn main() -> Result<(), AppError> {
 
     let graphql_state = GraphQlState {
         schema,
-        endpoint: app_config.endpoint.clone(),
+        endpoint: app_config.graphql_endpoint.clone(),
     };
 
     let http_routes = load_routes(&db_conn);
 
     let graphql_router = Router::new()
         .route(
-            &app_config.endpoint,
+            &app_config.graphql_endpoint,
             get(graphql_playground).post(graphql_handler),
         )
         .with_state(graphql_state);
@@ -123,7 +124,7 @@ async fn main() -> Result<(), AppError> {
     tracing::info!(
         "Visit GraphQL Playground at http://{}{}",
         ip_address,
-        app_config.endpoint
+        app_config.graphql_endpoint
     );
     tracing::info!("Service health check at http://{}/health", ip_address,);
     axum::serve(TcpListener::bind(ip_address).await.unwrap(), app)

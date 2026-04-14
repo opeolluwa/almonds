@@ -121,3 +121,26 @@ pub async fn transfer_note(
         .await
         .map_err(Into::into)
 }
+
+#[tauri::command]
+pub async fn export_notes_as_pdf(
+    state: State<'_, AppState>,
+    record_identifier: Uuid,
+    previous_workspace_identifier: Uuid,
+    meta: Option<RequestMeta>,
+) -> Result<(), AppError> {
+    let note = state
+        .notes_repository
+        .find_by_id(&record_identifier, &meta)
+        .await
+        .map_err(|err| AppError::Io(err.to_string()))?;
+
+    let note = note.unwrap();
+    let note_content = note.content;
+    let note_title = note.title;
+
+    almond_kernel::markdown2pdf::parse_markdown_to_pdf(&note_content, &note_title)
+        .map_err(|err| AppError::Io(err.to_string()))?;
+
+    Ok(())
+}

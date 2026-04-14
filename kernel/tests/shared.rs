@@ -10,8 +10,8 @@ use tokio::sync::OnceCell;
 
 use almond_kernel::adapters::meta::RequestMeta;
 use almond_kernel::adapters::workspace::CreateWorkspace;
+use almond_kernel::data_engine::Kernel;
 use almond_kernel::error::KernelError;
-use almond_kernel::kernel::Kernel;
 use almond_kernel::repositories::bookmarks::BookmarkRepository;
 use almond_kernel::repositories::notes::{NotesRepository, NotesRepositoryExt};
 use almond_kernel::repositories::prelude::{

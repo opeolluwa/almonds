@@ -1,6 +1,7 @@
 use almond_kernel::{
-    adapters::{meta::RequestMeta, todo::TodoPriority},
+    adapters::meta::RequestMeta,
     entities::todo,
+    enums::Priority as TodoPriority,
     repositories::todo::TodoRepositoryExt,
     repositories::workspace_manager::{DuplicateRecord, TransferRecord},
 };

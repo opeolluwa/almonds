@@ -1,4 +1,5 @@
-use almond_kernel::adapters::{meta::RequestMeta, recycle_bin::RecycleBinItemType};
+use almond_kernel::adapters::meta::RequestMeta;
+use almond_kernel::enums::ItemType as RecycleBinItemType;
 use serde::Deserialize;
 use uuid::Uuid;
 

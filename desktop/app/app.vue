@@ -4,7 +4,7 @@ import {
   requestPermission,
 } from "@tauri-apps/plugin-notification";
 import { useAlarmScheduler } from "~/composables/useAlarmScheduler";
-import { useWorkspaceSetup } from "./composables/useWorkspaceSetup";
+import { useWorkspaceSetup } from "~/composables/useWorkspaceSetup";
 
 const { init } = useAccentColor();
 const { init: initFontSize } = useFontSize();

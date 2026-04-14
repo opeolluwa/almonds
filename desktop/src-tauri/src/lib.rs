@@ -77,7 +77,7 @@ pub async fn run() {
 
                 let db_url = format!("sqlite://{}?mode=rwc", db_path.display());
                 dbg!("Database URL: {:?}", &db_path);
-                let kernel = almond_kernel::kernel::Kernel::new(&db_url)
+                let kernel = almond_kernel::kernel::DataEngine::new(&db_url)
                     .await
                     .expect("failed to initialize kernel");
 
@@ -125,6 +125,7 @@ pub async fn run() {
             commands::notes::get_recently_added_notes,
             commands::notes::transfer_note,
             commands::notes::update_note,
+            commands::notes::export_notes_as_pdf,
             commands::reminder::create_reminder,
             commands::reminder::delete_reminder,
             commands::reminder::duplicate_reminder,

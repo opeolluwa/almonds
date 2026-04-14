@@ -126,3 +126,10 @@ test-kernel:
 db-pull-server:
 	just migrate-up-server
 	just generate-server-entities
+
+
+
+	
+[working-directory:'kernel']
+gph-pull:
+		graphql-client generate  --schema-path .graphql/sync_queue_schema.graphql .graphql/sync_queue_query.graphql --output-directory src

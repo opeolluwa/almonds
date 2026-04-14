@@ -1,4 +1,5 @@
-use almond_kernel::adapters::{meta::RequestMeta, todo::TodoPriority};
+use almond_kernel::adapters::meta::RequestMeta;
+use almond_kernel::enums::Priority as TodoPriority;
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]

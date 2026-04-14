@@ -1,0 +1,53 @@
+mutation SyncQueue {
+  sync_queue(input: [
+    {
+      identifier: "5e7b1a687b8c8fca2f340b592a74fa4e"
+      tableName: "workspaces"
+      recordIdentifier: "f2X8b9dta2B!9cK890b695e86"
+      operation: "UPDATE"
+      createdAt: "2026-04-13T07:46:27Z"
+    },
+    {
+      identifier: "d1b6c143c7e53e10b5ee1d155abc23d3"
+      tableName: "notes"
+      recordIdentifier: "ad2c97cfdfOa3b0f51adbblt"
+      operation: "INSERT"
+      createdAt: "2026-04-13T08:16:25Z"
+    },
+    {
+      identifier: "28e2d225c7fa4ca4be57c0545bc98ea1"
+      tableName: "notes"
+      recordIdentifier: "ad2c97cfdfOa3b0f51adbblt"
+      operation: "UPDATE"
+      createdAt: "2026-04-13T08:16:48Z"
+    },
+    {
+      identifier: "a91c3d88f2b14c7aa9c8e12d7f4b1234"
+      tableName: "bookmarks"
+      recordIdentifier: "bm_9xK21abC88"
+      operation: "INSERT"
+      createdAt: "2026-04-13T09:05:12Z"
+    },
+    {
+      identifier: "bb72e1a92f7743a6aefb45c9912c5678"
+      tableName: "snippet"
+      recordIdentifier: "snip_77abXkLm09"
+      operation: "UPDATE"
+      createdAt: "2026-04-13T09:10:45Z"
+    },
+    {
+      identifier: "cc83f2b03e8845b9b123d67efab91234"
+      tableName: "todo"
+      recordIdentifier: "todo_5566YYkk"
+      operation: "INSERT"
+      createdAt: "2026-04-13T09:15:30Z"
+    },
+    {
+      identifier: "dd94a3c14f9956cab234e78fabcd5678"
+      tableName: "bookmarks"
+      recordIdentifier: "bm_9xK21abC88"
+      operation: "UPDATE"
+      createdAt: "2026-04-13T09:20:10Z"
+    }
+  ])
+}
