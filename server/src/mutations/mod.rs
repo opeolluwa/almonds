@@ -1,5 +1,5 @@
 pub mod bookmark;
-pub mod hello;
+pub mod preflight;
 pub mod note_category;
 pub mod notes;
 pub mod ollama_conversation_history;
@@ -10,3 +10,4 @@ pub mod reminder;
 pub mod snippets;
 pub mod todo;
 pub mod workspace;
+pub mod sync_queue;

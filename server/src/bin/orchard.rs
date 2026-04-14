@@ -4,7 +4,7 @@ use std::{
     time::Duration,
 };
 
-use almond_kernel::{error::KernelError, kernel};
+use almond_kernel::{data_engine, error::KernelError};
 use async_graphql::http::{playground_source, GraphQLPlaygroundConfig};
 use async_graphql_axum::{GraphQLRequest, GraphQLResponse};
 use axum::{
@@ -77,7 +77,7 @@ async fn main() -> Result<(), AppError> {
             .allow_headers(Any)
     };
 
-    let kernel = kernel::Kernel::new(&app_config.database_url).await?;
+    let kernel = data_engine::DataEngine::new(&app_config.database_url).await?;
 
     kernel.run_migrations().await?;
 

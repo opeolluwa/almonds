@@ -14,6 +14,7 @@ path = "src/lib.rs"
 [dependencies]
 almond_kernel = { version = "0.1.0", path = "../kernel", default-features = false, features = [
     "postgres",
+    "sync_engine",
 ] }
 async-graphql-axum = { version = "7.0" }
 async-trait = "0.1.89"

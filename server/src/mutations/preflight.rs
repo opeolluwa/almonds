@@ -3,11 +3,11 @@ use seaography::{
     CustomFields,
 };
 
-pub struct SayHello;
+pub struct Preflight;
 
 #[CustomFields]
-impl SayHello {
-    async fn hello(_ctx: &Context<'_>, name: String) -> async_graphql::Result<String> {
+impl Preflight {
+    async fn preflight(_ctx: &Context<'_>, name: String) -> async_graphql::Result<String> {
         Ok(format!("Hello, {}!", name))
     }
 }

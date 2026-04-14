@@ -44,14 +44,11 @@ pub fn schema_builder(
             types::ollama_conversation_response::CreateOllamaConversationResponseInput
         ]
     );
-    // seaography::register_custom_outputs!(builder, [types::PurchaseOrder, ..]);
-    // seaography::register_complex_custom_outputs!(builder, [types::Rectangle, ..]);
-    // seaography::register_custom_unions!(builder, [types::Shape, ..]);
-    // seaography::register_custom_queries!(builder, [queries::Operations]);
+   
     seaography::register_custom_mutations!(
         builder,
         [
-            mutations::hello::SayHello,
+            mutations::preflight::Preflight,
             mutations::workspace::CreateWorkspace,
             mutations::todo::CreateTodo,
             mutations::notes::CreateNote,
