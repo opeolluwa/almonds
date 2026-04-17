@@ -1,10 +1,9 @@
+use almond_kernel::entities;
 use seaography::{
-    async_graphql::{self, Context},
     CustomFields,
+    async_graphql::{self, Context},
 };
 use serde::{Deserialize, Serialize};
-
-use almond_kernel::entities;
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]

@@ -3,8 +3,8 @@ use axum::http::HeaderMap;
 use rayon::prelude::*;
 use sea_orm::{ColumnTrait, DatabaseConnection, EntityTrait};
 use seaography::{
-    CustomFields,
     async_graphql::{self, Context},
+    CustomFields,
 };
 
 use crate::{
