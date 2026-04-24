@@ -87,6 +87,8 @@ pub trait TodoRepositoryExt {
         done: bool,
         meta: &Option<RequestMeta>,
     ) -> Result<todo::Model, KernelError>;
+
+    async fn upsert_many(&self, models: Vec<todo::Model>) -> Result<(), KernelError>;
 }
 
 #[async_trait]
@@ -317,6 +319,44 @@ impl TodoRepositoryExt for TodoRepository {
             .update(self.conn.as_ref())
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))
+    }
+
+    async fn upsert_many(&self, models: Vec<todo::Model>) -> Result<(), KernelError> {
+        for chunk in models.chunks(20) {
+            let futures: Vec<_> = chunk
+                .iter()
+                .map(|model| {
+                    let conn = self.conn.clone();
+                    let model = model.clone();
+                    async move {
+                        let exists = todo::Entity::find()
+                            .filter(todo::Column::Identifier.eq(model.identifier))
+                            .one(conn.as_ref())
+                            .await
+                            .map_err(|err| KernelError::DbOperationError(err.to_string()))?
+                            .is_some();
+
+                        let active_model = model.into_active_model();
+
+                        if exists {
+                            active_model
+                                .update(conn.as_ref())
+                                .await
+                                .map_err(|err| KernelError::DbOperationError(err.to_string()))?;
+                        } else {
+                            active_model
+                                .insert(conn.as_ref())
+                                .await
+                                .map_err(|err| KernelError::DbOperationError(err.to_string()))?;
+                        }
+                        Ok::<(), KernelError>(())
+                    }
+                })
+                .collect();
+
+            futures::future::try_join_all(futures).await?;
+        }
+        Ok(())
     }
 }
 #[async_trait::async_trait]

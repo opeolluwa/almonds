@@ -1,7 +1,9 @@
 use std::sync::Arc;
 
 use async_trait::async_trait;
-use sea_orm::{ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter};
+use sea_orm::{
+    ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, IntoActiveModel, QueryFilter,
+};
 use uuid::Uuid;
 
 use crate::{adapters::sync_queue::SyncQueueEntry, entities::sync_queue, error::KernelError};
@@ -21,6 +23,8 @@ pub trait SyncQueueRepositoryExt {
     async fn len(&self) -> Result<i32, KernelError>;
 
     async fn entries(&self) -> Result<Vec<sync_queue::Model>, KernelError>;
+
+    async fn upsert_many(&self, models: Vec<sync_queue::Model>) -> Result<(), KernelError>;
 }
 
 #[async_trait]
@@ -62,5 +66,43 @@ impl SyncQueueRepositoryExt for SyncQueueRepository {
             .all(self.conn.as_ref())
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))
+    }
+
+    async fn upsert_many(&self, models: Vec<sync_queue::Model>) -> Result<(), KernelError> {
+        for chunk in models.chunks(20) {
+            let futures: Vec<_> = chunk
+                .iter()
+                .map(|model| {
+                    let conn = self.conn.clone();
+                    let model = model.clone();
+                    async move {
+                        let exists = sync_queue::Entity::find()
+                            .filter(sync_queue::Column::Identifier.eq(model.identifier))
+                            .one(conn.as_ref())
+                            .await
+                            .map_err(|err| KernelError::DbOperationError(err.to_string()))?
+                            .is_some();
+
+                        let active_model = model.into_active_model();
+
+                        if exists {
+                            active_model
+                                .update(conn.as_ref())
+                                .await
+                                .map_err(|err| KernelError::DbOperationError(err.to_string()))?;
+                        } else {
+                            active_model
+                                .insert(conn.as_ref())
+                                .await
+                                .map_err(|err| KernelError::DbOperationError(err.to_string()))?;
+                        }
+                        Ok::<(), KernelError>(())
+                    }
+                })
+                .collect();
+
+            futures::future::try_join_all(futures).await?;
+        }
+        Ok(())
     }
 }

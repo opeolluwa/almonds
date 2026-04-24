@@ -1,14 +1,17 @@
 use almond_kernel::entities;
 use almond_kernel::sync_engine::{DataQueue, SyncEngine, SyncEngineTrait};
-use axum::http::HeaderMap;
 use rayon::prelude::*;
-use sea_orm::{ColumnTrait, DatabaseConnection, EntityTrait};
+use sea_orm::{ColumnTrait, DatabaseConnection, EntityTrait, FromQueryResult, Statement};
 use seaography::{
     async_graphql::{self, Context},
     CustomFields,
 };
 
-use crate::{config::AppConfig, errors::app_error::AppError};
+use crate::{
+    config::AppConfig,
+    errors::app_error::AppError,
+    utils::context::extract_request_context,
+};
 
 pub struct SyncQueue;
 
@@ -24,40 +27,77 @@ impl SyncQueue {
             .map_err(|err| AppError::InternalError(err.to_string()))
     }
 }
+
 #[CustomFields]
 impl SyncQueue {
     async fn sync_queue(ctx: &Context<'_>, input: DataQueue) -> async_graphql::Result<bool> {
-        let db_conn = ctx
-            .data::<DatabaseConnection>()
-            .map_err(|err| AppError::InternalError(err.message))?;
-
-        let headers = ctx
-            .data::<HeaderMap>()
-            .map_err(|_| AppError::InternalError("Missing request headers".to_string()))?;
-
-        let api_key = headers
-            .get("Authorization")
-            .and_then(|v| v.to_str().ok())
-            .ok_or_else(|| AppError::InternalError("Missing Authorization header".to_string()))?;
-
+        let req_ctx = extract_request_context(ctx)?;
         let app_config = AppConfig::from_env()?;
 
+        let filtered = filter_stale_items(req_ctx.db_conn, input).await?;
+
+        if filtered.is_empty() {
+            return Ok(true);
+        }
+
         let sync_engine = Self::sync_engine(
-            db_conn.to_owned(),
+            req_ctx.db_conn.to_owned(),
             &app_config.base_url,
-            api_key,
+            req_ctx.api_key,
             &app_config.graphql_endpoint,
         )
         .await?;
 
-        // convert to entities
-        let resolved_entities = input
-            .par_iter()
-            .map(|item| resolve_to_entity(item))
-            .collect::<Vec<_>>();
+        sync_engine
+            .sync(filtered)
+            .await
+            .map_err(|err| AppError::InternalError(err.to_string()))?;
 
         Ok(true)
     }
+}
+
+#[derive(Debug, FromQueryResult)]
+struct RecordTimestamp {
+    updated_at: String,
+}
+
+/// Drops any item whose local record was updated more recently than the incoming
+/// change — keeping only items where the incoming change is the newer version.
+async fn filter_stale_items(
+    db: &DatabaseConnection,
+    items: DataQueue,
+) -> Result<DataQueue, AppError> {
+    let backend = db.get_database_backend();
+    let mut result = Vec::with_capacity(items.len());
+
+    for item in items {
+        let sql = format!(
+            "SELECT updated_at FROM \"{}\" WHERE identifier = ?",
+            item.table_name
+        );
+        let stmt = Statement::from_sql_and_values(
+            backend,
+            &sql,
+            [item.record_identifier.clone().into()],
+        );
+
+        let local = RecordTimestamp::find_by_statement(stmt)
+            .one(db)
+            .await
+            .map_err(|e| AppError::DatabaseError(e.to_string()))?;
+
+        if let Some(local) = local {
+            // Skip if local is already newer than the incoming change timestamp.
+            if local.updated_at > item.created_at {
+                continue;
+            }
+        }
+
+        result.push(item);
+    }
+
+    Ok(result)
 }
 
 pub enum EntityWrapper {
@@ -86,12 +126,9 @@ fn resolve_to_entity(item: &almond_kernel::entities::sync_queue::Model) -> Entit
         "recycle_bin" => EntityWrapper::RecycleBin(entities::recycle_bin::Entity),
         "sync_queue" => EntityWrapper::SyncQueue(entities::sync_queue::Entity),
         "user_preference" => EntityWrapper::UserPreference(entities::user_preference::Entity),
-
         _ => EntityWrapper::NoOp,
     }
 }
-
-// see which is newer between upstream and downstream and return the delta for syncing
 
 fn resolve_delta<T>(upstream: T, downstream: T) -> Option<T>
 where

@@ -55,6 +55,8 @@ pub trait WorkspaceRepositoryExt {
     ) -> Result<bool, KernelError>;
 
     async fn exists(&self, id: &Uuid) -> Result<bool, KernelError>;
+
+    async fn upsert_many(&self, models: Vec<workspaces::Model>) -> Result<(), KernelError>;
 }
 
 #[async_trait]
@@ -211,5 +213,43 @@ impl WorkspaceRepositoryExt for WorkspaceRepository {
     async fn exists(&self, id: &Uuid) -> Result<bool, KernelError> {
         let result = self.get_workspace_by_id(id.to_owned()).await.ok();
         Ok(result.is_some())
+    }
+
+    async fn upsert_many(&self, models: Vec<workspaces::Model>) -> Result<(), KernelError> {
+        for chunk in models.chunks(20) {
+            let futures: Vec<_> = chunk
+                .iter()
+                .map(|model| {
+                    let conn = self.conn.clone();
+                    let model = model.clone();
+                    async move {
+                        let exists = workspaces::Entity::find()
+                            .filter(workspaces::Column::Identifier.eq(model.identifier))
+                            .one(conn.as_ref())
+                            .await
+                            .map_err(|err| KernelError::DbOperationError(err.to_string()))?
+                            .is_some();
+
+                        let active_model: workspaces::ActiveModel = model.into();
+
+                        if exists {
+                            active_model
+                                .update(conn.as_ref())
+                                .await
+                                .map_err(|err| KernelError::DbOperationError(err.to_string()))?;
+                        } else {
+                            active_model
+                                .insert(conn.as_ref())
+                                .await
+                                .map_err(|err| KernelError::DbOperationError(err.to_string()))?;
+                        }
+                        Ok::<(), KernelError>(())
+                    }
+                })
+                .collect();
+
+            futures::future::try_join_all(futures).await?;
+        }
+        Ok(())
     }
 }

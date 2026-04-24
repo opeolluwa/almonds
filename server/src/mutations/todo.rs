@@ -1,9 +1,16 @@
-use almond_kernel::entities;
+use std::sync::Arc;
+
+use almond_kernel::{
+    entities,
+    repositories::todo::{TodoRepository, TodoRepositoryExt},
+};
 use seaography::{
     async_graphql::{self, Context},
     CustomFields,
 };
 use serde::{Deserialize, Serialize};
+
+use crate::{errors::app_error::AppError, utils::context::extract_db_conn};
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -15,6 +22,11 @@ impl SyncTodo {
         ctx: &Context<'_>,
         input: Vec<entities::todo::Model>,
     ) -> async_graphql::Result<bool> {
-        unimplemented!()
+        let db = extract_db_conn(ctx)?;
+        let repo = TodoRepository::new(Arc::new(db.clone()));
+        repo.upsert_many(input)
+            .await
+            .map_err(|e| AppError::InternalError(e.to_string()))?;
+        Ok(true)
     }
 }
