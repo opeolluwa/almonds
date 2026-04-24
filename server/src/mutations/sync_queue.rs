@@ -8,9 +8,7 @@ use seaography::{
 };
 
 use crate::{
-    config::AppConfig,
-    errors::app_error::AppError,
-    utils::context::extract_request_context,
+    config::AppConfig, errors::app_error::AppError, utils::context::extract_request_context,
 };
 
 pub struct SyncQueue;
@@ -76,11 +74,8 @@ async fn filter_stale_items(
             "SELECT updated_at FROM \"{}\" WHERE identifier = ?",
             item.table_name
         );
-        let stmt = Statement::from_sql_and_values(
-            backend,
-            &sql,
-            [item.record_identifier.clone().into()],
-        );
+        let stmt =
+            Statement::from_sql_and_values(backend, &sql, [item.record_identifier.clone().into()]);
 
         let local = RecordTimestamp::find_by_statement(stmt)
             .one(db)
