@@ -5,7 +5,7 @@ import {
 } from "@tauri-apps/plugin-notification";
 import { useAlarmScheduler } from "~/composables/useAlarmScheduler";
 import { useWorkspaceSetup } from "~/composables/useWorkspaceSetup";
-
+import { useClient } from 'villus';
 const { init } = useAccentColor();
 const { init: initFontSize } = useFontSize();
 const { init: initDarkTheme } = useDarkTheme();

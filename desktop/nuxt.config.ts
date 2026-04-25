@@ -34,6 +34,7 @@ export default defineNuxtConfig({
        collections: ['heroicons', 'lucide', "ri"] 
      }
   },
+  
   vite: {
     optimizeDeps: {
       include: [
@@ -49,6 +50,7 @@ export default defineNuxtConfig({
     host: "0.0.0.0",
   },
 
+  
   colorMode: {
     preference: "system",
     fallback: "light",
