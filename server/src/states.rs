@@ -49,7 +49,6 @@ impl FromRef<ServicesState> for CountryService {
 //     }
 // }
 
-
 #[derive(Clone)]
 pub struct GraphQlState {
     pub schema: Schema,
