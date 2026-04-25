@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use almond_kernel::{
     entities,
-    repositories::snippets::{SnippetRepository, SnippetRepositoryExt},
+    repositories::user_preference::{UserPreferenceRepository, UserPreferenceRepositoryExt},
     sync_engine::EntitySyncResult,
 };
 use seaography::{
@@ -12,23 +12,24 @@ use seaography::{
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    errors::app_error::AppError, types::snippet::SyncSnippetInput, utils::context::extract_db_conn,
+    errors::app_error::AppError, types::user_preference::SyncUserPreferenceInput,
+    utils::context::extract_db_conn,
 };
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct SyncSnippet;
+pub struct SyncUserPreference;
 
 #[CustomFields]
-impl SyncSnippet {
-    async fn sync_snippet(
+impl SyncUserPreference {
+    async fn sync_user_preference(
         ctx: &Context<'_>,
-        input: Vec<SyncSnippetInput>,
+        input: Vec<SyncUserPreferenceInput>,
     ) -> async_graphql::Result<Vec<EntitySyncResult>> {
         let db = extract_db_conn(ctx)?;
-        let repo = SnippetRepository::new(Arc::new(db.clone()));
+        let repo = UserPreferenceRepository::new(Arc::new(db.clone()));
 
-        let models: Vec<entities::snippets::Model> =
+        let models: Vec<entities::user_preference::Model> =
             input.into_iter().map(|item| item.into()).collect();
 
         let res = repo
