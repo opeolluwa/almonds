@@ -1,9 +1,9 @@
 use std::sync::Arc;
 
-use sea_orm::{DatabaseConnection, EntityTrait};
+use sea_orm::{ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter};
 
 use crate::{
-    entities::{countries, prelude::Countries},
+    entities::{countries, countries::Column, prelude::Countries},
     errors::database_error::DatabaseError,
     repositories::base::Repository,
 };
@@ -20,6 +20,11 @@ pub(crate) trait CountryRepositoryExt {
         &self,
         identifier: &str,
     ) -> Result<Option<countries::Model>, DatabaseError>;
+
+    async fn fetch_countries_by_currency_code(
+        &self,
+        currency_code: &str,
+    ) -> Result<Vec<countries::Model>, DatabaseError>;
 }
 
 impl Repository for CountryRepository {
@@ -50,5 +55,18 @@ impl CountryRepositoryExt for CountryRepository {
             .map_err(DatabaseError::from)?;
 
         Ok(country)
+    }
+
+    async fn fetch_countries_by_currency_code(
+        &self,
+        currency_code: &str,
+    ) -> Result<Vec<countries::Model>, DatabaseError> {
+        let countries = Countries::find()
+            .filter(Column::CurrencyCode.eq(currency_code))
+            .all(self.db_conn.as_ref())
+            .await
+            .map_err(DatabaseError::from)?;
+
+        Ok(countries)
     }
 }

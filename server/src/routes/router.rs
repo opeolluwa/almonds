@@ -8,10 +8,13 @@ use crate::{
     routes::{
         app::public_routes,
         auth::authentication_routes,
+        country::country_routes,
         // wait_list::wait_list_routes,
     },
     services::{
-        authentication_service::AuthenticationService, /*notification_service::NotificationService,*/
+        authentication_service::AuthenticationService,
+        country_service::CountryService,
+        /*notification_service::NotificationService,*/
         root_service::RootService,
         user_service::UserService,
         // wait_list_service::WaitListService,
@@ -24,17 +27,17 @@ pub fn load_routes(db_conn: &Arc<DatabaseConnection>) -> Router {
         user_service: UserService::init(db_conn),
         root_service: RootService::init(),
         auth_service: AuthenticationService::init(db_conn),
+        country_service: CountryService::init(db_conn),
         // notification_service: NotificationService::init(db_conn),
-        // country_service: CountryService::init(db_conn),
         // wait_list_service: WaitListService::init(db_conn),
     };
 
     Router::new()
         .merge(public_routes())
         .nest("/auth", authentication_routes(state.clone()))
+        .nest("/countries", country_routes(state.clone()))
         // .nest("/user", user_routes(state.clone()))
         // .nest("/notifications", notification_routes(state.clone()))
-        // .nest("/countries", country_routes(state.clone()))
         // .nest("/wait-list", wait_list_routes(state.clone()))
         .fallback(async || {
             ApiResponseBuilder::<()>::new()

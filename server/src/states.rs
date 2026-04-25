@@ -4,7 +4,7 @@ use seaography::async_graphql;
 
 use crate::services::{
     authentication_service::AuthenticationService,
-
+    country_service::CountryService,
     // notification_service::NotificationService,
     root_service::RootService,
     user_service::UserService,
@@ -16,6 +16,7 @@ pub struct ServicesState {
     pub user_service: UserService,
     pub root_service: RootService,
     pub auth_service: AuthenticationService,
+    pub country_service: CountryService,
     // pub notification_service: NotificationService,
     // pub wait_list_service: WaitListService,
 }
@@ -35,6 +36,12 @@ impl FromRef<ServicesState> for RootService {
 impl FromRef<ServicesState> for AuthenticationService {
     fn from_ref(services: &ServicesState) -> AuthenticationService {
         services.auth_service.clone()
+    }
+}
+
+impl FromRef<ServicesState> for CountryService {
+    fn from_ref(services: &ServicesState) -> CountryService {
+        services.country_service.clone()
     }
 }
 

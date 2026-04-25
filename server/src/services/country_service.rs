@@ -32,6 +32,11 @@ pub(crate) trait CountryServiceExt {
         &self,
         identifier: &str,
     ) -> Result<Option<countries::Model>, ServiceError>;
+
+    async fn get_countries_by_currency_code(
+        &self,
+        currency_code: &str,
+    ) -> Result<FetchCountriesResponse, ServiceError>;
 }
 
 impl CountryServiceExt for CountryService {
@@ -56,5 +61,18 @@ impl CountryServiceExt for CountryService {
             .map_err(ServiceError::from)?;
 
         Ok(country)
+    }
+
+    async fn get_countries_by_currency_code(
+        &self,
+        currency_code: &str,
+    ) -> Result<FetchCountriesResponse, ServiceError> {
+        let records = self
+            .country_repository
+            .fetch_countries_by_currency_code(currency_code)
+            .await
+            .map_err(ServiceError::from)?;
+
+        Ok(FetchCountriesResponse { records })
     }
 }
