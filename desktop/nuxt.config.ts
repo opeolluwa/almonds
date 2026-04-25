@@ -17,6 +17,7 @@ export default defineNuxtConfig({
   ssr: false,
   modules: [
     // "@nuxt/a11y",
+    "@nuxtjs/apollo",
     "@nuxt/eslint",
     "@nuxt/hints",
     "@nuxt/image",
@@ -29,12 +30,20 @@ export default defineNuxtConfig({
     "@vueuse/nuxt",
   ],
 
-  icon: {
-     serverBundle: {
-       collections: ['heroicons', 'lucide', "ri"] 
-     }
+  apollo: {
+    clients: {
+      default: {
+        httpEndpoint: "https://spacex-production.up.railway.app",
+      },
+    },
   },
-  
+
+  icon: {
+    serverBundle: {
+      collections: ["heroicons", "lucide", "ri"],
+    },
+  },
+
   vite: {
     optimizeDeps: {
       include: [
@@ -50,7 +59,6 @@ export default defineNuxtConfig({
     host: "0.0.0.0",
   },
 
-  
   colorMode: {
     preference: "system",
     fallback: "light",
