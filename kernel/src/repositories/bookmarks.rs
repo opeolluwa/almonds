@@ -12,6 +12,8 @@ use uuid::Uuid;
 use crate::entities::sea_orm_active_enums::{ItemType, Tag};
 #[cfg(feature = "sqlite")]
 use crate::enums::{ItemType, Tag};
+#[cfg(feature = "sync_engine")]
+use crate::types::EntitySyncResult;
 use crate::{
     adapters::{
         bookmarks::{CreateBookmark, UpdateBookmark},
@@ -28,8 +30,6 @@ use crate::{
     },
     utils::extract_req_meta,
 };
-#[cfg(feature = "sync_engine")]
-use crate::types::EntitySyncResult;
 
 #[derive(Debug, Clone)]
 pub struct BookmarkRepository {
@@ -85,7 +85,10 @@ pub trait BookmarkRepositoryExt {
     async fn exists(&self, identifier: &Uuid) -> Result<bool, KernelError>;
 
     #[cfg(feature = "sync_engine")]
-    async fn upsert_many(&self, models: Vec<bookmark::Model>) -> Result<Vec<EntitySyncResult>, KernelError>;
+    async fn upsert_many(
+        &self,
+        models: Vec<bookmark::Model>,
+    ) -> Result<Vec<EntitySyncResult>, KernelError>;
 }
 
 #[async_trait]
@@ -284,8 +287,10 @@ impl BookmarkRepositoryExt for BookmarkRepository {
     }
 
     #[cfg(feature = "sync_engine")]
-    async fn upsert_many(&self, models: Vec<bookmark::Model>) -> Result<Vec<EntitySyncResult>, KernelError> {
-        
+    async fn upsert_many(
+        &self,
+        models: Vec<bookmark::Model>,
+    ) -> Result<Vec<EntitySyncResult>, KernelError> {
         let mut sync_results: Vec<EntitySyncResult> = Vec::new();
         for chunk in models.chunks(20) {
             let futures: Vec<_> = chunk

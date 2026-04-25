@@ -36,7 +36,7 @@ impl SyncBookmark {
             .upsert_many(models)
             .await
             .map_err(|e| AppError::InternalError(e.to_string()))?;
-        
+
         Ok(res)
     }
 }

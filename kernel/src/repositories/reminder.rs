@@ -12,6 +12,8 @@ use uuid::Uuid;
 use crate::entities::sea_orm_active_enums::ItemType;
 #[cfg(feature = "sqlite")]
 use crate::enums::ItemType;
+#[cfg(feature = "sync_engine")]
+use crate::types::EntitySyncResult;
 use crate::{
     adapters::{
         meta::RequestMeta,
@@ -28,8 +30,6 @@ use crate::{
     },
     utils::extract_req_meta,
 };
-#[cfg(feature = "sync_engine")]
-use crate::types::EntitySyncResult;
 
 #[derive(Debug, Clone)]
 pub struct ReminderRepository {
@@ -72,7 +72,10 @@ pub trait ReminderRepositoryExt {
     ) -> Result<(), KernelError>;
 
     #[cfg(feature = "sync_engine")]
-    async fn upsert_many(&self, models: Vec<reminder::Model>) -> Result<Vec<EntitySyncResult>, KernelError>;
+    async fn upsert_many(
+        &self,
+        models: Vec<reminder::Model>,
+    ) -> Result<Vec<EntitySyncResult>, KernelError>;
 }
 
 #[async_trait]
@@ -216,7 +219,10 @@ impl ReminderRepositoryExt for ReminderRepository {
     }
 
     #[cfg(feature = "sync_engine")]
-    async fn upsert_many(&self, models: Vec<reminder::Model>) -> Result<Vec<EntitySyncResult>, KernelError> {
+    async fn upsert_many(
+        &self,
+        models: Vec<reminder::Model>,
+    ) -> Result<Vec<EntitySyncResult>, KernelError> {
         let mut sync_results: Vec<EntitySyncResult> = Vec::new();
         for chunk in models.chunks(20) {
             let futures: Vec<_> = chunk

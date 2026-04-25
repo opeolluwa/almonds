@@ -8,6 +8,8 @@ use sea_orm::{
 };
 use uuid::Uuid;
 
+#[cfg(feature = "sync_engine")]
+use crate::types::EntitySyncResult;
 use crate::{
     adapters::{
         meta::RequestMeta,
@@ -17,8 +19,6 @@ use crate::{
     error::KernelError,
     utils::extract_req_meta,
 };
-#[cfg(feature = "sync_engine")]
-use crate::types::EntitySyncResult;
 
 #[derive(Debug, Clone)]
 pub struct WorkspaceRepository {
@@ -59,7 +59,10 @@ pub trait WorkspaceRepositoryExt {
     async fn exists(&self, id: &Uuid) -> Result<bool, KernelError>;
 
     #[cfg(feature = "sync_engine")]
-    async fn upsert_many(&self, models: Vec<workspaces::Model>) -> Result<Vec<EntitySyncResult>, KernelError>;
+    async fn upsert_many(
+        &self,
+        models: Vec<workspaces::Model>,
+    ) -> Result<Vec<EntitySyncResult>, KernelError>;
 }
 
 #[async_trait]
@@ -219,7 +222,10 @@ impl WorkspaceRepositoryExt for WorkspaceRepository {
     }
 
     #[cfg(feature = "sync_engine")]
-    async fn upsert_many(&self, models: Vec<workspaces::Model>) -> Result<Vec<EntitySyncResult>, KernelError> {
+    async fn upsert_many(
+        &self,
+        models: Vec<workspaces::Model>,
+    ) -> Result<Vec<EntitySyncResult>, KernelError> {
         let mut sync_results: Vec<EntitySyncResult> = Vec::new();
         for chunk in models.chunks(20) {
             let futures: Vec<_> = chunk

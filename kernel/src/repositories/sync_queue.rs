@@ -6,13 +6,9 @@ use sea_orm::{
 };
 use uuid::Uuid;
 
-use crate::{
-    adapters::sync_queue::SyncQueueEntry,
-    entities::sync_queue,
-    error::KernelError,
-};
 #[cfg(feature = "sync_engine")]
 use crate::types::EntitySyncResult;
+use crate::{adapters::sync_queue::SyncQueueEntry, entities::sync_queue, error::KernelError};
 
 pub struct SyncQueueRepository {
     conn: Arc<DatabaseConnection>,
@@ -31,7 +27,10 @@ pub trait SyncQueueRepositoryExt {
     async fn entries(&self) -> Result<Vec<sync_queue::Model>, KernelError>;
 
     #[cfg(feature = "sync_engine")]
-    async fn upsert_many(&self, models: Vec<sync_queue::Model>) -> Result<Vec<EntitySyncResult>, KernelError>;
+    async fn upsert_many(
+        &self,
+        models: Vec<sync_queue::Model>,
+    ) -> Result<Vec<EntitySyncResult>, KernelError>;
 }
 
 #[async_trait]
@@ -76,7 +75,10 @@ impl SyncQueueRepositoryExt for SyncQueueRepository {
     }
 
     #[cfg(feature = "sync_engine")]
-    async fn upsert_many(&self, models: Vec<sync_queue::Model>) -> Result<Vec<EntitySyncResult>, KernelError> {
+    async fn upsert_many(
+        &self,
+        models: Vec<sync_queue::Model>,
+    ) -> Result<Vec<EntitySyncResult>, KernelError> {
         let mut sync_results: Vec<EntitySyncResult> = Vec::new();
         for chunk in models.chunks(20) {
             let futures: Vec<_> = chunk

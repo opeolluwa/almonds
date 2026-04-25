@@ -11,14 +11,14 @@ use uuid::Uuid;
 use crate::entities::sea_orm_active_enums::ItemType;
 #[cfg(feature = "sqlite")]
 use crate::enums::ItemType;
+#[cfg(feature = "sync_engine")]
+use crate::types::EntitySyncResult;
 use crate::{
     adapters::{meta::RequestMeta, recycle_bin::CreateRecycleBinEntry},
     entities::recycle_bin,
     error::KernelError,
     utils::extract_req_meta,
 };
-#[cfg(feature = "sync_engine")]
-use crate::types::EntitySyncResult;
 
 #[derive(Debug, Clone)]
 pub struct RecycleBinRepository {
@@ -58,7 +58,10 @@ pub trait RecycleBinRepositoryExt {
     async fn purge_all(&self, meta: &Option<RequestMeta>) -> Result<(), KernelError>;
 
     #[cfg(feature = "sync_engine")]
-    async fn upsert_many(&self, models: Vec<recycle_bin::Model>) -> Result<Vec<EntitySyncResult>, KernelError>;
+    async fn upsert_many(
+        &self,
+        models: Vec<recycle_bin::Model>,
+    ) -> Result<Vec<EntitySyncResult>, KernelError>;
 }
 
 #[async_trait]
@@ -175,7 +178,10 @@ impl RecycleBinRepositoryExt for RecycleBinRepository {
     }
 
     #[cfg(feature = "sync_engine")]
-    async fn upsert_many(&self, models: Vec<recycle_bin::Model>) -> Result<Vec<EntitySyncResult>, KernelError> {
+    async fn upsert_many(
+        &self,
+        models: Vec<recycle_bin::Model>,
+    ) -> Result<Vec<EntitySyncResult>, KernelError> {
         let mut sync_results: Vec<EntitySyncResult> = Vec::new();
         for chunk in models.chunks(20) {
             let futures: Vec<_> = chunk

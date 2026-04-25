@@ -3,7 +3,6 @@ use sea_orm::DatabaseConnection;
 
 pub use crate::types::EntitySyncResult;
 
-
 #[derive(GraphQLQuery)]
 #[graphql(
     schema_path = ".graphql/sync_queue_schema.graphql",
