@@ -21,7 +21,7 @@ pub struct OtpService {
 impl Repository for OtpService {
     fn init(db_conn: &Arc<DatabaseConnection>) -> Self {
         Self {
-            otp_repository: OtpRepository::init(&db_conn),
+            otp_repository: OtpRepository::init(db_conn),
         }
     }
 }
@@ -37,7 +37,7 @@ pub(crate) trait OtpServiceExt {
 }
 
 impl OtpServiceExt for OtpService {
-    async fn new_otp_for_user(&self, user_identifier: &str) -> Result<String, ServiceError> {
+    async fn new_otp_for_user(&self, _user_identifier: &str) -> Result<String, ServiceError> {
         unimplemented!()
         // let otp = generate_otp();
         // self.otp_repository

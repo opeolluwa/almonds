@@ -1,0 +1,46 @@
+mutation SyncReminders {
+  sync_reminder(
+    input: [
+      {
+        identifier: "d5e6f7a8-b9c0-1234-ef01-345678901234"
+        title: "Team standup"
+        description: "Daily sync with the engineering team"
+        recurring: true
+        recurrence_rule: "FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR"
+        alarm_sound: "default"
+        remind_at: "2026-04-28T09:00:00+00:00"
+        created_at: "2026-04-01T08:00:00+00:00"
+        updated_at: "2026-04-01T08:00:00+00:00"
+        workspace_identifier: null
+      }
+      {
+        identifier: "e6f7a8b9-c0d1-2345-f012-456789012345"
+        title: "Pay server invoice"
+        description: null
+        recurring: false
+        recurrence_rule: null
+        alarm_sound: null
+        remind_at: "2026-04-30T10:00:00+00:00"
+        created_at: "2026-04-15T12:00:00+00:00"
+        updated_at: "2026-04-15T12:00:00+00:00"
+        workspace_identifier: null
+      }
+      {
+        identifier: "f7a8b9c0-d1e2-3456-0123-567890123456"
+        title: "Review quarterly goals"
+        description: "Check progress against OKRs and update tracker"
+        recurring: true
+        recurrence_rule: "FREQ=MONTHLY;BYMONTHDAY=1"
+        alarm_sound: "chime"
+        remind_at: "2026-05-01T09:00:00+00:00"
+        created_at: "2026-04-10T11:00:00+00:00"
+        updated_at: "2026-04-10T11:00:00+00:00"
+        workspace_identifier: null
+      }
+    ]
+  ) {
+    success
+    error_message
+    identifier
+  }
+}

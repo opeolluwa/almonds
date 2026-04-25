@@ -14,6 +14,8 @@ use crate::adapters::meta::RequestMeta;
 use crate::entities::sea_orm_active_enums::{ItemType, Priority};
 #[cfg(feature = "sqlite")]
 use crate::enums::{ItemType, Priority};
+#[cfg(feature = "sync_engine")]
+use crate::types::EntitySyncResult;
 use crate::utils::extract_req_meta;
 use crate::{
     adapters::{
@@ -88,7 +90,11 @@ pub trait TodoRepositoryExt {
         meta: &Option<RequestMeta>,
     ) -> Result<todo::Model, KernelError>;
 
-    async fn upsert_many(&self, models: Vec<todo::Model>) -> Result<(), KernelError>;
+    #[cfg(feature = "sync_engine")]
+    async fn upsert_many(
+        &self,
+        models: Vec<todo::Model>,
+    ) -> Result<Vec<EntitySyncResult>, KernelError>;
 }
 
 #[async_trait]
@@ -321,15 +327,21 @@ impl TodoRepositoryExt for TodoRepository {
             .map_err(|err| KernelError::DbOperationError(err.to_string()))
     }
 
-    async fn upsert_many(&self, models: Vec<todo::Model>) -> Result<(), KernelError> {
+    #[cfg(feature = "sync_engine")]
+    async fn upsert_many(
+        &self,
+        models: Vec<todo::Model>,
+    ) -> Result<Vec<EntitySyncResult>, KernelError> {
+        let mut sync_results: Vec<EntitySyncResult> = Vec::new();
         for chunk in models.chunks(20) {
-            let futures: Vec<_> =
-                chunk
-                    .iter()
-                    .map(|model| {
-                        let conn = self.conn.clone();
-                        let model = model.clone();
-                        async move {
+            let futures: Vec<_> = chunk
+                .iter()
+                .map(|model| {
+                    let conn = self.conn.clone();
+                    let model = model.clone();
+                    async move {
+                        let identifier = model.identifier.to_string();
+                        let op_result: Result<(), KernelError> = async {
                             let exists = todo::Entity::find()
                                 .filter(todo::Column::Identifier.eq(model.identifier))
                                 .one(conn.as_ref())
@@ -348,14 +360,22 @@ impl TodoRepositoryExt for TodoRepository {
                                     KernelError::DbOperationError(err.to_string())
                                 })?;
                             }
-                            Ok::<(), KernelError>(())
+                            Ok(())
                         }
-                    })
-                    .collect();
+                        .await;
+                        EntitySyncResult {
+                            identifier,
+                            success: op_result.is_ok(),
+                            error_message: op_result.err().map(|e| e.to_string()),
+                        }
+                    }
+                })
+                .collect();
 
-            futures::future::try_join_all(futures).await?;
+            let chunk_results = futures::future::join_all(futures).await;
+            sync_results.extend(chunk_results);
         }
-        Ok(())
+        Ok(sync_results)
     }
 }
 #[async_trait::async_trait]

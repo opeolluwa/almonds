@@ -1,0 +1,34 @@
+mutation SyncRecycleBin {
+  sync_recycle_bin_item(
+    input: [
+      {
+        identifier: "b5c6d7e8-f9a0-1234-8901-345678901234"
+        item_id: "c4d5e6f7-a8b9-0123-def0-234567890123"
+        item_type: TODO
+        payload: "{\"identifier\":\"c4d5e6f7-a8b9-0123-def0-234567890123\",\"title\":\"Outdated task\",\"done\":false,\"priority\":\"low\"}"
+        deleted_at: "2026-04-20T11:00:00+00:00"
+        workspace_identifier: null
+      }
+      {
+        identifier: "c6d7e8f9-a0b1-2345-9012-456789012345"
+        item_id: "a8b9c0d1-e2f3-4567-1234-678901234567"
+        item_type: SNIPPET
+        payload: "{\"identifier\":\"a8b9c0d1-e2f3-4567-1234-678901234567\",\"title\":\"Old snippet\",\"language\":\"python\",\"code\":\"print('hello')\"}"
+        deleted_at: "2026-04-21T09:30:00+00:00"
+        workspace_identifier: null
+      }
+      {
+        identifier: "d7e8f9a0-b1c2-3456-0123-567890123456"
+        item_id: "d5e6f7a8-b9c0-1234-ef01-345678901234"
+        item_type: REMINDER
+        payload: "{\"identifier\":\"d5e6f7a8-b9c0-1234-ef01-345678901234\",\"title\":\"Cancelled meeting\",\"recurring\":false}"
+        deleted_at: "2026-04-22T15:00:00+00:00"
+        workspace_identifier: null
+      }
+    ]
+  ) {
+    success
+    error_message
+    identifier
+  }
+}

@@ -1,7 +1,6 @@
-use std::{fs, io, path::Path};
+use std::io;
 
 use async_trait::async_trait;
-use bcrypt::{hash, verify, DEFAULT_COST};
 
 use crate::errors::service_error::ServiceError;
 

@@ -3,12 +3,9 @@ use axum::extract::FromRef;
 use seaography::async_graphql;
 
 use crate::services::{
-    authentication_service::AuthenticationService,
-
-    // notification_service::NotificationService,
-    root_service::RootService,
+    authentication_service::AuthenticationService, country_service::CountryService,
+    notification_service::NotificationService, root_service::RootService,
     user_service::UserService,
-    // wait_list_service::WaitListService,
 };
 
 #[derive(Clone)]
@@ -16,8 +13,8 @@ pub struct ServicesState {
     pub user_service: UserService,
     pub root_service: RootService,
     pub auth_service: AuthenticationService,
-    // pub notification_service: NotificationService,
-    // pub wait_list_service: WaitListService,
+    pub country_service: CountryService,
+    pub notification_service: NotificationService,
 }
 
 impl FromRef<ServicesState> for UserService {
@@ -38,17 +35,17 @@ impl FromRef<ServicesState> for AuthenticationService {
     }
 }
 
-// impl FromRef<ServicesState> for NotificationService {
-//     fn from_ref(services: &ServicesState) -> NotificationService {
-//         services.notification_service.clone()
-//     }
-// }
+impl FromRef<ServicesState> for CountryService {
+    fn from_ref(services: &ServicesState) -> CountryService {
+        services.country_service.clone()
+    }
+}
 
-// impl FromRef<ServicesState> for WaitListService {
-//     fn from_ref(services: &ServicesState) -> WaitListService {
-//         services.wait_list_service.clone()
-//     }
-// }
+impl FromRef<ServicesState> for NotificationService {
+    fn from_ref(services: &ServicesState) -> NotificationService {
+        services.notification_service.clone()
+    }
+}
 
 #[derive(Clone)]
 pub struct GraphQlState {

@@ -6,6 +6,8 @@ use sea_orm::{
 };
 use uuid::Uuid;
 
+#[cfg(feature = "sync_engine")]
+use crate::types::EntitySyncResult;
 use crate::{adapters::sync_queue::SyncQueueEntry, entities::sync_queue, error::KernelError};
 
 pub struct SyncQueueRepository {
@@ -24,7 +26,11 @@ pub trait SyncQueueRepositoryExt {
 
     async fn entries(&self) -> Result<Vec<sync_queue::Model>, KernelError>;
 
-    async fn upsert_many(&self, models: Vec<sync_queue::Model>) -> Result<(), KernelError>;
+    #[cfg(feature = "sync_engine")]
+    async fn upsert_many(
+        &self,
+        models: Vec<sync_queue::Model>,
+    ) -> Result<Vec<EntitySyncResult>, KernelError>;
 }
 
 #[async_trait]
@@ -68,15 +74,21 @@ impl SyncQueueRepositoryExt for SyncQueueRepository {
             .map_err(|err| KernelError::DbOperationError(err.to_string()))
     }
 
-    async fn upsert_many(&self, models: Vec<sync_queue::Model>) -> Result<(), KernelError> {
+    #[cfg(feature = "sync_engine")]
+    async fn upsert_many(
+        &self,
+        models: Vec<sync_queue::Model>,
+    ) -> Result<Vec<EntitySyncResult>, KernelError> {
+        let mut sync_results: Vec<EntitySyncResult> = Vec::new();
         for chunk in models.chunks(20) {
-            let futures: Vec<_> =
-                chunk
-                    .iter()
-                    .map(|model| {
-                        let conn = self.conn.clone();
-                        let model = model.clone();
-                        async move {
+            let futures: Vec<_> = chunk
+                .iter()
+                .map(|model| {
+                    let conn = self.conn.clone();
+                    let model = model.clone();
+                    async move {
+                        let identifier = model.identifier.to_string();
+                        let op_result: Result<(), KernelError> = async {
                             let exists = sync_queue::Entity::find()
                                 .filter(sync_queue::Column::Identifier.eq(model.identifier))
                                 .one(conn.as_ref())
@@ -95,13 +107,21 @@ impl SyncQueueRepositoryExt for SyncQueueRepository {
                                     KernelError::DbOperationError(err.to_string())
                                 })?;
                             }
-                            Ok::<(), KernelError>(())
+                            Ok(())
                         }
-                    })
-                    .collect();
+                        .await;
+                        EntitySyncResult {
+                            identifier,
+                            success: op_result.is_ok(),
+                            error_message: op_result.err().map(|e| e.to_string()),
+                        }
+                    }
+                })
+                .collect();
 
-            futures::future::try_join_all(futures).await?;
+            let chunk_results = futures::future::join_all(futures).await;
+            sync_results.extend(chunk_results);
         }
-        Ok(())
+        Ok(sync_results)
     }
 }

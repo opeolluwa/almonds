@@ -1,0 +1,54 @@
+mutation SyncSnippets {
+  sync_snippet(
+    input: [
+      {
+        identifier: "a8b9c0d1-e2f3-4567-1234-678901234567"
+        title: "Rust error propagation"
+        language: "rust"
+        code: "fn parse_config(path: &str) -> Result<Config, Box<dyn std::error::Error>> {\n    let content = std::fs::read_to_string(path)?;\n    let config: Config = serde_json::from_str(&content)?;\n    Ok(config)\n}"
+        description: "Generic error propagation with ? operator"
+        is_pinned: true
+        created_at: "2026-04-05T10:00:00+00:00"
+        updated_at: "2026-04-05T10:00:00+00:00"
+        workspace_identifier: null
+      }
+      {
+        identifier: "b9c0d1e2-f3a4-5678-2345-789012345678"
+        title: "SQL upsert pattern"
+        language: "sql"
+        code: "INSERT INTO records (id, value, updated_at)\nVALUES ($1, $2, now())\nON CONFLICT (id) DO UPDATE\n  SET value = EXCLUDED.value,\n      updated_at = EXCLUDED.updated_at;"
+        description: null
+        is_pinned: false
+        created_at: "2026-04-08T14:00:00+00:00"
+        updated_at: "2026-04-09T09:30:00+00:00"
+        workspace_identifier: null
+      }
+      {
+        identifier: "c0d1e2f3-a4b5-6789-3456-890123456789"
+        title: "Debounce hook"
+        language: "typescript"
+        code: "function useDebounce<T>(value: T, delay: number): T {\n  const [debounced, setDebounced] = useState(value);\n  useEffect(() => {\n    const timer = setTimeout(() => setDebounced(value), delay);\n    return () => clearTimeout(timer);\n  }, [value, delay]);\n  return debounced;\n}"
+        description: "React hook for debouncing any value"
+        is_pinned: true
+        created_at: "2026-04-12T16:00:00+00:00"
+        updated_at: "2026-04-12T16:00:00+00:00"
+        workspace_identifier: null
+      }
+      {
+        identifier: "d1e2f3a4-b5c6-7890-4567-901234567890"
+        title: null
+        language: "bash"
+        code: "git log --oneline --graph --decorate --all"
+        description: "Pretty git log"
+        is_pinned: false
+        created_at: "2026-04-17T08:00:00+00:00"
+        updated_at: "2026-04-17T08:00:00+00:00"
+        workspace_identifier: null
+      }
+    ]
+  ) {
+    success
+    error_message
+    identifier
+  }
+}

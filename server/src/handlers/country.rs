@@ -32,3 +32,17 @@ pub async fn fetch_country_by_identifier(
         .data(country)
         .build())
 }
+
+pub async fn fetch_countries_by_currency_code(
+    State(country_service): State<CountryService>,
+    Path(currency_code): Path<String>,
+) -> Result<ApiResponse<FetchCountriesResponse>, ServiceError> {
+    let countries = country_service
+        .get_countries_by_currency_code(&currency_code)
+        .await?;
+
+    Ok(ApiResponse::builder()
+        .message("Countries fetched successfully")
+        .data(countries)
+        .build())
+}

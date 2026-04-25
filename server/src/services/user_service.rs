@@ -1,7 +1,6 @@
 use std::path::Path;
 use std::sync::Arc;
 
-use almond_kernel::utils::extract_env;
 use axum_typed_multipart::TypedMultipart;
 use sea_orm::DatabaseConnection;
 use uuid::Uuid;
@@ -88,7 +87,7 @@ impl UserServiceTrait for UserService {
         TypedMultipart(UploadProfilePictureRequest { image }): TypedMultipart<
             UploadProfilePictureRequest,
         >,
-        user_identifier: &Uuid,
+        _user_identifier: &Uuid,
     ) -> Result<(), ServiceError> {
         // tokio::task::spawn(async move {
         let file_name = image.metadata.file_name.clone().unwrap(); //TODO: undo unwrap

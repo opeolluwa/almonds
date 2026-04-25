@@ -1,6 +1,5 @@
 use std::fmt;
 
-use almond_kernel::entities::notifications;
 use chrono::{DateTime, Local};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
@@ -48,6 +47,6 @@ impl fmt::Display for Notification {
 #[derive(Debug, Serialize, Deserialize, Default)]
 #[serde(rename_all = "camelCase")]
 pub struct PaginatedNotification {
-    pub notifications: Vec<notifications::Model>,
+    pub notifications: Vec<crate::entities::notifications::Model>,
     pub total: u64,
 }

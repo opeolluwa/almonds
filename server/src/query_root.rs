@@ -1,12 +1,22 @@
 use almond_kernel::entities::{register_active_enums, register_entity_modules};
 use async_graphql::dynamic::*;
 use sea_orm::DatabaseConnection;
-use seaography::{async_graphql, lazy_static::lazy_static, Builder, BuilderContext};
+use seaography::{
+    async_graphql, lazy_static::lazy_static, Builder, BuilderContext, DecimalLibrary, TimeLibrary,
+    TypesMapConfig,
+};
 
 use crate::{mutations, types};
 
 lazy_static! {
-    static ref CONTEXT: BuilderContext = BuilderContext::default();
+    static ref CONTEXT: BuilderContext = BuilderContext {
+        types: TypesMapConfig {
+            time_library: TimeLibrary::Chrono,
+            decimal_library: DecimalLibrary::Decimal,
+            ..Default::default()
+        },
+        ..Default::default()
+    };
 }
 
 pub fn schema(
@@ -27,14 +37,21 @@ pub fn schema_builder(
     builder = register_entity_modules(builder);
     builder = register_active_enums(builder);
 
-    // seaography::register_custom_inputs!(
-    //     builder,
-    //     [
-    //         types::ollama_conversation_history::CreateOllamaConversationHistoryInput,
-    //         types::ollama_conversation_prompt::CreateOllamaConversationPromptInput,
-    //         types::ollama_conversation_response::CreateOllamaConversationResponseInput
-    //     ]
-    // );
+    seaography::register_custom_inputs!(
+        builder,
+        [
+            types::bookmark::SyncBookmarkInput,
+            // types::note::SyncNoteInput,
+            types::snippet::SyncSnippetInput,
+            types::todo::SyncTodoInput,
+            types::reminder::SyncReminderInput,
+            types::workspace::SyncWorkspaceInput,
+            types::recycle_bin::SyncRecycleBinInput,
+            types::user_preference::SyncUserPreferenceInput,
+        ]
+    );
+
+    seaography::register_custom_outputs!(builder, [almond_kernel::sync_engine::EntitySyncResult,]);
 
     seaography::register_custom_mutations!(
         builder,
@@ -42,7 +59,7 @@ pub fn schema_builder(
             mutations::preflight::Preflight,
             mutations::sync_queue::SyncQueue,
             mutations::bookmark::SyncBookmark,
-            mutations::notes::SyncNote,
+            // mutations::notes::SyncNote,
             mutations::note_category::SyncNoteCategory,
             mutations::snippets::SyncSnippet,
             mutations::todo::SyncTodo,

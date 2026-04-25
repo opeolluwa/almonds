@@ -1,0 +1,58 @@
+mutation SyncTodos {
+  sync_todo(
+    input: [
+      {
+        identifier: "f1a2b3c4-d5e6-7890-abcd-ef1234567890"
+        title: "Set up CI pipeline"
+        description: "Configure GitHub Actions for lint, test, and build"
+        due_date: "2026-04-28"
+        due_time: null
+        priority: HIGH
+        done: false
+        created_at: "2026-04-20T08:00:00+00:00"
+        updated_at: "2026-04-20T08:00:00+00:00"
+        workspace_identifier: null
+      }
+      {
+        identifier: "a2b3c4d5-e6f7-8901-bcde-f12345678901"
+        title: "Write migration guide"
+        description: null
+        due_date: "2026-05-01"
+        due_time: "09:00:00"
+        priority: MEDIUM
+        done: false
+        created_at: "2026-04-21T10:30:00+00:00"
+        updated_at: "2026-04-22T14:15:00+00:00"
+        workspace_identifier: null
+      }
+      {
+        identifier: "b3c4d5e6-f7a8-9012-cdef-123456789012"
+        title: "Review pull requests"
+        description: "Go through open PRs and leave feedback"
+        due_date: null
+        due_time: null
+        priority: LOW
+        done: true
+        created_at: "2026-04-18T09:00:00+00:00"
+        updated_at: "2026-04-19T17:45:00+00:00"
+        workspace_identifier: null
+      }
+      {
+        identifier: "c4d5e6f7-a8b9-0123-def0-234567890123"
+        title: "Implement sync engine tests"
+        description: "Cover upsert_many paths for all entities"
+        due_date: "2026-04-30"
+        due_time: null
+        priority: HIGH
+        done: false
+        created_at: "2026-04-22T07:00:00+00:00"
+        updated_at: "2026-04-22T07:00:00+00:00"
+        workspace_identifier: null
+      }
+    ]
+  ) {
+    success
+    error_message
+    identifier
+  }
+}

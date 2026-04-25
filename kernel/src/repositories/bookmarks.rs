@@ -12,6 +12,8 @@ use uuid::Uuid;
 use crate::entities::sea_orm_active_enums::{ItemType, Tag};
 #[cfg(feature = "sqlite")]
 use crate::enums::{ItemType, Tag};
+#[cfg(feature = "sync_engine")]
+use crate::types::EntitySyncResult;
 use crate::{
     adapters::{
         bookmarks::{CreateBookmark, UpdateBookmark},
@@ -82,7 +84,11 @@ pub trait BookmarkRepositoryExt {
 
     async fn exists(&self, identifier: &Uuid) -> Result<bool, KernelError>;
 
-    async fn upsert_many(&self, models: Vec<bookmark::Model>) -> Result<(), KernelError>;
+    #[cfg(feature = "sync_engine")]
+    async fn upsert_many(
+        &self,
+        models: Vec<bookmark::Model>,
+    ) -> Result<Vec<EntitySyncResult>, KernelError>;
 }
 
 #[async_trait]
@@ -280,15 +286,21 @@ impl BookmarkRepositoryExt for BookmarkRepository {
         Ok(result.is_some())
     }
 
-    async fn upsert_many(&self, models: Vec<bookmark::Model>) -> Result<(), KernelError> {
+    #[cfg(feature = "sync_engine")]
+    async fn upsert_many(
+        &self,
+        models: Vec<bookmark::Model>,
+    ) -> Result<Vec<EntitySyncResult>, KernelError> {
+        let mut sync_results: Vec<EntitySyncResult> = Vec::new();
         for chunk in models.chunks(20) {
-            let futures: Vec<_> =
-                chunk
-                    .iter()
-                    .map(|model| {
-                        let conn = self.conn.clone();
-                        let model = model.clone();
-                        async move {
+            let futures: Vec<_> = chunk
+                .iter()
+                .map(|model| {
+                    let conn = self.conn.clone();
+                    let model = model.clone();
+                    async move {
+                        let identifier = model.identifier.to_string();
+                        let op_result: Result<(), KernelError> = async {
                             let exists = bookmark::Entity::find()
                                 .filter(bookmark::Column::Identifier.eq(model.identifier))
                                 .one(conn.as_ref())
@@ -307,14 +319,22 @@ impl BookmarkRepositoryExt for BookmarkRepository {
                                     KernelError::DbOperationError(err.to_string())
                                 })?;
                             }
-                            Ok::<(), KernelError>(())
+                            Ok(())
                         }
-                    })
-                    .collect();
+                        .await;
+                        EntitySyncResult {
+                            identifier,
+                            success: op_result.is_ok(),
+                            error_message: op_result.err().map(|e| e.to_string()),
+                        }
+                    }
+                })
+                .collect();
 
-            futures::future::try_join_all(futures).await?;
+            let chunk_results = futures::future::join_all(futures).await;
+            sync_results.extend(chunk_results);
         }
-        Ok(())
+        Ok(sync_results)
     }
 }
 

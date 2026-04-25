@@ -5,6 +5,8 @@ pub mod entities;
 pub mod enums;
 pub mod error;
 pub mod repositories;
+#[cfg(feature = "sync_engine")]
+pub mod types;
 pub mod utils;
 pub use data_engine::DataEngine;
 #[cfg(feature = "markdown2pdf")]

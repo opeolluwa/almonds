@@ -12,6 +12,8 @@ use uuid::Uuid;
 use crate::entities::sea_orm_active_enums::ItemType;
 #[cfg(feature = "sqlite")]
 use crate::enums::ItemType;
+#[cfg(feature = "sync_engine")]
+use crate::types::EntitySyncResult;
 use crate::{
     adapters::{
         meta::RequestMeta,
@@ -71,7 +73,11 @@ pub trait NotesRepositoryExt {
         meta: &Option<RequestMeta>,
     ) -> Result<notes::Model, KernelError>;
 
-    async fn upsert_many(&self, models: Vec<notes::Model>) -> Result<(), KernelError>;
+    #[cfg(feature = "sync_engine")]
+    async fn upsert_many(
+        &self,
+        models: Vec<notes::Model>,
+    ) -> Result<Vec<EntitySyncResult>, KernelError>;
 }
 
 #[async_trait]
@@ -218,15 +224,21 @@ impl NotesRepositoryExt for NotesRepository {
             .map_err(|err| KernelError::DbOperationError(err.to_string()))
     }
 
-    async fn upsert_many(&self, models: Vec<notes::Model>) -> Result<(), KernelError> {
+    #[cfg(feature = "sync_engine")]
+    async fn upsert_many(
+        &self,
+        models: Vec<notes::Model>,
+    ) -> Result<Vec<EntitySyncResult>, KernelError> {
+        let mut sync_results: Vec<EntitySyncResult> = Vec::new();
         for chunk in models.chunks(20) {
-            let futures: Vec<_> =
-                chunk
-                    .iter()
-                    .map(|model| {
-                        let conn = self.conn.clone();
-                        let model = model.clone();
-                        async move {
+            let futures: Vec<_> = chunk
+                .iter()
+                .map(|model| {
+                    let conn = self.conn.clone();
+                    let model = model.clone();
+                    async move {
+                        let identifier = model.identifier.to_string();
+                        let op_result: Result<(), KernelError> = async {
                             let exists = notes::Entity::find()
                                 .filter(notes::Column::Identifier.eq(model.identifier))
                                 .one(conn.as_ref())
@@ -245,14 +257,22 @@ impl NotesRepositoryExt for NotesRepository {
                                     KernelError::DbOperationError(err.to_string())
                                 })?;
                             }
-                            Ok::<(), KernelError>(())
+                            Ok(())
                         }
-                    })
-                    .collect();
+                        .await;
+                        EntitySyncResult {
+                            identifier,
+                            success: op_result.is_ok(),
+                            error_message: op_result.err().map(|e| e.to_string()),
+                        }
+                    }
+                })
+                .collect();
 
-            futures::future::try_join_all(futures).await?;
+            let chunk_results = futures::future::join_all(futures).await;
+            sync_results.extend(chunk_results);
         }
-        Ok(())
+        Ok(sync_results)
     }
 }
 #[async_trait::async_trait]

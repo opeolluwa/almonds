@@ -1,0 +1,26 @@
+mutation SyncNoteCategories {
+  sync_note_category(
+    input: [
+      {
+        identifier: "f9a0b1c2-d3e4-5678-2345-789012345678"
+        label: "Engineering"
+        description: "Technical notes and architecture decisions"
+      }
+      {
+        identifier: "a0b1c2d3-e4f5-6789-3456-890123456789"
+        label: "Design"
+        description: null
+      }
+      {
+        identifier: "b1c2d3e4-f5a6-7890-4567-901234567890"
+        label: "Personal"
+        description: "Personal journal and reflections"
+      }
+      {
+        identifier: "c2d3e4f5-a6b7-8901-5678-012345678901"
+        label: "Meeting Notes"
+        description: "Summaries and action items from meetings"
+      }
+    ]
+  )
+}
