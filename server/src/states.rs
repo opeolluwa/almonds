@@ -8,7 +8,6 @@ use crate::services::{
     // notification_service::NotificationService,
     root_service::RootService,
     user_service::UserService,
-    // wait_list_service::WaitListService,
 };
 
 #[derive(Clone)]
@@ -18,7 +17,6 @@ pub struct ServicesState {
     pub auth_service: AuthenticationService,
     pub country_service: CountryService,
     // pub notification_service: NotificationService,
-    // pub wait_list_service: WaitListService,
 }
 
 impl FromRef<ServicesState> for UserService {
@@ -51,11 +49,6 @@ impl FromRef<ServicesState> for CountryService {
 //     }
 // }
 
-// impl FromRef<ServicesState> for WaitListService {
-//     fn from_ref(services: &ServicesState) -> WaitListService {
-//         services.wait_list_service.clone()
-//     }
-// }
 
 #[derive(Clone)]
 pub struct GraphQlState {
