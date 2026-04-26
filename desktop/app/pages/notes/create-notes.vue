@@ -31,9 +31,13 @@ const wordCount = computed(() => {
   return text.split(/\s+/).filter(Boolean).length;
 });
 
+const readTime = computed(() => Math.max(1, Math.ceil(wordCount.value / 200)));
+
 const charCount = computed(() => {
   return content.value.replace(/<[^>]*>/g, "").replace(/\s/g, "").length;
 });
+
+const lastSaved = ref<Date | null>(null);
 
 const hasContent = computed(
   () => !!title.value.trim() || !!content.value.trim(),
@@ -77,6 +81,7 @@ async function handleSave() {
       categories: categories.value,
     });
     saved.value = true;
+    lastSaved.value = new Date();
     router.push("/notes");
   } catch (e) {
     error.value = String(e);
@@ -112,70 +117,59 @@ onBeforeRouteLeave(async () => {
     <template #page_title><span /></template>
 
     <template #main_content>
-      <!-- Sticky top nav -->
-      <div
-        class="sticky top-0 z-10 flex items-center justify-between -mx-6 px-6 -mt-5 pt-4 pb-3 mb-8 bg-gray-50/90 dark:bg-surface-950/90 backdrop-blur border-b border-gray-100 dark:border-gray-800/60"
-      >
-        <button
-          class="flex items-center gap-1.5 text-xs text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
-          @click="router.push('/notes')"
-        >
-          <UIcon name="heroicons:arrow-left" class="size-3.5" />
-          Notes
-        </button>
 
-        <span class="text-[11px] text-gray-300 dark:text-gray-600 select-none">
-          {{ submitting ? "Saving…" : hasContent ? "⌘S to save" : "Start writing…" }}
-        </span>
-      </div>
 
-      <!-- Title -->
-      <textarea
-        v-model="title"
-        placeholder="Untitled"
-        rows="1"
-        :disabled="submitting"
-        class="w-full resize-none bg-transparent outline-none text-4xl font-bold text-gray-900 dark:text-gray-50 placeholder:text-gray-200 dark:placeholder:text-gray-500 leading-snug mb-3 overflow-hidden"
-        @input="
-          ($event.target as HTMLTextAreaElement).style.height = 'auto';
-          ($event.target as HTMLTextAreaElement).style.height =
-            ($event.target as HTMLTextAreaElement).scrollHeight + 'px';
-        "
-      />
+      <div class="pb-20">
+        <!-- Title -->
+        <textarea
+          v-model="title"
+          placeholder="Untitled"
+          rows="1"
+          :disabled="submitting"
+          class="w-full resize-none bg-transparent outline-none text-4xl font-bold text-gray-900 dark:text-gray-50 placeholder:text-gray-200 dark:placeholder:text-gray-200 leading-snug mb-3 overflow-hidden"
+          @input="
+            ($event.target as HTMLTextAreaElement).style.height = 'auto';
+            ($event.target as HTMLTextAreaElement).style.height =
+              ($event.target as HTMLTextAreaElement).scrollHeight + 'px';
+          "
+        />
 
-      <!-- Tags row -->
-      <div class="flex flex-wrap items-center gap-1.5 mb-8 min-h-5">
-        <span
-          v-for="tag in categories"
-          :key="tag"
-          class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent-50 dark:bg-accent-950 text-accent-600 dark:text-accent-300 text-xs font-medium"
-        >
-          {{ tag }}
-          <button
-            class="text-accent-400 hover:text-accent-600 dark:hover:text-accent-200 transition-colors leading-none"
-            @click="removeTag(tag)"
+        <!-- Tags row -->
+        <div class="flex flex-wrap items-center gap-1.5 mb-8 min-h-5">
+          <span
+            v-for="tag in categories"
+            :key="tag"
+            class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent-50 dark:bg-accent-950 text-accent-600 dark:text-accent-300 text-xs font-medium"
           >
-            <UIcon name="heroicons:x-mark" class="size-3" />
-          </button>
-        </span>
-        <input
-          v-model="tagInput"
-          placeholder="Add tag…"
-          autocapitalize="off"
-          autocorrect="off"
-          spellcheck="false"
-          class="bg-transparent outline-none text-xs text-gray-400 dark:text-gray-500 placeholder:text-gray-300 dark:placeholder:text-gray-600 w-20 min-w-0"
-          @keydown="onTagKeydown"
-          @blur="addTag"
-        >
+            {{ tag }}
+            <button
+              class="text-accent-400 hover:text-accent-600 dark:hover:text-accent-200 transition-colors leading-none"
+              @click="removeTag(tag)"
+            >
+              <UIcon name="heroicons:x-mark" class="size-3" />
+            </button>
+          </span>
+          <input
+            v-model="tagInput"
+            placeholder="Add tag…"
+            autocapitalize="off"
+            autocorrect="off"
+            spellcheck="false"
+            class="bg-transparent outline-none text-xs text-gray-400 dark:text-gray-500 placeholder:text-gray-300 dark:placeholder:text-gray-400 w-20 min-w-0"
+            @keydown="onTagKeydown"
+            @blur="addTag"
+          >
+        </div>
+
+        <!-- Editor -->
+        <NotesEditor v-model="content" />
+
+        <p v-if="error" class="text-xs text-red-500 mt-6">
+          {{ error }}
+        </p>
       </div>
 
-      <!-- Editor -->
-      <NotesEditor v-model="content" />
-
-      <p v-if="error" class="text-xs text-red-500 mt-6">
-        {{ error }}
-      </p>
+ 
     </template>
 
     <template #side_content>

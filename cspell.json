@@ -1,5 +1,6 @@
 {
   "words": [
+    "boltffi",
     "Domternal",
     "highlightjs",
     "iconify",
@@ -8,8 +9,9 @@
     "scule",
     "seaography",
     "shiki",
-    "tauri",
+    "nums",
     "tabular",
+    "tauri",
     "thiserror"
   ],
   "userWords": [
