@@ -36,7 +36,7 @@ jobs:
         with:
           node-version: "20"
           cache: npm
-          cache-dependency-path: grove/package-lock.json
+          cache-dependency-path: website/package-lock.json
       - name: Setup Pages
         uses: actions/configure-pages@v5
         with:
@@ -49,21 +49,21 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            grove/dist
-            grove/.nuxt
-          key: ${{ runner.os }}-nuxt-build-${{ hashFiles('grove/dist') }}
+            website/dist
+            website/.nuxt
+          key: ${{ runner.os }}-nuxt-build-${{ hashFiles('website/dist') }}
           restore-keys: |
             ${{ runner.os }}-nuxt-build-
       - name: Install dependencies
-        working-directory: grove
+        working-directory: website
         run: npm ci
       - name: Static HTML export with Nuxt
-        working-directory: grove
+        working-directory: website
         run: npm run generate
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./grove/dist
+          path: ./website/dist
 
   # Deployment job
   deploy:

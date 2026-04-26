@@ -4,6 +4,7 @@ install-dependencies:
 	cargo install cargo-group-imports
 	cargo install sea-orm-cli@^2.0.0-rc
 	cargo install seaography-cli@^2.0.0-rc
+	cargo install boltffi_cli
 
 generate-bindings:
 	cd server && cargo test

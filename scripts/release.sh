@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-TAURI_CONFIG="almonds/src-tauri/tauri.conf.json"
+TAURI_CONFIG="desktop/src-tauri/tauri.conf.json"
 
 BUMP_TYPE=${1:-patch}
 

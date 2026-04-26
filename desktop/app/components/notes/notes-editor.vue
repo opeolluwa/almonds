@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { marked } from "marked";
 import { Domternal } from "@domternal/vue";
 import {
   StarterKit,
@@ -68,6 +69,19 @@ const extensions = [
 
 const model = defineModel<string>();
 
+// Old notes were saved as Markdown (UEditor content-type="markdown").
+// Domternal expects HTML, so detect and convert on the way in.
+function isHtml(s: string): boolean {
+  const t = s.trimStart();
+  return t.startsWith("<") && /<[a-z][\s\S]*>/i.test(t);
+}
+
+const initialContent = computed(() => {
+  const raw = model.value ?? "";
+  if (!raw || isHtml(raw)) return raw;
+  return marked.parse(raw) as string;
+});
+
 function handleUpdate({ editor }: { editor: any }) {
   model.value = editor.getHTML();
 }
@@ -77,7 +91,7 @@ function handleUpdate({ editor }: { editor: any }) {
   <div :class="{ 'dm-theme-dark': isDark}" :style="dmVars" class="h-full">
     <Domternal
       :extensions="extensions"
-      :content="model ?? ''"
+      :content="initialContent"
       :on-update="handleUpdate"
     >
       <Domternal.Toolbar class="-mt-5" />

@@ -50,7 +50,7 @@ jobs:
         with:
           node-version: 20
           cache: npm
-          cache-dependency-path: almonds/package-lock.json
+          cache-dependency-path: desktop/package-lock.json
 
       # Rust toolchain
       - name: install Rust
@@ -62,19 +62,19 @@ jobs:
       - name: Rust cache
         uses: swatinem/rust-cache@v2
         with:
-          workspaces: "./almonds/src-tauri -> target"
+          workspaces: "./desktop/src-tauri -> target"
 
       # Install frontend dependencies
       - name: install frontend dependencies
         run: npm ci
-        working-directory: almonds
+        working-directory: desktop
 
       # Build + Release
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          projectPath: almonds
+          projectPath: desktop
           tagName: v__VERSION__
           releaseName: "App v__VERSION__"
           releaseBody: "Download the latest version here."

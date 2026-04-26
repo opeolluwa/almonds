@@ -7,7 +7,7 @@ const router = useRouter();
 const noteStore = useNoteStore();
 
 const title = ref("");
-const content = ref("l34knfbk");
+const content = ref("");
 const categories = ref<string[]>([]);
 const tagInput = ref("");
 const submitting = ref(false);
@@ -29,6 +29,10 @@ const wordCount = computed(() => {
   const text = content.value.replace(/<[^>]*>/g, " ").trim();
   if (!text) return 0;
   return text.split(/\s+/).filter(Boolean).length;
+});
+
+const charCount = computed(() => {
+  return content.value.replace(/<[^>]*>/g, "").replace(/\s/g, "").length;
 });
 
 const hasContent = computed(
@@ -80,7 +84,6 @@ async function handleSave() {
   }
 }
 
-// Keyboard shortcut: Cmd/Ctrl+S
 useEventListener("keydown", (e: KeyboardEvent) => {
   if ((e.metaKey || e.ctrlKey) && e.key === "s") {
     e.preventDefault();
@@ -105,152 +108,119 @@ onBeforeRouteLeave(async () => {
 
 <template>
   <NuxtLayout name="default">
+    <!-- suppress default page title -->
+    <template #page_title><span /></template>
+
     <template #main_content>
-      <div class="max-w-2xl mx-auto">
-        <!-- Back link -->
+      <!-- Sticky top nav -->
+      <div
+        class="sticky top-0 z-10 flex items-center justify-between -mx-6 px-6 -mt-5 pt-4 pb-3 mb-8 bg-gray-50/90 dark:bg-surface-950/90 backdrop-blur border-b border-gray-100 dark:border-gray-800/60"
+      >
         <button
-          class="flex items-center gap-1.5 text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 mb-6 transition-colors"
+          class="flex items-center gap-1.5 text-xs text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
           @click="router.push('/notes')"
         >
           <UIcon name="heroicons:arrow-left" class="size-3.5" />
-          All notes
+          Notes
         </button>
 
-        <!-- Title -->
-        <textarea
-          v-model="title"
-          placeholder="Untitled"
-          rows="1"
-          :disabled="submitting"
-          class="w-full resize-none bg-transparent outline-none text-3xl font-bold text-gray-900 dark:text-gray-50 placeholder:text-gray-300 dark:placeholder:text-gray-500 leading-tight mb-4 overflow-hidden"
-          @input="
-            ($event.target as HTMLTextAreaElement).style.height = 'auto';
-            ($event.target as HTMLTextAreaElement).style.height =
-              ($event.target as HTMLTextAreaElement).scrollHeight + 'px';
-          "
-        />
-
-        <!-- Tags row -->
-        <div class="flex flex-wrap items-center gap-1.5 mb-5 min-h-6">
-          <span
-            v-for="tag in categories"
-            :key="tag"
-            class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent-50 dark:bg-accent-950 text-accent-600 dark:text-accent-300 text-xs font-medium"
-          >
-            {{ tag }}
-            <button
-              class="text-accent-400 hover:text-accent-600 dark:hover:text-accent-200 transition-colors leading-none"
-              @click="removeTag(tag)"
-            >
-              <UIcon name="heroicons:x-mark" class="size-3" />
-            </button>
-          </span>
-          <input
-            v-model="tagInput"
-            placeholder="Add tag…"
-            autocapitalize="off"
-            autocorrect="off"
-            spellcheck="false"
-            class="bg-transparent outline-none text-xs text-gray-400 dark:text-gray-300 placeholder:text-gray-300 dark:placeholder:text-gray-500 w-20 min-w-0"
-            @keydown="onTagKeydown"
-            @blur="addTag"
-          >
-        </div>
-
-        <!-- Divider -->
-        <div class="border-t border-gray-100 dark:border-gray-800 mb-5" />
-
-
-        <NotesEditor v-model="content" />
-
-        <p v-if="error" class="text-xs text-red-500 mt-4">{{ error }}</p>
+        <span class="text-[11px] text-gray-300 dark:text-gray-600 select-none">
+          {{ submitting ? "Saving…" : hasContent ? "⌘S to save" : "Start writing…" }}
+        </span>
       </div>
+
+      <!-- Title -->
+      <textarea
+        v-model="title"
+        placeholder="Untitled"
+        rows="1"
+        :disabled="submitting"
+        class="w-full resize-none bg-transparent outline-none text-4xl font-bold text-gray-900 dark:text-gray-50 placeholder:text-gray-200 dark:placeholder:text-gray-500 leading-snug mb-3 overflow-hidden"
+        @input="
+          ($event.target as HTMLTextAreaElement).style.height = 'auto';
+          ($event.target as HTMLTextAreaElement).style.height =
+            ($event.target as HTMLTextAreaElement).scrollHeight + 'px';
+        "
+      />
+
+      <!-- Tags row -->
+      <div class="flex flex-wrap items-center gap-1.5 mb-8 min-h-5">
+        <span
+          v-for="tag in categories"
+          :key="tag"
+          class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent-50 dark:bg-accent-950 text-accent-600 dark:text-accent-300 text-xs font-medium"
+        >
+          {{ tag }}
+          <button
+            class="text-accent-400 hover:text-accent-600 dark:hover:text-accent-200 transition-colors leading-none"
+            @click="removeTag(tag)"
+          >
+            <UIcon name="heroicons:x-mark" class="size-3" />
+          </button>
+        </span>
+        <input
+          v-model="tagInput"
+          placeholder="Add tag…"
+          autocapitalize="off"
+          autocorrect="off"
+          spellcheck="false"
+          class="bg-transparent outline-none text-xs text-gray-400 dark:text-gray-500 placeholder:text-gray-300 dark:placeholder:text-gray-600 w-20 min-w-0"
+          @keydown="onTagKeydown"
+          @blur="addTag"
+        >
+      </div>
+
+      <!-- Editor -->
+      <NotesEditor v-model="content" />
+
+      <p v-if="error" class="text-xs text-red-500 mt-6">
+        {{ error }}
+      </p>
     </template>
 
     <template #side_content>
-      <!-- Document stats -->
-      <div class="mb-6">
-        <h2
-          class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-3"
+      <!-- Save -->
+      <UButton
+        block
+        size="sm"
+        :loading="submitting"
+        :disabled="!hasContent"
+        class="mb-2"
+        @click="handleSave"
+      >
+        Save note
+      </UButton>
+      <UButton
+        block
+        variant="ghost"
+        size="sm"
+        :disabled="submitting"
+        @click="router.push('/notes')"
+      >
+        Discard
+      </UButton>
+
+      <USeparator class="my-5" />
+
+      <!-- Stats -->
+      <p class="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3">
+        Document
+      </p>
+      <div class="flex flex-col gap-0.5">
+        <div
+          v-for="stat in [
+            { label: 'Words', value: wordCount },
+            { label: 'Characters', value: charCount },
+            { label: 'Tags', value: categories.length },
+          ]"
+          :key="stat.label"
+          class="flex items-center justify-between py-2 border-b border-gray-50 dark:border-gray-800/60 text-xs"
         >
-          Document
-        </h2>
-        <div class="flex flex-col gap-2">
-          <div class="flex items-center justify-between text-xs">
-            <span class="text-gray-400">Words</span>
-            <span
-              class="font-medium text-gray-700 dark:text-gray-300 tabular-nums"
-              >{{ wordCount }}</span
-            >
-          </div>
-          <div class="flex items-center justify-between text-xs">
-            <span class="text-gray-400">Categories</span>
-            <span
-              class="font-medium text-gray-700 dark:text-gray-300 tabular-nums"
-              >{{ categories.length }}</span
-            >
-          </div>
+          <span class="text-gray-400">{{ stat.label }}</span>
+          <span class="tabular-nums font-semibold text-gray-700 dark:text-gray-200">
+            {{ stat.value }}
+          </span>
         </div>
-      </div>
-
-      <!-- Actions -->
-      <div class="flex flex-col gap-2 mb-6">
-        <UButton
-          block
-          size="sm"
-          :loading="submitting"
-          :disabled="!hasContent"
-          @click="handleSave"
-        >
-          Save note
-        </UButton>
-        <UButton
-          block
-          variant="ghost"
-          size="sm"
-          :disabled="submitting"
-          @click="router.push('/notes')"
-        >
-          Discard
-        </UButton>
-        <p
-          class="text-center text-[10px] text-gray-300 dark:text-gray-600 mt-1"
-        >
-          {{
-            submitting
-              ? "Saving…"
-              : hasContent
-                ? "⌘S to save"
-                : "Start writing to save"
-          }}
-        </p>
-      </div>
-
-      <!-- Tips -->
-      <div>
-        <h2
-          class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-3"
-        >
-          Tips
-        </h2>
-        <ul class="flex flex-col gap-2.5">
-          <li
-            v-for="tip in [
-              'Type / for formatting commands.',
-              'Press Enter after a tag to add it.',
-              'Use ⌘S to save anytime.',
-              'Navigating away auto-saves your work.',
-            ]"
-            :key="tip"
-            class="flex items-start gap-2 text-xs text-gray-400 dark:text-gray-500"
-          >
-            <UIcon
-              name="heroicons:light-bulb"
-              class="size-3.5 mt-0.5 shrink-0 text-accent-400"
-            />
-            {{ tip }}
-          </li>
-        </ul>
       </div>
     </template>
   </NuxtLayout>
