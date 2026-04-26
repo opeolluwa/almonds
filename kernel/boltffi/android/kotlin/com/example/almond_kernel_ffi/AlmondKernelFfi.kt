@@ -16,6 +16,12 @@ import java.net.URI
 
 typealias DateTimeWithTimeZone = Long
 
+typealias Date = Long
+
+typealias Time = String
+
+typealias Json = String
+
 class FfiException(val code: Int, message: String) : Exception(message)
 
 private fun takeLastErrorMessage(): String =

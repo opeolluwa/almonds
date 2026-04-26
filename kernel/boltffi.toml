@@ -68,6 +68,12 @@ output = "boltffi/wasm"
 [targets.wasm.typescript.type_mappings]
 
 [targets.wasm.npm]
+package_name = "almond_kernel"
+version = "1.0.0"
+license = "MIT"
+repository = "https://github.com/opeolluwa/almonds"
+generate_package_json = true
+generate_readme = true
 
 [targets.java.jvm]
 enabled = false
@@ -86,7 +92,7 @@ min_sdk = 24
 
 [targets.dart]
 output = "boltffi/dart"
-enabled = false
+enabled = true
 
 [targets.python]
 output = "boltffi/python"

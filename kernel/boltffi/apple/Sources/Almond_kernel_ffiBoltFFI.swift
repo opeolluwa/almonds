@@ -15,6 +15,9 @@ public struct FfiError: Error {
 }
 
 public typealias DateTimeWithTimeZone = Int64
+public typealias Date = Int64
+public typealias Time = String
+public typealias Json = String
 
 public struct Model: Hashable, Equatable, Sendable {
     public var title: String

@@ -6,8 +6,9 @@ edition = "2024"
 [workspace]
 members = [".", "migration"]
 
-[lib]
-crate-type = ["staticlib"]
+# [lib]
+# crate-type = ["staticlib"]
+# path="src/lib.rs"
 
 [features]
 default = ["sqlite"]

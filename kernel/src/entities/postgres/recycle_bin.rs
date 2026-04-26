@@ -8,7 +8,7 @@ use super::sea_orm_active_enums::ItemType;
 #[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel, Serialize, Deserialize)]
 #[sea_orm(table_name = "recycle_bin")]
 #[serde(rename_all = "camelCase")]
-#[boltffi::data]
+// #[boltffi::data]
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false)]
     pub identifier: Uuid,

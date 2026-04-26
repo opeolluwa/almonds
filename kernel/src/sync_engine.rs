@@ -1,5 +1,4 @@
 use graphql_client::GraphQLQuery;
-use sea_orm::DatabaseConnection;
 
 pub use crate::types::EntitySyncResult;
 
