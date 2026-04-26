@@ -100,7 +100,7 @@ function handleUpdate({ editor }: { editor: any }) {
       :content="initialContent"
       :on-update="handleUpdate"
     >
-      <Domternal.Toolbar class="-mt-5" />
+      <Domternal.Toolbar class="" />
       <Domternal.Content class="bg-transparent" />
       <Domternal.BubbleMenu class="" />
     </Domternal>

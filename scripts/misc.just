@@ -5,6 +5,7 @@ install-dependencies:
 	cargo install sea-orm-cli@^2.0.0-rc
 	cargo install seaography-cli@^2.0.0-rc
 	cargo install boltffi_cli
+	cargo install wasm-pack
 
 generate-bindings:
 	cd server && cargo test
