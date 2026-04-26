@@ -6,6 +6,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel, Serialize, Deserialize)]
 #[sea_orm(table_name = "workspaces")]
 #[serde(rename_all = "camelCase")]
+#[boltffi::data]
 pub struct Model {
     pub name: String,
     pub description: String,

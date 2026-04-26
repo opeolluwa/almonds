@@ -10,7 +10,7 @@ name = "almond_kernel_ffi"
 
 [targets.apple]
 enabled = true
-output = "dist/apple"
+output = "boltffi/apple"
 deployment_target = "16.0"
 include_macos = false
 
@@ -37,7 +37,7 @@ bundle = "unstripped"
 
 [targets.android]
 enabled = true
-output = "dist/android"
+output = "boltffi/android"
 min_sdk = 24
 
 [targets.android.kotlin]
@@ -61,7 +61,7 @@ bundle = "unstripped"
 enabled = true
 triple = "wasm32-unknown-unknown"
 profile = "release"
-output = "dist/wasm"
+output = "boltffi/wasm"
 
 [targets.wasm.optimize]
 
@@ -71,7 +71,7 @@ output = "dist/wasm"
 
 [targets.java.jvm]
 enabled = false
-output = "dist/java"
+output = "boltffi/java"
 strip_symbols = false
 
 [targets.java.jvm.debug_symbols]
@@ -81,19 +81,19 @@ bundle = "unstripped"
 
 [targets.java.android]
 enabled = false
-output = "dist/java/android"
+output = "boltffi/java/android"
 min_sdk = 24
 
 [targets.dart]
-output = "dist/dart"
+output = "boltffi/dart"
 enabled = false
 
 [targets.python]
-output = "dist/python"
+output = "boltffi/python"
 enabled = false
 
 [targets.python.wheel]
 
 [targets.csharp]
-output = "dist/csharp"
+output = "boltffi/csharp"
 enabled = false
