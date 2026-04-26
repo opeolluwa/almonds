@@ -18,23 +18,14 @@ import {
   createEmojiSuggestionRenderer,
 } from "@domternal/extension-emoji";
 
-const props = defineProps<{
-  modelValue?: string;
-  placeholder?: string;
-  disabled?: boolean;
-  readonly?: boolean;
-}>();
-
-const emit = defineEmits<{
-  "update:modelValue": [value: string];
-}>();
-
-
-const value = computed({
-  get: () => props.modelValue ?? "",
-  set: (v) => emit("update:modelValue", v),
-});
-
+// const content = defineModel<string>({ required: true });
+// const { content } = defineProps({
+//   content: {
+//     type: String,
+//     required: true,
+//   },
+// });
+// const emit = defineEmits(["update:modelValue"]);
 
 const extensions = [
   StarterKit,
@@ -61,15 +52,19 @@ const extensions = [
     },
   }),
 ];
+
+const model = defineModel<string>();
+
+function handleUpdate({ editor }: { editor: any }) {
+  model.value = editor.getHTML();
+}
 </script>
 
 <template>
   <Domternal
     :extensions="extensions"
-    :content="value"
-    :placeholder="placeholder"
-    :editable="!disabled && !readonly"
-    @update:modelValue="emit('update:modelValue', $event)"
+    :content="model ?? ''"
+    :on-update="handleUpdate"
   >
     <Domternal.Toolbar class="-mt-5" />
     <Domternal.Content class="bg-transparent dark:dm-theme-auto" />

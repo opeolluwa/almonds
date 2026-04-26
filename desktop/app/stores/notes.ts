@@ -52,10 +52,12 @@ export const useNoteStore = defineStore("notes_store", {
     },
 
     async createNote(payload: CreateNotePayload): Promise<Note> {
+      console.log("Creating note with payload:", payload);
       const created = await invoke<Note>("create_note", {
         note: payload,
         meta: await getWorkspaceMeta(),
       });
+
 
       this.notes.unshift(created);
 

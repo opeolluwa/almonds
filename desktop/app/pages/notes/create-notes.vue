@@ -7,7 +7,7 @@ const router = useRouter();
 const noteStore = useNoteStore();
 
 const title = ref("");
-const content = ref("");
+const content = ref("l34knfbk");
 const categories = ref<string[]>([]);
 const tagInput = ref("");
 const submitting = ref(false);
@@ -160,7 +160,7 @@ onBeforeRouteLeave(async () => {
         <!-- Divider -->
         <div class="border-t border-gray-100 dark:border-gray-800 mb-5" />
 
-        <!-- Editor -->
+
         <NotesEditor v-model="content" />
 
         <p v-if="error" class="text-xs text-red-500 mt-4">{{ error }}</p>
