@@ -6,10 +6,6 @@ edition = "2024"
 [workspace]
 members = [".", "migration"]
 
-# [lib]
-# crate-type = ["staticlib"]
-# path="src/lib.rs"
-
 [features]
 default = ["sqlite"]
 sqlite = ["sea-orm/sqlx-sqlite"]
@@ -23,8 +19,6 @@ argon2 = "0.5"
 async-trait = "0.1.89"
 boltffi = { version = "0.24.1", features = ["chrono"] }
 chrono = { version = "0.4", features = ["serde"] }
-diplomat = "0.10.0"
-diplomat-runtime = "0.10.0"
 dirs = { version = "6.0.0", optional = true }
 futures = "0.3.32"
 graphql-ws-client = { version = "0.12.1", features = [

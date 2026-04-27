@@ -114,7 +114,14 @@ onBeforeRouteLeave(async () => {
 <template>
   <NuxtLayout name="default">
     <!-- suppress default page title -->
-    <template #page_title><span /></template>
+    <template #page_title>
+      <UButton
+        variant="ghost"
+        @click="router.back()"
+        color="neutral"
+        icon="heroicons:arrow-long-left"
+      ></UButton>
+    </template>
 
     <template #main_content>
 

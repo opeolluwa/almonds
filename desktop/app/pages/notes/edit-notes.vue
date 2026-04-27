@@ -208,6 +208,14 @@ onMounted(async () => {
 
 <template>
   <NuxtLayout name="default">
+    <template #page_title>
+      <UButton
+        variant="ghost"
+        @click="router.back()"
+        color="neutral"
+        icon="heroicons:arrow-long-left"
+      ></UButton>
+    </template>
     <template #main_content>
       <!-- Not found -->
       <div
@@ -278,7 +286,7 @@ onMounted(async () => {
               class="bg-transparent outline-none text-xs text-gray-400 dark:text-gray-300 placeholder:text-gray-300 dark:placeholder:text-gray-600 w-20 min-w-0"
               @keydown="onTagKeydown"
               @blur="addTag"
-            >
+            />
           </div>
 
           <!-- Divider -->
@@ -291,7 +299,6 @@ onMounted(async () => {
         </div>
 
         <!-- Sticky bottom bar -->
-       
       </div>
     </template>
 
