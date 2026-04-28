@@ -89,3 +89,14 @@ pub async fn transfer_user_preference(
         .await
         .map_err(Into::into)
 }
+
+#[tauri::command]
+pub async fn get_unsynced_user_preferences(
+    state: State<'_, AppState>,
+) -> Result<Vec<user_preference::Model>, AppError> {
+    state
+        .user_preference_repository
+        .extract_unsynced()
+        .await
+        .map_err(Into::into)
+}

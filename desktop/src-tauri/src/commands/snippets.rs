@@ -121,3 +121,14 @@ pub async fn transfer_snippet(
         .await
         .map_err(Into::into)
 }
+
+#[tauri::command]
+pub async fn get_unsynced_snippets(
+    state: State<'_, AppState>,
+) -> Result<Vec<snippets::Model>, AppError> {
+    state
+        .snippet_repository
+        .extract_unsynced()
+        .await
+        .map_err(Into::into)
+}

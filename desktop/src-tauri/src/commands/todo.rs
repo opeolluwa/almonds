@@ -169,3 +169,12 @@ pub async fn duplicate_todo(
         .await
         .map_err(Into::into)
 }
+
+#[tauri::command]
+pub async fn get_unsynced_todos(state: State<'_, AppState>) -> Result<Vec<todo::Model>, AppError> {
+    state
+        .todo_repository
+        .extract_unsynced()
+        .await
+        .map_err(Into::into)
+}

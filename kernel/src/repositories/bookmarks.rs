@@ -20,7 +20,7 @@ use crate::{
         meta::RequestMeta,
         recycle_bin::CreateRecycleBinEntry,
     },
-    entities::bookmark,
+    entities::{bookmark, sync_queue},
     error::KernelError,
     repositories::{
         prelude::WorkspaceRepositoryExt,
@@ -83,6 +83,8 @@ pub trait BookmarkRepositoryExt {
     ) -> Result<(), KernelError>;
 
     async fn exists(&self, identifier: &Uuid) -> Result<bool, KernelError>;
+
+    async fn extract_unsynced(&self) -> Result<Vec<bookmark::Model>, KernelError>;
 
     #[cfg(feature = "sync_engine")]
     async fn upsert_many(
@@ -284,6 +286,33 @@ impl BookmarkRepositoryExt for BookmarkRepository {
             .ok();
 
         Ok(result.is_some())
+    }
+
+    async fn extract_unsynced(&self) -> Result<Vec<bookmark::Model>, KernelError> {
+        let queue_entries = sync_queue::Entity::find()
+            .filter(sync_queue::Column::TableName.eq("bookmark"))
+            .limit(25)
+            .all(self.conn.as_ref())
+            .await
+            .map_err(|err| KernelError::DbOperationError(err.to_string()))?;
+
+        let identifiers = queue_entries
+            .iter()
+            .map(|entry| {
+                Uuid::parse_str(&entry.record_identifier)
+                    .map_err(|err| KernelError::DbOperationError(err.to_string()))
+            })
+            .collect::<Result<Vec<Uuid>, KernelError>>()?;
+
+        if identifiers.is_empty() {
+            return Ok(Vec::new());
+        }
+
+        bookmark::Entity::find()
+            .filter(bookmark::Column::Identifier.is_in(identifiers))
+            .all(self.conn.as_ref())
+            .await
+            .map_err(|err| KernelError::DbOperationError(err.to_string()))
     }
 
     #[cfg(feature = "sync_engine")]

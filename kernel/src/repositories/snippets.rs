@@ -20,7 +20,7 @@ use crate::{
         recycle_bin::CreateRecycleBinEntry,
         snippets::{CreateSnippet, UpdateSnippet},
     },
-    entities::snippets,
+    entities::{snippets, sync_queue},
     error::KernelError,
     repositories::{
         prelude::WorkspaceRepositoryExt,
@@ -75,6 +75,8 @@ pub trait SnippetRepositoryExt {
         payload: &UpdateSnippet,
         meta: &Option<RequestMeta>,
     ) -> Result<snippets::Model, KernelError>;
+
+    async fn extract_unsynced(&self) -> Result<Vec<snippets::Model>, KernelError>;
 
     #[cfg(feature = "sync_engine")]
     async fn upsert_many(
@@ -232,6 +234,33 @@ impl SnippetRepositoryExt for SnippetRepository {
 
         active_model
             .update(self.conn.as_ref())
+            .await
+            .map_err(|err| KernelError::DbOperationError(err.to_string()))
+    }
+
+    async fn extract_unsynced(&self) -> Result<Vec<snippets::Model>, KernelError> {
+        let queue_entries = sync_queue::Entity::find()
+            .filter(sync_queue::Column::TableName.eq("snippets"))
+            .limit(25)
+            .all(self.conn.as_ref())
+            .await
+            .map_err(|err| KernelError::DbOperationError(err.to_string()))?;
+
+        let identifiers = queue_entries
+            .iter()
+            .map(|entry| {
+                Uuid::parse_str(&entry.record_identifier)
+                    .map_err(|err| KernelError::DbOperationError(err.to_string()))
+            })
+            .collect::<Result<Vec<Uuid>, KernelError>>()?;
+
+        if identifiers.is_empty() {
+            return Ok(Vec::new());
+        }
+
+        snippets::Entity::find()
+            .filter(snippets::Column::Identifier.is_in(identifiers))
+            .all(self.conn.as_ref())
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))
     }

@@ -3,7 +3,7 @@ use std::sync::Arc;
 use async_trait::async_trait;
 use sea_orm::{
     ActiveModelTrait, ActiveValue::Set, ColumnTrait, DatabaseConnection, EntityTrait,
-    IntoActiveModel, QueryFilter, QueryOrder,
+    IntoActiveModel, QueryFilter, QueryOrder, QuerySelect,
 };
 use uuid::Uuid;
 
@@ -15,7 +15,7 @@ use crate::enums::ItemType;
 use crate::types::EntitySyncResult;
 use crate::{
     adapters::{meta::RequestMeta, recycle_bin::CreateRecycleBinEntry},
-    entities::recycle_bin,
+    entities::{recycle_bin, sync_queue},
     error::KernelError,
     utils::extract_req_meta,
 };
@@ -56,6 +56,8 @@ pub trait RecycleBinRepositoryExt {
     -> Result<(), KernelError>;
 
     async fn purge_all(&self, meta: &Option<RequestMeta>) -> Result<(), KernelError>;
+
+    async fn extract_unsynced(&self) -> Result<Vec<recycle_bin::Model>, KernelError>;
 
     #[cfg(feature = "sync_engine")]
     async fn upsert_many(
@@ -175,6 +177,33 @@ impl RecycleBinRepositoryExt for RecycleBinRepository {
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))?;
         Ok(())
+    }
+
+    async fn extract_unsynced(&self) -> Result<Vec<recycle_bin::Model>, KernelError> {
+        let queue_entries = sync_queue::Entity::find()
+            .filter(sync_queue::Column::TableName.eq("recycle_bin"))
+            .limit(25)
+            .all(self.conn.as_ref())
+            .await
+            .map_err(|err| KernelError::DbOperationError(err.to_string()))?;
+
+        let identifiers = queue_entries
+            .iter()
+            .map(|entry| {
+                Uuid::parse_str(&entry.record_identifier)
+                    .map_err(|err| KernelError::DbOperationError(err.to_string()))
+            })
+            .collect::<Result<Vec<Uuid>, KernelError>>()?;
+
+        if identifiers.is_empty() {
+            return Ok(Vec::new());
+        }
+
+        recycle_bin::Entity::find()
+            .filter(recycle_bin::Column::Identifier.is_in(identifiers))
+            .all(self.conn.as_ref())
+            .await
+            .map_err(|err| KernelError::DbOperationError(err.to_string()))
     }
 
     #[cfg(feature = "sync_engine")]

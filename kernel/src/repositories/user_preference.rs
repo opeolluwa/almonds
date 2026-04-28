@@ -4,7 +4,7 @@ use async_trait::async_trait;
 use chrono::Utc;
 use sea_orm::{
     ActiveModelTrait, ActiveValue::Set, ColumnTrait, DatabaseConnection, EntityTrait,
-    IntoActiveModel, QueryFilter,
+    IntoActiveModel, QueryFilter, QuerySelect,
 };
 use uuid::Uuid;
 
@@ -20,7 +20,7 @@ use crate::{
         meta::RequestMeta,
         user_preference::{CreateUserPreference, UpdateUserPreference},
     },
-    entities::user_preference,
+    entities::{sync_queue, user_preference},
     error::KernelError,
     utils::extract_req_meta,
 };
@@ -51,6 +51,8 @@ pub trait UserPreferenceRepositoryExt {
         payload: &UpdateUserPreference,
         meta: &Option<RequestMeta>,
     ) -> Result<user_preference::Model, KernelError>;
+
+    async fn extract_unsynced(&self) -> Result<Vec<user_preference::Model>, KernelError>;
 
     #[cfg(feature = "sync_engine")]
     async fn upsert_many(
@@ -135,6 +137,33 @@ impl UserPreferenceRepositoryExt for UserPreferenceRepository {
 
         active_model
             .update(self.conn.as_ref())
+            .await
+            .map_err(|err| KernelError::DbOperationError(err.to_string()))
+    }
+
+    async fn extract_unsynced(&self) -> Result<Vec<user_preference::Model>, KernelError> {
+        let queue_entries = sync_queue::Entity::find()
+            .filter(sync_queue::Column::TableName.eq("user_preference"))
+            .limit(25)
+            .all(self.conn.as_ref())
+            .await
+            .map_err(|err| KernelError::DbOperationError(err.to_string()))?;
+
+        let identifiers = queue_entries
+            .iter()
+            .map(|entry| {
+                Uuid::parse_str(&entry.record_identifier)
+                    .map_err(|err| KernelError::DbOperationError(err.to_string()))
+            })
+            .collect::<Result<Vec<Uuid>, KernelError>>()?;
+
+        if identifiers.is_empty() {
+            return Ok(Vec::new());
+        }
+
+        user_preference::Entity::find()
+            .filter(user_preference::Column::Identifier.is_in(identifiers))
+            .all(self.conn.as_ref())
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))
     }

@@ -20,7 +20,7 @@ use crate::{
         notes::{CreateNote, UpdateNote},
         recycle_bin::CreateRecycleBinEntry,
     },
-    entities::notes,
+    entities::{notes, sync_queue},
     error::KernelError,
     repositories::{
         prelude::WorkspaceRepositoryExt,
@@ -72,6 +72,8 @@ pub trait NotesRepositoryExt {
         payload: &UpdateNote,
         meta: &Option<RequestMeta>,
     ) -> Result<notes::Model, KernelError>;
+
+    async fn extract_unsynced(&self) -> Result<Vec<notes::Model>, KernelError>;
 
     #[cfg(feature = "sync_engine")]
     async fn upsert_many(
@@ -220,6 +222,33 @@ impl NotesRepositoryExt for NotesRepository {
 
         active_model
             .update(self.conn.as_ref())
+            .await
+            .map_err(|err| KernelError::DbOperationError(err.to_string()))
+    }
+
+    async fn extract_unsynced(&self) -> Result<Vec<notes::Model>, KernelError> {
+        let queue_entries = sync_queue::Entity::find()
+            .filter(sync_queue::Column::TableName.eq("notes"))
+            .limit(25)
+            .all(self.conn.as_ref())
+            .await
+            .map_err(|err| KernelError::DbOperationError(err.to_string()))?;
+
+        let identifiers = queue_entries
+            .iter()
+            .map(|entry| {
+                Uuid::parse_str(&entry.record_identifier)
+                    .map_err(|err| KernelError::DbOperationError(err.to_string()))
+            })
+            .collect::<Result<Vec<Uuid>, KernelError>>()?;
+
+        if identifiers.is_empty() {
+            return Ok(Vec::new());
+        }
+
+        notes::Entity::find()
+            .filter(notes::Column::Identifier.is_in(identifiers))
+            .all(self.conn.as_ref())
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))
     }

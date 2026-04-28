@@ -4,7 +4,7 @@ use async_trait::async_trait;
 use chrono::Utc;
 use sea_orm::{
     ActiveModelTrait, ActiveValue::Set, ColumnTrait, DatabaseConnection, EntityTrait,
-    IntoActiveModel, QueryFilter,
+    IntoActiveModel, QueryFilter, QuerySelect,
 };
 use uuid::Uuid;
 
@@ -20,7 +20,7 @@ use crate::{
         recycle_bin::CreateRecycleBinEntry,
         reminder::{CreateReminder, UpdateReminder},
     },
-    entities::reminder,
+    entities::{reminder, sync_queue},
     error::KernelError,
     repositories::{
         prelude::WorkspaceRepositoryExt,
@@ -70,6 +70,8 @@ pub trait ReminderRepositoryExt {
         identifier: &Uuid,
         meta: &Option<RequestMeta>,
     ) -> Result<(), KernelError>;
+
+    async fn extract_unsynced(&self) -> Result<Vec<reminder::Model>, KernelError>;
 
     #[cfg(feature = "sync_engine")]
     async fn upsert_many(
@@ -216,6 +218,33 @@ impl ReminderRepositoryExt for ReminderRepository {
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))?;
         Ok(())
+    }
+
+    async fn extract_unsynced(&self) -> Result<Vec<reminder::Model>, KernelError> {
+        let queue_entries = sync_queue::Entity::find()
+            .filter(sync_queue::Column::TableName.eq("reminder"))
+            .limit(25)
+            .all(self.conn.as_ref())
+            .await
+            .map_err(|err| KernelError::DbOperationError(err.to_string()))?;
+
+        let identifiers = queue_entries
+            .iter()
+            .map(|entry| {
+                Uuid::parse_str(&entry.record_identifier)
+                    .map_err(|err| KernelError::DbOperationError(err.to_string()))
+            })
+            .collect::<Result<Vec<Uuid>, KernelError>>()?;
+
+        if identifiers.is_empty() {
+            return Ok(Vec::new());
+        }
+
+        reminder::Entity::find()
+            .filter(reminder::Column::Identifier.is_in(identifiers))
+            .all(self.conn.as_ref())
+            .await
+            .map_err(|err| KernelError::DbOperationError(err.to_string()))
     }
 
     #[cfg(feature = "sync_engine")]

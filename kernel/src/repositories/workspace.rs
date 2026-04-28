@@ -5,6 +5,7 @@ use chrono::Utc;
 use sea_orm::prelude::Expr;
 use sea_orm::{
     ActiveModelTrait, ActiveValue::Set, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter,
+    QuerySelect,
 };
 use uuid::Uuid;
 
@@ -15,7 +16,7 @@ use crate::{
         meta::RequestMeta,
         workspace::{CreateWorkspace, UpdateWorkspace, hash_password, verify_password},
     },
-    entities::workspaces,
+    entities::{sync_queue, workspaces},
     error::KernelError,
     utils::extract_req_meta,
 };
@@ -57,6 +58,8 @@ pub trait WorkspaceRepositoryExt {
     ) -> Result<bool, KernelError>;
 
     async fn exists(&self, id: &Uuid) -> Result<bool, KernelError>;
+
+    async fn extract_unsynced(&self) -> Result<Vec<workspaces::Model>, KernelError>;
 
     #[cfg(feature = "sync_engine")]
     async fn upsert_many(
@@ -219,6 +222,33 @@ impl WorkspaceRepositoryExt for WorkspaceRepository {
     async fn exists(&self, id: &Uuid) -> Result<bool, KernelError> {
         let result = self.get_workspace_by_id(id.to_owned()).await.ok();
         Ok(result.is_some())
+    }
+
+    async fn extract_unsynced(&self) -> Result<Vec<workspaces::Model>, KernelError> {
+        let queue_entries = sync_queue::Entity::find()
+            .filter(sync_queue::Column::TableName.eq("workspaces"))
+            .limit(25)
+            .all(self.conn.as_ref())
+            .await
+            .map_err(|err| KernelError::DbOperationError(err.to_string()))?;
+
+        let identifiers = queue_entries
+            .iter()
+            .map(|entry| {
+                Uuid::parse_str(&entry.record_identifier)
+                    .map_err(|err| KernelError::DbOperationError(err.to_string()))
+            })
+            .collect::<Result<Vec<Uuid>, KernelError>>()?;
+
+        if identifiers.is_empty() {
+            return Ok(Vec::new());
+        }
+
+        workspaces::Entity::find()
+            .filter(workspaces::Column::Identifier.is_in(identifiers))
+            .all(self.conn.as_ref())
+            .await
+            .map_err(|err| KernelError::DbOperationError(err.to_string()))
     }
 
     #[cfg(feature = "sync_engine")]
