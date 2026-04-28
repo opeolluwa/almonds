@@ -46,7 +46,7 @@ const pageTitle = computed(() => {
 <template>
   <UDashboardGroup id="wild_almonds_app" as="div">
     <!-- Sidebar: icons-only strip when collapsed -->
-    <AppSideNavigation  />
+    <AppSideNavigation />
 
     <!-- Right column: header + main content -->
     <div class="flex flex-col flex-1 min-w-0 overflow-hidden">

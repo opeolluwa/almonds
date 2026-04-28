@@ -6,15 +6,13 @@ import { useUserPreferenceStore } from "~/stores/user-preference";
 import { useReminderStore } from "~/stores/reminder";
 import { useSnippetStore } from "~/stores/snippets";
 import { openUrl } from "@tauri-apps/plugin-opener";
-import { useMutation } from 'villus';
-
+import { useMutation } from "villus";
 
 const preflightGraphQL = `
 mutation Preflight {
   preflight(name: "alex")
 }
 `;
-
 
 const { data, execute } = useMutation(preflightGraphQL);
 
@@ -196,8 +194,6 @@ onMounted(() => {
 });
 onUnmounted(() => clearInterval(clockTimer));
 
-
-
 const greeting = computed(() => {
   const h = now.value.getHours();
   if (h < 12) return "Good morning";
@@ -370,8 +366,8 @@ const quickActions = [
       <div
         class="relative -mx-6 -mt-6 px-6 pt-7 pb-6 overflow-hidden bg-linear-to-br from-accent-500/10 via-violet-400/5 to-transparent dark:from-accent-500/12 dark:via-violet-500/6 dark:to-transparent border-b border-gray-100 dark:border-gray-800"
       >
-      <!-- {{ data }} -->
-      <!-- <button @click="execute">Test GraphQL</button> -->
+        <!-- {{ data }} -->
+        <!-- <button @click="execute">Test GraphQL</button> -->
         <!-- Soft blobs -->
         <div
           class="pointer-events-none absolute -top-10 right-0 size-52 rounded-full bg-accent-300/20 dark:bg-accent-500/10 blur-3xl"

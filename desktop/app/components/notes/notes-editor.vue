@@ -82,12 +82,12 @@ const extensions = [
     suggestion: { render: createEmojiSuggestionRenderer() },
   }),
   Link.configure({
-  protocols: ['http:', 'https:'],
-  openOnClick:true,
-  autolink: true,
-  linkOnPaste: true,
-  defaultProtocol: 'https',
-}),
+    protocols: ["http:", "https:"],
+    openOnClick: true,
+    autolink: true,
+    linkOnPaste: true,
+    defaultProtocol: "https",
+  }),
   Image.configure({
     //TODO: replace with actual upload handler that uploads to server and returns URL
     uploadHandler: async (file) => {

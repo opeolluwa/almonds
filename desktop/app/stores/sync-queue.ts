@@ -1,4 +1,4 @@
-import type { Notes, Todo, ItemType } from 'almond_kernel';
+import type { Notes, Todo, ItemType } from "almond_kernel";
 
 export const useSyncQueueStore = defineStore("sync_queue_store", {
   state: () => ({
@@ -52,10 +52,6 @@ export const useSyncQueueStore = defineStore("sync_queue_store", {
         this.ClearUserPreferencesQueue(),
         this.ClearSnippetsQueue(),
       ]);
-    }
-
-    
+    },
   },
 });
-
-

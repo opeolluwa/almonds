@@ -6,6 +6,8 @@ import {
 import { useClient } from "villus";
 import { useAlarmScheduler } from "~/composables/useAlarmScheduler";
 import { useWorkspaceSetup } from "~/composables/useWorkspaceSetup";
+
+import "@domternal/theme";
 const { init } = useAccentColor();
 const { init: initFontSize } = useFontSize();
 const { init: initDarkTheme } = useDarkTheme();
@@ -19,9 +21,6 @@ const {
 useClient({
   url: "http://localhost:8000/orchard",
 });
-
-import '@domternal/theme';
-
 
 useAlarmScheduler();
 
