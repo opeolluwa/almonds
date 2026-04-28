@@ -1,10 +1,10 @@
 <script setup lang="ts">
+import NotesCard from "~/components/notes/notes-card.vue";
 definePageMeta({ layout: false });
 
 const noteStore = useNoteStore();
 const router = useRouter();
 const { searchQuery, setSearch, clearSearch } = useAppSearch();
-import NotesCard from "~/components/notes/notes-card.vue";
 type NoteSort = "name-asc" | "name-desc" | "date-newest" | "date-oldest";
 const sortBy = ref<NoteSort>("date-newest");
 

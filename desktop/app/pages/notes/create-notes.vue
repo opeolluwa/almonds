@@ -117,15 +117,13 @@ onBeforeRouteLeave(async () => {
     <template #page_title>
       <UButton
         variant="ghost"
-        @click="router.back()"
         color="neutral"
         icon="heroicons:arrow-long-left"
-      ></UButton>
+        @click="router.back()"
+      />
     </template>
 
     <template #main_content>
-
-
       <div class="pb-20">
         <!-- Title -->
         <textarea
@@ -175,8 +173,6 @@ onBeforeRouteLeave(async () => {
           {{ error }}
         </p>
       </div>
-
- 
     </template>
 
     <template #side_content>
@@ -204,7 +200,9 @@ onBeforeRouteLeave(async () => {
       <USeparator class="my-5" />
 
       <!-- Stats -->
-      <p class="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3">
+      <p
+        class="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3"
+      >
         Document
       </p>
       <div class="flex flex-col gap-0.5">
@@ -218,7 +216,9 @@ onBeforeRouteLeave(async () => {
           class="flex items-center justify-between py-2 border-b border-gray-50 dark:border-gray-800/60 text-xs"
         >
           <span class="text-gray-400">{{ stat.label }}</span>
-          <span class="tabular-nums font-semibold text-gray-700 dark:text-gray-200">
+          <span
+            class="tabular-nums font-semibold text-gray-700 dark:text-gray-200"
+          >
             {{ stat.value }}
           </span>
         </div>

@@ -58,7 +58,6 @@ export const useNoteStore = defineStore("notes_store", {
         meta: await getWorkspaceMeta(),
       });
 
-
       this.notes.unshift(created);
 
       await this.fetchRecentNotes();
