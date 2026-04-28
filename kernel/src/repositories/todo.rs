@@ -5,7 +5,7 @@ use chrono::Utc;
 use sea_orm::prelude::Date;
 use sea_orm::{
     ActiveModelTrait, ActiveValue::Set, ColumnTrait, DatabaseConnection, EntityTrait,
-    IntoActiveModel, QueryFilter,
+    IntoActiveModel, QueryFilter, QuerySelect,
 };
 use uuid::Uuid;
 
@@ -22,7 +22,7 @@ use crate::{
         recycle_bin::CreateRecycleBinEntry,
         todo::{CreateTodo, UpdateTodo},
     },
-    entities::todo,
+    entities::{sync_queue, todo},
     error::KernelError,
     repositories::{
         prelude::WorkspaceRepositoryExt,
@@ -89,6 +89,8 @@ pub trait TodoRepositoryExt {
         done: bool,
         meta: &Option<RequestMeta>,
     ) -> Result<todo::Model, KernelError>;
+
+    async fn extract_unsynced(&self) -> Result<Vec<todo::Model>, KernelError>;
 
     #[cfg(feature = "sync_engine")]
     async fn upsert_many(
@@ -323,6 +325,33 @@ impl TodoRepositoryExt for TodoRepository {
 
         active_model
             .update(self.conn.as_ref())
+            .await
+            .map_err(|err| KernelError::DbOperationError(err.to_string()))
+    }
+
+    async fn extract_unsynced(&self) -> Result<Vec<todo::Model>, KernelError> {
+        let queue_entries = sync_queue::Entity::find()
+            .filter(sync_queue::Column::TableName.eq("todo"))
+            .limit(25)
+            .all(self.conn.as_ref())
+            .await
+            .map_err(|err| KernelError::DbOperationError(err.to_string()))?;
+
+        let identifiers = queue_entries
+            .iter()
+            .map(|entry| {
+                Uuid::parse_str(&entry.record_identifier)
+                    .map_err(|err| KernelError::DbOperationError(err.to_string()))
+            })
+            .collect::<Result<Vec<Uuid>, KernelError>>()?;
+
+        if identifiers.is_empty() {
+            return Ok(Vec::new());
+        }
+
+        todo::Entity::find()
+            .filter(todo::Column::Identifier.is_in(identifiers))
+            .all(self.conn.as_ref())
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))
     }
