@@ -1,3 +1,4 @@
+#![cfg(feature = "sqlite")]
 mod shared;
 mod workspace;
 use shared::*;

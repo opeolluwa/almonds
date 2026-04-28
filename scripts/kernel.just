@@ -93,7 +93,8 @@ db-clean:
 		-o src/entities/postgres \
 		--seaography
 	python3 ../scripts/fix-ts-exports.py src/entities/postgres
-	cargo test
+	cargo test --no-default-features --features postgres -- export_bindings
+	npm run build
 	
 # Pull schema and generate entities for MySQL using docker defaults (feature: mysql)
 [working-directory: 'kernel']

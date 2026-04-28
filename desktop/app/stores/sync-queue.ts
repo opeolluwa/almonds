@@ -1,3 +1,5 @@
+import type { Notes, Todo, ItemType } from 'almond_kernel';
+
 export const useSyncQueueStore = defineStore("sync_queue_store", {
   state: () => ({
     bookmarks: [],
@@ -55,3 +57,5 @@ export const useSyncQueueStore = defineStore("sync_queue_store", {
     
   },
 });
+
+
