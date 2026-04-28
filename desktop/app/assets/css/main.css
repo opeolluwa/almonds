@@ -120,3 +120,66 @@ body {
   --dm-toolbar-bg: transparent;
   --dm-button-size: 2.25rem;
 }
+
+
+
+
+
+h1.notes_heading {
+  @apply text-4xl font-bold;
+}
+
+h2.notes_heading {
+  @apply text-3xl font-bold;
+}
+
+h3.notes_heading {
+  @apply text-2xl font-semibold;
+}
+
+h4.notes_heading {
+  @apply text-xl font-semibold;
+}
+
+h5.notes_heading {
+  @apply text-lg font-medium;
+}
+
+h6.notes_heading {
+  @apply text-base font-medium;
+}
+
+
+
+.note_list_unordered {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin: 0.5rem 0;
+}
+
+.note_list_unordered .note_list_unordered {
+  list-style-type: circle;
+}
+
+.note_list_unordered .note_list_unordered .note_list_unordered {
+  list-style-type: square;
+}
+
+.note_list_ordered {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+  margin: 0.5rem 0;
+}
+
+.note_list_ordered .note_list_ordered {
+  list-style-type: lower-alpha;
+}
+
+.note_list_ordered .note_list_ordered .note_list_ordered {
+  list-style-type: lower-roman;
+}
+
+.notes_list_item {
+  margin: 0.2rem 0;
+  line-height: 1.6;
+}

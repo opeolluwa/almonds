@@ -4,16 +4,22 @@ import { Domternal } from "@domternal/vue";
 import DOMPurify from "dompurify";
 import { Details } from "@domternal/extension-details";
 import { CodeBlockLowlight } from "@domternal/extension-code-block-lowlight";
-import { createLowlight, common } from 'lowlight';
+import { createLowlight, common } from "lowlight";
 import {
   StarterKit,
   BubbleMenu,
+  BaseKeymap,
   Superscript,
   Subscript,
   Text,
   TextStyle,
   TextAlign,
   Code,
+  Heading,
+  ListItem,
+  BulletList,
+  OrderedList,
+  Link,
 } from "@domternal/core";
 import { Table } from "@domternal/extension-table";
 import { Image } from "@domternal/extension-image";
@@ -49,18 +55,39 @@ const extensions = [
   StarterKit,
   BubbleMenu,
   Table,
+  ListItem.configure({
+    HTMLAttributes: { class: "notes_list_item" },
+  }),
+  BulletList.configure({
+    HTMLAttributes: { class: "note_list_unordered" },
+  }),
+  OrderedList.configure({
+    HTMLAttributes: { class: "note_list_ordered" },
+  }),
   Superscript,
   Subscript,
   Text,
+  BaseKeymap,
   Details,
   TextStyle,
   Code,
   TextAlign,
+  Heading.configure({
+    levels: [1, 2, 3, 4, 5, 6],
+    HTMLAttributes: { class: "notes_heading" },
+  }),
   CodeBlockLowlight.configure({ lowlight }),
   Emoji.configure({
     emojis,
     suggestion: { render: createEmojiSuggestionRenderer() },
   }),
+  Link.configure({
+  protocols: ['http:', 'https:'],
+  openOnClick:true,
+  autolink: true,
+  linkOnPaste: true,
+  defaultProtocol: 'https',
+}),
   Image.configure({
     //TODO: replace with actual upload handler that uploads to server and returns URL
     uploadHandler: async (file) => {
