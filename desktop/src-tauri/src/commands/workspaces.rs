@@ -86,3 +86,14 @@ pub async fn delete_workspace(
 
     Ok(())
 }
+
+#[tauri::command]
+pub async fn get_unsynced_workspaces(
+    state: State<'_, AppState>,
+) -> Result<Vec<almond_kernel::entities::workspaces::Model>, AppError> {
+    state
+        .workspace_repository
+        .extract_unsynced()
+        .await
+        .map_err(Into::into)
+}

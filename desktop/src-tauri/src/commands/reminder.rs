@@ -112,3 +112,14 @@ pub async fn transfer_reminder(
         .await
         .map_err(Into::into)
 }
+
+#[tauri::command]
+pub async fn get_unsynced_reminders(
+    state: State<'_, AppState>,
+) -> Result<Vec<reminder::Model>, AppError> {
+    state
+        .reminder_repository
+        .extract_unsynced()
+        .await
+        .map_err(Into::into)
+}
