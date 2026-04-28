@@ -65,9 +65,7 @@ export const useSyncQueueStore = defineStore("sync_queue_store", {
     },
 
     async SyncRecycleBin() {
-      this.recycleBin = await invoke<RecycleBin[]>(
-        "get_unsynced_recycle_bin",
-      );
+      this.recycleBin = await invoke<RecycleBin[]>("get_unsynced_recycle_bin");
     },
 
     async SyncAll() {

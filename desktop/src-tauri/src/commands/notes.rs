@@ -146,9 +146,7 @@ pub async fn export_notes_as_pdf(
 }
 
 #[tauri::command]
-pub async fn get_unsynced_notes(
-    state: State<'_, AppState>,
-) -> Result<Vec<notes::Model>, AppError> {
+pub async fn get_unsynced_notes(state: State<'_, AppState>) -> Result<Vec<notes::Model>, AppError> {
     state
         .notes_repository
         .extract_unsynced()
