@@ -6,11 +6,13 @@ use crate::error::KernelError;
 pub fn parse_markdown_to_pdf(markdown: &str, file_name: &str) -> Result<(), KernelError> {
     let output_path = dirs::download_dir()
         .ok_or(KernelError::DownloadDirNotFound)?
-        .join(file_name);
+        .join(file_name)
+        .join(".pdf");
 
     parse_into_file(
         markdown.to_string(),
-        &output_path.to_string_lossy(),
+        "output.pdf",
+        // &output_path.to_string_lossy(),
         ConfigSource::Default,
         None,
     )
