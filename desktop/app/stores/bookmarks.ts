@@ -1,5 +1,6 @@
 import { invoke } from "@tauri-apps/api/core";
 import { defineStore } from "pinia";
+import { useMutation } from "villus";
 
 export type BookmarkTag = "development" | "design" | "research" | "inspiration";
 
@@ -23,6 +24,8 @@ export interface UpdateBookmarkPayload {
   url?: string;
   tag?: BookmarkTag;
 }
+
+type SyncResult = { success: boolean; error_message: string | null; identifier: string };
 
 export const useBookmarkStore = defineStore("bookmark_store", {
   state: () => ({
@@ -135,6 +138,32 @@ export const useBookmarkStore = defineStore("bookmark_store", {
       this.bookmarks = this.bookmarks.filter(
         (b) => b.identifier !== recordIdentifier,
       );
+    },
+
+    async fetchUnsynced() {
+      const bookmarks = await invoke<Bookmark[]>("get_unsynced_bookmarks");
+      return bookmarks;
+    },
+
+    async syncUpstream() {
+      const bookmarks = await this.fetchUnsynced();
+      if (!bookmarks.length) return;
+
+      const { data, execute } = useMutation(`
+        mutation SyncBookmarks($input: [SyncBookmarkInput!]!) {
+          sync_bookmark(input: $input) { success error_message identifier }
+        }
+      `);
+      await execute({ input: bookmarks });
+
+      const synced = data.value?.sync_bookmark
+        .filter((r: SyncResult) => r.success)
+        .map((r: SyncResult) => r.identifier);
+      if (synced?.length) await invoke("clear_synced_bookmarks", { identifiers: synced });
+    },
+
+    async clearQueue(identifiers: string[]) {
+      await invoke("clear_synced_bookmarks", { identifiers });
     },
   },
 });

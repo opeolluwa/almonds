@@ -1,5 +1,8 @@
 import { defineStore } from "pinia";
 import { invoke } from "@tauri-apps/api/core";
+import { useMutation } from "villus";
+
+type SyncResult = { success: boolean; error_message: string | null; identifier: string };
 
 export interface Workspace {
   identifier: string;
@@ -158,6 +161,32 @@ export const useWorkspacesStore = defineStore("workspaces_store", {
       if (!this.unlockedWorkspaceIds.includes(identifier)) {
         this.unlockedWorkspaceIds.push(identifier);
       }
+    },
+
+    async fetchUnsynced() {
+      const workspaces = await invoke<Workspace[]>("get_unsynced_workspaces");
+      return workspaces;
+    },
+
+    async syncUpstream() {
+      const workspaces = await this.fetchUnsynced();
+      if (!workspaces.length) return;
+
+      const { data, execute } = useMutation(`
+        mutation SyncWorkspaces($input: [SyncWorkspaceInput!]!) {
+          sync_workspace(input: $input) { success error_message identifier }
+        }
+      `);
+      await execute({ input: workspaces });
+
+      const synced = data.value?.sync_workspace
+        .filter((r: SyncResult) => r.success)
+        .map((r: SyncResult) => r.identifier);
+      if (synced?.length) await invoke("clear_synced_workspaces", { identifiers: synced });
+    },
+
+    async clearQueue(identifiers: string[]) {
+      await invoke("clear_synced_workspaces", { identifiers });
     },
   },
   persist: {

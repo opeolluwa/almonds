@@ -1,5 +1,8 @@
 import { defineStore } from "pinia";
 import { invoke } from "@tauri-apps/api/core";
+import { useMutation } from "villus";
+
+type SyncResult = { success: boolean; error_message: string | null; identifier: string };
 
 export interface Snippet {
   identifier: string;
@@ -128,6 +131,32 @@ export const useSnippetStore = defineStore("snippets_store", {
       this.snippets = this.snippets.filter(
         (s) => s.identifier !== recordIdentifier,
       );
+    },
+
+    async fetchUnsynced() {
+      const snippets = await invoke<Snippet[]>("get_unsynced_snippets");
+      return snippets;
+    },
+
+    async syncUpstream() {
+      const snippets = await this.fetchUnsynced();
+      if (!snippets.length) return;
+
+      const { data, execute } = useMutation(`
+        mutation SyncSnippets($input: [SyncSnippetInput!]!) {
+          sync_snippet(input: $input) { success error_message identifier }
+        }
+      `);
+      await execute({ input: snippets });
+
+      const synced = data.value?.sync_snippet
+        .filter((r: SyncResult) => r.success)
+        .map((r: SyncResult) => r.identifier);
+      if (synced?.length) await invoke("clear_synced_snippets", { identifiers: synced });
+    },
+
+    async clearQueue(identifiers: string[]) {
+      await invoke("clear_synced_snippets", { identifiers });
     },
   },
 });

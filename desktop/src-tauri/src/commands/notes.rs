@@ -153,3 +153,15 @@ pub async fn get_unsynced_notes(state: State<'_, AppState>) -> Result<Vec<notes:
         .await
         .map_err(Into::into)
 }
+
+#[tauri::command]
+pub async fn clear_synced_notes(
+    state: State<'_, AppState>,
+    identifiers: Vec<String>,
+) -> Result<(), AppError> {
+    state
+        .notes_repository
+        .clear_synced(identifiers)
+        .await
+        .map_err(Into::into)
+}

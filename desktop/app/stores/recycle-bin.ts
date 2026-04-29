@@ -1,5 +1,8 @@
 import { defineStore } from "pinia";
 import { invoke } from "@tauri-apps/api/core";
+import { useMutation } from "villus";
+
+type SyncResult = { success: boolean; error_message: string | null; identifier: string };
 
 export type RecycleBinItemType =
   | "note"
@@ -90,6 +93,32 @@ export const useRecycleBinStore = defineStore("recycle_bin_store", {
       });
 
       this.entries = [];
+    },
+
+    async fetchUnsynced() {
+      const recycleBin = await invoke<RecycleBinEntry[]>("get_unsynced_recycle_bin");
+      return recycleBin;
+    },
+
+    async syncUpstream() {
+      const recycleBin = await this.fetchUnsynced();
+      if (!recycleBin.length) return;
+
+      const { data, execute } = useMutation(`
+        mutation SyncRecycleBin($input: [SyncRecycleBinInput!]!) {
+          sync_recycle_bin(input: $input) { success error_message identifier }
+        }
+      `);
+      await execute({ input: recycleBin });
+
+      const synced = data.value?.sync_recycle_bin
+        .filter((r: SyncResult) => r.success)
+        .map((r: SyncResult) => r.identifier);
+      if (synced?.length) await invoke("clear_synced_recycle_bin", { identifiers: synced });
+    },
+
+    async clearQueue(identifiers: string[]) {
+      await invoke("clear_synced_recycle_bin", { identifiers });
     },
   },
 });

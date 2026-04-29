@@ -1,5 +1,8 @@
 import { defineStore } from "pinia";
 import { invoke } from "@tauri-apps/api/core";
+import { useMutation } from "villus";
+
+type SyncResult = { success: boolean; error_message: string | null; identifier: string };
 
 export interface Todo {
   identifier: string;
@@ -166,6 +169,32 @@ export const useTodoStore = defineStore("todo_store", {
       const idx = this.todos.findIndex((t) => t.identifier === identifier);
       if (idx !== -1) this.todos[idx] = updated;
       return updated;
+    },
+
+    async fetchUnsynced() {
+      const todo = await invoke<Todo[]>("get_unsynced_todos");
+      return todo;
+    },
+
+    async syncUpstream() {
+      const todo = await this.fetchUnsynced();
+      if (!todo.length) return;
+
+      const { data, execute } = useMutation(`
+        mutation SyncTodos($input: [SyncTodoInput!]!) {
+          sync_todo(input: $input) { success error_message identifier }
+        }
+      `);
+      await execute({ input: todo });
+
+      const synced = data.value?.sync_todo
+        .filter((r: SyncResult) => r.success)
+        .map((r: SyncResult) => r.identifier);
+      if (synced?.length) await invoke("clear_synced_todos", { identifiers: synced });
+    },
+
+    async clearQueue(identifiers: string[]) {
+      await invoke("clear_synced_todos", { identifiers });
     },
   },
 });

@@ -15,7 +15,7 @@ const todoStore = useTodoStore();
 const userPreferenceStore = useUserPreferenceStore();
 const reminderStore = useReminderStore();
 const snippetStore = useSnippetStore();
-const syncQueueStore = useSyncQueueStore(); 
+const syncQueueStore = useSyncQueueStore();
 
 const { setSearch, clearSearch, searchQuery } = useAppSearch();
 
@@ -358,8 +358,9 @@ const quickActions = [
       <div
         class="relative -mx-6 -mt-6 px-6 pt-7 pb-6 overflow-hidden bg-linear-to-br from-accent-500/10 via-violet-400/5 to-transparent dark:from-accent-500/12 dark:via-violet-500/6 dark:to-transparent border-b border-gray-100 dark:border-gray-800"
       >
-
-        <button @click="syncQueueStore.preflightCheck('alex')">Test GraphQL</button>
+        <button @click="syncQueueStore.preflightCheck('alex')">
+          Test GraphQL
+        </button>
         <!-- Soft blobs -->
         <div
           class="pointer-events-none absolute -top-10 right-0 size-52 rounded-full bg-accent-300/20 dark:bg-accent-500/10 blur-3xl"
@@ -405,7 +406,6 @@ const quickActions = [
               </template>
             </p>
           </div>
-
         </div>
 
         <!-- Stat pills -->

@@ -100,3 +100,15 @@ pub async fn get_unsynced_user_preferences(
         .await
         .map_err(Into::into)
 }
+
+#[tauri::command]
+pub async fn clear_synced_user_preferences(
+    state: State<'_, AppState>,
+    identifiers: Vec<String>,
+) -> Result<(), AppError> {
+    state
+        .user_preference_repository
+        .clear_synced(identifiers)
+        .await
+        .map_err(Into::into)
+}

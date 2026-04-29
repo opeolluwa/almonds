@@ -86,6 +86,8 @@ pub trait BookmarkRepositoryExt {
 
     async fn extract_unsynced(&self) -> Result<Vec<bookmark::Model>, KernelError>;
 
+    async fn clear_synced(&self, identifiers: Vec<String>) -> Result<(), KernelError>;
+
     #[cfg(feature = "sync_engine")]
     async fn upsert_many(
         &self,
@@ -313,6 +315,16 @@ impl BookmarkRepositoryExt for BookmarkRepository {
             .all(self.conn.as_ref())
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))
+    }
+
+    async fn clear_synced(&self, identifiers: Vec<String>) -> Result<(), KernelError> {
+        sync_queue::Entity::delete_many()
+            .filter(sync_queue::Column::TableName.eq("bookmark"))
+            .filter(sync_queue::Column::RecordIdentifier.is_in(identifiers))
+            .exec(self.conn.as_ref())
+            .await
+            .map_err(|err| KernelError::DbOperationError(err.to_string()))?;
+        Ok(())
     }
 
     #[cfg(feature = "sync_engine")]

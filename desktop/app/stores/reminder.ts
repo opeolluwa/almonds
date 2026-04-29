@@ -1,5 +1,8 @@
 import { defineStore } from "pinia";
 import { invoke } from "@tauri-apps/api/core";
+import { useMutation } from "villus";
+
+type SyncResult = { success: boolean; error_message: string | null; identifier: string };
 
 export interface Reminder {
   identifier: string;
@@ -126,6 +129,32 @@ export const useReminderStore = defineStore("reminder_store", {
       this.reminders = this.reminders.filter(
         (r) => r.identifier !== recordIdentifier,
       );
+    },
+
+    async fetchUnsynced() {
+      const reminders = await invoke<Reminder[]>("get_unsynced_reminders");
+      return reminders;
+    },
+
+    async syncUpstream() {
+      const reminders = await this.fetchUnsynced();
+      if (!reminders.length) return;
+
+      const { data, execute } = useMutation(`
+        mutation SyncReminders($input: [SyncReminderInput!]!) {
+          sync_reminder(input: $input) { success error_message identifier }
+        }
+      `);
+      await execute({ input: reminders });
+
+      const synced = data.value?.sync_reminder
+        .filter((r: SyncResult) => r.success)
+        .map((r: SyncResult) => r.identifier);
+      if (synced?.length) await invoke("clear_synced_reminders", { identifiers: synced });
+    },
+
+    async clearQueue(identifiers: string[]) {
+      await invoke("clear_synced_reminders", { identifiers });
     },
   },
 });

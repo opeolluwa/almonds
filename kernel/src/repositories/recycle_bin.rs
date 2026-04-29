@@ -59,6 +59,8 @@ pub trait RecycleBinRepositoryExt {
 
     async fn extract_unsynced(&self) -> Result<Vec<recycle_bin::Model>, KernelError>;
 
+    async fn clear_synced(&self, identifiers: Vec<String>) -> Result<(), KernelError>;
+
     #[cfg(feature = "sync_engine")]
     async fn upsert_many(
         &self,
@@ -204,6 +206,16 @@ impl RecycleBinRepositoryExt for RecycleBinRepository {
             .all(self.conn.as_ref())
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))
+    }
+
+    async fn clear_synced(&self, identifiers: Vec<String>) -> Result<(), KernelError> {
+        sync_queue::Entity::delete_many()
+            .filter(sync_queue::Column::TableName.eq("recycle_bin"))
+            .filter(sync_queue::Column::RecordIdentifier.is_in(identifiers))
+            .exec(self.conn.as_ref())
+            .await
+            .map_err(|err| KernelError::DbOperationError(err.to_string()))?;
+        Ok(())
     }
 
     #[cfg(feature = "sync_engine")]

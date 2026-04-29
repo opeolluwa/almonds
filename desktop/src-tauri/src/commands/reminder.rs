@@ -123,3 +123,15 @@ pub async fn get_unsynced_reminders(
         .await
         .map_err(Into::into)
 }
+
+#[tauri::command]
+pub async fn clear_synced_reminders(
+    state: State<'_, AppState>,
+    identifiers: Vec<String>,
+) -> Result<(), AppError> {
+    state
+        .reminder_repository
+        .clear_synced(identifiers)
+        .await
+        .map_err(Into::into)
+}
