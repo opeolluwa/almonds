@@ -3,7 +3,11 @@ import { invoke } from "@tauri-apps/api/core";
 import { getWorkspaceMeta } from "~/composables/getWorkspaceMeta";
 import { useMutation } from "villus";
 
-type SyncResult = { success: boolean; error_message: string | null; identifier: string };
+type SyncResult = {
+  success: boolean;
+  error_message: string | null;
+  identifier: string;
+};
 
 export interface UserPreference {
   identifier: string;
@@ -79,7 +83,9 @@ export const useUserPreferenceStore = defineStore("user_preference_store", {
     },
 
     async fetchUnsynced() {
-      const userPreferences = await invoke<UserPreference[]>("get_unsynced_user_preferences");
+      const userPreferences = await invoke<UserPreference[]>(
+        "get_unsynced_user_preferences",
+      );
       return userPreferences;
     },
 
@@ -97,7 +103,8 @@ export const useUserPreferenceStore = defineStore("user_preference_store", {
       const synced = data.value?.sync_user_preference
         .filter((r: SyncResult) => r.success)
         .map((r: SyncResult) => r.identifier);
-      if (synced?.length) await invoke("clear_synced_user_preferences", { identifiers: synced });
+      if (synced?.length)
+        await invoke("clear_synced_user_preferences", { identifiers: synced });
     },
 
     async clearQueue(identifiers: string[]) {

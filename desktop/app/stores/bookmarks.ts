@@ -25,7 +25,11 @@ export interface UpdateBookmarkPayload {
   tag?: BookmarkTag;
 }
 
-type SyncResult = { success: boolean; error_message: string | null; identifier: string };
+type SyncResult = {
+  success: boolean;
+  error_message: string | null;
+  identifier: string;
+};
 
 export const useBookmarkStore = defineStore("bookmark_store", {
   state: () => ({
@@ -159,7 +163,8 @@ export const useBookmarkStore = defineStore("bookmark_store", {
       const synced = data.value?.sync_bookmark
         .filter((r: SyncResult) => r.success)
         .map((r: SyncResult) => r.identifier);
-      if (synced?.length) await invoke("clear_synced_bookmarks", { identifiers: synced });
+      if (synced?.length)
+        await invoke("clear_synced_bookmarks", { identifiers: synced });
     },
 
     async clearQueue(identifiers: string[]) {

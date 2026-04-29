@@ -2,7 +2,11 @@ import { defineStore } from "pinia";
 import { invoke } from "@tauri-apps/api/core";
 import { useMutation } from "villus";
 
-type SyncResult = { success: boolean; error_message: string | null; identifier: string };
+type SyncResult = {
+  success: boolean;
+  error_message: string | null;
+  identifier: string;
+};
 
 export interface Workspace {
   identifier: string;
@@ -182,7 +186,8 @@ export const useWorkspacesStore = defineStore("workspaces_store", {
       const synced = data.value?.sync_workspace
         .filter((r: SyncResult) => r.success)
         .map((r: SyncResult) => r.identifier);
-      if (synced?.length) await invoke("clear_synced_workspaces", { identifiers: synced });
+      if (synced?.length)
+        await invoke("clear_synced_workspaces", { identifiers: synced });
     },
 
     async clearQueue(identifiers: string[]) {

@@ -2,7 +2,11 @@ import { defineStore } from "pinia";
 import { invoke } from "@tauri-apps/api/core";
 import { useMutation } from "villus";
 
-type SyncResult = { success: boolean; error_message: string | null; identifier: string };
+type SyncResult = {
+  success: boolean;
+  error_message: string | null;
+  identifier: string;
+};
 
 export interface Todo {
   identifier: string;
@@ -190,7 +194,8 @@ export const useTodoStore = defineStore("todo_store", {
       const synced = data.value?.sync_todo
         .filter((r: SyncResult) => r.success)
         .map((r: SyncResult) => r.identifier);
-      if (synced?.length) await invoke("clear_synced_todos", { identifiers: synced });
+      if (synced?.length)
+        await invoke("clear_synced_todos", { identifiers: synced });
     },
 
     async clearQueue(identifiers: string[]) {

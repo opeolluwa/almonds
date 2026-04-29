@@ -2,7 +2,11 @@ import { defineStore } from "pinia";
 import { invoke } from "@tauri-apps/api/core";
 import { useMutation } from "villus";
 
-type SyncResult = { success: boolean; error_message: string | null; identifier: string };
+type SyncResult = {
+  success: boolean;
+  error_message: string | null;
+  identifier: string;
+};
 
 export interface Note {
   identifier: string;
@@ -161,7 +165,8 @@ export const useNoteStore = defineStore("notes_store", {
       const synced = data.value?.sync_note
         .filter((r: SyncResult) => r.success)
         .map((r: SyncResult) => r.identifier);
-      if (synced?.length) await invoke("clear_synced_notes", { identifiers: synced });
+      if (synced?.length)
+        await invoke("clear_synced_notes", { identifiers: synced });
     },
 
     async clearQueue(identifiers: string[]) {

@@ -2,7 +2,11 @@ import { defineStore } from "pinia";
 import { invoke } from "@tauri-apps/api/core";
 import { useMutation } from "villus";
 
-type SyncResult = { success: boolean; error_message: string | null; identifier: string };
+type SyncResult = {
+  success: boolean;
+  error_message: string | null;
+  identifier: string;
+};
 
 export type RecycleBinItemType =
   | "note"
@@ -96,7 +100,9 @@ export const useRecycleBinStore = defineStore("recycle_bin_store", {
     },
 
     async fetchUnsynced() {
-      const recycleBin = await invoke<RecycleBinEntry[]>("get_unsynced_recycle_bin");
+      const recycleBin = await invoke<RecycleBinEntry[]>(
+        "get_unsynced_recycle_bin",
+      );
       return recycleBin;
     },
 
@@ -114,7 +120,8 @@ export const useRecycleBinStore = defineStore("recycle_bin_store", {
       const synced = data.value?.sync_recycle_bin
         .filter((r: SyncResult) => r.success)
         .map((r: SyncResult) => r.identifier);
-      if (synced?.length) await invoke("clear_synced_recycle_bin", { identifiers: synced });
+      if (synced?.length)
+        await invoke("clear_synced_recycle_bin", { identifiers: synced });
     },
 
     async clearQueue(identifiers: string[]) {
