@@ -10,97 +10,82 @@ import type {
   UserPreference,
   Workspaces,
 } from "almond_kernel";
+import { useMutation } from "villus";
 
 // JsonValue in Notes is a recursive type that exceeds TypeScript's instantiation
 // depth limit inside Pinia's state inference — replace it with unknown.
 type FlatNotes = Omit<Notes, "categories"> & { categories: unknown };
 
+type QueueState = {
+  bookmarks: Bookmark[];
+  notes: FlatNotes[];
+  todo: Todo[];
+  workspaces: Workspaces[];
+  reminders: Reminder[];
+  userPreferences: UserPreference[];
+  snippets: Snippets[];
+  recycleBin: RecycleBin[];
+};
+
+const SYNC_COMMANDS: Record<keyof QueueState, string> = {
+  bookmarks: "get_unsynced_bookmarks",
+  notes: "get_unsynced_notes",
+  todo: "get_unsynced_todos",
+  workspaces: "get_unsynced_workspaces",
+  reminders: "get_unsynced_reminders",
+  userPreferences: "get_unsynced_user_preferences",
+  snippets: "get_unsynced_snippets",
+  recycleBin: "get_unsynced_recycle_bin",
+};
+
+const QUEUE_KEYS = Object.keys(SYNC_COMMANDS) as (keyof QueueState)[];
+
 export const useSyncQueueStore = defineStore("sync_queue_store", {
-  state: () => ({
-    bookmarks: [] as Bookmark[],
-    notes: [] as FlatNotes[],
-    todo: [] as Todo[],
-    workspaces: [] as Workspaces[],
-    reminders: [] as Reminder[],
-    userPreferences: [] as UserPreference[],
-    snippets: [] as Snippets[],
-    recycleBin: [] as RecycleBin[],
+  state: (): QueueState & { initialized: boolean } => ({
+    bookmarks: [],
+    notes: [],
+    todo: [],
+    workspaces: [],
+    reminders: [],
+    userPreferences: [],
+    snippets: [],
+    recycleBin: [],
     initialized: false,
   }),
 
   actions: {
+    async preflightCheck(name: string) {
+      const preflightGraphQL = `
+mutation Preflight($name: String!) {
+  preflight(name: $name)
+}
+`;
+
+      const { data, execute } = useMutation(preflightGraphQL);
+
+      await execute({ name });
+      console.log("Preflight check response:", data.value);
+    },
+
     async initialize() {
       await this.SyncAll();
       this.initialized = true;
     },
 
-    async SyncBookmarks() {
-      this.bookmarks = await invoke<Bookmark[]>("get_unsynced_bookmarks");
-    },
-
-    async SyncNotes() {
-      this.notes = (await invoke("get_unsynced_notes")) as FlatNotes[];
-    },
-
-    async SyncTodo() {
-      this.todo = await invoke<Todo[]>("get_unsynced_todos");
-    },
-
-    async SyncWorkspaces() {
-      this.workspaces = await invoke<Workspaces[]>("get_unsynced_workspaces");
-    },
-
-    async SyncReminders() {
-      this.reminders = await invoke<Reminder[]>("get_unsynced_reminders");
-    },
-
-    async SyncUserPreferences() {
-      this.userPreferences = await invoke<UserPreference[]>(
-        "get_unsynced_user_preferences",
-      );
-    },
-
-    async SyncSnippets() {
-      this.snippets = await invoke<Snippets[]>("get_unsynced_snippets");
-    },
-
-    async SyncRecycleBin() {
-      this.recycleBin = await invoke<RecycleBin[]>("get_unsynced_recycle_bin");
+    async sync(key: keyof QueueState) {
+      this.$patch({ [key]: await invoke(SYNC_COMMANDS[key]) });
     },
 
     async SyncAll() {
-      await Promise.all([
-        this.SyncBookmarks(),
-        this.SyncNotes(),
-        this.SyncTodo(),
-        this.SyncWorkspaces(),
-        this.SyncReminders(),
-        this.SyncUserPreferences(),
-        this.SyncSnippets(),
-        this.SyncRecycleBin(),
-      ]);
+      await Promise.all(QUEUE_KEYS.map((k) => this.sync(k)));
     },
 
-    async ClearBookmarkQueue() {},
-    async ClearNotesQueue() {},
-    async ClearTodoQueue() {},
-    async ClearWorkspacesQueue() {},
-    async ClearRemindersQueue() {},
-    async ClearUserPreferencesQueue() {},
-    async ClearSnippetsQueue() {},
-    async ClearRecycleBinQueue() {},
+    clearQueue(key: keyof QueueState) {
+      this.$patch({ [key]: [] });
+    },
 
-    async ClearAllQueues() {
-      await Promise.all([
-        this.ClearBookmarkQueue(),
-        this.ClearNotesQueue(),
-        this.ClearTodoQueue(),
-        this.ClearWorkspacesQueue(),
-        this.ClearRemindersQueue(),
-        this.ClearUserPreferencesQueue(),
-        this.ClearSnippetsQueue(),
-        this.ClearRecycleBinQueue(),
-      ]);
+    ClearAllQueues() {
+      QUEUE_KEYS.forEach((k) => this.clearQueue(k));
     },
   },
 });
