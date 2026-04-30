@@ -14,6 +14,7 @@
     "lint:fix": "eslint . --fix"
   },
   "dependencies": {
+    "@apollo/client": "^3.14.1",
     "@domternal/core": "^0.6.2",
     "@domternal/extension-code-block-lowlight": "^0.6.2",
     "@domternal/extension-details": "^0.6.2",
