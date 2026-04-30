@@ -174,14 +174,12 @@ export const useWorkspacesStore = defineStore("workspaces_store", {
     async syncUpstream() {
       // const workspaces = await this.fetchUnsynced();
       // if (!workspaces.length) return;
-
       // const { data, execute } = useMutation(`
       //   mutation SyncWorkspaces($input: [SyncWorkspaceInput!]!) {
       //     sync_workspace(input: $input) { success error_message identifier }
       //   }
       // `);
       // await execute({ input: workspaces });
-
       // const synced = data.value?.sync_workspace
       //   .filter((r: SyncResult) => r.success)
       //   .map((r: SyncResult) => r.identifier);

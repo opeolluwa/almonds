@@ -182,14 +182,12 @@ export const useTodoStore = defineStore("todo_store", {
     async syncUpstream() {
       // const todo = await this.fetchUnsynced();
       // if (!todo.length) return;
-
       // const { data, execute } = useMutation(`
       //   mutation SyncTodos($input: [SyncTodoInput!]!) {
       //     sync_todo(input: $input) { success error_message identifier }
       //   }
       // `);
       // await execute({ input: todo });
-
       // const synced = data.value?.sync_todo
       //   .filter((r: SyncResult) => r.success)
       //   .map((r: SyncResult) => r.identifier);

@@ -91,14 +91,12 @@ export const useUserPreferenceStore = defineStore("user_preference_store", {
     async syncUpstream() {
       // const userPreferences = await this.fetchUnsynced();
       // if (!userPreferences.length) return;
-
       // const { data, execute } = useMutation(`
       //   mutation SyncUserPreferences($input: [SyncUserPreferenceInput!]!) {
       //     sync_user_preference(input: $input) { success error_message identifier }
       //   }
       // `);
       // await execute({ input: userPreferences });
-
       // const synced = data.value?.sync_user_preference
       //   .filter((r: SyncResult) => r.success)
       //   .map((r: SyncResult) => r.identifier);

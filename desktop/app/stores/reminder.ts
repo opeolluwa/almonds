@@ -142,14 +142,12 @@ export const useReminderStore = defineStore("reminder_store", {
     async syncUpstream() {
       // const reminders = await this.fetchUnsynced();
       // if (!reminders.length) return;
-
       // const { data, execute } = useMutation(`
       //   mutation SyncReminders($input: [SyncReminderInput!]!) {
       //     sync_reminder(input: $input) { success error_message identifier }
       //   }
       // `);
       // await execute({ input: reminders });
-
       // const synced = data.value?.sync_reminder
       //   .filter((r: SyncResult) => r.success)
       //   .map((r: SyncResult) => r.identifier);
