@@ -146,26 +146,36 @@ export const useNoteStore = defineStore("notes_store", {
     },
 
     async fetchUnsynced() {
-      const notes = await invoke<Note[]>("get_unsynced_notes");
-      return notes;
+      try {
+        const notes = await invoke<Note[]>("get_unsynced_notes");
+        return notes;
+      } catch (error) {
+        console.error("Error fetching unsynced notes:", error);
+        return [];
+      }
     },
 
     async syncUpstream() {
       const notes = await this.fetchUnsynced();
       if (!notes.length) return;
 
-      // const { data, execute } = useMutation(`
-      //   mutation SyncNotes($input: [SyncNoteInput!]!) {
-      //     sync_note(input: $input) { success error_message identifier }
-      //   }
-      // `);
-      // await execute({ input: notes });
+      console.log("Unsynced notes:", JSON.stringify(notes, null, 2));
 
-      // const synced = data.value?.sync_note
-      //   .filter((r: SyncResult) => r.success)
-      //   .map((r: SyncResult) => r.identifier);
-      // if (synced?.length)
-      //   await invoke("clear_synced_notes", { identifiers: synced });
+      const variables = { notes };
+      const query = gql`
+        mutation SyncNotes($input: [SyncNoteInput!]!) {
+          sync_note(input: $input) {
+            success
+            error_message
+            identifier
+          }
+        }
+      `;
+
+      const { mutate } = useMutation(query, { variables });
+
+      const data = await mutate();
+      console.log("Notes checks response:", data);
     },
 
     async clearQueue(identifiers: string[]) {
