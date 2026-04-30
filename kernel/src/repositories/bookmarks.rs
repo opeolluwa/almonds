@@ -292,7 +292,7 @@ impl BookmarkRepositoryExt for BookmarkRepository {
 
     async fn extract_unsynced(&self) -> Result<Vec<bookmark::Model>, KernelError> {
         let queue_entries = sync_queue::Entity::find()
-            .filter(sync_queue::Column::TableName.eq("bookmark"))
+            // .filter(sync_queue::Column::TableName.eq("bookmarks"))
             .limit(25)
             .all(self.conn.as_ref())
             .await

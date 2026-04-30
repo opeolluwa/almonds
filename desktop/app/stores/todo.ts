@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
 import { invoke } from "@tauri-apps/api/core";
-import { useMutation } from "villus";
 
 type SyncResult = {
   success: boolean;
@@ -181,21 +180,21 @@ export const useTodoStore = defineStore("todo_store", {
     },
 
     async syncUpstream() {
-      const todo = await this.fetchUnsynced();
-      if (!todo.length) return;
+      // const todo = await this.fetchUnsynced();
+      // if (!todo.length) return;
 
-      const { data, execute } = useMutation(`
-        mutation SyncTodos($input: [SyncTodoInput!]!) {
-          sync_todo(input: $input) { success error_message identifier }
-        }
-      `);
-      await execute({ input: todo });
+      // const { data, execute } = useMutation(`
+      //   mutation SyncTodos($input: [SyncTodoInput!]!) {
+      //     sync_todo(input: $input) { success error_message identifier }
+      //   }
+      // `);
+      // await execute({ input: todo });
 
-      const synced = data.value?.sync_todo
-        .filter((r: SyncResult) => r.success)
-        .map((r: SyncResult) => r.identifier);
-      if (synced?.length)
-        await invoke("clear_synced_todos", { identifiers: synced });
+      // const synced = data.value?.sync_todo
+      //   .filter((r: SyncResult) => r.success)
+      //   .map((r: SyncResult) => r.identifier);
+      // if (synced?.length)
+      //   await invoke("clear_synced_todos", { identifiers: synced });
     },
 
     async clearQueue(identifiers: string[]) {

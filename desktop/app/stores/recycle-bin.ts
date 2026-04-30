@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
 import { invoke } from "@tauri-apps/api/core";
-import { useMutation } from "villus";
 
 type SyncResult = {
   success: boolean;
@@ -107,21 +106,21 @@ export const useRecycleBinStore = defineStore("recycle_bin_store", {
     },
 
     async syncUpstream() {
-      const recycleBin = await this.fetchUnsynced();
-      if (!recycleBin.length) return;
+      // const recycleBin = await this.fetchUnsynced();
+      // if (!recycleBin.length) return;
 
-      const { data, execute } = useMutation(`
-        mutation SyncRecycleBin($input: [SyncRecycleBinInput!]!) {
-          sync_recycle_bin(input: $input) { success error_message identifier }
-        }
-      `);
-      await execute({ input: recycleBin });
+      // const { data, execute } = useMutation(`
+      //   mutation SyncRecycleBin($input: [SyncRecycleBinInput!]!) {
+      //     sync_recycle_bin(input: $input) { success error_message identifier }
+      //   }
+      // `);
+      // await execute({ input: recycleBin });
 
-      const synced = data.value?.sync_recycle_bin
-        .filter((r: SyncResult) => r.success)
-        .map((r: SyncResult) => r.identifier);
-      if (synced?.length)
-        await invoke("clear_synced_recycle_bin", { identifiers: synced });
+      // const synced = data.value?.sync_recycle_bin
+      //   .filter((r: SyncResult) => r.success)
+      //   .map((r: SyncResult) => r.identifier);
+      // if (synced?.length)
+      //   await invoke("clear_synced_recycle_bin", { identifiers: synced });
     },
 
     async clearQueue(identifiers: string[]) {

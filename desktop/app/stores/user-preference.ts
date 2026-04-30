@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
 import { invoke } from "@tauri-apps/api/core";
 import { getWorkspaceMeta } from "~/composables/getWorkspaceMeta";
-import { useMutation } from "villus";
 
 type SyncResult = {
   success: boolean;
@@ -90,21 +89,21 @@ export const useUserPreferenceStore = defineStore("user_preference_store", {
     },
 
     async syncUpstream() {
-      const userPreferences = await this.fetchUnsynced();
-      if (!userPreferences.length) return;
+      // const userPreferences = await this.fetchUnsynced();
+      // if (!userPreferences.length) return;
 
-      const { data, execute } = useMutation(`
-        mutation SyncUserPreferences($input: [SyncUserPreferenceInput!]!) {
-          sync_user_preference(input: $input) { success error_message identifier }
-        }
-      `);
-      await execute({ input: userPreferences });
+      // const { data, execute } = useMutation(`
+      //   mutation SyncUserPreferences($input: [SyncUserPreferenceInput!]!) {
+      //     sync_user_preference(input: $input) { success error_message identifier }
+      //   }
+      // `);
+      // await execute({ input: userPreferences });
 
-      const synced = data.value?.sync_user_preference
-        .filter((r: SyncResult) => r.success)
-        .map((r: SyncResult) => r.identifier);
-      if (synced?.length)
-        await invoke("clear_synced_user_preferences", { identifiers: synced });
+      // const synced = data.value?.sync_user_preference
+      //   .filter((r: SyncResult) => r.success)
+      //   .map((r: SyncResult) => r.identifier);
+      // if (synced?.length)
+      //   await invoke("clear_synced_user_preferences", { identifiers: synced });
     },
 
     async clearQueue(identifiers: string[]) {

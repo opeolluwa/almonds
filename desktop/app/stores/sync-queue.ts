@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-import { useClient, useMutation } from "villus";
 import { useBookmarkStore } from "~/stores/bookmarks";
 import { useNoteStore } from "~/stores/notes";
 import { useTodoStore } from "~/stores/todo";
@@ -9,9 +8,6 @@ import { useUserPreferenceStore } from "~/stores/user-preference";
 import { useSnippetStore } from "~/stores/snippets";
 import { useRecycleBinStore } from "~/stores/recycle-bin";
 
-export const graphqlClient = useClient({
-  url: "http://localhost:8000/orchard",
-});
 export const useSyncQueueStore = defineStore("sync_queue_store", {
   state: () => ({
     networkAvailable: false,
@@ -20,16 +16,17 @@ export const useSyncQueueStore = defineStore("sync_queue_store", {
 
   actions: {
     async preflightCheck(name: string) {
-      const { data, execute } = useMutation(
-        `
-        mutation Preflight($name: String!) {
+      const query = gql`
+        mutation PreflightCheck($name: String!) {
           preflight(name: $name)
         }
-      `,
-        {context:{}},
-      );
-      await execute({ name });
-      console.log("Preflight check response:", data.value);
+      `;
+
+      const variables = { name };
+
+      const { mutate } = useMutation(query, { variables });
+      const data = await mutate();
+      console.log("Preflight check response:", data);
     },
 
     async runSync() {

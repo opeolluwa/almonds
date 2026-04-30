@@ -26,12 +26,12 @@ services:
     # command: cargo watch -qcx run
     stdin_open: true
     tty: true
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:${PORT}/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-      start_period: 30s
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:${PORT}/health"]
+    #   interval: 10s
+    #   timeout: 5s
+    #   retries: 10
+    #   start_period: 30s
 
   postgres:
     image: postgres:15-alpine

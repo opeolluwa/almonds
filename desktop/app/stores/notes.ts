@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
 import { invoke } from "@tauri-apps/api/core";
-import { useMutation } from "villus";
 
 type SyncResult = {
   success: boolean;
@@ -155,18 +154,18 @@ export const useNoteStore = defineStore("notes_store", {
       const notes = await this.fetchUnsynced();
       if (!notes.length) return;
 
-      const { data, execute } = useMutation(`
-        mutation SyncNotes($input: [SyncNoteInput!]!) {
-          sync_note(input: $input) { success error_message identifier }
-        }
-      `);
-      await execute({ input: notes });
+      // const { data, execute } = useMutation(`
+      //   mutation SyncNotes($input: [SyncNoteInput!]!) {
+      //     sync_note(input: $input) { success error_message identifier }
+      //   }
+      // `);
+      // await execute({ input: notes });
 
-      const synced = data.value?.sync_note
-        .filter((r: SyncResult) => r.success)
-        .map((r: SyncResult) => r.identifier);
-      if (synced?.length)
-        await invoke("clear_synced_notes", { identifiers: synced });
+      // const synced = data.value?.sync_note
+      //   .filter((r: SyncResult) => r.success)
+      //   .map((r: SyncResult) => r.identifier);
+      // if (synced?.length)
+      //   await invoke("clear_synced_notes", { identifiers: synced });
     },
 
     async clearQueue(identifiers: string[]) {

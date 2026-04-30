@@ -1,6 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
 import { defineStore } from "pinia";
-import { useMutation } from "villus";
 
 export type BookmarkTag = "development" | "design" | "research" | "inspiration";
 
@@ -152,19 +151,23 @@ export const useBookmarkStore = defineStore("bookmark_store", {
     async syncUpstream() {
       const bookmarks = await this.fetchUnsynced();
       if (!bookmarks.length) return;
+      console.log("Unsynced bookmarks:", JSON.stringify(bookmarks, null, 2));
 
-      const { data, execute } = useMutation(`
+      const variables = { bookmarks };
+      const query = gql`
         mutation SyncBookmarks($input: [SyncBookmarkInput!]!) {
-          sync_bookmark(input: $input) { success error_message identifier }
+          sync_bookmark(input: $input) {
+            success
+            error_message
+            identifier
+          }
         }
-      `);
-      await execute({ input: bookmarks });
+      `;
 
-      const synced = data.value?.sync_bookmark
-        .filter((r: SyncResult) => r.success)
-        .map((r: SyncResult) => r.identifier);
-      if (synced?.length)
-        await invoke("clear_synced_bookmarks", { identifiers: synced });
+      const { mutate } = useMutation(query, { variables });
+
+      const data = await mutate();
+      console.log("Bookmarks checks response:", data);
     },
 
     async clearQueue(identifiers: string[]) {
