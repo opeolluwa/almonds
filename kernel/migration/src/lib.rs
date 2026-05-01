@@ -38,9 +38,9 @@ impl MigratorTrait for Migrator {
         vec![
             Box::new(m20260217_143820_create_snippet_table::Migration),
             Box::new(m20260217_150510_create_sync_queue_table::Migration),
-            Box::new(m20260218_071617_create_ollama_conversation_history::Migration),
             Box::new(m20260218_071539_create_ollama_conversation_prompt::Migration),
             Box::new(m20260218_071549_create_ollama_conversation_response::Migration),
+            Box::new(m20260218_071617_create_ollama_conversation_history::Migration),
             Box::new(m20260218_110352_create_note_table::Migration),
             Box::new(m20260218_110353_create_note_category_table::Migration),
             Box::new(m20260218_171131_create_todo_table::Migration),
