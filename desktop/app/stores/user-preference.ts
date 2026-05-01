@@ -86,7 +86,10 @@ export const useUserPreferenceStore = defineStore("user_preference_store", {
         const userPreferences = await invoke<UserPreference[]>(
           "get_unsynced_user_preferences",
         );
-        console.log("Unsynced user preferences fetched:", JSON.stringify(userPreferences, null, 2));
+        console.log(
+          "Unsynced user preferences fetched:",
+          JSON.stringify(userPreferences, null, 2),
+        );
         return userPreferences;
       } catch (error) {
         console.error("Error fetching unsynced user preferences:", error);

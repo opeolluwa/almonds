@@ -137,7 +137,10 @@ export const useReminderStore = defineStore("reminder_store", {
     async fetchUnsynced() {
       try {
         const reminders = await invoke<Reminder[]>("get_unsynced_reminders");
-        console.log("Unsynced reminders fetched:", JSON.stringify(reminders, null, 2));
+        console.log(
+          "Unsynced reminders fetched:",
+          JSON.stringify(reminders, null, 2),
+        );
         return reminders;
       } catch (error) {
         console.error("Error fetching unsynced reminders:", error);

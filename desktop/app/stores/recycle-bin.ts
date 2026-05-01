@@ -103,7 +103,10 @@ export const useRecycleBinStore = defineStore("recycle_bin_store", {
         const recycleBin = await invoke<RecycleBinEntry[]>(
           "get_unsynced_recycle_bin",
         );
-        console.log("Unsynced recycle bin fetched:", JSON.stringify(recycleBin, null, 2));
+        console.log(
+          "Unsynced recycle bin fetched:",
+          JSON.stringify(recycleBin, null, 2),
+        );
         return recycleBin;
       } catch (error) {
         console.error("Error fetching unsynced recycle bin:", error);

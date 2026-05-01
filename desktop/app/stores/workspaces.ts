@@ -169,7 +169,10 @@ export const useWorkspacesStore = defineStore("workspaces_store", {
     async fetchUnsynced() {
       try {
         const workspaces = await invoke<Workspace[]>("get_unsynced_workspaces");
-        console.log("Unsynced workspaces fetched:", JSON.stringify(workspaces, null, 2));
+        console.log(
+          "Unsynced workspaces fetched:",
+          JSON.stringify(workspaces, null, 2),
+        );
         return workspaces;
       } catch (error) {
         console.error("Error fetching unsynced workspaces:", error);

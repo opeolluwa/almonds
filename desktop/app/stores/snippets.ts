@@ -139,7 +139,10 @@ export const useSnippetStore = defineStore("snippets_store", {
     async fetchUnsynced() {
       try {
         const snippets = await invoke<Snippet[]>("get_unsynced_snippets");
-        console.log("Unsynced snippets fetched:", JSON.stringify(snippets, null, 2));
+        console.log(
+          "Unsynced snippets fetched:",
+          JSON.stringify(snippets, null, 2),
+        );
         return snippets;
       } catch (error) {
         console.error("Error fetching unsynced snippets:", error);
