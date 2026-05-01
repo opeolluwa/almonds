@@ -1,6 +1,12 @@
 import { defineStore } from "pinia";
 import { invoke } from "@tauri-apps/api/core";
 
+type SyncResult = {
+  success: boolean;
+  error_message: string | null;
+  identifier: string;
+};
+
 export type RecycleBinItemType =
   | "note"
   | "todo"
@@ -90,6 +96,58 @@ export const useRecycleBinStore = defineStore("recycle_bin_store", {
       });
 
       this.entries = [];
+    },
+
+    async fetchUnsynced() {
+      try {
+        const recycleBin = await invoke<RecycleBinEntry[]>(
+          "get_unsynced_recycle_bin",
+        );
+        console.log(
+          "Unsynced recycle bin fetched:",
+          JSON.stringify(recycleBin, null, 2),
+        );
+        return recycleBin;
+      } catch (error) {
+        console.error("Error fetching unsynced recycle bin:", error);
+        return [];
+      }
+    },
+
+    async syncUpstream() {
+      const recycleBin = await this.fetchUnsynced();
+      if (!recycleBin.length) return;
+
+      const input = recycleBin.map((e) => ({
+        identifier: e.identifier,
+        item_id: e.itemId,
+        item_type: e.itemType,
+        payload: e.payload,
+        deleted_at: e.deletedAt,
+        workspace_identifier: (e as any).workspaceIdentifier ?? null,
+      }));
+      const query = gql`
+        mutation SyncRecycleBin($input: [SyncRecycleBinInput!]!) {
+          sync_recycle_bin(input: $input) {
+            success
+            error_message
+            identifier
+          }
+        }
+      `;
+
+      const { mutate } = useMutation(query, { variables: { input } });
+
+      try {
+        const data = await mutate();
+        console.log("Recycle bin sync response:", data);
+      } catch (error) {
+        console.error("Error syncing recycle bin:", error);
+      }
+    },
+
+    async clearQueue(identifiers: string[]) {
+      await invoke("clear_synced_recycle_bin", { identifiers });
     },
   },
 });

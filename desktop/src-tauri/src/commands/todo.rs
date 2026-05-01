@@ -178,3 +178,15 @@ pub async fn get_unsynced_todos(state: State<'_, AppState>) -> Result<Vec<todo::
         .await
         .map_err(Into::into)
 }
+
+#[tauri::command]
+pub async fn clear_synced_todos(
+    state: State<'_, AppState>,
+    identifiers: Vec<String>,
+) -> Result<(), AppError> {
+    state
+        .todo_repository
+        .clear_synced(identifiers)
+        .await
+        .map_err(Into::into)
+}

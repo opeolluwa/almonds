@@ -1,5 +1,5 @@
 mutation SyncQueue {
-  sync_queue(input: [
+  syncQueue(input: [
     {
       identifier: "5e7b1a687b8c8fca2f340b592a74fa4e"
       tableName: "workspaces"

@@ -1,0 +1,55 @@
+mutation SyncNotes {
+  sync_note(
+    input: [
+      {
+        identifier: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+        title: "Rust ownership notes"
+        content: "Ownership is Rust's most unique feature. Every value has a single owner, and when the owner goes out of scope, the value is dropped."
+        categories: ["development", "rust"]
+        created_at: "2026-04-01T09:00:00+00:00"
+        updated_at: "2026-04-01T09:00:00+00:00"
+        workspace_identifier: null
+      }
+      {
+        identifier: "b2c3d4e5-f6a7-8901-bcde-f12345678901"
+        title: "UI design principles"
+        content: "Good UI design follows principles like consistency, feedback, and simplicity. Users should always know where they are and what they can do."
+        categories: ["design", "inspiration"]
+        created_at: "2026-04-10T14:30:00+00:00"
+        updated_at: "2026-04-12T08:15:00+00:00"
+        workspace_identifier: null
+      }
+      {
+        identifier: "c3d4e5f6-a7b8-9012-cdef-123456789012"
+        title: "SeaORM relations cheatsheet"
+        content: "One-to-many: define has_many on the parent entity. Many-to-many: use a junction table with belongs_to on both sides."
+        categories: ["development", "database"]
+        created_at: "2026-04-15T11:00:00+00:00"
+        updated_at: "2026-04-15T11:00:00+00:00"
+        workspace_identifier: null
+      }
+      {
+        identifier: "d4e5f6a7-b8c9-0123-def0-234567890123"
+        title: "Meeting notes – product sync"
+        content: "Discussed roadmap priorities for Q2. Agreed to ship bookmark tagging before note categories. Follow up with design on the sidebar layout."
+        categories: ["work", "meetings"]
+        created_at: "2026-04-18T16:45:00+00:00"
+        updated_at: "2026-04-20T10:00:00+00:00"
+        workspace_identifier: null
+      }
+      {
+        identifier: "e5f6a7b8-c9d0-1234-ef01-345678901234"
+        title: "GraphQL schema design tips"
+        content: "Prefer input types over inline arguments for mutations. Use nullable fields for optional data and keep mutations focused on a single concern."
+        categories: ["development", "graphql"]
+        created_at: "2026-04-22T08:00:00+00:00"
+        updated_at: "2026-04-22T08:00:00+00:00"
+        workspace_identifier: null
+      }
+    ]
+  ) {
+    success
+    error_message
+    identifier
+  }
+}

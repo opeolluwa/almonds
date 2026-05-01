@@ -3,7 +3,6 @@ import {
   isPermissionGranted,
   requestPermission,
 } from "@tauri-apps/plugin-notification";
-import { useClient } from "villus";
 import { useAlarmScheduler } from "~/composables/useAlarmScheduler";
 import { useWorkspaceSetup } from "~/composables/useWorkspaceSetup";
 
@@ -17,10 +16,6 @@ const {
   checkSetup: checkWorkspaceSetup,
   initializing: workspaceInitializing,
 } = useWorkspaceSetup();
-//graphql client
-useClient({
-  url: "http://localhost:8000/orchard",
-});
 
 useAlarmScheduler();
 

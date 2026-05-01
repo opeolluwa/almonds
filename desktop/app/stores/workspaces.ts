@@ -1,6 +1,12 @@
 import { defineStore } from "pinia";
 import { invoke } from "@tauri-apps/api/core";
 
+type SyncResult = {
+  success: boolean;
+  error_message: string | null;
+  identifier: string;
+};
+
 export interface Workspace {
   identifier: string;
   name: string;
@@ -158,6 +164,59 @@ export const useWorkspacesStore = defineStore("workspaces_store", {
       if (!this.unlockedWorkspaceIds.includes(identifier)) {
         this.unlockedWorkspaceIds.push(identifier);
       }
+    },
+
+    async fetchUnsynced() {
+      try {
+        const workspaces = await invoke<Workspace[]>("get_unsynced_workspaces");
+        console.log(
+          "Unsynced workspaces fetched:",
+          JSON.stringify(workspaces, null, 2),
+        );
+        return workspaces;
+      } catch (error) {
+        console.error("Error fetching unsynced workspaces:", error);
+        return [];
+      }
+    },
+
+    async syncUpstream() {
+      const workspaces = await this.fetchUnsynced();
+      if (!workspaces.length) return;
+
+      const input = workspaces.map((w) => ({
+        identifier: w.identifier,
+        name: w.name,
+        description: w.description,
+        created_at: w.createdAt,
+        updated_at: w.updatedAt,
+        is_default: w.isDefault,
+        is_hidden: w.isHidden,
+        is_secured: w.isSecured,
+        password_hash: (w as any).passwordHash ?? null,
+      }));
+      const query = gql`
+        mutation SyncWorkspaces($input: [SyncWorkspaceInput!]!) {
+          sync_workspace(input: $input) {
+            success
+            error_message
+            identifier
+          }
+        }
+      `;
+
+      const { mutate } = useMutation(query, { variables: { input } });
+
+      try {
+        const data = await mutate();
+        console.log("Workspaces sync response:", data);
+      } catch (error) {
+        console.error("Error syncing workspaces:", error);
+      }
+    },
+
+    async clearQueue(identifiers: string[]) {
+      await invoke("clear_synced_workspaces", { identifiers });
     },
   },
   persist: {

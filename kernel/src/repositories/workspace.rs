@@ -61,6 +61,8 @@ pub trait WorkspaceRepositoryExt {
 
     async fn extract_unsynced(&self) -> Result<Vec<workspaces::Model>, KernelError>;
 
+    async fn clear_synced(&self, identifiers: Vec<String>) -> Result<(), KernelError>;
+
     #[cfg(feature = "sync_engine")]
     async fn upsert_many(
         &self,
@@ -249,6 +251,16 @@ impl WorkspaceRepositoryExt for WorkspaceRepository {
             .all(self.conn.as_ref())
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))
+    }
+
+    async fn clear_synced(&self, identifiers: Vec<String>) -> Result<(), KernelError> {
+        sync_queue::Entity::delete_many()
+            .filter(sync_queue::Column::TableName.eq("workspaces"))
+            .filter(sync_queue::Column::RecordIdentifier.is_in(identifiers))
+            .exec(self.conn.as_ref())
+            .await
+            .map_err(|err| KernelError::DbOperationError(err.to_string()))?;
+        Ok(())
     }
 
     #[cfg(feature = "sync_engine")]

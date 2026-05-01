@@ -16,6 +16,7 @@ sync_engine = ["dep:graphql-ws-client", "dep:graphql_client"]
 
 [dependencies]
 argon2 = "0.5"
+async-graphql = { version = "7.0.17", features = ["apollo_tracing", "raw_value", "tracing", "uuid"] }
 async-trait = "0.1.89"
 boltffi = { version = "0.24.1", features = ["chrono"] }
 chrono = { version = "0.4", features = ["serde"] }

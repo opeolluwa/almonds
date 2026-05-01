@@ -10,9 +10,10 @@ use crate::{
     config::AppConfig, errors::app_error::AppError, utils::context::extract_request_context,
 };
 
+#[derive(Debug)]
 pub struct SyncQueue;
 
-#[CustomFields]
+#[CustomFields(rename_fields = "camelCase")]
 impl SyncQueue {
     async fn sync_queue(ctx: &Context<'_>, input: DataQueue) -> async_graphql::Result<bool> {
         let req_ctx = extract_request_context(ctx)?;

@@ -1,10 +1,35 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
-import { useOnline, useEventListener } from "@vueuse/core";
+import { computed, onMounted, watch } from "vue";
+import { useEventListener } from "@vueuse/core";
 import { platform } from "@tauri-apps/plugin-os";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 
-const online = useOnline();
+const syncQueueStore = useSyncQueueStore();
+const isOnline = computed(() => syncQueueStore.isOnline);
+const runningSync = computed(() => syncQueueStore.runningSync);
+
+const syncIcon = computed(() =>
+  runningSync.value ? "heroicons:arrow-path" : "heroicons:cloud-arrow-up",
+);
+const syncColor = computed(() => {
+  if (!isOnline.value) return "error";
+  if (runningSync.value) return "primary";
+  return "neutral";
+});
+const syncTooltip = computed(() => {
+  if (!isOnline.value) return "Offline — sync unavailable";
+  if (runningSync.value) return "Syncing...";
+  return "Sync data";
+});
+
+onMounted(() => {
+  if (isOnline.value) syncQueueStore.runSync();
+});
+
+watch(isOnline, (online) => {
+  if (online) syncQueueStore.runSync();
+});
+
 const router = useRouter();
 const colorMode = useColorMode();
 const { searchQuery, isOpen } = useAppSearch();
@@ -21,15 +46,13 @@ const themeIcon = computed(() =>
 );
 const themeLabel = computed(() => (isDark.value ? "Light mode" : "Dark mode"));
 const internetStatusColor = computed(() =>
-  online.value ? "success" : "error",
+  isOnline.value ? "success" : "error",
 );
 
 function onSearchInput(val: string) {
   searchQuery.value = val;
   isOpen.value = val.trim().length > 0;
 }
-
-const syncing = ref(false);
 
 const currentPlatform = platform();
 const isMacOS = computed(() => {
@@ -109,15 +132,22 @@ useEventListener("keydown", (e: KeyboardEvent) => {
     <div
       class="col-col-end-3 flex items-center justify-center -gap-x-1.25 ml-16"
     >
-      <UTooltip text="Syncing data">
+      <UTooltip :text="syncTooltip">
         <UButton
           size="sm"
-          color="neutral"
-          :loading="syncing"
+          :color="syncColor"
           variant="ghost"
-          icon="heroicons:cloud-arrow-up"
-          aria-label="Switch workspace"
-        />
+          :disabled="!isOnline"
+          aria-label="Sync data"
+          @click="syncQueueStore.runSync()"
+        >
+          <template #leading>
+            <UIcon
+              :name="syncIcon"
+              :class="['size-4', runningSync && 'animate-spin']"
+            />
+          </template>
+        </UButton>
       </UTooltip>
 
       <UTooltip :text="`Go back (${isMacOS ? '⌘' : 'Ctrl'}+[)`">

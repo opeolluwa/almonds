@@ -41,7 +41,7 @@ pub fn schema_builder(
         builder,
         [
             types::bookmark::SyncBookmarkInput,
-            // types::note::SyncNoteInput,
+            types::note::SyncNoteInput,
             types::snippet::SyncSnippetInput,
             types::todo::SyncTodoInput,
             types::reminder::SyncReminderInput,
@@ -59,7 +59,7 @@ pub fn schema_builder(
             mutations::preflight::Preflight,
             mutations::sync_queue::SyncQueue,
             mutations::bookmark::SyncBookmark,
-            // mutations::notes::SyncNote,
+            mutations::notes::SyncNote,
             mutations::note_category::SyncNoteCategory,
             mutations::snippets::SyncSnippet,
             mutations::todo::SyncTodo,

@@ -1,6 +1,12 @@
 import { defineStore } from "pinia";
 import { invoke } from "@tauri-apps/api/core";
 
+type SyncResult = {
+  success: boolean;
+  error_message: string | null;
+  identifier: string;
+};
+
 export interface Todo {
   identifier: string;
   title: string;
@@ -166,6 +172,57 @@ export const useTodoStore = defineStore("todo_store", {
       const idx = this.todos.findIndex((t) => t.identifier === identifier);
       if (idx !== -1) this.todos[idx] = updated;
       return updated;
+    },
+
+    async fetchUnsynced() {
+      try {
+        const todos = await invoke<Todo[]>("get_unsynced_todos");
+        console.log("Unsynced todos fetched:", JSON.stringify(todos, null, 2));
+        return todos;
+      } catch (error) {
+        console.error("Error fetching unsynced todos:", error);
+        return [];
+      }
+    },
+
+    async syncUpstream() {
+      const todos = await this.fetchUnsynced();
+      if (!todos.length) return;
+
+      const input = todos.map((t) => ({
+        identifier: t.identifier,
+        title: t.title,
+        description: t.description ?? null,
+        due_date: t.dueDate ?? null,
+        priority: t.priority,
+        done: t.done,
+        created_at: t.createdAt,
+        updated_at: t.updatedAt,
+        due_time: t.time ?? null,
+        workspace_identifier: (t as any).workspaceIdentifier ?? null,
+      }));
+      const query = gql`
+        mutation SyncTodos($input: [SyncTodoInput!]!) {
+          sync_todo(input: $input) {
+            success
+            error_message
+            identifier
+          }
+        }
+      `;
+
+      const { mutate } = useMutation(query, { variables: { input } });
+
+      try {
+        const data = await mutate();
+        console.log("Todos sync response:", data);
+      } catch (error) {
+        console.error("Error syncing todos:", error);
+      }
+    },
+
+    async clearQueue(identifiers: string[]) {
+      await invoke("clear_synced_todos", { identifiers });
     },
   },
 });

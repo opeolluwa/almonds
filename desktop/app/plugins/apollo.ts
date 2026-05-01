@@ -1,21 +1,18 @@
-// import {
-//   ApolloClient,
-//   InMemoryCache,
-// } from "@apollo/client/core";
-// import { HttpLink } from "@apollo/client/link/http";
-// import { createApolloProvider } from '@vue/apollo-option'
+import { ApolloClient, InMemoryCache } from "@apollo/client/core";
+import { HttpLink } from "@apollo/client/link/http";
+import { createApolloProvider } from "@vue/apollo-option";
 
-// const httpLink = new HttpLink({
-//   uri: "http://localhost:5006/orchard",
-// });
+const httpLink = new HttpLink({
+  uri: "http://localhost:8000/orchard",
+});
 
-// const cache = new InMemoryCache();
+const cache = new InMemoryCache();
 
-// const apolloClient = new ApolloClient({
-//   link: httpLink,
-//   cache,
-// });
+export const apolloClient = new ApolloClient({
+  link: httpLink,
+  cache,
+});
 
-// const apolloProvider = createApolloProvider({
-//   defaultClient: apolloClient,
-// })
+export const apolloProvider = createApolloProvider({
+  defaultClient: apolloClient,
+});

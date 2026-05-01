@@ -1,6 +1,12 @@
 import { defineStore } from "pinia";
 import { invoke } from "@tauri-apps/api/core";
 
+type SyncResult = {
+  success: boolean;
+  error_message: string | null;
+  identifier: string;
+};
+
 export interface Snippet {
   identifier: string;
   title: string | null;
@@ -128,6 +134,59 @@ export const useSnippetStore = defineStore("snippets_store", {
       this.snippets = this.snippets.filter(
         (s) => s.identifier !== recordIdentifier,
       );
+    },
+
+    async fetchUnsynced() {
+      try {
+        const snippets = await invoke<Snippet[]>("get_unsynced_snippets");
+        console.log(
+          "Unsynced snippets fetched:",
+          JSON.stringify(snippets, null, 2),
+        );
+        return snippets;
+      } catch (error) {
+        console.error("Error fetching unsynced snippets:", error);
+        return [];
+      }
+    },
+
+    async syncUpstream() {
+      const snippets = await this.fetchUnsynced();
+      if (!snippets.length) return;
+
+      const input = snippets.map((s) => ({
+        identifier: s.identifier,
+        title: s.title ?? null,
+        language: s.language ?? null,
+        code: s.code,
+        description: s.description ?? null,
+        is_pinned: s.isPinned,
+        created_at: s.createdAt,
+        updated_at: s.updatedAt,
+        workspace_identifier: (s as any).workspaceIdentifier ?? null,
+      }));
+      const query = gql`
+        mutation SyncSnippets($input: [SyncSnippetInput!]!) {
+          sync_snippet(input: $input) {
+            success
+            error_message
+            identifier
+          }
+        }
+      `;
+
+      const { mutate } = useMutation(query, { variables: { input } });
+
+      try {
+        const data = await mutate();
+        console.log("Snippets sync response:", data);
+      } catch (error) {
+        console.error("Error syncing snippets:", error);
+      }
+    },
+
+    async clearQueue(identifiers: string[]) {
+      await invoke("clear_synced_snippets", { identifiers });
     },
   },
 });

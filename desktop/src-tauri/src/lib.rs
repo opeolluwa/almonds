@@ -62,40 +62,43 @@ pub async fn run() {
 
             let app_handle = app.handle().clone();
 
-            tauri::async_runtime::spawn(async move {
-                let app_data_dir = app_handle
-                    .path()
-                    .app_data_dir()
-                    .expect("failed to resolve app data dir");
+            // Initialize state synchronously so it is managed before the
+            // frontend window can invoke any Tauri commands.
+            tokio::task::block_in_place(|| {
+                tokio::runtime::Handle::current().block_on(async move {
+                    let app_data_dir = app_handle
+                        .path()
+                        .app_data_dir()
+                        .expect("failed to resolve app data dir");
 
-                std::fs::create_dir_all(&app_data_dir).expect("failed to create app data dir");
+                    std::fs::create_dir_all(&app_data_dir).expect("failed to create app data dir");
 
-                let db_path = match std::env::var("ALMONDS_DB_PATH") {
-                    Ok(path) => std::path::PathBuf::from(path),
-                    Err(_) => app_data_dir.join("almonds.db"),
-                };
+                    let db_path = match std::env::var("ALMONDS_DB_PATH") {
+                        Ok(path) => std::path::PathBuf::from(path),
+                        Err(_) => app_data_dir.join("almonds.db"),
+                    };
 
-                let db_url = format!("sqlite://{}?mode=rwc", db_path.display());
-                dbg!("Database URL: {:?}", &db_path);
-                let kernel = almond_kernel::DataEngine::new(&db_url)
-                    .await
-                    .expect("failed to initialize kernel");
+                    let db_url = format!("sqlite://{}?mode=rwc", db_path.display());
+                    dbg!("Database URL: {:?}", &db_path);
+                    let kernel = almond_kernel::DataEngine::new(&db_url)
+                        .await
+                        .expect("failed to initialize kernel");
 
-                kernel
-                    .run_migrations()
-                    .await
-                    .expect("failed to run migrations");
+                    kernel
+                        .run_migrations()
+                        .await
+                        .expect("failed to run migrations");
 
-                let conn = Arc::new(kernel.connection().clone());
+                    let conn = Arc::new(kernel.connection().clone());
+                    let state = AppState::new(conn).await;
 
-                let state = AppState::new(conn).await;
-
-                app_handle.manage(state);
-                app_handle.manage(AlarmState::new());
-                app_handle.manage(SchedulerState::new());
+                    app_handle.manage(state);
+                    app_handle.manage(AlarmState::new());
+                    app_handle.manage(SchedulerState::new());
+                })
             });
 
-            // Spawn the cron-style reminder scheduler.
+            // Spawn the cron-style reminder scheduler after state is managed.
             let scheduler_handle = app.handle().clone();
             tauri::async_runtime::spawn(async move {
                 scheduler::run(scheduler_handle, None).await;
@@ -116,6 +119,7 @@ pub async fn run() {
             commands::bookmarks::get_bookmarks_by_tag,
             commands::bookmarks::get_recently_added_bookmarks,
             commands::bookmarks::get_unsynced_bookmarks,
+            commands::bookmarks::clear_synced_bookmarks,
             commands::bookmarks::transfer_bookmark,
             commands::bookmarks::update_bookmark,
             commands::notes::create_note,
@@ -125,6 +129,7 @@ pub async fn run() {
             commands::notes::get_note,
             commands::notes::get_recently_added_notes,
             commands::notes::get_unsynced_notes,
+            commands::notes::clear_synced_notes,
             commands::notes::transfer_note,
             commands::notes::update_note,
             commands::notes::export_notes_as_pdf,
@@ -134,6 +139,7 @@ pub async fn run() {
             commands::reminder::get_all_reminders,
             commands::reminder::get_reminder,
             commands::reminder::get_unsynced_reminders,
+            commands::reminder::clear_synced_reminders,
             commands::reminder::transfer_reminder,
             commands::reminder::update_reminder,
             commands::recycle_bin::create_recycle_bin_entry,
@@ -141,6 +147,7 @@ pub async fn run() {
             commands::recycle_bin::get_recycle_bin_entry,
             commands::recycle_bin::get_recycle_bin_entries_by_type,
             commands::recycle_bin::get_unsynced_recycle_bin,
+            commands::recycle_bin::clear_synced_recycle_bin,
             commands::recycle_bin::purge_all_recycle_bin_entries,
             commands::recycle_bin::purge_recycle_bin_entry,
             commands::snippets::create_snippet,
@@ -150,6 +157,7 @@ pub async fn run() {
             commands::snippets::get_recently_added_snippet,
             commands::snippets::get_snippet,
             commands::snippets::get_unsynced_snippets,
+            commands::snippets::clear_synced_snippets,
             commands::snippets::transfer_snippet,
             commands::snippets::update_snippet,
             commands::sync_queue::add_sync_queue_entry,
@@ -163,6 +171,7 @@ pub async fn run() {
             commands::todo::get_all_todos,
             commands::todo::get_todo,
             commands::todo::get_unsynced_todos,
+            commands::todo::clear_synced_todos,
             commands::todo::mark_todo_done,
             commands::todo::transfer_todo,
             commands::todo::update_todo,
@@ -170,12 +179,14 @@ pub async fn run() {
             commands::user_preference::create_user_preference,
             commands::user_preference::duplicate_user_preference,
             commands::user_preference::get_unsynced_user_preferences,
+            commands::user_preference::clear_synced_user_preferences,
             commands::user_preference::get_user_preference,
             commands::user_preference::transfer_user_preference,
             commands::user_preference::update_user_preference,
             commands::workspaces::create_workspace,
             commands::workspaces::delete_workspace,
             commands::workspaces::get_unsynced_workspaces,
+            commands::workspaces::clear_synced_workspaces,
             commands::workspaces::get_workspace_by_id,
             commands::workspaces::list_workspaces,
             commands::workspaces::update_workspace,

@@ -1,106 +1,51 @@
-import { invoke } from "@tauri-apps/api/core";
+import { ref } from "vue";
+import { useNetwork } from "@vueuse/core";
 import { defineStore } from "pinia";
-import type {
-  Bookmark,
-  Notes,
-  RecycleBin,
-  Reminder,
-  Snippets,
-  Todo,
-  UserPreference,
-  Workspaces,
-} from "almond_kernel";
+import { useBookmarkStore } from "~/stores/bookmarks";
+import { useNoteStore } from "~/stores/notes";
+import { useTodoStore } from "~/stores/todo";
+import { useWorkspacesStore } from "~/stores/workspaces";
+import { useReminderStore } from "~/stores/reminder";
+import { useUserPreferenceStore } from "~/stores/user-preference";
+import { useSnippetStore } from "~/stores/snippets";
+import { useRecycleBinStore } from "~/stores/recycle-bin";
 
-// JsonValue in Notes is a recursive type that exceeds TypeScript's instantiation
-// depth limit inside Pinia's state inference — replace it with unknown.
-type FlatNotes = Omit<Notes, "categories"> & { categories: unknown };
+export const useSyncQueueStore = defineStore("sync_queue_store", () => {
+  const { isOnline } = useNetwork();
+  const runningSync = ref(false);
 
-export const useSyncQueueStore = defineStore("sync_queue_store", {
-  state: () => ({
-    bookmarks: [] as Bookmark[],
-    notes: [] as FlatNotes[],
-    todo: [] as Todo[],
-    workspaces: [] as Workspaces[],
-    reminders: [] as Reminder[],
-    userPreferences: [] as UserPreference[],
-    snippets: [] as Snippets[],
-    recycleBin: [] as RecycleBin[],
-    initialized: false,
-  }),
+  async function preflightCheck(name: string) {
+    const query = gql`
+      mutation PreflightCheck($name: String!) {
+        preflight(name: $name)
+      }
+    `;
 
-  actions: {
-    async initialize() {
-      await this.SyncAll();
-      this.initialized = true;
-    },
+    const variables = { name };
 
-    async SyncBookmarks() {
-      this.bookmarks = await invoke<Bookmark[]>("get_unsynced_bookmarks");
-    },
+    const { mutate } = useMutation(query, { variables });
+    const data = await mutate();
+    console.log("Preflight check response:", data);
+  }
 
-    async SyncNotes() {
-      this.notes = (await invoke("get_unsynced_notes")) as FlatNotes[];
-    },
-
-    async SyncTodo() {
-      this.todo = await invoke<Todo[]>("get_unsynced_todos");
-    },
-
-    async SyncWorkspaces() {
-      this.workspaces = await invoke<Workspaces[]>("get_unsynced_workspaces");
-    },
-
-    async SyncReminders() {
-      this.reminders = await invoke<Reminder[]>("get_unsynced_reminders");
-    },
-
-    async SyncUserPreferences() {
-      this.userPreferences = await invoke<UserPreference[]>(
-        "get_unsynced_user_preferences",
-      );
-    },
-
-    async SyncSnippets() {
-      this.snippets = await invoke<Snippets[]>("get_unsynced_snippets");
-    },
-
-    async SyncRecycleBin() {
-      this.recycleBin = await invoke<RecycleBin[]>("get_unsynced_recycle_bin");
-    },
-
-    async SyncAll() {
+  async function runSync() {
+    if (runningSync.value || !isOnline.value) return;
+    runningSync.value = true;
+    try {
       await Promise.all([
-        this.SyncBookmarks(),
-        this.SyncNotes(),
-        this.SyncTodo(),
-        this.SyncWorkspaces(),
-        this.SyncReminders(),
-        this.SyncUserPreferences(),
-        this.SyncSnippets(),
-        this.SyncRecycleBin(),
+        useBookmarkStore().syncUpstream(),
+        useNoteStore().syncUpstream(),
+        useTodoStore().syncUpstream(),
+        useWorkspacesStore().syncUpstream(),
+        useReminderStore().syncUpstream(),
+        useUserPreferenceStore().syncUpstream(),
+        useSnippetStore().syncUpstream(),
+        useRecycleBinStore().syncUpstream(),
       ]);
-    },
+    } finally {
+      runningSync.value = false;
+    }
+  }
 
-    async ClearBookmarkQueue() {},
-    async ClearNotesQueue() {},
-    async ClearTodoQueue() {},
-    async ClearWorkspacesQueue() {},
-    async ClearRemindersQueue() {},
-    async ClearUserPreferencesQueue() {},
-    async ClearSnippetsQueue() {},
-    async ClearRecycleBinQueue() {},
-
-    async ClearAllQueues() {
-      await Promise.all([
-        this.ClearBookmarkQueue(),
-        this.ClearNotesQueue(),
-        this.ClearTodoQueue(),
-        this.ClearWorkspacesQueue(),
-        this.ClearRemindersQueue(),
-        this.ClearUserPreferencesQueue(),
-        this.ClearSnippetsQueue(),
-        this.ClearRecycleBinQueue(),
-      ]);
-    },
-  },
+  return { isOnline, runningSync, preflightCheck, runSync };
 });

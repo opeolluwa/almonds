@@ -97,3 +97,15 @@ pub async fn get_unsynced_workspaces(
         .await
         .map_err(Into::into)
 }
+
+#[tauri::command]
+pub async fn clear_synced_workspaces(
+    state: State<'_, AppState>,
+    identifiers: Vec<String>,
+) -> Result<(), AppError> {
+    state
+        .workspace_repository
+        .clear_synced(identifiers)
+        .await
+        .map_err(Into::into)
+}

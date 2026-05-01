@@ -6,6 +6,7 @@ use uuid::Uuid;
 
 #[derive(CustomInputType, Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
+#[seaography(input_type_name = "SyncReminderInput")]
 pub struct SyncReminderInput {
     pub identifier: Uuid,
     pub title: String,
