@@ -135,24 +135,50 @@ export const useReminderStore = defineStore("reminder_store", {
     },
 
     async fetchUnsynced() {
-      const reminders = await invoke<Reminder[]>("get_unsynced_reminders");
-      return reminders;
+      try {
+        const reminders = await invoke<Reminder[]>("get_unsynced_reminders");
+        console.log("Unsynced reminders fetched:", JSON.stringify(reminders, null, 2));
+        return reminders;
+      } catch (error) {
+        console.error("Error fetching unsynced reminders:", error);
+        return [];
+      }
     },
 
     async syncUpstream() {
-      // const reminders = await this.fetchUnsynced();
-      // if (!reminders.length) return;
-      // const { data, execute } = useMutation(`
-      //   mutation SyncReminders($input: [SyncReminderInput!]!) {
-      //     sync_reminder(input: $input) { success error_message identifier }
-      //   }
-      // `);
-      // await execute({ input: reminders });
-      // const synced = data.value?.sync_reminder
-      //   .filter((r: SyncResult) => r.success)
-      //   .map((r: SyncResult) => r.identifier);
-      // if (synced?.length)
-      //   await invoke("clear_synced_reminders", { identifiers: synced });
+      const reminders = await this.fetchUnsynced();
+      if (!reminders.length) return;
+
+      const input = reminders.map((r) => ({
+        identifier: r.identifier,
+        title: r.title,
+        description: r.description ?? null,
+        recurring: r.recurring,
+        recurrence_rule: r.recurrenceRule ?? null,
+        alarm_sound: r.alarmSound ?? null,
+        remind_at: r.remindAt,
+        created_at: r.createdAt,
+        updated_at: r.updatedAt,
+        workspace_identifier: (r as any).workspaceIdentifier ?? null,
+      }));
+      const query = gql`
+        mutation SyncReminders($input: [SyncReminderInput!]!) {
+          sync_reminder(input: $input) {
+            success
+            error_message
+            identifier
+          }
+        }
+      `;
+
+      const { mutate } = useMutation(query, { variables: { input } });
+
+      try {
+        const data = await mutate();
+        console.log("Reminders sync response:", data);
+      } catch (error) {
+        console.error("Error syncing reminders:", error);
+      }
     },
 
     async clearQueue(identifiers: string[]) {

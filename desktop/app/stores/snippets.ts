@@ -137,24 +137,49 @@ export const useSnippetStore = defineStore("snippets_store", {
     },
 
     async fetchUnsynced() {
-      const snippets = await invoke<Snippet[]>("get_unsynced_snippets");
-      return snippets;
+      try {
+        const snippets = await invoke<Snippet[]>("get_unsynced_snippets");
+        console.log("Unsynced snippets fetched:", JSON.stringify(snippets, null, 2));
+        return snippets;
+      } catch (error) {
+        console.error("Error fetching unsynced snippets:", error);
+        return [];
+      }
     },
 
     async syncUpstream() {
-      // const snippets = await this.fetchUnsynced();
-      // if (!snippets.length) return;
-      // const { data, execute } = useMutation(`
-      //   mutation SyncSnippets($input: [SyncSnippetInput!]!) {
-      //     sync_snippet(input: $input) { success error_message identifier }
-      //   }
-      // `);
-      // await execute({ input: snippets });
-      // const synced = data.value?.sync_snippet
-      //   .filter((r: SyncResult) => r.success)
-      //   .map((r: SyncResult) => r.identifier);
-      // if (synced?.length)
-      //   await invoke("clear_synced_snippets", { identifiers: synced });
+      const snippets = await this.fetchUnsynced();
+      if (!snippets.length) return;
+
+      const input = snippets.map((s) => ({
+        identifier: s.identifier,
+        title: s.title ?? null,
+        language: s.language ?? null,
+        code: s.code,
+        description: s.description ?? null,
+        is_pinned: s.isPinned,
+        created_at: s.createdAt,
+        updated_at: s.updatedAt,
+        workspace_identifier: (s as any).workspaceIdentifier ?? null,
+      }));
+      const query = gql`
+        mutation SyncSnippets($input: [SyncSnippetInput!]!) {
+          sync_snippet(input: $input) {
+            success
+            error_message
+            identifier
+          }
+        }
+      `;
+
+      const { mutate } = useMutation(query, { variables: { input } });
+
+      try {
+        const data = await mutate();
+        console.log("Snippets sync response:", data);
+      } catch (error) {
+        console.error("Error syncing snippets:", error);
+      }
     },
 
     async clearQueue(identifiers: string[]) {

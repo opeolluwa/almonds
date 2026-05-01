@@ -167,24 +167,49 @@ export const useWorkspacesStore = defineStore("workspaces_store", {
     },
 
     async fetchUnsynced() {
-      const workspaces = await invoke<Workspace[]>("get_unsynced_workspaces");
-      return workspaces;
+      try {
+        const workspaces = await invoke<Workspace[]>("get_unsynced_workspaces");
+        console.log("Unsynced workspaces fetched:", JSON.stringify(workspaces, null, 2));
+        return workspaces;
+      } catch (error) {
+        console.error("Error fetching unsynced workspaces:", error);
+        return [];
+      }
     },
 
     async syncUpstream() {
-      // const workspaces = await this.fetchUnsynced();
-      // if (!workspaces.length) return;
-      // const { data, execute } = useMutation(`
-      //   mutation SyncWorkspaces($input: [SyncWorkspaceInput!]!) {
-      //     sync_workspace(input: $input) { success error_message identifier }
-      //   }
-      // `);
-      // await execute({ input: workspaces });
-      // const synced = data.value?.sync_workspace
-      //   .filter((r: SyncResult) => r.success)
-      //   .map((r: SyncResult) => r.identifier);
-      // if (synced?.length)
-      //   await invoke("clear_synced_workspaces", { identifiers: synced });
+      const workspaces = await this.fetchUnsynced();
+      if (!workspaces.length) return;
+
+      const input = workspaces.map((w) => ({
+        identifier: w.identifier,
+        name: w.name,
+        description: w.description,
+        created_at: w.createdAt,
+        updated_at: w.updatedAt,
+        is_default: w.isDefault,
+        is_hidden: w.isHidden,
+        is_secured: w.isSecured,
+        password_hash: (w as any).passwordHash ?? null,
+      }));
+      const query = gql`
+        mutation SyncWorkspaces($input: [SyncWorkspaceInput!]!) {
+          sync_workspace(input: $input) {
+            success
+            error_message
+            identifier
+          }
+        }
+      `;
+
+      const { mutate } = useMutation(query, { variables: { input } });
+
+      try {
+        const data = await mutate();
+        console.log("Workspaces sync response:", data);
+      } catch (error) {
+        console.error("Error syncing workspaces:", error);
+      }
     },
 
     async clearQueue(identifiers: string[]) {

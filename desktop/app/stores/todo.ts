@@ -175,24 +175,50 @@ export const useTodoStore = defineStore("todo_store", {
     },
 
     async fetchUnsynced() {
-      const todo = await invoke<Todo[]>("get_unsynced_todos");
-      return todo;
+      try {
+        const todos = await invoke<Todo[]>("get_unsynced_todos");
+        console.log("Unsynced todos fetched:", JSON.stringify(todos, null, 2));
+        return todos;
+      } catch (error) {
+        console.error("Error fetching unsynced todos:", error);
+        return [];
+      }
     },
 
     async syncUpstream() {
-      // const todo = await this.fetchUnsynced();
-      // if (!todo.length) return;
-      // const { data, execute } = useMutation(`
-      //   mutation SyncTodos($input: [SyncTodoInput!]!) {
-      //     sync_todo(input: $input) { success error_message identifier }
-      //   }
-      // `);
-      // await execute({ input: todo });
-      // const synced = data.value?.sync_todo
-      //   .filter((r: SyncResult) => r.success)
-      //   .map((r: SyncResult) => r.identifier);
-      // if (synced?.length)
-      //   await invoke("clear_synced_todos", { identifiers: synced });
+      const todos = await this.fetchUnsynced();
+      if (!todos.length) return;
+
+      const input = todos.map((t) => ({
+        identifier: t.identifier,
+        title: t.title,
+        description: t.description ?? null,
+        due_date: t.dueDate ?? null,
+        priority: t.priority,
+        done: t.done,
+        created_at: t.createdAt,
+        updated_at: t.updatedAt,
+        due_time: t.time ?? null,
+        workspace_identifier: (t as any).workspaceIdentifier ?? null,
+      }));
+      const query = gql`
+        mutation SyncTodos($input: [SyncTodoInput!]!) {
+          sync_todo(input: $input) {
+            success
+            error_message
+            identifier
+          }
+        }
+      `;
+
+      const { mutate } = useMutation(query, { variables: { input } });
+
+      try {
+        const data = await mutate();
+        console.log("Todos sync response:", data);
+      } catch (error) {
+        console.error("Error syncing todos:", error);
+      }
     },
 
     async clearQueue(identifiers: string[]) {
