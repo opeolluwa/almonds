@@ -236,29 +236,23 @@ impl NotesRepositoryExt for NotesRepository {
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))?;
 
-        dbg!("notes {:#?}", &queue_entries);
+        let identifiers = queue_entries
+            .iter()
+            .map(|entry| {
+                Uuid::parse_str(&entry.record_identifier)
+                    .map_err(|err| KernelError::DbOperationError(err.to_string()))
+            })
+            .collect::<Result<Vec<Uuid>, KernelError>>()?;
 
-        // let identifiers = queue_entries
-        //     .iter()
-        //     .map(|entry| {
-        //         Uuid::parse_str(&entry.record_identifier)
-        //             .map_err(|err| KernelError::DbOperationError(err.to_string()))
-        //     })
-        //     .collect::<Result<Vec<Uuid>, KernelError>>()?;
+        if identifiers.is_empty() {
+            return Ok(Vec::new());
+        }
 
-        // dbg!("notes {:#?}", &identifiers);
-
-        // if !identifiers.is_empty() {
-        //     return Ok(Vec::new());
-        // }
-
-        // notes::Entity::find()
-        //     .filter(notes::Column::Identifier.is_in(identifiers))
-        //     .all(self.conn.as_ref())
-        //     .await
-        //     .map_err(|err| KernelError::DbOperationError(err.to_string()))
-
-        Ok(Vec::new())
+        notes::Entity::find()
+            .filter(notes::Column::Identifier.is_in(identifiers))
+            .all(self.conn.as_ref())
+            .await
+            .map_err(|err| KernelError::DbOperationError(err.to_string()))
     }
 
     async fn clear_synced(&self, identifiers: Vec<String>) -> Result<(), KernelError> {

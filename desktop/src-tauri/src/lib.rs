@@ -62,40 +62,44 @@ pub async fn run() {
 
             let app_handle = app.handle().clone();
 
-            tauri::async_runtime::spawn(async move {
-                let app_data_dir = app_handle
-                    .path()
-                    .app_data_dir()
-                    .expect("failed to resolve app data dir");
+            // Initialize state synchronously so it is managed before the
+            // frontend window can invoke any Tauri commands.
+            tokio::task::block_in_place(|| {
+                tokio::runtime::Handle::current().block_on(async move {
+                    let app_data_dir = app_handle
+                        .path()
+                        .app_data_dir()
+                        .expect("failed to resolve app data dir");
 
-                std::fs::create_dir_all(&app_data_dir).expect("failed to create app data dir");
+                    std::fs::create_dir_all(&app_data_dir)
+                        .expect("failed to create app data dir");
 
-                let db_path = match std::env::var("ALMONDS_DB_PATH") {
-                    Ok(path) => std::path::PathBuf::from(path),
-                    Err(_) => app_data_dir.join("almonds.db"),
-                };
+                    let db_path = match std::env::var("ALMONDS_DB_PATH") {
+                        Ok(path) => std::path::PathBuf::from(path),
+                        Err(_) => app_data_dir.join("almonds.db"),
+                    };
 
-                let db_url = format!("sqlite://{}?mode=rwc", db_path.display());
-                dbg!("Database URL: {:?}", &db_path);
-                let kernel = almond_kernel::DataEngine::new(&db_url)
-                    .await
-                    .expect("failed to initialize kernel");
+                    let db_url = format!("sqlite://{}?mode=rwc", db_path.display());
+                    dbg!("Database URL: {:?}", &db_path);
+                    let kernel = almond_kernel::DataEngine::new(&db_url)
+                        .await
+                        .expect("failed to initialize kernel");
 
-                kernel
-                    .run_migrations()
-                    .await
-                    .expect("failed to run migrations");
+                    kernel
+                        .run_migrations()
+                        .await
+                        .expect("failed to run migrations");
 
-                let conn = Arc::new(kernel.connection().clone());
+                    let conn = Arc::new(kernel.connection().clone());
+                    let state = AppState::new(conn).await;
 
-                let state = AppState::new(conn).await;
-
-                app_handle.manage(state);
-                app_handle.manage(AlarmState::new());
-                app_handle.manage(SchedulerState::new());
+                    app_handle.manage(state);
+                    app_handle.manage(AlarmState::new());
+                    app_handle.manage(SchedulerState::new());
+                })
             });
 
-            // Spawn the cron-style reminder scheduler.
+            // Spawn the cron-style reminder scheduler after state is managed.
             let scheduler_handle = app.handle().clone();
             tauri::async_runtime::spawn(async move {
                 scheduler::run(scheduler_handle, None).await;

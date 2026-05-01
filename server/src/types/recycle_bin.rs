@@ -7,6 +7,7 @@ use uuid::Uuid;
 
 #[derive(CustomInputType, Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
+#[seaography(input_type_name = "SyncRecycleBinInput")]
 pub struct SyncRecycleBinInput {
     pub identifier: Uuid,
     pub item_id: Uuid,

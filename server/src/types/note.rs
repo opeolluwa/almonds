@@ -6,6 +6,7 @@ use uuid::Uuid;
 
 #[derive(CustomInputType, Debug, Serialize, Deserialize, Clone, PartialEq)]
 #[serde(rename_all = "camelCase")]
+#[seaography(input_type_name = "SyncNoteInput")]
 pub struct SyncNoteInput {
     pub identifier: Uuid,
     pub title: String,
@@ -22,8 +23,7 @@ impl From<SyncNoteInput> for entities::notes::Model {
             identifier: val.identifier,
             title: val.title,
             content: val.content,
-            // categories: val.categories,
-            categories: None,
+            categories: None, //TODO: Handle categories separately if needed
             created_at: val.created_at.parse().unwrap(),
             updated_at: val.updated_at.parse().unwrap(),
             workspace_identifier: val.workspace_identifier,

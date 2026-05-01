@@ -51,6 +51,7 @@ pub fn schema_builder(
         ]
     );
 
+
     seaography::register_custom_outputs!(builder, [almond_kernel::sync_engine::EntitySyncResult,]);
 
     seaography::register_custom_mutations!(
