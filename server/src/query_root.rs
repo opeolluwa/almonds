@@ -66,6 +66,7 @@ pub fn schema_builder(
             mutations::reminder::SyncReminder,
             mutations::workspace::SyncWorkspace,
             mutations::recycle_bin::SyncRecycleBinItem,
+            mutations::user_preference::SyncUserPreference,
         ]
     );
 

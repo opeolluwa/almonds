@@ -15,6 +15,8 @@ server/target
 kernel/migration/target
 server/migration/target
 **/target
+kernel/node_modules
+kernel/dist
 
 # Optional common ignores
 **/*.db

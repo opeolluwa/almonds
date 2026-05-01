@@ -1,12 +1,6 @@
 import { defineStore } from "pinia";
 import { invoke } from "@tauri-apps/api/core";
 
-type SyncResult = {
-  success: boolean;
-  error_message: string | null;
-  identifier: string;
-};
-
 export interface Todo {
   identifier: string;
   title: string;
@@ -188,18 +182,6 @@ export const useTodoStore = defineStore("todo_store", {
       const todos = await this.fetchUnsynced();
       if (!todos.length) return;
 
-      const workspacesStore = useWorkspacesStore();
-      const workspaceIds = [
-        ...new Set(
-          todos
-            .map((t) => (t as any).workspaceIdentifier as string | null)
-            .filter((id): id is string => !!id),
-        ),
-      ];
-      await Promise.all(
-        workspaceIds.map((id) => workspacesStore.resolveWorkspace(id)),
-      );
-
       const input = todos.map((t) => ({
         identifier: t.identifier,
         title: t.title,
@@ -226,7 +208,7 @@ export const useTodoStore = defineStore("todo_store", {
 
       try {
         const data = await mutate();
-        console.log("Todos sync response:", data);
+        console.log("Todos sync response:", JSON.stringify(data, null, 2));
       } catch (error) {
         console.error("Error syncing todos:", error);
       }

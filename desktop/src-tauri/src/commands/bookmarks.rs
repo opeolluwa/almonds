@@ -152,13 +152,11 @@ pub async fn transfer_bookmark(
 pub async fn get_unsynced_bookmarks(
     state: State<'_, AppState>,
 ) -> Result<Vec<bookmark::Model>, AppError> {
-    let bookmarks = state
+    state
         .bookmark_repository
         .extract_unsynced()
         .await
-        .unwrap_or_else(|_| vec![]);
-    dbg!("Unsynced bookmarks extracted:", &bookmarks);
-    Ok(bookmarks)
+        .map_err(Into::into)
 }
 
 #[tauri::command]

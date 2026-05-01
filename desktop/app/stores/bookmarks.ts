@@ -24,12 +24,6 @@ export interface UpdateBookmarkPayload {
   tag?: BookmarkTag;
 }
 
-type SyncResult = {
-  success: boolean;
-  error_message: string | null;
-  identifier: string;
-};
-
 export const useBookmarkStore = defineStore("bookmark_store", {
   state: () => ({
     bookmarks: [] as Bookmark[],
@@ -157,18 +151,6 @@ export const useBookmarkStore = defineStore("bookmark_store", {
       const bookmarks = await this.fetchUnsynced();
       if (!bookmarks.length) return;
 
-      const workspacesStore = useWorkspacesStore();
-      const workspaceIds = [
-        ...new Set(
-          bookmarks
-            .map((b) => (b as any).workspaceIdentifier as string | null)
-            .filter((id): id is string => !!id),
-        ),
-      ];
-      await Promise.all(
-        workspaceIds.map((id) => workspacesStore.resolveWorkspace(id)),
-      );
-
       const input = bookmarks.map((b) => ({
         identifier: b.identifier,
         title: b.title,
@@ -192,7 +174,7 @@ export const useBookmarkStore = defineStore("bookmark_store", {
 
       try {
         const data = await mutate();
-        console.log("Bookmarks checks response:", data);
+        console.log("Bookmarks checks response:", JSON.stringify(data, null, 2));
       } catch (error) {
         console.error("Error syncing bookmarks:", error);
       }

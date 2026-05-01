@@ -182,7 +182,7 @@ export const useNoteStore = defineStore("notes_store", {
 
       try {
         const data = await mutate();
-        console.log("Notes checks response:", data);
+        console.log("Notes checks response:", JSON.stringify(data, null, 2));
       } catch (error) {
         console.error("Error syncing notes:", error);
       }

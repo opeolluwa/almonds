@@ -1,12 +1,6 @@
 import { defineStore } from "pinia";
 import { invoke } from "@tauri-apps/api/core";
 
-type SyncResult = {
-  success: boolean;
-  error_message: string | null;
-  identifier: string;
-};
-
 export interface Workspace {
   identifier: string;
   name: string;
@@ -207,7 +201,7 @@ export const useWorkspacesStore = defineStore("workspaces_store", {
 
       try {
         const data = await mutate();
-        console.log("Workspaces sync response:", data);
+        console.log("Workspaces sync response:", JSON.stringify(data, null, 2));
       } catch (error) {
         console.error("Error syncing workspaces:", error);
       }
@@ -222,8 +216,18 @@ export const useWorkspacesStore = defineStore("workspaces_store", {
 
       const { client } = useApolloClient();
       const existsQuery = gql`
-        query WorkspaceExists($identifier: String!) {
-          workspace_exists(identifier: $identifier)
+        query FindWorkSpaces($identifier: String!) {
+          workspaces(filters: { identifier: $identifier }) {
+            nodes {
+              identifier
+              name
+              createdAt
+              isHidden
+              isDefault
+              isSecured
+              description
+            }
+          }
         }
       `;
 
@@ -271,6 +275,7 @@ export const useWorkspacesStore = defineStore("workspaces_store", {
         resolvedWorkspaceIds.add(identifier);
       } catch (error) {
         console.error("Error resolving workspace:", identifier, error);
+        throw error;
       }
     },
   },

@@ -32,11 +32,11 @@ export const useSyncQueueStore = defineStore("sync_queue_store", () => {
     if (runningSync.value || !isOnline.value) return;
     runningSync.value = true;
     try {
+      await useWorkspacesStore().syncUpstream();
       await Promise.all([
         useBookmarkStore().syncUpstream(),
         useNoteStore().syncUpstream(),
         useTodoStore().syncUpstream(),
-        useWorkspacesStore().syncUpstream(),
         useReminderStore().syncUpstream(),
         useUserPreferenceStore().syncUpstream(),
         useSnippetStore().syncUpstream(),

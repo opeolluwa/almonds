@@ -1,12 +1,6 @@
 import { defineStore } from "pinia";
 import { invoke } from "@tauri-apps/api/core";
 
-type SyncResult = {
-  success: boolean;
-  error_message: string | null;
-  identifier: string;
-};
-
 export interface Snippet {
   identifier: string;
   title: string | null;
@@ -150,18 +144,6 @@ export const useSnippetStore = defineStore("snippets_store", {
       const snippets = await this.fetchUnsynced();
       if (!snippets.length) return;
 
-      const workspacesStore = useWorkspacesStore();
-      const workspaceIds = [
-        ...new Set(
-          snippets
-            .map((s) => (s as any).workspaceIdentifier as string | null)
-            .filter((id): id is string => !!id),
-        ),
-      ];
-      await Promise.all(
-        workspaceIds.map((id) => workspacesStore.resolveWorkspace(id)),
-      );
-
       const input = snippets.map((s) => ({
         identifier: s.identifier,
         title: s.title ?? null,
@@ -187,7 +169,7 @@ export const useSnippetStore = defineStore("snippets_store", {
 
       try {
         const data = await mutate();
-        console.log("Snippets sync response:", data);
+        console.log("Snippets sync response:", JSON.stringify(data, null, 2));
       } catch (error) {
         console.error("Error syncing snippets:", error);
       }

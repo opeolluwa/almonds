@@ -41,3 +41,19 @@ mutation SyncWorkspaces {
     identifier
   }
 }
+
+
+
+query FindWorkSpaces {
+  workspaces {
+    nodes {
+      identifier
+      name
+      createdAt
+      isHidden
+      isDefault
+      isSecured
+      description
+    }
+  }
+}

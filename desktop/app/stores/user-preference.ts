@@ -2,12 +2,6 @@ import { defineStore } from "pinia";
 import { invoke } from "@tauri-apps/api/core";
 import { getWorkspaceMeta } from "~/composables/getWorkspaceMeta";
 
-type SyncResult = {
-  success: boolean;
-  error_message: string | null;
-  identifier: string;
-};
-
 export interface UserPreference {
   identifier: string;
   firstName: string;
@@ -97,18 +91,6 @@ export const useUserPreferenceStore = defineStore("user_preference_store", {
       const userPreferences = await this.fetchUnsynced();
       if (!userPreferences.length) return;
 
-      const workspacesStore = useWorkspacesStore();
-      const workspaceIds = [
-        ...new Set(
-          userPreferences
-            .map((p) => p.workspaceIdentifier as string | null)
-            .filter((id): id is string => !!id),
-        ),
-      ];
-      await Promise.all(
-        workspaceIds.map((id) => workspacesStore.resolveWorkspace(id)),
-      );
-
       const input = userPreferences.map((p) => ({
         identifier: p.identifier,
         first_name: p.firstName,
@@ -132,7 +114,7 @@ export const useUserPreferenceStore = defineStore("user_preference_store", {
 
       try {
         const data = await mutate();
-        console.log("User preferences sync response:", data);
+        console.log("User preferences sync response:", JSON.stringify(data, null, 2));
       } catch (error) {
         console.error("Error syncing user preferences:", error);
       }

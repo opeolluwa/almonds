@@ -103,8 +103,19 @@ async function submitProfileSetup() {
   }
 }
 
-function useDefaultProfile() {
+async function useDefaultProfile() {
   showProfileSetup.value = false;
+  if (profileForm.firstName.trim() && profileForm.email.trim()) {
+    try {
+      await preferenceStore.createPreference({
+        firstName: profileForm.firstName.trim(),
+        lastName: profileForm.lastName.trim(),
+        email: profileForm.email.trim(),
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  }
   openSecurityStep();
 }
 
