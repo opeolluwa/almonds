@@ -4,6 +4,7 @@ use async_graphql::{Enum, InputObject};
 use sea_orm::entity::prelude::*;
 use seaography::{CustomEnum, CustomInputType, CustomOutputType};
 use serde::{Deserialize, Serialize};
+
 #[derive(
     Debug, Clone, PartialEq, Eq, EnumIter, DeriveActiveEnum, Serialize, Deserialize, ts_rs :: TS,
 )]

@@ -16,6 +16,7 @@ sync_engine = ["dep:graphql-ws-client", "dep:graphql_client"]
 
 [dependencies]
 argon2 = "0.5"
+async-graphql = { version = "7.0.17", features = ["apollo_tracing", "raw_value", "tracing", "uuid"] }
 async-trait = "0.1.89"
 boltffi = { version = "0.24.1", features = ["chrono"] }
 chrono = { version = "0.4", features = ["serde"] }
@@ -47,7 +48,6 @@ tokio = { version = "1.50.0", features = ["full"] }
 ts-rs = { version = "12.0.1", features = ["uuid-impl", "chrono-impl", "serde-json-impl", "format"] }
 uuid = { version = "1.21.0", features = ["v4"] }
 validator = { version = "0.20.0", features = ["derive"] }
-async-graphql = { version = "7.0.17", features = ["apollo_tracing", "raw_value", "tracing", "uuid"] }
 
 [dependencies.seaography]
 version = "~2.0.0-rc.8" 

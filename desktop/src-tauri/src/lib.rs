@@ -71,8 +71,7 @@ pub async fn run() {
                         .app_data_dir()
                         .expect("failed to resolve app data dir");
 
-                    std::fs::create_dir_all(&app_data_dir)
-                        .expect("failed to create app data dir");
+                    std::fs::create_dir_all(&app_data_dir).expect("failed to create app data dir");
 
                     let db_path = match std::env::var("ALMONDS_DB_PATH") {
                         Ok(path) => std::path::PathBuf::from(path),

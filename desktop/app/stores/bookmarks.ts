@@ -146,7 +146,10 @@ export const useBookmarkStore = defineStore("bookmark_store", {
     async fetchUnsynced() {
       try {
         const bookmarks = await invoke<Bookmark[]>("get_unsynced_bookmarks");
-        console.log("Unsynced bookmarks fetched:", JSON.stringify(bookmarks, null, 2));
+        console.log(
+          "Unsynced bookmarks fetched:",
+          JSON.stringify(bookmarks, null, 2),
+        );
         return bookmarks;
       } catch (error) {
         console.error("Error fetching unsynced bookmarks:", error);
