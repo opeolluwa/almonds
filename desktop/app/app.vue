@@ -67,7 +67,6 @@ onMounted(async () => {
     </Transition>
   </UApp>
 
-
   <Body>
     <UApp>
       <AppTitlebar />
