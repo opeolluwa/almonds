@@ -27,6 +27,7 @@ mod m20260327_000000_add_workspace_id_to_user_preference;
 mod m20260331_000000_add_workspace_flags;
 mod m20260403_000000_add_workspace_security;
 mod m20260501_000000_fix_sync_queue_uuid_triggers;
+mod m20260518_000000_remove_email_unique_constraint_from_user_preference;
 
 pub use sea_orm_migration::prelude::*;
 
@@ -65,6 +66,7 @@ impl MigratorTrait for Migrator {
             Box::new(m20260331_000000_add_workspace_flags::Migration),
             Box::new(m20260403_000000_add_workspace_security::Migration),
             Box::new(m20260501_000000_fix_sync_queue_uuid_triggers::Migration),
+            Box::new(m20260518_000000_remove_email_unique_constraint_from_user_preference::Migration),
         ]
     }
 }

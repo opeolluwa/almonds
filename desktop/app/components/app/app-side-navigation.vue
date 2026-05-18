@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import type { Workspace } from "~/stores/workspaces";
 import { primaryRoutes, secondaryRoutes } from "~/data/routes";
+import AppWorkspaceCreateModal from "./workspace-create-modal.vue";
+import AppWorkspaceSecuritySetupModal from "./workspace-security-setup-modal.vue";
+import AppWorkspaceProfileSetupModal from "./workspace-profile-setup-modal.vue";
+import AppWorkspacePasswordModal from "./workspace-security-setup-modal.vue";
 
 const workspaceStore = useWorkspacesStore();
 const showCreateModal = ref(false);
@@ -225,7 +229,8 @@ const workspaceItems = computed(() => [
 
   <AppWorkspacePasswordModal
     :open="showPasswordModal"
-    :workspace-id="pendingWorkspaceId"
+    :workspace-id="String(pendingWorkspaceId)"
+    workspace-name=""
     @close="handlePasswordClose"
   />
 
