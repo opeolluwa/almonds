@@ -39,12 +39,12 @@ export const primaryRoutes: Route[] = [
     activeIcon: "heroicons:clock-solid",
   },
 
-  {
-    path: "/ollama",
-    name: "Ollama",
-    icon: "heroicons:cpu-chip",
-    activeIcon: "heroicons:cpu-chip-solid",
-  },
+  // {
+  //   path: "/ollama",
+  //   name: "Ollama",
+  //   icon: "heroicons:cpu-chip",
+  //   activeIcon: "heroicons:cpu-chip-solid",
+  // },
   {
     path: "/snippets",
     name: "Snippets",
