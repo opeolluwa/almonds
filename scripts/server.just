@@ -1,3 +1,14 @@
+# Build the production Docker image for the app server.
+# Usage: just build app  (via the root `build` alias)
+#        just build-app  (direct)
+#        just build-app my-registry.io/orchard  (custom tag prefix)
+build-app tag="orchard":
+    DOCKER_BUILDKIT=1 docker build \
+        --file docker/prod/Dockerfile.app \
+        --tag {{tag}}:latest \
+        --tag {{tag}}:$(git rev-parse --short HEAD) \
+        .
+
 [working-directory:'server']
 server-init url:
     seaography-cli -e ./src/entities  --output-dir . --database-url={{url}} --framework axum orchard

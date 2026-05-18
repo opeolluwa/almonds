@@ -1,0 +1,49 @@
+name: server
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - "server/**"
+      - "kernel/**"
+      - ".github/workflows/server.yaml"
+  pull_request:
+    branches: [master]
+    paths:
+      - "server/**"
+      - "kernel/**"
+      - ".github/workflows/server.yaml"
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: cache dependencies
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: |
+            kernel -> target
+            server -> target
+
+      - name: install system dependencies
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -yq --no-install-recommends \
+            libssl-dev \
+            pkg-config \
+            clang \
+            libclang-dev \
+            zlib1g-dev \
+            llvm-dev \
+            build-essential
+
+      - name: build
+        working-directory: server
+        run: cargo build --release --bin orchard
