@@ -1,9 +1,6 @@
 pub mod bookmark;
 pub mod note_category;
 pub mod notes;
-// pub mod ollama_conversation_history;
-// pub mod ollama_conversation_prompt;
-// pub mod ollama_conversation_response;
 pub mod preflight;
 pub mod recycle_bin;
 pub mod reminder;

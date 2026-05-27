@@ -13,14 +13,23 @@ impl MigrationTrait for Migration {
         let db_backend = manager.get_database_backend();
 
         if db_backend == DbBackend::Postgres {
-            manager
-                .create_type(
-                    Type::create()
-                        .as_enum(Priority::Type)
-                        .values([Priority::High, Priority::Medium, Priority::Low])
-                        .to_owned(),
-                )
-                .await?;
+            let has_type = manager
+                .get_connection()
+                .execute_unprepared("SELECT 1 FROM pg_type WHERE typname = 'priority'")
+                .await?
+                .rows_affected()
+                > 0;
+
+            if !has_type {
+                manager
+                    .create_type(
+                        Type::create()
+                            .as_enum(Priority::Type)
+                            .values([Priority::High, Priority::Medium, Priority::Low])
+                            .to_owned(),
+                    )
+                    .await?;
+            }
         }
 
         manager

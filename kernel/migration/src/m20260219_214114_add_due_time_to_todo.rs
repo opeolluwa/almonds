@@ -12,7 +12,7 @@ impl MigrationTrait for Migration {
             .alter_table(
                 Table::alter()
                     .table("todo")
-                    .add_column(ColumnDef::new("due_time").time().null())
+                    .add_column_if_not_exists(ColumnDef::new("due_time").time().null())
                     .to_owned(),
             )
             .await

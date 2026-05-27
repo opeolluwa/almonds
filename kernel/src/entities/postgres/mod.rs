@@ -3,9 +3,6 @@
 pub mod bookmark;
 pub mod note_categories;
 pub mod notes;
-pub mod ollama_conversation_history;
-pub mod ollama_conversation_prompt;
-pub mod ollama_conversation_response;
 pub mod prelude;
 pub mod recycle_bin;
 pub mod reminder;
@@ -20,9 +17,6 @@ seaography::register_entity_modules!([
     bookmark,
     note_categories,
     notes,
-    ollama_conversation_history,
-    ollama_conversation_prompt,
-    ollama_conversation_response,
     recycle_bin,
     reminder,
     snippets,

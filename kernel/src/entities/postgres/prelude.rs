@@ -3,9 +3,6 @@
 pub use super::bookmark::Entity as Bookmark;
 pub use super::note_categories::Entity as NoteCategories;
 pub use super::notes::Entity as Notes;
-pub use super::ollama_conversation_history::Entity as OllamaConversationHistory;
-pub use super::ollama_conversation_prompt::Entity as OllamaConversationPrompt;
-pub use super::ollama_conversation_response::Entity as OllamaConversationResponse;
 pub use super::recycle_bin::Entity as RecycleBin;
 pub use super::reminder::Entity as Reminder;
 pub use super::snippets::Entity as Snippets;

@@ -3,7 +3,6 @@ import 'scripts/misc.just'
 import 'scripts/desktop.just'
 import 'scripts/lint.just'
 import 'scripts/test.just'
-import 'scripts/clean.just'
 import 'scripts/server.just'
 import 'scripts/website.just'
 import 'scripts/release.just'
@@ -70,6 +69,10 @@ test target:
 release target:
 	@just release-{{target}}
 
+
+[working-directory:'.']
+clean target:
+	lua scripts/clean.lua {{target}}
 
 
 sync:

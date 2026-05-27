@@ -1,7 +1,6 @@
 pub mod bookmarks;
 pub mod meta;
 pub mod notes;
-pub mod ollama_conversations;
 pub mod recycle_bin;
 pub mod reminder;
 pub mod snippets;
