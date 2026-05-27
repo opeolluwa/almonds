@@ -5,27 +5,25 @@ export type { JsonValue } from "./bindings/serde_json/JsonValue";
 import type { Model as BookmarkModel } from "./bindings/bookmark";
 import type { Model as NoteCategoriesModel } from "./bindings/note_categories";
 import type { Model as NotesModel } from "./bindings/notes";
-import type { Model as OllamaConversationHistoryModel } from "./bindings/ollama_conversation_history";
-import type { Model as OllamaConversationPromptModel } from "./bindings/ollama_conversation_prompt";
-import type { Model as OllamaConversationResponseModel } from "./bindings/ollama_conversation_response";
 import type { Model as RecycleBinModel } from "./bindings/recycle_bin";
 import type { Model as ReminderModel } from "./bindings/reminder";
 import type { Model as SnippetsModel } from "./bindings/snippets";
 import type { Model as SyncQueueModel } from "./bindings/sync_queue";
 import type { Model as TodoModel } from "./bindings/todo";
 import type { Model as UserPreferenceModel } from "./bindings/user_preference";
+import type { Model as UserPreferencesModel } from "./bindings/user_preferences";
+import type { Model as WorkspacePreferencesModel } from "./bindings/workspace_preferences";
 import type { Model as WorkspacesModel } from "./bindings/workspaces";
 
 export interface Bookmark extends BookmarkModel {}
 export interface NoteCategories extends NoteCategoriesModel {}
 export interface Notes extends NotesModel {}
-export interface OllamaConversationHistory extends OllamaConversationHistoryModel {}
-export interface OllamaConversationPrompt extends OllamaConversationPromptModel {}
-export interface OllamaConversationResponse extends OllamaConversationResponseModel {}
 export interface RecycleBin extends RecycleBinModel {}
 export interface Reminder extends ReminderModel {}
 export interface Snippets extends SnippetsModel {}
 export interface SyncQueue extends SyncQueueModel {}
 export interface Todo extends TodoModel {}
 export interface UserPreference extends UserPreferenceModel {}
+export interface UserPreferences extends UserPreferencesModel {}
+export interface WorkspacePreferences extends WorkspacePreferencesModel {}
 export interface Workspaces extends WorkspacesModel {}

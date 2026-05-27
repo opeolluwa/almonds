@@ -3,20 +3,19 @@ import 'scripts/misc.just'
 import 'scripts/desktop.just'
 import 'scripts/lint.just'
 import 'scripts/test.just'
-import 'scripts/clean.just'
 import 'scripts/server.just'
 import 'scripts/website.just'
 import 'scripts/release.just'
 import 'scripts/mobile.just'
 
 
-DB_PffigenATH := "sqlite://../../test.sqlite?mode=rwc"
+DB_PATH := "sqlite://../../test.sqlite?mode=rwc"
 DOCKER_CMD := "docker compose -f docker-compose.yaml"
 POSTGRES_URL := "postgres://almond:almond@localhost:5433/almond"
 MYSQL_URL    := "mysql://almond:almond@localhost:3307/almond"
-SQLITE_URL   := "sqlite://./almond.db?mode=rwc"
+SQLITE_URL   := "sqlite://./almonds.db?mode=rwc"
 DATABASE_URL :="postgres://orchard:orchard@localhost:6543/orchard"
-DB_PATH := ""
+
 set dotenv-required := false
 set dotenv-load := true
 set dotenv-path := ".env"
@@ -70,6 +69,10 @@ test target:
 release target:
 	@just release-{{target}}
 
+
+[working-directory:'.']
+clean target:
+	lua scripts/clean.lua {{target}}
 
 
 sync:

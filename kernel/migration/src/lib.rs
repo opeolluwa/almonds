@@ -1,8 +1,5 @@
 mod m20260217_143820_create_snippet_table;
 mod m20260217_150510_create_sync_queue_table;
-mod m20260218_071539_create_ollama_conversation_prompt;
-mod m20260218_071549_create_ollama_conversation_response;
-mod m20260218_071617_create_ollama_conversation_history;
 mod m20260218_110352_create_note_table;
 mod m20260218_110353_create_note_category_table;
 mod m20260218_171131_create_todo_table;
@@ -28,6 +25,8 @@ mod m20260331_000000_add_workspace_flags;
 mod m20260403_000000_add_workspace_security;
 mod m20260501_000000_fix_sync_queue_uuid_triggers;
 mod m20260518_000000_remove_email_unique_constraint_from_user_preference;
+mod m20260527_110010_rename_user_prefernece_table_to_workspace_preference;
+mod m20260527_110634_create_user_prefernece_table;
 
 pub use sea_orm_migration::prelude::*;
 
@@ -39,9 +38,6 @@ impl MigratorTrait for Migrator {
         vec![
             Box::new(m20260217_143820_create_snippet_table::Migration),
             Box::new(m20260217_150510_create_sync_queue_table::Migration),
-            Box::new(m20260218_071617_create_ollama_conversation_history::Migration),
-            Box::new(m20260218_071539_create_ollama_conversation_prompt::Migration),
-            Box::new(m20260218_071549_create_ollama_conversation_response::Migration),
             Box::new(m20260218_110352_create_note_table::Migration),
             Box::new(m20260218_110353_create_note_category_table::Migration),
             Box::new(m20260218_171131_create_todo_table::Migration),
@@ -66,7 +62,13 @@ impl MigratorTrait for Migrator {
             Box::new(m20260331_000000_add_workspace_flags::Migration),
             Box::new(m20260403_000000_add_workspace_security::Migration),
             Box::new(m20260501_000000_fix_sync_queue_uuid_triggers::Migration),
-            Box::new(m20260518_000000_remove_email_unique_constraint_from_user_preference::Migration),
+            Box::new(
+                m20260518_000000_remove_email_unique_constraint_from_user_preference::Migration,
+            ),
+            Box::new(
+                m20260527_110010_rename_user_prefernece_table_to_workspace_preference::Migration,
+            ),
+            Box::new(m20260527_110634_create_user_prefernece_table::Migration),
         ]
     }
 }

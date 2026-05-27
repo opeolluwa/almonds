@@ -4,32 +4,35 @@ use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel, Serialize, Deserialize)]
-#[sea_orm(table_name = "ollama_conversation_response")]
+#[sea_orm(table_name = "notes")]
 #[serde(rename_all = "camelCase")]
 pub struct Model {
-    #[sea_orm(primary_key, auto_increment = false)]
-    pub identifier: Uuid,
-    pub history_id: Uuid,
+    #[sea_orm(primary_key, auto_increment = false, column_type = "Binary(16)")]
+    pub identifier: Vec<u8>,
+    pub title: String,
     #[sea_orm(column_type = "Text")]
     pub content: String,
-    pub created_at: DateTimeWithTimeZone,
+    pub categories: Option<Json>,
+    pub created_at: DateTimeUtc,
+    pub updated_at: DateTimeUtc,
+    pub workspace_identifier: Option<String>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
     #[sea_orm(
-        belongs_to = "super::ollama_conversation_history::Entity",
-        from = "Column::HistoryId",
-        to = "super::ollama_conversation_history::Column::Identifier",
+        belongs_to = "super::workspaces::Entity",
+        from = "Column::WorkspaceIdentifier",
+        to = "super::workspaces::Column::Identifier",
         on_update = "NoAction",
         on_delete = "Cascade"
     )]
-    OllamaConversationHistory,
+    Workspaces,
 }
 
-impl Related<super::ollama_conversation_history::Entity> for Entity {
+impl Related<super::workspaces::Entity> for Entity {
     fn to() -> RelationDef {
-        Relation::OllamaConversationHistory.def()
+        Relation::Workspaces.def()
     }
 }
 

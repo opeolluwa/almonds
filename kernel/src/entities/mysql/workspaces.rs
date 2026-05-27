@@ -9,13 +9,13 @@ use serde::{Deserialize, Serialize};
 pub struct Model {
     pub name: String,
     pub description: String,
-    pub created_at: DateTimeWithTimeZone,
-    pub updated_at: DateTimeWithTimeZone,
+    pub created_at: DateTimeUtc,
+    pub updated_at: DateTimeUtc,
     #[sea_orm(primary_key, auto_increment = false)]
-    pub identifier: Uuid,
-    pub is_default: bool,
-    pub is_hidden: bool,
-    pub is_secured: bool,
+    pub identifier: String,
+    pub is_default: i8,
+    pub is_hidden: i8,
+    pub is_secured: i8,
     #[sea_orm(column_type = "Text", nullable)]
     pub password_hash: Option<String>,
 }

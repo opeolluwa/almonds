@@ -9,10 +9,6 @@ use almond_kernel::{
     },
     sea_orm::DatabaseConnection,
 };
-use ollama_rs::generation::completion::GenerationContext;
-use tokio::sync::Mutex;
-
-use crate::state::ollama::OllamaState;
 
 #[allow(unused)]
 pub struct AppState {
@@ -24,9 +20,7 @@ pub struct AppState {
     pub sync_queue_repository: SyncQueueRepository,
     pub todo_repository: TodoRepository,
     pub user_preference_repository: UserPreferenceRepository,
-    pub ollama: OllamaState,
     pub workspace_repository: WorkspaceRepository,
-    pub context: Mutex<Option<GenerationContext>>,
 }
 
 impl AppState {
@@ -39,10 +33,7 @@ impl AppState {
         let sync_queue_repository = SyncQueueRepository::new(conn.clone());
         let todo_repository = TodoRepository::new(conn.clone());
         let user_preference_repository = UserPreferenceRepository::new(conn.clone());
-        let ollama = OllamaState::new(conn.clone()).await;
-
         let workspace_repository = WorkspaceRepository::new(conn.clone());
-        let context = Mutex::new(None);
 
         AppState {
             bookmark_repository,
@@ -53,9 +44,7 @@ impl AppState {
             sync_queue_repository,
             todo_repository,
             user_preference_repository,
-            ollama,
             workspace_repository,
-            context,
         }
     }
 }

@@ -3,7 +3,7 @@ use sea_orm::ActiveValue::Set;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-use crate::entities::{self, user_preference::ActiveModel};
+use crate::entities::{self, workspace_preferences::ActiveModel};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -13,8 +13,8 @@ pub struct CreateUserPreference {
     pub email: String,
 }
 
-impl Into<entities::user_preference::ActiveModel> for CreateUserPreference {
-    fn into(self) -> entities::user_preference::ActiveModel {
+impl Into<entities::workspace_preferences::ActiveModel> for CreateUserPreference {
+    fn into(self) -> entities::workspace_preferences::ActiveModel {
         ActiveModel {
             identifier: Set(Uuid::new_v4()),
             first_name: Set(self.first_name),

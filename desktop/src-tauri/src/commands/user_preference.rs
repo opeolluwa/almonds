@@ -8,7 +8,7 @@ use tauri::State;
 use uuid::Uuid;
 
 use crate::{
-    adapters::user_preference::{CreateUserPreference, UpdateUserPreference},
+    adapters::workspace_preference::{CreateUserPreference, UpdateUserPreference},
     errors::AppError,
     state::app::AppState,
 };

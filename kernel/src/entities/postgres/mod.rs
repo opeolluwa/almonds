@@ -3,9 +3,6 @@
 pub mod bookmark;
 pub mod note_categories;
 pub mod notes;
-pub mod ollama_conversation_history;
-pub mod ollama_conversation_prompt;
-pub mod ollama_conversation_response;
 pub mod prelude;
 pub mod recycle_bin;
 pub mod reminder;
@@ -13,22 +10,21 @@ pub mod sea_orm_active_enums;
 pub mod snippets;
 pub mod sync_queue;
 pub mod todo;
-pub mod user_preference;
+pub mod user_preferences;
+pub mod workspace_preferences;
 pub mod workspaces;
 
 seaography::register_entity_modules!([
     bookmark,
     note_categories,
     notes,
-    ollama_conversation_history,
-    ollama_conversation_prompt,
-    ollama_conversation_response,
     recycle_bin,
     reminder,
     snippets,
     sync_queue,
     todo,
-    user_preference,
+    user_preferences,
+    workspace_preferences,
     workspaces,
 ]);
 seaography::register_active_enums!([

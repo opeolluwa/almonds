@@ -4,5 +4,4 @@ pub mod countries;
 pub mod notifications;
 pub mod one_time_passwords;
 pub mod prelude;
-pub mod revoked_tokens;
 pub mod users;

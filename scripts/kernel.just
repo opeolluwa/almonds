@@ -2,8 +2,6 @@
 watch-kernel:
 	cargo watch -qcx check
 
-# --- Docker -----------------------------------------------------------
-
 # Start postgres and mysql containers (kernel/docker/docker-compose.yml)
 [working-directory: 'kernel']
 db-up:
@@ -48,16 +46,16 @@ db-clean:
 	sea-orm-cli migrate up --database-url {{SQLITE_URL}}
 
 # Run pending migrations against mysql (docker)
-# [working-directory: 'kernel']
-# @migrate-up-mysql:
-# 	sea-orm-cli migrate up --database-url {{MYSQL_URL}}
+[working-directory: 'kernel']
+@migrate-up-mysql:
+	sea-orm-cli migrate up --database-url {{MYSQL_URL}}
 
 # Run pending migrations against all active databases
 [working-directory: 'kernel']
 @migrate-up:
 	just migrate-up-postgres
 	just migrate-up-sqlite
-	# just migrate-up-mysql
+	just migrate-up-mysql
 
 # --- Entity generation ------------------------------------------------
 
@@ -72,9 +70,9 @@ db-clean:
 
 # Pull schema and generate entities for SQLite (feature: sqlite)
 [working-directory: 'kernel']
-@db-pull-sqlite url:
+@db-pull-sqlite:
 	sea-orm-cli generate entity \
-		--database-url {{url}} \
+		--database-url {{SQLITE_URL}} \
 		--with-serde both \
 		--model-extra-attributes 'serde(rename_all="camelCase")' \
 		-o src/entities/sqlite
@@ -111,13 +109,14 @@ db-clean:
 #   just db-pull
 #   just db-pull sqlite://./custom.db
 [working-directory: 'kernel']
-db-pull sqlite_url=SQLITE_URL:
+db-pull:
 	just db-up
 	@echo "Waiting for PostgreSQL to be ready..."
 	@until pg_isready -h localhost -p 5433 -U almond -q; do sleep 1; done
 	just migrate-up
-	just db-pull-sqlite {{sqlite_url}}
+	just db-pull-sqlite
 	just db-pull-postgres
+	just db-pull-mysql  
 	just db-pull-server
 
 [working-directory: 'server']

@@ -21,7 +21,6 @@ almond_kernel = { version = "0.1.0", path = "../../kernel", features = ["markdow
 base64 = "0.22"
 chrono = { version = "0.4.43", features = ["serde"] }
 log = "0.4"
-ollama-rs = { version = "0.3.4", features = ["stream"] }
 rodio = { version = "0.19", features = ["mp3", "wav", "vorbis", "flac"] }
 sanitizer = { version = "1.0.0", features = ["derive"] }
 serde = { version = "1.0", features = ["derive"] }

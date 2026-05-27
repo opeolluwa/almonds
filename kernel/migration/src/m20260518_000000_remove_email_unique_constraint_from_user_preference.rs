@@ -53,11 +53,18 @@ impl MigrationTrait for Migration {
             return Ok(());
         }
 
-        db_connection
-            .execute_unprepared(
-                r#"ALTER TABLE user_preference DROP CONSTRAINT user_preference_email_key;"#,
-            )
-            .await?;
+        if db_backend == DbBackend::MySql {
+            // MySQL names the unique index after the column, not with a _key suffix.
+            db_connection
+                .execute_unprepared("ALTER TABLE user_preference DROP INDEX email")
+                .await?;
+        } else {
+            db_connection
+                .execute_unprepared(
+                    "ALTER TABLE user_preference DROP CONSTRAINT user_preference_email_key",
+                )
+                .await?;
+        }
 
         Ok(())
     }
@@ -105,11 +112,17 @@ impl MigrationTrait for Migration {
             return Ok(());
         }
 
-        db_connection
-            .execute_unprepared(
-                r#"ALTER TABLE user_preference ADD CONSTRAINT user_preference_email_key UNIQUE (email);"#,
-            )
-            .await?;
+        if db_backend == DbBackend::MySql {
+            db_connection
+                .execute_unprepared("ALTER TABLE user_preference ADD UNIQUE INDEX email (email)")
+                .await?;
+        } else {
+            db_connection
+                .execute_unprepared(
+                    "ALTER TABLE user_preference ADD CONSTRAINT user_preference_email_key UNIQUE (email)",
+                )
+                .await?;
+        }
 
         Ok(())
     }

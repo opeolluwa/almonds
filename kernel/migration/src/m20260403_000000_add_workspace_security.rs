@@ -17,11 +17,22 @@ impl MigrationTrait for Migration {
                 "#,
             )
             .await?;
+        } else if backend == DbBackend::MySql {
+            if !manager.has_column("workspaces", "is_secured").await? {
+                db.execute_unprepared(
+                    "ALTER TABLE workspaces ADD COLUMN is_secured TINYINT NOT NULL DEFAULT 0",
+                )
+                .await?;
+            }
+            if !manager.has_column("workspaces", "password_hash").await? {
+                db.execute_unprepared("ALTER TABLE workspaces ADD COLUMN password_hash TEXT")
+                    .await?;
+            }
         } else {
             db.execute_unprepared(
                 r#"
-                ALTER TABLE workspaces ADD COLUMN is_secured BOOLEAN NOT NULL DEFAULT FALSE;
-                ALTER TABLE workspaces ADD COLUMN password_hash TEXT;
+                ALTER TABLE workspaces ADD COLUMN IF NOT EXISTS is_secured BOOLEAN NOT NULL DEFAULT FALSE;
+                ALTER TABLE workspaces ADD COLUMN IF NOT EXISTS password_hash TEXT;
                 "#,
             )
             .await?;

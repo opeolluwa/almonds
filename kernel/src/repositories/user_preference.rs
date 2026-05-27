@@ -18,9 +18,9 @@ use crate::types::EntitySyncResult;
 use crate::{
     adapters::{
         meta::RequestMeta,
-        user_preference::{CreateUserPreference, UpdateUserPreference},
+        workspace_preferences::{CreateUserPreference, UpdateUserPreference},
     },
-    entities::{sync_queue, user_preference},
+    entities::{sync_queue, workspace_preferences},
     error::KernelError,
     utils::extract_req_meta,
 };
@@ -38,28 +38,28 @@ pub trait UserPreferenceRepositoryExt {
         &self,
         payload: &CreateUserPreference,
         meta: &Option<RequestMeta>,
-    ) -> Result<user_preference::Model, KernelError>;
+    ) -> Result<workspace_preferences::Model, KernelError>;
 
     async fn get(
         &self,
         meta: &Option<RequestMeta>,
-    ) -> Result<Option<user_preference::Model>, KernelError>;
+    ) -> Result<Option<workspace_preferences::Model>, KernelError>;
 
     async fn update(
         &self,
         identifier: &Uuid,
         payload: &UpdateUserPreference,
         meta: &Option<RequestMeta>,
-    ) -> Result<user_preference::Model, KernelError>;
+    ) -> Result<workspace_preferences::Model, KernelError>;
 
-    async fn extract_unsynced(&self) -> Result<Vec<user_preference::Model>, KernelError>;
+    async fn extract_unsynced(&self) -> Result<Vec<workspace_preferences::Model>, KernelError>;
 
     async fn clear_synced(&self, identifiers: Vec<String>) -> Result<(), KernelError>;
 
     #[cfg(feature = "sync_engine")]
     async fn upsert_many(
         &self,
-        models: Vec<user_preference::Model>,
+        models: Vec<workspace_preferences::Model>,
     ) -> Result<Vec<EntitySyncResult>, KernelError>;
 }
 
@@ -76,8 +76,8 @@ impl UserPreferenceRepositoryExt for UserPreferenceRepository {
         &self,
         payload: &CreateUserPreference,
         meta: &Option<RequestMeta>,
-    ) -> Result<user_preference::Model, KernelError> {
-        let mut active_model: user_preference::ActiveModel = payload.to_owned().into();
+    ) -> Result<workspace_preferences::Model, KernelError> {
+        let mut active_model: workspace_preferences::ActiveModel = payload.to_owned().into();
 
         if let Some(meta) = meta {
             active_model.workspace_identifier = Set(Some(meta.workspace_identifier));
@@ -96,11 +96,13 @@ impl UserPreferenceRepositoryExt for UserPreferenceRepository {
     async fn get(
         &self,
         meta: &Option<RequestMeta>,
-    ) -> Result<Option<user_preference::Model>, KernelError> {
+    ) -> Result<Option<workspace_preferences::Model>, KernelError> {
         let meta = extract_req_meta(meta)?;
 
-        user_preference::Entity::find()
-            .filter(user_preference::Column::WorkspaceIdentifier.eq(meta.workspace_identifier))
+        workspace_preferences::Entity::find()
+            .filter(
+                workspace_preferences::Column::WorkspaceIdentifier.eq(meta.workspace_identifier),
+            )
             .one(self.conn.as_ref())
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))
@@ -111,12 +113,14 @@ impl UserPreferenceRepositoryExt for UserPreferenceRepository {
         identifier: &Uuid,
         payload: &UpdateUserPreference,
         meta: &Option<RequestMeta>,
-    ) -> Result<user_preference::Model, KernelError> {
+    ) -> Result<workspace_preferences::Model, KernelError> {
         let meta = extract_req_meta(meta)?;
 
-        let model = user_preference::Entity::find()
-            .filter(user_preference::Column::Identifier.eq(*identifier))
-            .filter(user_preference::Column::WorkspaceIdentifier.eq(meta.workspace_identifier))
+        let model = workspace_preferences::Entity::find()
+            .filter(workspace_preferences::Column::Identifier.eq(*identifier))
+            .filter(
+                workspace_preferences::Column::WorkspaceIdentifier.eq(meta.workspace_identifier),
+            )
             .one(self.conn.as_ref())
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))?
@@ -143,9 +147,9 @@ impl UserPreferenceRepositoryExt for UserPreferenceRepository {
             .map_err(|err| KernelError::DbOperationError(err.to_string()))
     }
 
-    async fn extract_unsynced(&self) -> Result<Vec<user_preference::Model>, KernelError> {
+    async fn extract_unsynced(&self) -> Result<Vec<workspace_preferences::Model>, KernelError> {
         let queue_entries = sync_queue::Entity::find()
-            .filter(sync_queue::Column::TableName.eq("user_preference"))
+            .filter(sync_queue::Column::TableName.eq("workspace_preferences"))
             .limit(25)
             .all(self.conn.as_ref())
             .await
@@ -163,8 +167,8 @@ impl UserPreferenceRepositoryExt for UserPreferenceRepository {
             return Ok(Vec::new());
         }
 
-        user_preference::Entity::find()
-            .filter(user_preference::Column::Identifier.is_in(identifiers))
+        workspace_preferences::Entity::find()
+            .filter(workspace_preferences::Column::Identifier.is_in(identifiers))
             .all(self.conn.as_ref())
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))
@@ -172,7 +176,7 @@ impl UserPreferenceRepositoryExt for UserPreferenceRepository {
 
     async fn clear_synced(&self, identifiers: Vec<String>) -> Result<(), KernelError> {
         sync_queue::Entity::delete_many()
-            .filter(sync_queue::Column::TableName.eq("user_preference"))
+            .filter(sync_queue::Column::TableName.eq("workspace_preferences"))
             .filter(sync_queue::Column::RecordIdentifier.is_in(identifiers))
             .exec(self.conn.as_ref())
             .await
@@ -183,7 +187,7 @@ impl UserPreferenceRepositoryExt for UserPreferenceRepository {
     #[cfg(feature = "sync_engine")]
     async fn upsert_many(
         &self,
-        models: Vec<user_preference::Model>,
+        models: Vec<workspace_preferences::Model>,
     ) -> Result<Vec<EntitySyncResult>, KernelError> {
         let mut sync_results: Vec<EntitySyncResult> = Vec::new();
         for chunk in models.chunks(20) {
@@ -195,8 +199,10 @@ impl UserPreferenceRepositoryExt for UserPreferenceRepository {
                     async move {
                         let identifier = model.identifier.to_string();
                         let op_result: Result<(), KernelError> = async {
-                            let exists = user_preference::Entity::find()
-                                .filter(user_preference::Column::Identifier.eq(model.identifier))
+                            let exists = workspace_preferences::Entity::find()
+                                .filter(
+                                    workspace_preferences::Column::Identifier.eq(model.identifier),
+                                )
                                 .one(conn.as_ref())
                                 .await
                                 .map_err(|err| KernelError::DbOperationError(err.to_string()))?
@@ -269,8 +275,8 @@ impl TransferRecord for UserPreferenceRepository {
             return Err(KernelError::BookmarkNotFound(record_identifier.to_string()));
         }
 
-        let Some(record) = user_preference::Entity::find()
-            .filter(user_preference::Column::Identifier.eq(*record_identifier))
+        let Some(record) = workspace_preferences::Entity::find()
+            .filter(workspace_preferences::Column::Identifier.eq(*record_identifier))
             .one(self.conn.as_ref())
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))?
@@ -299,9 +305,9 @@ impl RecordExistInWorkspace for UserPreferenceRepository {
         record_identifier: &Uuid,
         workspace_identifier: &Uuid,
     ) -> Result<bool, KernelError> {
-        let record = user_preference::Entity::find()
-            .filter(user_preference::Column::Identifier.eq(*record_identifier))
-            .filter(user_preference::Column::WorkspaceIdentifier.eq(*workspace_identifier))
+        let record = workspace_preferences::Entity::find()
+            .filter(workspace_preferences::Column::Identifier.eq(*record_identifier))
+            .filter(workspace_preferences::Column::WorkspaceIdentifier.eq(*workspace_identifier))
             .one(self.conn.as_ref())
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))?;
@@ -340,9 +346,12 @@ impl DuplicateRecord for UserPreferenceRepository {
             ));
         }
 
-        let Some(record) = user_preference::Entity::find()
-            .filter(user_preference::Column::Identifier.eq(*record_identifier))
-            .filter(user_preference::Column::WorkspaceIdentifier.eq(*previous_workspace_identifier))
+        let Some(record) = workspace_preferences::Entity::find()
+            .filter(workspace_preferences::Column::Identifier.eq(*record_identifier))
+            .filter(
+                workspace_preferences::Column::WorkspaceIdentifier
+                    .eq(*previous_workspace_identifier),
+            )
             .one(self.conn.as_ref())
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))?

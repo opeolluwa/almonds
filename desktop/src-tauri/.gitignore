@@ -3,3 +3,7 @@
 /target/
 /gen/schemas
 almonds.db
+
+
+backup.sql 
+ sqlite3 almonds.db .dump > backup.sql

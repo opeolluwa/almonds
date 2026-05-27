@@ -2,7 +2,9 @@
 
 export type Model = {
   identifier: string;
-  historyId: string;
-  content: string;
+  masterFirstName: string;
+  masterLastName: string;
+  masterEmail: string;
   createdAt: string;
+  updatedAt: string;
 };

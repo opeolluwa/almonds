@@ -2,7 +2,6 @@ pub mod alarm;
 pub mod bookmarks;
 pub mod moodboard;
 pub mod notes;
-pub mod ollama;
 pub mod recycle_bin;
 pub mod reminder;
 pub mod snippets;

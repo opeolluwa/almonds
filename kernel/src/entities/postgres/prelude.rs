@@ -3,13 +3,11 @@
 pub use super::bookmark::Entity as Bookmark;
 pub use super::note_categories::Entity as NoteCategories;
 pub use super::notes::Entity as Notes;
-pub use super::ollama_conversation_history::Entity as OllamaConversationHistory;
-pub use super::ollama_conversation_prompt::Entity as OllamaConversationPrompt;
-pub use super::ollama_conversation_response::Entity as OllamaConversationResponse;
 pub use super::recycle_bin::Entity as RecycleBin;
 pub use super::reminder::Entity as Reminder;
 pub use super::snippets::Entity as Snippets;
 pub use super::sync_queue::Entity as SyncQueue;
 pub use super::todo::Entity as Todo;
-pub use super::user_preference::Entity as UserPreference;
+pub use super::user_preferences::Entity as UserPreferences;
+pub use super::workspace_preferences::Entity as WorkspacePreferences;
 pub use super::workspaces::Entity as Workspaces;
