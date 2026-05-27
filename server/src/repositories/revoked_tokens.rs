@@ -47,6 +47,7 @@ impl TokenBlacklistRepositoryTrait for TokenBlacklistRepository {
             expires_at: Set(expires_at),
             revoked_at: Set(chrono::Utc::now().fixed_offset()),
         };
+
         record
             .insert(self.db_conn.as_ref())
             .await

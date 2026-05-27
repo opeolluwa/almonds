@@ -17,7 +17,9 @@ use crate::state::scheduler::SchedulerState;
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 #[tokio::main]
 pub async fn run() {
-    let mut builder = tauri::Builder::default().plugin(tauri_plugin_opener::init());
+    let mut builder = tauri::Builder::default()
+        .plugin(tauri_plugin_stronghold::Builder::new(|pass| todo!()).build())
+        .plugin(tauri_plugin_opener::init());
 
     #[cfg(desktop)]
     {

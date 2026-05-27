@@ -2,7 +2,9 @@ use std::sync::Arc;
 
 use almond_kernel::{
     entities,
-    repositories::user_preference::{UserPreferenceRepository, UserPreferenceRepositoryExt},
+    repositories::workspace_preference::{
+        WorkspacePreferenceRepository, WorkspacePreferenceRepositoryExt,
+    },
     sync_engine::EntitySyncResult,
 };
 use seaography::{
@@ -12,7 +14,7 @@ use seaography::{
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    errors::app_error::AppError, types::user_preference::SyncUserPreferenceInput,
+    errors::app_error::AppError, types::workspace_preferences::SyncWorkspacePreferenceInput,
     utils::context::extract_db_conn,
 };
 
@@ -24,12 +26,12 @@ pub struct SyncUserPreference;
 impl SyncUserPreference {
     async fn sync_user_preference(
         ctx: &Context<'_>,
-        input: Vec<SyncUserPreferenceInput>,
+        input: Vec<SyncWorkspacePreferenceInput>,
     ) -> async_graphql::Result<Vec<EntitySyncResult>> {
         let db = extract_db_conn(ctx)?;
-        let repo = UserPreferenceRepository::new(Arc::new(db.clone()));
+        let repo = WorkspacePreferenceRepository::new(Arc::new(db.clone()));
 
-        let models: Vec<entities::user_preference::Model> = input
+        let models: Vec<entities::workspace_preferences::Model> = input
             .into_iter()
             .map(|item| item.try_into())
             .collect::<Result<_, _>>()?;

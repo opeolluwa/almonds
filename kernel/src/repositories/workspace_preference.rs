@@ -25,13 +25,13 @@ use crate::{
     utils::extract_req_meta,
 };
 
-pub struct UserPreferenceRepository {
+pub struct WorkspacePreferenceRepository {
     conn: Arc<DatabaseConnection>,
     workspace_repository: WorkspaceRepository,
 }
 
 #[async_trait]
-pub trait UserPreferenceRepositoryExt {
+pub trait WorkspacePreferenceRepositoryExt {
     fn new(conn: Arc<DatabaseConnection>) -> Self;
 
     async fn create(
@@ -64,7 +64,7 @@ pub trait UserPreferenceRepositoryExt {
 }
 
 #[async_trait]
-impl UserPreferenceRepositoryExt for UserPreferenceRepository {
+impl WorkspacePreferenceRepositoryExt for WorkspacePreferenceRepository {
     fn new(conn: Arc<DatabaseConnection>) -> Self {
         Self {
             conn: conn.clone(),
@@ -136,9 +136,7 @@ impl UserPreferenceRepositoryExt for UserPreferenceRepository {
         if let Some(last_name) = &payload.last_name {
             active_model.last_name = Set(last_name.clone());
         }
-        if let Some(email) = &payload.email {
-            active_model.email = Set(email.clone());
-        }
+
         active_model.updated_at = Set(Utc::now().fixed_offset());
 
         active_model
@@ -239,7 +237,7 @@ impl UserPreferenceRepositoryExt for UserPreferenceRepository {
 }
 
 #[async_trait::async_trait]
-impl TransferRecord for UserPreferenceRepository {
+impl TransferRecord for WorkspacePreferenceRepository {
     async fn transfer_record(
         &self,
         record_identifier: &Uuid,
@@ -299,7 +297,7 @@ impl TransferRecord for UserPreferenceRepository {
 }
 
 #[async_trait::async_trait]
-impl RecordExistInWorkspace for UserPreferenceRepository {
+impl RecordExistInWorkspace for WorkspacePreferenceRepository {
     async fn record_exists_in_workspace(
         &self,
         record_identifier: &Uuid,
@@ -317,7 +315,7 @@ impl RecordExistInWorkspace for UserPreferenceRepository {
 }
 
 #[async_trait::async_trait]
-impl DuplicateRecord for UserPreferenceRepository {
+impl DuplicateRecord for WorkspacePreferenceRepository {
     async fn duplicate_record(
         &self,
         record_identifier: &Uuid,

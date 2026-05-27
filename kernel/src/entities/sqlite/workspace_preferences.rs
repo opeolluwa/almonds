@@ -11,7 +11,6 @@ pub struct Model {
     pub identifier: Uuid,
     pub first_name: String,
     pub last_name: String,
-    pub email: String,
     pub workspace_identifier: Option<Uuid>,
     pub created_at: DateTimeWithTimeZone,
     pub updated_at: DateTimeWithTimeZone,

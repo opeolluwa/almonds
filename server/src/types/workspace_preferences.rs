@@ -6,8 +6,8 @@ use uuid::Uuid;
 
 #[derive(CustomInputType, Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
-#[seaography(input_type_name = "SyncUserPreferenceInput")]
-pub struct SyncUserPreferenceInput {
+#[seaography(input_type_name = "SyncWorkspacePreferenceInput")]
+pub struct SyncWorkspacePreferenceInput {
     pub identifier: Uuid,
     pub first_name: String,
     pub last_name: String,
@@ -17,15 +17,14 @@ pub struct SyncUserPreferenceInput {
     pub workspace_identifier: Option<Uuid>,
 }
 
-impl TryFrom<SyncUserPreferenceInput> for entities::user_preference::Model {
+impl TryFrom<SyncWorkspacePreferenceInput> for entities::workspace_preferences::Model {
     type Error = async_graphql::Error;
 
-    fn try_from(val: SyncUserPreferenceInput) -> Result<Self, Self::Error> {
-        Ok(entities::user_preference::Model {
+    fn try_from(val: SyncWorkspacePreferenceInput) -> Result<Self, Self::Error> {
+        Ok(entities::workspace_preferences::Model {
             identifier: val.identifier,
             first_name: val.first_name,
             last_name: val.last_name,
-            email: val.email,
             created_at: val
                 .created_at
                 .parse()

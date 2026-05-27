@@ -32,6 +32,7 @@ tauri-plugin-log = "2"
 tauri-plugin-notification = "2"
 tauri-plugin-opener = "2"
 tauri-plugin-os = "2"
+tauri-plugin-stronghold = "2"
 thiserror = "2"
 tokio = { version = "1", features = ["time"] }
 tokio-stream = "0.1.18"
@@ -45,3 +46,6 @@ tauri-plugin-single-instance = "2"
 
 [build-dependencies]
 tauri-build = { version = "2.5.4", features = [] }
+
+[profile.dev.package.scrypt]
+opt-level = 3

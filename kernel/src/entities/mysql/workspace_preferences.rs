@@ -11,7 +11,6 @@ pub struct Model {
     pub identifier: Vec<u8>,
     pub first_name: String,
     pub last_name: String,
-    pub email: String,
     pub created_at: DateTimeUtc,
     pub updated_at: DateTimeUtc,
     pub workspace_identifier: Option<String>,

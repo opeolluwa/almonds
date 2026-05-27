@@ -28,6 +28,8 @@ pub enum Relation {
     Notifications,
     #[sea_orm(has_many = "super::one_time_passwords::Entity")]
     OneTimePasswords,
+    #[sea_orm(has_many = "super::revoked_tokens::Entity")]
+    RevokedTokens,
 }
 
 impl Related<super::notifications::Entity> for Entity {
@@ -39,6 +41,12 @@ impl Related<super::notifications::Entity> for Entity {
 impl Related<super::one_time_passwords::Entity> for Entity {
     fn to() -> RelationDef {
         Relation::OneTimePasswords.def()
+    }
+}
+
+impl Related<super::revoked_tokens::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::RevokedTokens.def()
     }
 }
 

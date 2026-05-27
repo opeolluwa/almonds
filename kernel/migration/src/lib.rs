@@ -25,8 +25,9 @@ mod m20260331_000000_add_workspace_flags;
 mod m20260403_000000_add_workspace_security;
 mod m20260501_000000_fix_sync_queue_uuid_triggers;
 mod m20260518_000000_remove_email_unique_constraint_from_user_preference;
-mod m20260527_110010_rename_user_prefernece_table_to_workspace_preference;
-mod m20260527_110634_create_user_prefernece_table;
+mod m20260527_110010_rename_user_preference_table_to_workspace_preference;
+mod m20260527_110634_create_user_preference_table;
+mod m20260527_171026_remove_email_from_workspace_preference;
 
 pub use sea_orm_migration::prelude::*;
 
@@ -66,9 +67,10 @@ impl MigratorTrait for Migrator {
                 m20260518_000000_remove_email_unique_constraint_from_user_preference::Migration,
             ),
             Box::new(
-                m20260527_110010_rename_user_prefernece_table_to_workspace_preference::Migration,
+                m20260527_110010_rename_user_preference_table_to_workspace_preference::Migration,
             ),
-            Box::new(m20260527_110634_create_user_prefernece_table::Migration),
+            Box::new(m20260527_110634_create_user_preference_table::Migration),
+            Box::new(m20260527_171026_remove_email_from_workspace_preference::Migration),
         ]
     }
 }

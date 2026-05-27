@@ -47,7 +47,7 @@ pub fn schema_builder(
             types::reminder::SyncReminderInput,
             types::workspace::SyncWorkspaceInput,
             types::recycle_bin::SyncRecycleBinInput,
-            types::user_preference::SyncUserPreferenceInput,
+            types::workspace_preferences::SyncWorkspacePreferenceInput,
         ]
     );
 
@@ -66,7 +66,7 @@ pub fn schema_builder(
             mutations::reminder::SyncReminder,
             mutations::workspace::SyncWorkspace,
             mutations::recycle_bin::SyncRecycleBinItem,
-            mutations::user_preference::SyncUserPreference,
+            mutations::workspace_preference::SyncUserPreference,
         ]
     );
 

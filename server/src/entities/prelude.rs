@@ -3,4 +3,5 @@
 pub use super::countries::Entity as Countries;
 pub use super::notifications::Entity as Notifications;
 pub use super::one_time_passwords::Entity as OneTimePasswords;
+pub use super::revoked_tokens::Entity as RevokedTokens;
 pub use super::users::Entity as Users;
