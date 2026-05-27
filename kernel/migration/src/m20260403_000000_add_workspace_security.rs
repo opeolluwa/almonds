@@ -25,10 +25,8 @@ impl MigrationTrait for Migration {
                 .await?;
             }
             if !manager.has_column("workspaces", "password_hash").await? {
-                db.execute_unprepared(
-                    "ALTER TABLE workspaces ADD COLUMN password_hash TEXT",
-                )
-                .await?;
+                db.execute_unprepared("ALTER TABLE workspaces ADD COLUMN password_hash TEXT")
+                    .await?;
             }
         } else {
             db.execute_unprepared(

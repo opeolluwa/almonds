@@ -114,9 +114,7 @@ impl MigrationTrait for Migration {
 
         if db_backend == DbBackend::MySql {
             db_connection
-                .execute_unprepared(
-                    "ALTER TABLE user_preference ADD UNIQUE INDEX email (email)",
-                )
+                .execute_unprepared("ALTER TABLE user_preference ADD UNIQUE INDEX email (email)")
                 .await?;
         } else {
             db_connection
