@@ -100,7 +100,9 @@ impl UserPreferenceRepositoryExt for UserPreferenceRepository {
         let meta = extract_req_meta(meta)?;
 
         workspace_preferences::Entity::find()
-            .filter(workspace_preferences::Column::WorkspaceIdentifier.eq(meta.workspace_identifier))
+            .filter(
+                workspace_preferences::Column::WorkspaceIdentifier.eq(meta.workspace_identifier),
+            )
             .one(self.conn.as_ref())
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))
@@ -116,7 +118,9 @@ impl UserPreferenceRepositoryExt for UserPreferenceRepository {
 
         let model = workspace_preferences::Entity::find()
             .filter(workspace_preferences::Column::Identifier.eq(*identifier))
-            .filter(workspace_preferences::Column::WorkspaceIdentifier.eq(meta.workspace_identifier))
+            .filter(
+                workspace_preferences::Column::WorkspaceIdentifier.eq(meta.workspace_identifier),
+            )
             .one(self.conn.as_ref())
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))?
@@ -196,7 +200,9 @@ impl UserPreferenceRepositoryExt for UserPreferenceRepository {
                         let identifier = model.identifier.to_string();
                         let op_result: Result<(), KernelError> = async {
                             let exists = workspace_preferences::Entity::find()
-                                .filter(workspace_preferences::Column::Identifier.eq(model.identifier))
+                                .filter(
+                                    workspace_preferences::Column::Identifier.eq(model.identifier),
+                                )
                                 .one(conn.as_ref())
                                 .await
                                 .map_err(|err| KernelError::DbOperationError(err.to_string()))?
@@ -342,7 +348,10 @@ impl DuplicateRecord for UserPreferenceRepository {
 
         let Some(record) = workspace_preferences::Entity::find()
             .filter(workspace_preferences::Column::Identifier.eq(*record_identifier))
-            .filter(workspace_preferences::Column::WorkspaceIdentifier.eq(*previous_workspace_identifier))
+            .filter(
+                workspace_preferences::Column::WorkspaceIdentifier
+                    .eq(*previous_workspace_identifier),
+            )
             .one(self.conn.as_ref())
             .await
             .map_err(|err| KernelError::DbOperationError(err.to_string()))?

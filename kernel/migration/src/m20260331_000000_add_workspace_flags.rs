@@ -19,6 +19,12 @@ impl MigrationTrait for Migration {
             )
             .await?;
         } else if backend == DbBackend::MySql {
+            // Drop the broken trigger from m20260314 (uses UUID() → 36-char string
+            // into BINARY(16)) before any workspace UPDATE, then recreate it correctly.
+            // m20260501 will later reconcile all other triggers.
+            db.execute_unprepared("DROP TRIGGER IF EXISTS workspaces_sync_update")
+                .await?;
+
             if !manager.has_column("workspaces", "is_default").await? {
                 db.execute_unprepared(
                     "ALTER TABLE workspaces ADD COLUMN is_default TINYINT NOT NULL DEFAULT 0",
@@ -31,8 +37,13 @@ impl MigrationTrait for Migration {
                 )
                 .await?;
             }
+            db.execute_unprepared("UPDATE workspaces SET is_default = 1 WHERE name = 'default'")
+                .await?;
             db.execute_unprepared(
-                "UPDATE workspaces SET is_default = 1 WHERE name = 'default'",
+                "CREATE TRIGGER workspaces_sync_update \
+                 AFTER UPDATE ON workspaces FOR EACH ROW \
+                 INSERT INTO sync_queue(identifier, table_name, record_identifier, operation, created_at) \
+                 VALUES (UUID_TO_BIN(UUID()), 'workspaces', NEW.identifier, 'UPDATE', NOW())",
             )
             .await?;
         } else if backend == DbBackend::Postgres {
@@ -45,7 +56,6 @@ impl MigrationTrait for Migration {
             )
             .await?;
         }
-        
 
         Ok(())
     }

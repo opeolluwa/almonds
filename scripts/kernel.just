@@ -116,6 +116,7 @@ db-pull:
 	just migrate-up
 	just db-pull-sqlite
 	just db-pull-postgres
+	just db-pull-mysql  
 	just db-pull-server
 
 [working-directory: 'server']
