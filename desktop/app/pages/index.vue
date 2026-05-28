@@ -2,7 +2,7 @@
 import { useNoteStore } from "~/stores/notes";
 import { useBookmarkStore } from "~/stores/bookmarks";
 import { useTodoStore } from "~/stores/todo";
-import { useUserPreferenceStore } from "~/stores/user-preference";
+import { useUserPreferenceStore } from "~/stores/workspace-preferences";
 import { useReminderStore } from "~/stores/reminder";
 import { useSnippetStore } from "~/stores/snippets";
 import { openUrl } from "@tauri-apps/plugin-opener";
