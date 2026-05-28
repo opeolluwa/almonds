@@ -346,6 +346,9 @@ onMounted(async () => {
             size="sm"
             :loading="submitting"
             :disabled="!hasChanges"
+            :ui="{
+              base: 'bg-accent-500 hover:bg-accent-600 disabled:bg-accent-600 disabled:text-gray-100 disabled:cursor-not-allowed py-2',
+            }"
             @click="handleSave"
           >
             Save changes
@@ -355,6 +358,7 @@ onMounted(async () => {
             variant="ghost"
             size="sm"
             :disabled="submitting"
+            :ui="{ base: 'text-accent-500' }"
             @click="router.push('/notes')"
           >
             Discard

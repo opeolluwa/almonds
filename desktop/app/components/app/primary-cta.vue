@@ -7,7 +7,7 @@ defineProps<{
 </script>
 
 <template>
-  <!-- Desktop: labelled button -->
+  <!-- Desktop: labeled button -->
   <NuxtLink
     :to="to"
     class="hidden md:flex items-center gap-2 py-2 px-4 bg-accent-500 text-white rounded-lg text-sm font-medium hover:bg-accent-600 transition-colors"

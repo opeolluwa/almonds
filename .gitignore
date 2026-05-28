@@ -24,3 +24,7 @@ test.sqlite
 
 
 almonds/src-tauri/almond.dev.db
+
+
+prod.db
+backup.sql

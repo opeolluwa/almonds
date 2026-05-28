@@ -6,19 +6,35 @@
   nocompatible: true;
 }
 
-@theme {
-  --color-accent-50: #fdf2f4;
-  --color-accent-100: #fce7eb;
-  --color-accent-200: #f9d0d9;
-  --color-accent-300: #f4a9b9;
-  --color-accent-400: #ed7694;
-  --color-accent-500: #d02752;
-  --color-accent-600: #bf2249;
-  --color-accent-700: #a11d3f;
-  --color-accent-800: #871b3a;
-  --color-accent-900: #741b36;
-  --color-accent-950: #410a1a;
+:root {
+  --app-accent-50: #fdf2f4;
+  --app-accent-100: #fce7eb;
+  --app-accent-200: #f9d0d9;
+  --app-accent-300: #f4a9b9;
+  --app-accent-400: #ed7694;
+  --app-accent-500: #d02752;
+  --app-accent-600: #bf2249;
+  --app-accent-700: #a11d3f;
+  --app-accent-800: #871b3a;
+  --app-accent-900: #741b36;
+  --app-accent-950: #410a1a;
+}
 
+@theme inline {
+  --color-accent-50: var(--app-accent-50);
+  --color-accent-100: var(--app-accent-100);
+  --color-accent-200: var(--app-accent-200);
+  --color-accent-300: var(--app-accent-300);
+  --color-accent-400: var(--app-accent-400);
+  --color-accent-500: var(--app-accent-500);
+  --color-accent-600: var(--app-accent-600);
+  --color-accent-700: var(--app-accent-700);
+  --color-accent-800: var(--app-accent-800);
+  --color-accent-900: var(--app-accent-900);
+  --color-accent-950: var(--app-accent-950);
+}
+
+@theme {
   --color-surface-50: #f3f5f6;
   --color-surface-100: #e7eaed;
   --color-surface-200: #cfd4dd;
@@ -32,17 +48,6 @@
   --color-surface-950: #0a121f;
 
   --color-primary: oklch(56.262% 0.20195 13.152);
-  --color-accent-50: oklch(84.747% 0.06448 1.3462);
-  --color-accent-100: oklch(81.004% 0.08241 2.6317);
-  --color-accent-200: oklch(73.827% 0.11968 4.327);
-  --color-accent-300: oklch(66.956% 0.15683 6.1397);
-  --color-accent-400: oklch(61.3% 0.18887 9.459);
-  --color-accent-500: oklch(56.262% 0.20195 13.152);
-  --color-accent-600: oklch(46.7% 0.16531 12.87);
-  --color-accent-700: oklch(36.661% 0.12643 11.718);
-  --color-accent-800: oklch(25.697% 0.08247 10.016);
-  --color-accent-900: oklch(13.852% 0.03175 1.2983);
-  --color-accent-950: oklch(0% 0 none);
 }
 
 html {

@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use almond_kernel::{
     entities,
-    repositories::workspace_preference::{
+    repositories::workspace_preferences::{
         WorkspacePreferenceRepository, WorkspacePreferenceRepositoryExt,
     },
     sync_engine::EntitySyncResult,

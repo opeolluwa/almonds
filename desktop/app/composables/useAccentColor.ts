@@ -61,7 +61,7 @@ function applyPalette(key: AccentKey) {
   const palette = palettes[key];
   const root = document.documentElement;
   for (const [shade, value] of Object.entries(palette)) {
-    root.style.setProperty(`--color-accent-${shade}`, value);
+    root.style.setProperty(`--app-accent-${shade}`, value);
   }
 }
 

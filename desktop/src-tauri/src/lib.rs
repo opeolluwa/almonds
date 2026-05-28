@@ -81,7 +81,7 @@ pub async fn run() {
                     };
 
                     let db_url = format!("sqlite://{}?mode=rwc", db_path.display());
-                    dbg!("Database URL: {:?}", &db_path);
+                    dbg!("Database URL: {:?}", &db_url);
                     let kernel = almond_kernel::DataEngine::new(&db_url)
                         .await
                         .expect("failed to initialize kernel");
