@@ -1,7 +1,7 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
   "productName": "Wild almonds",
-  "version": "1.0.0",
+  "version": "0.8.23",
   "identifier": "com.wild.almonds",
   "build": {
     "frontendDist": "../dist",
