@@ -1,6 +1,8 @@
 use sea_orm_migration::{prelude::*, schema::*, sea_orm::DbBackend};
 
-use crate::m20260224_214545_create_workspaces::Workspaces;
+use crate::{
+    m20260224_214545_create_workspaces::Workspaces, m20260528_132342_notification::NotificationType,
+};
 
 #[derive(DeriveMigrationName)]
 pub struct Migration;
@@ -15,26 +17,44 @@ impl MigrationTrait for Migration {
             db_connection
                 .execute_unprepared(
                     r#"
-                    CREATE TABLE IF NOT EXISTS "notifications_new" (
-                        "identifier"         TEXT NOT NULL PRIMARY KEY,
-                        "title"              TEXT NOT NULL,
-                        "body"               TEXT NOT NULL,
-                        "notification_type"  TEXT NOT NULL DEFAULT 'generic',
-                        "is_read"            INTEGER NOT NULL DEFAULT 0,
-                        "workspace_identifier" TEXT REFERENCES "workspaces" ("identifier") ON DELETE CASCADE,
-                        "created_at"         TEXT NOT NULL,
-                        "updated_at"         TEXT NOT NULL
-                    );
-
-                    INSERT INTO "notifications_new"
-                        ("identifier", "title", "body", "notification_type", "created_at", "updated_at")
-                    SELECT
-                        "identifier", "title", "body", "notification_type", "created_at", "updated_at"
-                    FROM "notifications";
-
-                    DROP TABLE "notifications";
-                    ALTER TABLE "notifications_new" RENAME TO "notifications";
+                    DROP TABLE "notifications";             
                     "#,
+                )
+                .await?;
+
+            manager
+                .create_table(
+                    Table::create()
+                        .table("notifications")
+                        .if_not_exists()
+                        .col(pk_uuid("identifier"))
+                        .col(string("title"))
+                        .col(string("body"))
+                        .col(
+                            enumeration(
+                                "notification_type",
+                                "notification_type",
+                                [
+                                    NotificationType::BackupFailed,
+                                    NotificationType::BackupSuccess,
+                                    NotificationType::WorkspaceInviteReceived,
+                                    NotificationType::WorkspaceInviteAccepted,
+                                    NotificationType::WorkspaceInviteDeclined,
+                                    NotificationType::ItemShared,
+                                    NotificationType::ItemUnshared,
+                                    NotificationType::ItemUpdated,
+                                    NotificationType::ItemDeleted,
+                                    NotificationType::ItemAccessGranted,
+                                    NotificationType::ItemAccessRevoked,
+                                    NotificationType::Generic,
+                                ],
+                            )
+                            .not_null()
+                            .default("generic".to_string()),
+                        )
+                        .col(timestamp_with_time_zone("created_at"))
+                        .col(timestamp_with_time_zone("updated_at"))
+                        .to_owned(),
                 )
                 .await?;
 
