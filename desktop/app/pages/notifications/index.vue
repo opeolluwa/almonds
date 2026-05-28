@@ -1,89 +1,9 @@
 <script setup lang="ts">
+import type { NotificationType } from "almond_kernel";
+
 definePageMeta({ layout: false });
 
-type NotificationCategory = "system" | "activity" | "reminder" | "alert";
-
-interface Notification {
-  id: number;
-  title: string;
-  message: string;
-  category: NotificationCategory;
-  read: boolean;
-  time: string; // ISO string
-}
-
-const notifications = ref<Notification[]>([]);
-
-// const test = ref<Notification[]>([
-//   {
-//     id: 1,
-//     title: "Snippet saved",
-//     message: "Your TypeScript utility snippet was saved successfully.",
-//     category: "activity",
-//     read: false,
-//     time: new Date(Date.now() - 1000 * 60 * 4).toISOString(),
-//   },
-//   {
-//     id: 2,
-//     title: "Sync complete",
-//     message: "All local data has been synced to the server.",
-//     category: "system",
-//     read: false,
-//     time: new Date(Date.now() - 1000 * 60 * 22).toISOString(),
-//   },
-//   {
-//     id: 3,
-//     title: "Daily reminder",
-//     message: "You have 3 tasks due today. Stay on top of it!",
-//     category: "reminder",
-//     read: false,
-//     time: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
-//   },
-//   {
-//     id: 4,
-//     title: "Storage warning",
-//     message: "You're using 85% of your available storage quota.",
-//     category: "alert",
-//     read: false,
-//     time: new Date(Date.now() - 1000 * 60 * 60 * 3).toISOString(),
-//   },
-//   {
-//     id: 5,
-//     title: "Note updated",
-//     message: '"Project Ideas" was modified from another session.',
-//     category: "activity",
-//     read: true,
-//     time: new Date(Date.now() - 1000 * 60 * 60 * 6).toISOString(),
-//   },
-//   {
-//     id: 6,
-//     title: "New bookmark added",
-//     message: '"Nuxt 4 Migration Guide" was bookmarked.',
-//     category: "activity",
-//     read: true,
-//     time: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
-//   },
-//   {
-//     id: 7,
-//     title: "App updated",
-//     message: "Almonds was updated to version 1.4.0. See what's new.",
-//     category: "system",
-//     read: true,
-//     time: new Date(Date.now() - 1000 * 60 * 60 * 48).toISOString(),
-//   },
-//   {
-//     id: 8,
-//     title: "Weekly summary",
-//     message: "You completed 12 tasks and added 5 snippets this week.",
-//     category: "reminder",
-//     read: true,
-//     time: new Date(Date.now() - 1000 * 60 * 60 * 72).toISOString(),
-//   },
-// ]);
-
-type FilterTab = "all" | "unread";
-const filter = ref<FilterTab>("all");
-const activeCategory = ref<NotificationCategory | "all">("all");
+type NotificationCategory = "system" | "activity" | "alert";
 
 const categoryConfig: Record<
   NotificationCategory,
@@ -101,12 +21,6 @@ const categoryConfig: Record<
     bg: "bg-gray-100 dark:bg-gray-800",
     label: "System",
   },
-  reminder: {
-    icon: "heroicons:bell",
-    color: "text-amber-500 dark:text-amber-400",
-    bg: "bg-amber-50 dark:bg-amber-950",
-    label: "Reminder",
-  },
   alert: {
     icon: "heroicons:exclamation-triangle",
     color: "text-accent-500 dark:text-accent-400",
@@ -115,42 +29,59 @@ const categoryConfig: Record<
   },
 };
 
+function getCategory(type: NotificationType): NotificationCategory {
+  if (type === "BackupFailed") return "alert";
+  if (type.startsWith("WorkspaceInvite") || type.startsWith("Item"))
+    return "activity";
+  return "system";
+}
+
+const notificationStore = useNotificationStore();
+const notifications = computed(() => notificationStore.notifications);
+
+type FilterTab = "all" | "unread";
+const filter = ref<FilterTab>("all");
+const activeCategory = ref<NotificationCategory | "all">("all");
+
 const filtered = computed(() => {
   let list = notifications.value;
-  if (filter.value === "unread") list = list.filter((n) => !n.read);
+  if (filter.value === "unread") list = list.filter((n) => !n.isRead);
   if (activeCategory.value !== "all")
-    list = list.filter((n) => n.category === activeCategory.value);
+    list = list.filter(
+      (n) => getCategory(n.notificationType) === activeCategory.value,
+    );
   return list;
 });
 
 const unreadCount = computed(
-  () => notifications.value.filter((n) => !n.read).length,
+  () => notifications.value.filter((n) => !n.isRead).length,
 );
 
 const categoryCounts = computed(() =>
-  (["activity", "system", "reminder", "alert"] as NotificationCategory[]).map(
-    (c) => ({
-      key: c,
-      count: notifications.value.filter((n) => n.category === c).length,
-    }),
-  ),
+  (["activity", "system", "alert"] as NotificationCategory[]).map((c) => ({
+    key: c,
+    count: notifications.value.filter(
+      (n) => getCategory(n.notificationType) === c,
+    ).length,
+  })),
 );
 
-function markRead(id: number) {
-  const n = notifications.value.find((n) => n.id === id);
-  if (n) n.read = true;
+function markRead(identifier: string) {
+  notificationStore.markAsRead(identifier);
 }
 
-function dismiss(id: number) {
-  notifications.value = notifications.value.filter((n) => n.id !== id);
+function dismiss(identifier: string) {
+  notificationStore.deleteNotification(identifier);
 }
 
 function markAllRead() {
-  notifications.value.forEach((n) => (n.read = true));
+  notificationStore.markAllAsRead();
 }
 
 function clearAll() {
-  notifications.value = [];
+  notifications.value.forEach((n) =>
+    notificationStore.deleteNotification(n.identifier),
+  );
 }
 
 function relativeTime(iso: string) {
@@ -228,30 +159,30 @@ function relativeTime(iso: string) {
       <div v-else class="flex flex-col gap-2">
         <div
           v-for="item in filtered"
-          :key="item.id"
+          :key="item.identifier"
           class="group relative flex items-start gap-3 bg-white dark:bg-gray-800 rounded-xl p-4 border transition-all cursor-pointer"
           :class="
-            item.read
+            item.isRead
               ? 'border-gray-100 dark:border-gray-700'
               : 'border-accent-100 dark:border-accent-900 hover:border-accent-200 dark:hover:border-accent-800'
           "
-          @click="markRead(item.id)"
+          @click="markRead(item.identifier)"
         >
           <!-- unread dot -->
           <span
-            v-if="!item.read"
+            v-if="!item.isRead"
             class="absolute top-4 right-4 size-2 rounded-full bg-accent-500"
           />
 
           <!-- category icon -->
           <div
             class="shrink-0 size-8 rounded-lg flex items-center justify-center mt-0.5"
-            :class="categoryConfig[item.category].bg"
+            :class="categoryConfig[getCategory(item.notificationType)].bg"
           >
             <UIcon
-              :name="categoryConfig[item.category].icon"
+              :name="categoryConfig[getCategory(item.notificationType)].icon"
               class="size-4"
-              :class="categoryConfig[item.category].color"
+              :class="categoryConfig[getCategory(item.notificationType)].color"
             />
           </div>
 
@@ -261,7 +192,7 @@ function relativeTime(iso: string) {
               <p
                 class="text-sm truncate"
                 :class="
-                  item.read
+                  item.isRead
                     ? 'font-normal text-gray-600 dark:text-gray-400'
                     : 'font-medium text-gray-800 dark:text-gray-100'
                 "
@@ -269,13 +200,13 @@ function relativeTime(iso: string) {
                 {{ item.title }}
               </p>
               <span class="text-[11px] text-gray-400 shrink-0">
-                {{ relativeTime(item.time) }}
+                {{ relativeTime(item.createdAt) }}
               </span>
             </div>
             <p
               class="text-xs text-gray-400 dark:text-gray-500 mt-0.5 leading-snug"
             >
-              {{ item.message }}
+              {{ item.body }}
             </p>
           </div>
 
@@ -283,7 +214,7 @@ function relativeTime(iso: string) {
           <button
             class="absolute bottom-3.5 right-3.5 opacity-0 group-hover:opacity-100 transition-opacity text-gray-300 hover:text-gray-500 dark:hover:text-gray-300"
             aria-label="Dismiss"
-            @click.stop="dismiss(item.id)"
+            @click.stop="dismiss(item.identifier)"
           >
             <UIcon name="heroicons:x-mark" class="size-3.5" />
           </button>
