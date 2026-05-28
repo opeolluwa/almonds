@@ -7,21 +7,16 @@ use serde::{Deserialize, Serialize};
 #[sea_orm(table_name = "notifications")]
 #[serde(rename_all = "camelCase")]
 pub struct Model {
-    #[sea_orm(primary_key, auto_increment = false, column_type = "Text")]
-    pub identifier: String,
-    #[sea_orm(column_type = "Text")]
+    #[sea_orm(primary_key, auto_increment = false)]
+    pub identifier: Uuid,
     pub title: String,
-    #[sea_orm(column_type = "Text")]
     pub body: String,
     #[sea_orm(column_type = "Text")]
     pub notification_type: String,
-    pub is_read: i64,
-    #[sea_orm(column_type = "Text", nullable)]
-    pub workspace_identifier: Option<String>,
-    #[sea_orm(column_type = "Text")]
-    pub created_at: String,
-    #[sea_orm(column_type = "Text")]
-    pub updated_at: String,
+    pub is_read: bool,
+    pub workspace_identifier: Option<Uuid>,
+    pub created_at: DateTimeWithTimeZone,
+    pub updated_at: DateTimeWithTimeZone,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

@@ -1,6 +1,6 @@
 import { invoke } from "@tauri-apps/api/core";
 import { defineStore } from "pinia";
-import type { NotificationType } from "~/kernel/bindings/sea_orm_active_enums";
+import type { NotificationType } from "almond_kernel";
 
 export interface Notification {
   identifier: string;

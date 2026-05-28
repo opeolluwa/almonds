@@ -77,22 +77,8 @@ impl NotificationRepositoryExt for NotificationRepository {
     ) -> Result<notifications::Model, KernelError> {
         let mut active_model: notifications::ActiveModel = payload.to_owned().into();
 
-        #[cfg(feature = "postgres")]
-        {
-            let meta = extract_req_meta(meta)?;
-            active_model.workspace_identifier = Set(Some(meta.workspace_identifier));
-        }
-        #[cfg(feature = "sqlite")]
-        {
-            let meta = extract_req_meta(meta)?;
-            active_model.workspace_identifier = Set(Some(meta.workspace_identifier.to_string()));
-        }
-
-        #[cfg(feature = "mysql")]
-        {
-            let meta = extract_req_meta(meta)?;
-            active_model.workspace_identifier = Set(Some(meta.workspace_identifier.to_string()));
-        }
+        let meta = extract_req_meta(meta)?;
+        active_model.workspace_identifier = Set(Some(meta.workspace_identifier));
 
         active_model
             .insert(self.conn.as_ref())
@@ -175,17 +161,8 @@ impl NotificationRepositoryExt for NotificationRepository {
 
         let mut active_model = model.into_active_model();
 
-        #[cfg(feature = "postgres")]
-        {
-            active_model.is_read = Set(true);
-            active_model.updated_at = Set(Utc::now().fixed_offset());
-        }
-
-        #[cfg(feature = "sqlite")]
-        {
-            active_model.is_read = Set(1i64);
-            active_model.updated_at = Set(Utc::now().fixed_offset().to_string());
-        }
+        active_model.is_read = Set(true);
+        active_model.updated_at = Set(Utc::now().fixed_offset());
 
         active_model
             .update(self.conn.as_ref())

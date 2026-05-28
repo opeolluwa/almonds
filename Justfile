@@ -13,7 +13,7 @@ DB_PATH := "sqlite://../../test.sqlite?mode=rwc"
 DOCKER_CMD := "docker compose -f docker-compose.yaml"
 POSTGRES_URL := "postgres://almond:almond@localhost:5433/almond"
 MYSQL_URL    := "mysql://almond:almond@localhost:3307/almond"
-SQLITE_URL   := "sqlite://./almonds.db?mode=rwc"
+SQLITE_URL   := "sqlite://./almonds-dev.db?mode=rwc"
 DATABASE_URL :="postgres://orchard:orchard@localhost:6543/orchard"
 
 set dotenv-required := false

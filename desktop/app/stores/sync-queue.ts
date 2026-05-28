@@ -34,29 +34,68 @@ export const useSyncQueueStore = defineStore("sync_queue_store", () => {
     if (runningSync.value || !isOnline.value) return;
     runningSync.value = true;
     try {
-      await useWorkspacesStore().syncUpstream();
+      await useWorkspacesStore()
+        .syncUpstream()
+        .then(async () => {
+          await useNotificationStore().createNotification({
+            title: "Workspace Sync Successful",
+            body: "Your data has been synced successfully.",
+            notificationType: "BackupSuccess",
+          });
+        });
       await Promise.all([
-        useBookmarkStore().syncUpstream(),
-        useNoteStore().syncUpstream(),
-        useTodoStore().syncUpstream(),
-        useReminderStore().syncUpstream(),
-        useUserPreferenceStore().syncUpstream(),
-        useSnippetStore().syncUpstream(),
-        useRecycleBinStore().syncUpstream(),
+        useBookmarkStore().syncUpstream().then(async () => {
+          await useNotificationStore().createNotification({
+            title: "Bookmark Sync Successful",
+            body: "Your bookmark data has been synced successfully.",
+            notificationType: "BackupSuccess",
+          });
+        }),
+        useNoteStore().syncUpstream().then(async () => {
+          await useNotificationStore().createNotification({
+            title: "Note Sync Successful",
+            body: "Your note data has been synced successfully.",
+            notificationType: "BackupSuccess",
+          });
+        }),
+        useTodoStore().syncUpstream().then(async () => {
+          await useNotificationStore().createNotification({
+            title: "Todo Sync Successful",
+            body: "Your todo data has been synced successfully.",
+            notificationType: "BackupSuccess",
+          });
+        }),
+        useReminderStore().syncUpstream().then(async () => {
+          await useNotificationStore().createNotification({
+            title: "Reminder Sync Successful",
+            body: "Your reminder data has been synced successfully.",
+            notificationType: "BackupSuccess",
+          });
+        }),
+        useUserPreferenceStore().syncUpstream().then(async () => {
+          await useNotificationStore().createNotification({
+            title: "User Preference Sync Successful",
+            body: "Your user preference data has been synced successfully.",
+            notificationType: "BackupSuccess",
+          });
+        }),
+        useSnippetStore().syncUpstream().then(async () => {
+          await useNotificationStore().createNotification({
+            title: "Snippet Sync Successful",
+            body: "Your snippet data has been synced successfully.",
+            notificationType: "BackupSuccess",
+          });
+        }),
+        useRecycleBinStore().syncUpstream().then(async () => {
+          await useNotificationStore().createNotification({
+            title: "Recycle Bin Sync Successful",
+            body: "Your recycle bin data has been synced successfully.",
+            notificationType: "BackupSuccess",
+          });
+        }),
       ]);
-      await useNotificationStore().createNotification({
-        title: "Sync complete",
-        body: "Your data has been synced successfully.",
-        notificationType: "BackupSuccess",
-      });
     } catch (err) {
       console.error("Error during sync:", err);
-      await useNotificationStore().createNotification({
-        title: "Sync failed",
-        body:
-          err instanceof Error ? err.message : "An error occurred during sync.",
-        notificationType: "BackupFailed",
-      });
     } finally {
       runningSync.value = false;
     }

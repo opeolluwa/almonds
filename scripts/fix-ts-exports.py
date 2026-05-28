@@ -17,13 +17,33 @@ import sys
 from pathlib import Path
 
 PATTERN = re.compile(r'#\[ts\(export\)\]')
+ENUM_PATTERN = re.compile(r'^pub enum (\w+)', re.MULTILINE)
 
 SKIP = {"mod", "prelude"}
 
-# Files whose bindings don't follow the standard `Model` export pattern.
-SPECIAL: dict[str, list[str]] = {
-    "sea_orm_active_enums": ["ItemType", "Priority", "Tag"],
+# Rust source files whose enums are emitted into a single bindings file.
+# Map: bindings stem -> path to the Rust source (relative to project root).
+ENUM_SOURCES: dict[str, str] = {
+    "sea_orm_active_enums": "kernel/src/enums.rs",
 }
+
+
+def discover_enums(rust_src: Path) -> list[str]:
+    """Return sorted enum names found in a Rust source file."""
+    if not rust_src.exists():
+        return []
+    return sorted(ENUM_PATTERN.findall(rust_src.read_text(encoding="utf-8")))
+
+
+def build_special(project_root: Path) -> dict[str, list[str]]:
+    return {
+        stem: discover_enums(project_root / src)
+        for stem, src in ENUM_SOURCES.items()
+    }
+
+
+# Resolved at runtime in main().
+SPECIAL: dict[str, list[str]] = {}
 
 
 def to_pascal(stem: str) -> str:
@@ -83,6 +103,14 @@ def main() -> None:
     if not entities_dir.exists():
         print(f"error: directory not found: {entities_dir}", file=sys.stderr)
         sys.exit(1)
+
+    # Resolve project root (two levels up from kernel/ when run from kernel/).
+    project_root = Path.cwd().parent
+
+    global SPECIAL
+    SPECIAL = build_special(project_root)
+    for stem, names in SPECIAL.items():
+        print(f"  enums from {ENUM_SOURCES[stem]}: {', '.join(names)}")
 
     changed = [f for f in sorted(entities_dir.glob("*.rs")) if fix_file(f)]
 

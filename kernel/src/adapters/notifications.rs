@@ -39,14 +39,14 @@ impl Into<entities::notifications::ActiveModel> for CreateNotification {
 impl Into<entities::notifications::ActiveModel> for CreateNotification {
     fn into(self) -> entities::notifications::ActiveModel {
         ActiveModel {
-            identifier: Set(Uuid::new_v4().to_string()),
+            identifier: Set(Uuid::new_v4()),
             title: Set(self.title),
             body: Set(self.body),
             notification_type: Set(self.notification_type.to_string()),
-            is_read: Set(self.is_read as i64),
-            workspace_identifier: Set(self.workspace_identifier.map(|v| v.to_string())),
-            created_at: Set(Utc::now().fixed_offset().to_string()),
-            updated_at: Set(Utc::now().fixed_offset().to_string()),
+            is_read: Set(self.is_read),
+            workspace_identifier: Set(self.workspace_identifier),
+            created_at: Set(Utc::now().fixed_offset()),
+            updated_at: Set(Utc::now().fixed_offset()),
         }
     }
 }

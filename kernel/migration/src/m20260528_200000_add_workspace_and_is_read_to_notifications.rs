@@ -52,6 +52,20 @@ impl MigrationTrait for Migration {
                             .not_null()
                             .default("generic".to_string()),
                         )
+                        .foreign_key(
+                            ForeignKey::create()
+                                .name("fk_notification_workspace_identifier")
+                                .from("notifications", "workspace_identifier")
+                                .to(Workspaces::Table, "identifier")
+                                .on_delete(ForeignKeyAction::Cascade),
+                        )
+                        .col(
+                            ColumnDef::new("is_read")
+                                .boolean()
+                                .not_null()
+                                .default(false),
+                        )
+                        .col(ColumnDef::new("workspace_identifier").uuid())
                         .col(timestamp_with_time_zone("created_at"))
                         .col(timestamp_with_time_zone("updated_at"))
                         .to_owned(),

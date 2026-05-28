@@ -7,12 +7,12 @@ use serde::{Deserialize, Serialize};
 #[sea_orm(table_name = "workspaces")]
 #[serde(rename_all = "camelCase")]
 pub struct Model {
+    #[sea_orm(primary_key, auto_increment = false)]
+    pub identifier: Uuid,
     pub name: String,
     pub description: String,
     pub created_at: DateTimeWithTimeZone,
     pub updated_at: DateTimeWithTimeZone,
-    #[sea_orm(primary_key, auto_increment = false)]
-    pub identifier: Uuid,
     pub is_default: bool,
     pub is_hidden: bool,
     pub is_secured: bool,

@@ -7,6 +7,8 @@ use axum::{
 use sea_orm::DatabaseConnection;
 use uuid::Uuid;
 
+use almond_kernel::entities::notifications;
+
 use crate::{
     adapters::{
         jwt::Claims,
@@ -14,7 +16,6 @@ use crate::{
         pagination::{PaginatedResponse, PaginationParams},
     },
     dto::{common::RowCount, notifications::Notification},
-    entities::notifications,
     errors::{app_error::AppError, service_error::ServiceError},
     repositories::{
         base::Repository,
@@ -139,12 +140,12 @@ impl NotificationServiceExt for NotificationService {
 
     async fn fetch_notifications(
         &self,
-        claims: &Claims,
+        _claims: &Claims,
         pagination: &PaginationParams,
     ) -> Result<PaginatedResponse<Vec<notifications::Model>>, ServiceError> {
         let records = self
             .repository
-            .fetch_all(&claims.user_identifier, pagination)
+            .fetch_all(pagination)
             .await?;
 
         let paginated_result = PaginatedResponse {
@@ -157,10 +158,10 @@ impl NotificationServiceExt for NotificationService {
         Ok(paginated_result)
     }
 
-    async fn count_unread(&self, claims: &Claims) -> Result<RowCount, ServiceError> {
+    async fn count_unread(&self, _claims: &Claims) -> Result<RowCount, ServiceError> {
         let result = self
             .repository
-            .count_unread(&claims.user_identifier)
+            .count_unread()
             .await?;
 
         Ok(result)
@@ -168,11 +169,11 @@ impl NotificationServiceExt for NotificationService {
 
     async fn mark_read(
         &self,
-        claims: &Claims,
+        _claims: &Claims,
         notification_identifier: &Uuid,
     ) -> Result<(), ServiceError> {
         self.repository
-            .mark_read(&claims.user_identifier, notification_identifier)
+            .mark_read(notification_identifier)
             .await?;
         Ok(())
     }

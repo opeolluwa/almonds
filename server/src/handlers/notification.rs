@@ -4,13 +4,14 @@ use axum::{
 };
 use uuid::Uuid;
 
+use almond_kernel::entities::notifications;
+
 use crate::{
     adapters::{
         jwt::Claims,
         pagination::{PaginatedResponse, PaginationParams},
     },
     dto::common::RowCount,
-    entities::notifications,
     errors::service_error::ServiceError,
     response::ApiResponse,
     services::notification_service::{NotificationService, NotificationServiceExt},
