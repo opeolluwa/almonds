@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useUserPreferenceStore } from "~/stores/user-preference";
+import { useUserPreferenceStore } from "~/stores/workspace-preferences";
 import AppInput from "../forms/app-input.vue";
 const store = useUserPreferenceStore();
 

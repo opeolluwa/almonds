@@ -42,7 +42,7 @@ export const useUserPreferenceStore = defineStore("user_preference_store", {
       this.loading = true;
       try {
         this.preference = await invoke<UserPreference | null>(
-          "get_user_preference",
+          "get_workspace_preference",
           {
             meta: await getWorkspaceMeta(),
           },
@@ -55,7 +55,7 @@ export const useUserPreferenceStore = defineStore("user_preference_store", {
     async createPreference(
       payload: CreateUserPreferencePayload,
     ): Promise<UserPreference> {
-      const created = await invoke<UserPreference>("create_user_preference", {
+      const created = await invoke<UserPreference>("create_workspace_preference", {
         preference: payload,
         meta: await getWorkspaceMeta(),
       });
@@ -66,7 +66,7 @@ export const useUserPreferenceStore = defineStore("user_preference_store", {
     async updatePreference(
       payload: UpdateUserPreferencePayload,
     ): Promise<UserPreference> {
-      const updated = await invoke<UserPreference>("update_user_preference", {
+      const updated = await invoke<UserPreference>("update_workspace_preference", {
         identifier: this.preference!.identifier,
         preference: payload,
         meta: await getWorkspaceMeta(),
@@ -78,7 +78,7 @@ export const useUserPreferenceStore = defineStore("user_preference_store", {
     async fetchUnsynced() {
       try {
         const userPreferences = await invoke<UserPreference[]>(
-          "get_unsynced_user_preferences",
+          "get_unsynced_workspace_preferences",
         );
         return userPreferences;
       } catch (error) {
@@ -124,7 +124,7 @@ export const useUserPreferenceStore = defineStore("user_preference_store", {
     },
 
     async clearQueue(identifiers: string[]) {
-      await invoke("clear_synced_user_preferences", { identifiers });
+      await invoke("clear_synced_workspace_preferences", { identifiers });
     },
   },
   persist: true,

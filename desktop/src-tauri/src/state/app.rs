@@ -5,7 +5,9 @@ use almond_kernel::{
         bookmarks::BookmarkRepository, notes::NotesRepository, prelude::*,
         recycle_bin::RecycleBinRepository, reminder::ReminderRepository,
         snippets::SnippetRepository, sync_queue::SyncQueueRepository, todo::TodoRepository,
-        user_preference::UserPreferenceRepository, workspace::WorkspaceRepository,
+        user_preferences::UserPreferencesRepository,
+        user_preferences::UserPreferencesRepositoryExt, workspace::WorkspaceRepository,
+        workspace_preferences::WorkspacePreferenceRepository,
     },
     sea_orm::DatabaseConnection,
 };
@@ -19,7 +21,8 @@ pub struct AppState {
     pub snippet_repository: SnippetRepository,
     pub sync_queue_repository: SyncQueueRepository,
     pub todo_repository: TodoRepository,
-    pub user_preference_repository: UserPreferenceRepository,
+    pub user_preference_repository: UserPreferencesRepository,
+    pub workspace_preference_repository: WorkspacePreferenceRepository,
     pub workspace_repository: WorkspaceRepository,
 }
 
@@ -32,8 +35,9 @@ impl AppState {
         let snippet_repository = SnippetRepository::new(conn.clone());
         let sync_queue_repository = SyncQueueRepository::new(conn.clone());
         let todo_repository = TodoRepository::new(conn.clone());
-        let user_preference_repository = UserPreferenceRepository::new(conn.clone());
+        let user_preference_repository = UserPreferencesRepository::new(conn.clone());
         let workspace_repository = WorkspaceRepository::new(conn.clone());
+        let workspace_preference_repository = WorkspacePreferenceRepository::new(conn.clone());
 
         AppState {
             bookmark_repository,
@@ -45,6 +49,7 @@ impl AppState {
             todo_repository,
             user_preference_repository,
             workspace_repository,
+            workspace_preference_repository,
         }
     }
 }

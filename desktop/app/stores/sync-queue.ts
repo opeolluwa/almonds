@@ -6,7 +6,7 @@ import { useNoteStore } from "~/stores/notes";
 import { useTodoStore } from "~/stores/todo";
 import { useWorkspacesStore } from "~/stores/workspaces";
 import { useReminderStore } from "~/stores/reminder";
-import { useUserPreferenceStore } from "~/stores/user-preference";
+import { useUserPreferenceStore } from "~/stores/workspace-preferences";
 import { useSnippetStore } from "~/stores/snippets";
 import { useRecycleBinStore } from "~/stores/recycle-bin";
 
