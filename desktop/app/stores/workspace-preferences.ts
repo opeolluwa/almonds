@@ -97,7 +97,6 @@ export const useUserPreferenceStore = defineStore("user_preference_store", {
     async syncUpstream() {
       // const userPreferences = await this.fetchUnsynced();
       // if (!userPreferences.length) return;
-
       // const input = userPreferences.map((p) => ({
       //   identifier: p.identifier,
       //   first_name: p.firstName,
@@ -116,7 +115,6 @@ export const useUserPreferenceStore = defineStore("user_preference_store", {
       //     }
       //   }
       // `;
-
       // try {
       //   const data = await apolloClient.mutate({
       //     mutation: query,

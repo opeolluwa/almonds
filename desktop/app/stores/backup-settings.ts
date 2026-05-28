@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-// import { HttpLink } from "@apollo/client/link/http";
+import { HttpLink } from "@apollo/client/link/http";
 
 type BackupProvider = "local" | "cloud" | "self-hosted";
 
@@ -54,10 +54,10 @@ export const useBackupSettingsStore = defineStore("backup_settings", {
     },
 
     applyEndpoint() {
-      // const { client } = useApolloClient();
-      // if (this.provider === "self-hosted" && this.selfHostedApiUrl) {
-      //   client.setLink(new HttpLink({ uri: this.selfHostedApiUrl }));
-      // }
+      const { client } = useApolloClient();
+      if (this.provider === "self-hosted" && this.selfHostedApiUrl) {
+        client.setLink(new HttpLink({ uri: this.selfHostedApiUrl }));
+      }
     },
 
     async save() {

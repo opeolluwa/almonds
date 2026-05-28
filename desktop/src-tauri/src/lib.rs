@@ -44,13 +44,13 @@ pub async fn run() {
                 }
             });
 
-            let salt_path = app
-                .path()
-                .app_local_data_dir()
-                .expect("could not resolve app local data path")
-                .join("salt.txt");
-            app.handle()
-                .plugin(tauri_plugin_stronghold::Builder::with_argon2(&salt_path).build())?;
+            // let salt_path = app
+            //     .path()
+            //     .app_local_data_dir()
+            //     .expect("could not resolve app local data path")
+            //     .join("salt.txt");
+            // app.handle()
+            //     .plugin(tauri_plugin_stronghold::Builder::with_argon2(&salt_path).build())?;
 
             if cfg!(debug_assertions) {
                 app.handle().plugin(
