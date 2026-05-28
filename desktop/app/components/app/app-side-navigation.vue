@@ -148,7 +148,7 @@ const workspaceItems = computed(() => [
         }"
       >
         <button
-          class="flex items-center gap-2.5 w-full px-3 py-2 mt-2 mb-6  dark:bg-gray-800/60 border-none hover:rounded-2xl focus:rounded hover:bg-gray-100 dark:hover:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-colors group capitalize"
+          class="flex items-center gap-2.5 w-full px-3 py-2 mt-2 mb-6 dark:bg-gray-800/60 border-none hover:rounded-2xl focus:rounded hover:bg-gray-100 dark:hover:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-colors group capitalize"
         >
           <span
             class="flex items-center justify-center size-6 rounded-md bg-accent-100 dark:bg-accent-900 shrink-0"

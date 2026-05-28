@@ -74,9 +74,8 @@ onMounted(async () => {
   </Body>
 </template>
 
-
-<style >
-  @reference "./assets/css/main.css";
+<style>
+@reference "./assets/css/main.css";
 .scrollbar-config {
   @apply scrollbar-thumb-rounded-full scrollbar-w-[0.25px] scrollbar-corner-accent-400 scrollbar-h-20 scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-accent-600 scrollbar-track-transparent;
 }
