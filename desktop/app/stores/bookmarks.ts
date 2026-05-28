@@ -173,7 +173,10 @@ export const useBookmarkStore = defineStore("bookmark_store", {
       `;
 
       try {
-        const data = await apolloClient.mutate({ mutation: query, variables: { input } });
+        const data = await apolloClient.mutate({
+          mutation: query,
+          variables: { input },
+        });
         console.log(
           "Bookmarks checks response:",
           JSON.stringify(data, null, 2),

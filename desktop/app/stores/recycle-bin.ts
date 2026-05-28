@@ -129,7 +129,10 @@ export const useRecycleBinStore = defineStore("recycle_bin_store", {
       `;
 
       try {
-        const data = await apolloClient.mutate({ mutation: query, variables: { input } });
+        const data = await apolloClient.mutate({
+          mutation: query,
+          variables: { input },
+        });
         console.log(
           "Recycle bin sync response:",
           JSON.stringify(data, null, 2),

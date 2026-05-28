@@ -200,7 +200,10 @@ export const useWorkspacesStore = defineStore("workspaces_store", {
       `;
 
       try {
-        const data = await apolloClient.mutate({ mutation: query, variables: { input } });
+        const data = await apolloClient.mutate({
+          mutation: query,
+          variables: { input },
+        });
         console.log("Workspaces sync response:", JSON.stringify(data, null, 2));
       } catch (error) {
         console.error("Error syncing workspaces:", error);
@@ -265,7 +268,10 @@ export const useWorkspacesStore = defineStore("workspaces_store", {
                 }
               }
             `;
-            await apolloClient.mutate({ mutation: syncMutation, variables: { input } });
+            await apolloClient.mutate({
+              mutation: syncMutation,
+              variables: { input },
+            });
           }
         }
 

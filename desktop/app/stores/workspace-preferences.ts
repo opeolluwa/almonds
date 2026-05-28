@@ -119,7 +119,10 @@ export const useUserPreferenceStore = defineStore("user_preference_store", {
       `;
 
       try {
-        const data = await apolloClient.mutate({ mutation: query, variables: { input } });
+        const data = await apolloClient.mutate({
+          mutation: query,
+          variables: { input },
+        });
         console.log(
           "User preferences sync response:",
           JSON.stringify(data, null, 2),

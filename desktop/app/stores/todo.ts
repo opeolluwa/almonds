@@ -207,7 +207,10 @@ export const useTodoStore = defineStore("todo_store", {
       `;
 
       try {
-        const data = await apolloClient.mutate({ mutation: query, variables: { input } });
+        const data = await apolloClient.mutate({
+          mutation: query,
+          variables: { input },
+        });
         console.log("Todos sync response:", JSON.stringify(data, null, 2));
       } catch (error) {
         console.error("Error syncing todos:", error);

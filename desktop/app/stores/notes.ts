@@ -181,7 +181,10 @@ export const useNoteStore = defineStore("notes_store", {
       `;
 
       try {
-        const data = await apolloClient.mutate({ mutation: query, variables: { input } });
+        const data = await apolloClient.mutate({
+          mutation: query,
+          variables: { input },
+        });
         console.log("Notes checks response:", JSON.stringify(data, null, 2));
       } catch (error) {
         console.error("Error syncing notes:", error);

@@ -167,7 +167,10 @@ export const useReminderStore = defineStore("reminder_store", {
       `;
 
       try {
-        const data = await apolloClient.mutate({ mutation: query, variables: { input } });
+        const data = await apolloClient.mutate({
+          mutation: query,
+          variables: { input },
+        });
         console.log("Reminders sync response:", JSON.stringify(data, null, 2));
       } catch (error) {
         console.error("Error syncing reminders:", error);
