@@ -181,11 +181,10 @@ h6.notes_heading {
   line-height: 1.6;
 }
 
-
-.dm-floating-menu{
- height: 12rem;
+.dm-floating-menu {
+  height: 12rem;
 }
 
-.dm-editor{
+.dm-editor {
   height: 50vh;
 }

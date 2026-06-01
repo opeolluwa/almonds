@@ -135,9 +135,4 @@ function handleUpdate({ editor }: { editor: any }) {
   </div>
 </template>
 
-
-<style>
-
-
-
-</style>
+<style></style>
