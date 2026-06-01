@@ -281,6 +281,7 @@ useEventListener("keydown", (e: KeyboardEvent) => {
 <style scoped>
 .titlebar > * {
   cursor: pointer;
+  border: none;
 }
 
 .traffic-lights {

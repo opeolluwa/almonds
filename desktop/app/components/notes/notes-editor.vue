@@ -129,7 +129,15 @@ function handleUpdate({ editor }: { editor: any }) {
     >
       <Domternal.Toolbar class="mb-12 -mt-5" />
       <Domternal.Content class="bg-transparent" />
+      <Domternal.FloatingMenu class="" />
       <Domternal.BubbleMenu class="mb-5" />
     </Domternal>
   </div>
 </template>
+
+
+<style>
+
+
+
+</style>

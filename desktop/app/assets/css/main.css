@@ -180,3 +180,12 @@ h6.notes_heading {
   margin: 0.2rem 0;
   line-height: 1.6;
 }
+
+
+.dm-floating-menu{
+ height: 12rem;
+}
+
+.dm-editor{
+  height: 50vh;
+}
