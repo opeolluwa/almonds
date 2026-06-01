@@ -29,7 +29,14 @@ import {
   emojis,
   createEmojiSuggestionRenderer,
 } from "@domternal/extension-emoji";
-import { BlockContextMenu, BlockHandle, FloatingMenu, KeyboardReorder, SlashCommand, SmartPaste } from "@domternal/extension-block-menu";
+import {
+  BlockContextMenu,
+  BlockHandle,
+  FloatingMenu,
+  KeyboardReorder,
+  SlashCommand,
+  SmartPaste,
+} from "@domternal/extension-block-menu";
 
 const colorMode = useColorMode();
 const isDark = computed(() => colorMode.value === "dark");
@@ -74,11 +81,11 @@ const extensions = [
   TextStyle,
   Code,
   TextAlign,
-      BlockHandle.configure({ nested: true }),
-    BlockContextMenu,
-    SlashCommand,
-    SmartPaste,
-    KeyboardReorder,
+  BlockHandle.configure({ nested: true }),
+  BlockContextMenu,
+  SlashCommand,
+  SmartPaste,
+  KeyboardReorder,
   Heading.configure({
     levels: [1, 2, 3, 4, 5, 6],
     HTMLAttributes: { class: "notes_heading" },
@@ -95,10 +102,10 @@ const extensions = [
     linkOnPaste: true,
     defaultProtocol: "https",
   }),
-      FloatingMenu.configure({
-      element: document.getElementById('floating-menu')!,
-      requireExplicitTrigger: false,
-    }),
+  FloatingMenu.configure({
+    element: document.getElementById("floating-menu")!,
+    requireExplicitTrigger: false,
+  }),
   Image.configure({
     //TODO: replace with actual upload handler that uploads to server and returns URL
     uploadHandler: async (file) => {
@@ -110,12 +117,14 @@ const extensions = [
     },
   }),
 
-  Placeholder.configure({   placeholder: ({ node }) => {
-    if (node.type.name === 'heading') return 'Enter a heading...';
-    if (node.type.name === 'codeBlock') return '// Write code here';
-    if (node.type.name === 'table') return '';
-    return 'Type something...';
-  }, })
+  Placeholder.configure({
+    placeholder: ({ node }) => {
+      if (node.type.name === "heading") return "Enter a heading...";
+      if (node.type.name === "codeBlock") return "// Write code here";
+      if (node.type.name === "table") return "";
+      return "Type something...";
+    },
+  }),
 ];
 
 const model = defineModel<string>();
