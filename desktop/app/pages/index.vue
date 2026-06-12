@@ -737,7 +737,10 @@ const quickActions = [
               :color="action.color"
               class="size-4 shrink-0"
             />
-            <span class="text-gray-800 dark:text-gray-200" :class="action.color">
+            <span
+              class="text-gray-800 dark:text-gray-200"
+              :class="action.color"
+            >
               {{ action.label }}
             </span>
           </NuxtLink>
