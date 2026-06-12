@@ -40,17 +40,18 @@ export const useWorkspacesStore = defineStore("workspaces_store", {
 
   getters: {
     currentWorkspace: (state) =>
-      state.workspaces.find((w) => w.identifier === state.activeWorkspaceId) ||
+      state.workspaces?.find((w) => w.identifier === state.activeWorkspaceId) ||
       null,
 
-    visibleWorkspaces: (state) => state.workspaces.filter((w) => !w.isHidden),
+    visibleWorkspaces: (state) =>
+      state.workspaces?.filter((w) => !w.isHidden) ?? [],
 
     isWorkspaceUnlocked: (state) => (identifier: string) =>
-      !state.workspaces.find((w) => w.identifier === identifier)?.isSecured ||
+      !state.workspaces?.find((w) => w.identifier === identifier)?.isSecured ||
       state.unlockedWorkspaceIds.includes(identifier),
 
     isCurrentWorkspaceLocked: (state) => {
-      const current = state.workspaces.find(
+      const current = state.workspaces?.find(
         (w) => w.identifier === state.activeWorkspaceId,
       );
       return (
@@ -64,7 +65,7 @@ export const useWorkspacesStore = defineStore("workspaces_store", {
     async fetchWorkspaces() {
       this.loading = true;
       try {
-        this.workspaces = await invoke<Workspace[]>("list_workspaces");
+        this.workspaces = (await invoke<Workspace[]>("list_workspaces")) ?? [];
         if (!this.activeWorkspaceId && this.workspaces.length > 0) {
           // Prefer the default workspace on first load
           const defaultWs = this.workspaces.find((w) => w.isDefault);
@@ -281,5 +282,8 @@ export const useWorkspacesStore = defineStore("workspaces_store", {
   },
   persist: {
     omit: ["unlockedWorkspaceIds"],
+    afterHydrate: (ctx) => {
+      if (!Array.isArray(ctx.store.workspaces)) ctx.store.workspaces = [];
+    },
   },
 });

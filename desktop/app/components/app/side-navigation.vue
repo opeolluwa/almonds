@@ -1,10 +1,7 @@
 <script setup lang="ts">
 import type { Workspace } from "~/stores/workspaces";
 import { primaryRoutes, secondaryRoutes } from "~/data/routes";
-import AppWorkspaceCreateModal from "./workspace-create-modal.vue";
-import AppWorkspaceSecuritySetupModal from "./workspace-security-setup-modal.vue";
-import AppWorkspaceProfileSetupModal from "./workspace-profile-setup-modal.vue";
-import AppWorkspacePasswordModal from "./workspace-security-setup-modal.vue";
+
 
 const workspaceStore = useWorkspacesStore();
 const showCreateModal = ref(false);
@@ -63,7 +60,7 @@ const pendingWorkspaceId = ref<string | null>(null);
 const showPasswordModal = ref(false);
 
 function handleWorkspaceSelect(identifier: string) {
-  const ws = workspaceStore.visibleWorkspaces.find(
+  const ws = workspaceStore.visibleWorkspaces?.find(
     (w) => w.identifier === identifier,
   );
   if (!ws) return;
@@ -86,9 +83,7 @@ const activeWorkspaceName = computed(
 );
 
 const workspaceItems = computed(() => [
-  workspaceStore.visibleWorkspaces
-    .filter((w): w is Workspace => !!w)
-    .map((w) => {
+  workspaceStore?.visibleWorkspaces?.filter((w): w is Workspace => !!w)?.map((w) => {
       const isActive = w.identifier === activeId.value;
       return {
         label: w.name,

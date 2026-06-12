@@ -11,14 +11,16 @@ const secureSubmitting = ref(false);
 
 const secureTargetWorkspace = computed(() =>
   secureTargetId.value
-    ? workspaceStore.workspaces.find(
+    ? workspaceStore.workspaces?.find(
         (w) => w.identifier === secureTargetId.value,
       )
     : null,
 );
 
 function handleToggleSecured(identifier: string) {
-  const ws = workspaceStore.workspaces.find((w) => w.identifier === identifier);
+  const ws = workspaceStore.workspaces?.find(
+    (w) => w.identifier === identifier,
+  );
   if (!ws) return;
   secureTargetId.value = identifier;
   securePassword.value = "";
@@ -105,7 +107,9 @@ async function handleSetDefault(identifier: string) {
 
 // ── toggle hidden ─────────────────────────────────────────────────────────────
 async function handleToggleHidden(identifier: string) {
-  const ws = workspaceStore.workspaces.find((w) => w.identifier === identifier);
+  const ws = workspaceStore.workspaces?.find(
+    (w) => w.identifier === identifier,
+  );
   if (!ws) return;
   try {
     await workspaceStore.updateWorkspace(identifier, {
@@ -130,7 +134,9 @@ const editDescription = ref("");
 const editSubmitting = ref(false);
 
 function handleEdit(identifier: string) {
-  const ws = workspaceStore.workspaces.find((w) => w.identifier === identifier);
+  const ws = workspaceStore.workspaces?.find(
+    (w) => w.identifier === identifier,
+  );
   if (!ws) return;
   editingId.value = identifier;
   editName.value = ws.name;
@@ -163,7 +169,7 @@ async function submitEdit() {
   }
 }
 
-const workspaces = computed(() => workspaceStore.workspaces);
+const workspaces = computed(() => workspaceStore.workspaces ?? []);
 </script>
 
 <template>

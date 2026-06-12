@@ -78,7 +78,7 @@ useEventListener("keydown", (e: KeyboardEvent) => {
 </script>
 
 <template>
-  <div class="titlebar grid grid-cls-12" data-tauri-drag-region>
+  <div class="titlebar grid grid-cls-12 items-center" data-tauri-drag-region>
     <!-- mac os controls-->
     <div v-if="isMacOS" class="traffic-lights col-span-1">
       <UTooltip text="Close">
@@ -129,6 +129,7 @@ useEventListener("keydown", (e: KeyboardEvent) => {
     </div>
 
     <!-- Back & forward button -->
+    <WorkspaceSelect />
     <div
       class="col-col-end-3 flex items-center justify-center -gap-x-1.25 ml-16"
     >
@@ -195,7 +196,7 @@ useEventListener("keydown", (e: KeyboardEvent) => {
             isOpen = false;
             searchInputRef?.blur();
           "
-        >
+        />
         <kbd
           v-if="!searchQuery"
           class="hidden sm:inline-flex items-center gap-0.5 text-[10px] text-gray-400 dark:text-gray-500 font-mono select-none"
