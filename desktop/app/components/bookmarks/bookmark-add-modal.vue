@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { BookmarkTag, CreateBookmarkPayload } from "~/stores/bookmarks";
-import AppInput from "../forms/input.vue/index.js";
-import AppSelect from "../forms/select.vue/index.js";
+import AppInput from "../forms/input.vue";
+import AppSelect from "../forms/select.vue";
 import _ from "lodash";
 
 defineProps<{
