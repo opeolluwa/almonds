@@ -730,6 +730,7 @@ const quickActions = [
             v-for="action in quickActions"
             :key="action.label"
             :to="action.href"
+            :class="action.color"
             class="flex items-center gap-2.5 px-3 py-2.5 text-sm font-medium transition-colors"
           >
             <UIcon
