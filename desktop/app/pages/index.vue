@@ -467,7 +467,7 @@ const quickActions = [
 
             <div class="flex-1 min-w-0">
               <h2
-                class="text-sm font-semibold text-gray-800 dark:text-gray-200"
+                class="text-sm font-semibold text-gray-800 dark:text-gray-300/70"
               >
                 Active Todos
               </h2>
@@ -557,7 +557,7 @@ const quickActions = [
               class="flex items-center justify-between px-4 py-3.5 border-b border-gray-100 dark:border-white/10"
             >
               <h2
-                class="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-1.5"
+                class="text-sm font-semibold text-gray-700 dark:text-gray-300/70 flex items-center gap-1.5"
               >
                 <UIcon
                   name="heroicons:document-text"
@@ -642,7 +642,7 @@ const quickActions = [
             class="flex items-center justify-between px-5 py-3.5 border-b border-gray-100 dark:border-white/10"
           >
             <h2
-              class="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-1.5"
+              class="text-sm font-semibold text-gray-700 dark:text-gray-300/70 flex items-center gap-1.5"
             >
               <UIcon name="heroicons:bookmark" class="size-4 text-accent-400" />
               Recent bookmarks
@@ -737,7 +737,9 @@ const quickActions = [
               :color="action.color"
               class="size-4 shrink-0"
             />
-            {{ action.label }}
+            <span class="text-gray-800 dark:text-gray-200" :class="action.color">
+              {{ action.label }}
+            </span>
           </NuxtLink>
         </div>
       </section>
