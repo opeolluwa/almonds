@@ -1,42 +1,26 @@
 <script setup lang="ts">
-import { computed, onMounted, watch } from "vue";
-import { useEventListener } from "@vueuse/core";
-import { platform } from "@tauri-apps/plugin-os";
 import { getCurrentWindow } from "@tauri-apps/api/window";
+import { platform } from "@tauri-apps/plugin-os";
+import { useEventListener } from "@vueuse/core";
+import { computed, onMounted, watch } from "vue";
 
 const syncQueueStore = useSyncQueueStore();
 const isOnline = computed(() => syncQueueStore.isOnline);
 const runningSync = computed(() => syncQueueStore.runningSync);
-
-const syncIcon = computed(() =>
-  runningSync.value ? "heroicons:arrow-path" : "heroicons:cloud-arrow-up",
-);
-const syncColor = computed(() => {
-  if (!isOnline.value) return "error";
-  if (runningSync.value) return "primary";
-  return "neutral";
-});
-const syncTooltip = computed(() => {
-  if (!isOnline.value) return "Offline — sync unavailable";
-  if (runningSync.value) return "Syncing...";
-  return "Sync data";
-});
-
-onMounted(() => {
-  if (isOnline.value) syncQueueStore.runSync();
-});
-
-watch(isOnline, (online) => {
-  if (online) syncQueueStore.runSync();
-});
-
 const router = useRouter();
 const colorMode = useColorMode();
 const { searchQuery, isOpen } = useAppSearch();
-
 const appWindow = getCurrentWindow();
 const searchInputRef = ref<HTMLInputElement | null>(null);
+const currentPlatform = platform();
 
+const themeLabel = computed(() => (isDark.value ? "Light mode" : "Dark mode"));
+const isMacOS = computed(() => {
+  return currentPlatform.toLowerCase() === "macos";
+});
+const syncIcon = computed(() =>
+  runningSync.value ? "heroicons:arrow-path" : "heroicons:cloud-arrow-up",
+);
 const isDark = computed({
   get: () => colorMode.value === "dark",
   set: (v) => (colorMode.preference = v ? "dark" : "light"),
@@ -44,16 +28,18 @@ const isDark = computed({
 const themeIcon = computed(() =>
   isDark.value ? "heroicons:sun" : "heroicons:moon",
 );
-const themeLabel = computed(() => (isDark.value ? "Light mode" : "Dark mode"));
 
 function onSearchInput(val: string) {
   searchQuery.value = val;
   isOpen.value = val.trim().length > 0;
 }
 
-const currentPlatform = platform();
-const isMacOS = computed(() => {
-  return currentPlatform.toLowerCase() === "macos";
+onMounted(() => {
+  if (isOnline.value) syncQueueStore.runSync();
+});
+
+watch(isOnline, (online) => {
+  if (online) syncQueueStore.runSync();
 });
 
 useEventListener("keydown", (e: KeyboardEvent) => {
@@ -75,102 +61,95 @@ useEventListener("keydown", (e: KeyboardEvent) => {
 </script>
 
 <template>
-  <div class="titlebar grid grid-cols-12 items-center" data-tauri-drag-region>
+  <div class="titlebar flex items-center gap-2 px-2" data-tauri-drag-region>
     <!-- mac os controls-->
-      <div v-if="isMacOS" class="traffic-lights col-span-1">
-        <UTooltip text="Close">
-          <span class="btn close" @click="appWindow.close()" />
-        </UTooltip>
-        <UTooltip text="Minimize">
-          <span class="btn minimize" @click="appWindow.minimize()" />
-        </UTooltip>
-        <UTooltip text="Maximize">
-          <span class="btn maximize" @click="appWindow.toggleMaximize()" />
-        </UTooltip>
-      </div>
+    <div v-if="isMacOS" class="traffic-lights shrink-0">
+      <UTooltip text="Close">
+        <span class="btn close" @click="appWindow.close()" />
+      </UTooltip>
+      <UTooltip text="Minimize">
+        <span class="btn minimize" @click="appWindow.minimize()" />
+      </UTooltip>
+      <UTooltip text="Maximize">
+        <span class="btn maximize" @click="appWindow.toggleMaximize()" />
+      </UTooltip>
+    </div>
 
-      <!-- Windows controls -->
-      <div v-else class="controls ml-12">
-        <UTooltip text="Minimize">
-          <UButton
-            size="sm"
-            color="neutral"
-            variant="ghost"
-            icon="heroicons:minus"
-            aria-label="Minimize"
-            @click="appWindow.minimize()"
-          />
-        </UTooltip>
-
-        <UTooltip text="Maximize">
-          <UButton
-            size="sm"
-            color="neutral"
-            variant="ghost"
-            icon="lucide:maximize"
-            aria-label="Maximize"
-            @click="appWindow.maximize()"
-          />
-        </UTooltip>
-
-        <UTooltip text="Close">
-          <UButton
-            size="sm"
-            color="neutral"
-            variant="ghost"
-            icon="heroicons:x-mark"
-            aria-label="Close"
-            @click="appWindow.close()"
-          />
-        </UTooltip>
-      </div>
-
-    <WorkspaceSelect class="col-span-1" />
-    <!-- Back & forward button -->
-
-
-    <div
-      class="col-col-end-4 flex items-center justify-center -gap-x-1.25 ml-16"
-    >
-      <UTooltip :text="syncTooltip">
+    <!-- Windows controls -->
+    <div v-else class="flex items-center shrink-0">
+      <UTooltip text="Minimize">
         <UButton
           size="sm"
-          :color="syncColor"
+          color="neutral"
           variant="ghost"
-          :disabled="!isOnline"
-          aria-label="Sync data"
-          @click="syncQueueStore.runSync()"
-        >
-          <template #leading>
-            <UIcon
-              :name="syncIcon"
-              :class="['size-4', runningSync && 'animate-spin']"
-            />
-          </template>
-        </UButton>
+          icon="heroicons:minus"
+          aria-label="Minimize"
+          @click="appWindow.minimize()"
+        />
       </UTooltip>
 
+      <UTooltip text="Maximize">
         <UButton
           size="sm"
           color="neutral"
           variant="ghost"
-          icon="heroicons:chevron-left"
-          aria-label="Go back"
-          @click="router.back()"
+          icon="lucide:maximize"
+          aria-label="Maximize"
+          @click="appWindow.maximize()"
         />
+      </UTooltip>
 
+      <UTooltip text="Close">
         <UButton
           size="sm"
           color="neutral"
           variant="ghost"
-          icon="heroicons:chevron-right"
-          aria-label="Go forward"
-          @click="router.forward()"
+          icon="heroicons:x-mark"
+          aria-label="Close"
+          @click="appWindow.close()"
         />
+      </UTooltip>
+    </div>
+
+    <WorkspaceSelect class="shrink-0" />
+
+    <div class="flex items-center gap-1 shrink-0 hidden">
+      <UButton
+        size="sm"
+        variant="ghost"
+        :disabled="!isOnline"
+        aria-label="Sync data"
+        @click="syncQueueStore.runSync()"
+      >
+        <template #leading>
+          <UIcon
+            :name="syncIcon"
+            :class="['size-4', runningSync && 'animate-spin']"
+          />
+        </template>
+      </UButton>
+
+      <UButton
+        size="sm"
+        color="neutral"
+        variant="ghost"
+        icon="heroicons:arrow-left"
+        aria-label="Go back"
+        @click="router.back()"
+      />
+
+      <UButton
+        size="sm"
+        color="neutral"
+        variant="ghost"
+        icon="heroicons:arrow-right"
+        aria-label="Go forward"
+        @click="router.forward()"
+      />
     </div>
 
     <!-- Search -->
-    <div class="col-span-4 mx-auto w-full max-w-sm relative">
+    <div class="flex-1 max-w-sm mx-auto relative">
       <div
         class="flex items-center gap-2 px-3 py-2.5 transition-colors bg-none dark:bg-gray-800 border-gray-200 dark:border-gray-700 focus-within:border-accent-400 dark:focus-within:border-accent-500"
       >
@@ -265,7 +244,7 @@ useEventListener("keydown", (e: KeyboardEvent) => {
           src: 'https://i.pravatar.cc/150?u=john-doe',
         }"
         :chip="{
-          color: internetStatusColor,
+          color: isOnline ? 'success' : 'error',
           position: 'top-right',
         }"
         @click="navigateTo('/settings?section=profile')"
@@ -278,7 +257,6 @@ useEventListener("keydown", (e: KeyboardEvent) => {
 .titlebar > * {
   cursor: pointer;
   border: none;
-  height: 25px;
   outline: none;
   box-shadow: none;
 }

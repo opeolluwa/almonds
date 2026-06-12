@@ -7,9 +7,7 @@ function handleWorkspaceSelect(identifier: string) {
     (w) => w.identifier === identifier,
   );
   if (!ws) return;
-  else {
-    workspaceStore.setActiveWorkspace(identifier);
-  }
+  workspaceStore.setActiveWorkspace(identifier);
 }
 
 const activeWorkspaceName = computed(
@@ -57,20 +55,27 @@ const workspaceItems = computed(() => [
     :items="workspaceItems"
     :ui="{
       content:
-        'min-w-52 rounded-xl shadow-xl border border-gray-100 dark:border-gray-800 dark:bg-inherit py-1.5',
+        'min-w-60 rounded-xl shadow-xl border border-gray-100 dark:border-gray-800 py-1.5',
       item: 'rounded-lg mx-1 px-3 py-2 gap-2.5 text-sm transition-colors duration-150',
       separator: 'my-1 mx-2',
     }"
   >
     <button
-      class="inline-flex min-w-52 items-center gap-2.5 px-3 py-2 mt-2 mb-6 dark:bg-gray-800/60 border-none hover:rounded-2xl focus:rounded hover:bg-gray-100 dark:hover:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-colors group capitalize"
+      class="inline-flex items-center gap-2 px-2.5 py-1.5 hover:bg-accent-100/30 dark:hover:bg-gray-800 transition-colors group capitalize"
     >
-      
-      <span
-        class="flex-1 text-left text-sm font-medium text-gray-800 dark:text-gray-200 truncate"
-      >
-        {{ activeWorkspaceName }} workspace
+      <UIcon
+        name="heroicons:briefcase"
+        class="size-3.5 text-accent-600 dark:text-accent-400 shrink-0"
+      />
+      <span class="text-left text-sm font-medium text-gray-800 dark:text-gray-200 truncate max-w-36">
+        {{ activeWorkspaceName }}
       </span>
+      <UIcon
+        name="heroicons:chevron-up-down"
+        class="size-3.5 text-gray-400 dark:text-gray-500 shrink-0 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors"
+      />
     </button>
   </UDropdownMenu>
+
+  <AppWorkspaceCreateModal v-model:open="showCreateModal" />
 </template>
