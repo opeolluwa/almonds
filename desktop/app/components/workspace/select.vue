@@ -67,7 +67,9 @@ const workspaceItems = computed(() => [
         name="heroicons:briefcase"
         class="size-3.5 text-accent-600 dark:text-accent-400 shrink-0"
       />
-      <span class="text-left text-sm font-medium text-gray-800 dark:text-gray-200 truncate max-w-36">
+      <span
+        class="text-left text-sm font-medium text-gray-800 dark:text-gray-200 truncate max-w-36"
+      >
         {{ activeWorkspaceName }}
       </span>
       <UIcon
