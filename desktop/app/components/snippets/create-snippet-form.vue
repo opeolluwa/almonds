@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { CreateSnippetPayload } from "~/stores/snippets";
 import { SNIPPET_LANGUAGES } from "~/data/languages";
-import AppInput from "../forms/app-input.vue";
-import AppSelect from "../forms/app-select.vue";
+import AppInput from "../forms/input.vue";
+import AppSelect from "../forms/select.vue";
 
 const snippetStore = useSnippetStore();
 const router = useRouter();

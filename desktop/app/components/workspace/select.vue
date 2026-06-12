@@ -79,5 +79,5 @@ const workspaceItems = computed(() => [
     </button>
   </UDropdownMenu>
 
-  <AppWorkspaceCreateModal v-model:open="showCreateModal" />
+  <WorkspaceCreateModal v-model:open="showCreateModal" />
 </template>
