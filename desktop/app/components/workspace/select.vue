@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 const workspaceStore = useWorkspacesStore();
-const showCreateModal = ref(true);
+const showCreateModal = ref(false);
 
 function handleWorkspaceSelect(identifier: string) {
   const ws = workspaceStore.visibleWorkspaces.find(

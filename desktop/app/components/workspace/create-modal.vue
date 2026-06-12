@@ -70,16 +70,13 @@ async function handleSubmit() {
 <template>
   <UModal
     :open="open"
-    @update:open="handleClose"
     title="Create a New Workspace"
     description="Workspaces allow you to organize your projects and files."
     :ui="{ footer: 'justify-end' }"
+    @update:open="handleClose"
   >
     <template #body>
-      <form
-        class="pb-6 mt-4 flex flex-col"
-        @submit.prevent="handleSubmit"
-      >
+      <form class="pb-6 mt-4 flex flex-col" @submit.prevent="handleSubmit">
         <div class="flex flex-col gap-4">
           <FormsInput
             v-model="form.name"
