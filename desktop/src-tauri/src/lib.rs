@@ -73,17 +73,20 @@ pub async fn run() {
 
                     std::fs::create_dir_all(&app_data_dir).expect("failed to create app data dir");
 
-                    let db_path = match std::env::var("ALMONDS_DB_PATH") {
-                        Ok(path) => std::path::PathBuf::from(path),
-                        Err(_) => app_data_dir.join("almonds.db"),
-                    };
+                    // let db_path = match std::env::var("ALMONDS_DB_PATH") {
+                    //     Ok(path) => std::path::PathBuf::from(path),
+                    //     Err(_) => app_data_dir.join("almonds.db"),
+                    // };
+
+                        let db_path =app_data_dir.join("almondsdd.db");
 
                     let db_url = format!("sqlite://{}?mode=rwc", db_path.display());
                     dbg!("Database URL: {:?}", &db_url);
                     let kernel = almond_kernel::DataEngine::new(&db_url)
                         .await
                         .expect("failed to initialize kernel");
-
+//  "Database URL: {:?}"
+// [src/lib.rs:84:21] &db_url = "sqlite:///Users/USER/Library/Application Support/com.wild.almonds/almondsdd.db?mode=rwc"
                     kernel
                         .run_migrations()
                         .await
