@@ -2,7 +2,7 @@
   <highlightjs language="js" code="console.log('Hello World');" />
 </template>
 
-<script>
+<script setup lang="ts">
 import "highlight.js/lib/common";
 import hljsVuePlugin from "@highlightjs/vue-plugin";
 
