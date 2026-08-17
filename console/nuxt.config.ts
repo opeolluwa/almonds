@@ -1,10 +1,22 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
+import process from "node:process";
+
+// Tauri sets this when running `tauri dev`
+const host = process.env.TAURI_DEV_HOST;
+
 export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
-  devtools: { enabled: false },
-  components: [
-    { path: "~/components" },
-  ],
+
+  devtools: {
+    enabled: false,
+  },
+
+  devServer: {
+    host: host || "0.0.0.0",
+    port: 3000,
+  },
+
+  components: [{ path: "~/components" }],
+
   app: {
     head: {
       meta: [
@@ -14,13 +26,26 @@ export default defineNuxtConfig({
         },
       ],
     },
+
+    pageTransition: {
+      name: "page",
+      mode: "out-in",
+    },
+
+    layoutTransition: {
+      name: "layout",
+      mode: "out-in",
+    },
   },
+
   css: [
     "highlight.js/styles/atom-one-dark.css",
     "@domternal/theme",
     "@/assets/css/main.css",
   ],
+
   ssr: false,
+
   modules: [
     // "@nuxt/a11y",
     "@nuxtjs/apollo",
@@ -72,6 +97,29 @@ export default defineNuxtConfig({
   },
 
   vite: {
+    clearScreen: false,
+
+    envPrefix: ["VITE_", "TAURI_"],
+
+    server: {
+      strictPort: true,
+
+      // Only pin HMR when the Tauri CLI hands us a LAN host (mobile dev);
+      // `localhost` would resolve to the device itself. Otherwise let Nuxt
+      // pick its own HMR port (24678+) — :3000 is already the HTTP server.
+      ...(host && {
+        hmr: {
+          protocol: "ws",
+          host,
+          port: 24678,
+        },
+      }),
+
+      watch: {
+        ignored: ["**/src-tauri/**"],
+      },
+    },
+
     optimizeDeps: {
       include: [
         "@nuxt/ui > prosemirror-state",
@@ -81,16 +129,15 @@ export default defineNuxtConfig({
         "@nuxt/ui > prosemirror-gapcursor",
         "rehackt",
       ],
-      // PGlite ships its own wasm + FS assets; pre-bundling it breaks
-      // `new PGlite("idb://lunar")` in dev ("Invalid FS bundle size").
+
+      // PGlite ships its own WASM + FS assets.
+      // Pre-bundling breaks `new PGlite("idb://lunar")` in dev.
       exclude: ["@electric-sql/pglite"],
     },
+
     worker: {
       format: "es",
     },
-  },
-  devServer: {
-    host: "0.0.0.0",
   },
 
   colorMode: {

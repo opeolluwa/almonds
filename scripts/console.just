@@ -13,11 +13,15 @@ watch-mobile:
 
 [working-directory: 'console']
 watch-mobile-device HOST:
-    npm run tauri android dev --host {{HOST}}
+    TAURI_DEV_HOST={{HOST}} npm run tauri android dev
 
 [working-directory: 'console']
 watch-ios:
     npm run tauri ios dev
+
+[working-directory: 'console']
+watch-ios-device HOST:
+    TAURI_DEV_HOST={{HOST}} npm run tauri ios dev
 
 [working-directory: 'console']
 watch-console:
