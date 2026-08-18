@@ -64,10 +64,15 @@ const pageTitle = computed(() => {
             </h1>
           </slot>
 
+
           <div
             v-if="!workspaceStore.isCurrentWorkspaceLocked && $slots.primary_cta"
             class="hidden md:flex items-center justify-end mt-5 my-6"
           >
+          <!-- <div
+            v-if="!workspaceStore.isCurrentWorkspaceLocked && $slots.primary_cta"
+            class="hidden md:flex items-center justify-end mt-5 my-6"
+          > -->
             <slot name="primary_cta" />
           </div>
 
