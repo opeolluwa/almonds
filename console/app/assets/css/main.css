@@ -83,11 +83,12 @@ body {
   height: 100%;
   overflow: hidden;
   overscroll-behavior: none;
-  background-color: transparent;
+  /*background-color: transparent;*/
+  
 }
 
 * {
-  user-select: none;
+  /*user-select: none;*/
 }
 
 /*
