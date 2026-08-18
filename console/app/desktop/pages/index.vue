@@ -1,0 +1,491 @@
+<script setup lang="ts">
+import { useNoteStore } from "~/stores/notes";
+import { useBookmarkStore } from "~/stores/bookmarks";
+import { useTodoStore } from "~/stores/todo";
+import { useUserPreferenceStore } from "~/stores/workspace-preferences";
+import { useSnippetStore } from "~/stores/snippets";
+import { safeOpenUrl as openUrl } from "~/utils/safe-open-url";
+
+definePageMeta({ layout: false });
+
+const noteStore = useNoteStore();
+const bookmarkStore = useBookmarkStore();
+const todoStore = useTodoStore();
+const userPreferenceStore = useUserPreferenceStore();
+const snippetStore = useSnippetStore();
+
+const { setSearch, clearSearch } = useAppSearch();
+
+onMounted(async () => {
+  await Promise.all([
+    noteStore.fetchNotes(),
+    bookmarkStore.fetchBookmarks(),
+    todoStore.fetchTodos(),
+    userPreferenceStore.fetchPreference(),
+    snippetStore.fetchSnippets(),
+  ]);
+  setSearch({ placeholder: "Search everything…" });
+});
+
+onUnmounted(() => clearSearch());
+
+// Live clock
+const now = ref(new Date());
+let clockTimer: ReturnType<typeof setInterval>;
+onMounted(() => {
+  clockTimer = setInterval(() => {
+    now.value = new Date();
+  }, 60_000);
+});
+onUnmounted(() => clearInterval(clockTimer));
+
+const greeting = computed(() => {
+  const h = now.value.getHours();
+  if (h < 12) return "Good morning";
+  if (h < 17) return "Good afternoon";
+  return "Good evening";
+});
+
+const today = computed(() =>
+  now.value.toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+  }),
+);
+
+const firstName = computed(
+  () => userPreferenceStore.preference?.firstName || "there",
+);
+
+// Todos
+const priorityOrder: Record<"high" | "medium" | "low", number> = {
+  high: 0,
+  medium: 1,
+  low: 2,
+};
+
+const activeTodos = computed(() =>
+  [...todoStore.todos]
+    .filter((t) => !t.done)
+    .sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority])
+    .slice(0, 7),
+);
+
+const todoProgress = computed(() => {
+  const total = todoStore.todos.length;
+  if (total === 0) return 0;
+  return Math.round((todoStore.completedTodos.length / total) * 100);
+});
+
+// SVG progress ring
+const RING_R = 26;
+const RING_C = computed(() => 2 * Math.PI * RING_R);
+const ringOffset = computed(
+  () => RING_C.value * (1 - todoProgress.value / 100),
+);
+
+const priorityDot: Record<string, string> = {
+  high: "bg-red-400",
+  medium: "bg-amber-400",
+  low: "bg-emerald-400",
+};
+
+// Notes & bookmarks
+const recentNotes = computed(() => noteStore.notes.slice(0, 4));
+const recentBookmarks = computed(() => bookmarkStore.bookmarks.slice(0, 4));
+
+function stripHtml(html: string) {
+  return html
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+  });
+}
+
+// Stats pills
+const statPills = computed(() => [
+  {
+    label: "Notes",
+    value: noteStore.notes.length,
+    icon: "heroicons:document-text-solid",
+    color: "text-violet-500",
+    href: "/notes",
+  },
+  {
+    label: "Bookmarks",
+    value: bookmarkStore.bookmarks.length,
+    icon: "heroicons:bookmark-solid",
+    color: "text-accent-500",
+    href: "/bookmarks",
+  },
+  {
+    label: "Active todos",
+    value: todoStore.activeTodos.length,
+    icon: "heroicons:check-circle-solid",
+    color: "text-emerald-500",
+    href: "/todo",
+  },
+]);
+</script>
+
+<template>
+  <NuxtLayout name="default">
+    <!-- ── Hero banner ─────────────────────────────────────────────── -->
+    <template #page_title>
+      <div
+        class="relative -mx-6 -mt-6 px-6 pt-7 pb-6 overflow-hidden bg-linear-to-br from-accent-500/10 via-violet-400/5 to-transparent dark:from-accent-500/12 dark:via-violet-500/6 dark:to-transparent border-b border-gray-100 dark:border-gray-800"
+      >
+        <!-- Soft blobs -->
+        <div
+          class="pointer-events-none absolute -top-10 right-0 size-52 rounded-full bg-accent-300/20 dark:bg-accent-500/10 blur-3xl"
+        />
+        <div
+          class="pointer-events-none absolute bottom-0 left-1/2 size-36 rounded-full bg-violet-300/15 dark:bg-violet-500/8 blur-2xl translate-y-1/2"
+        />
+
+        <div class="relative flex items-end justify-between gap-4">
+          <div>
+            <p
+              class="text-xs font-semibold tracking-widest uppercase text-gray-400 dark:text-gray-500 mb-1.5"
+            >
+              {{ today }}
+            </p>
+            <h1
+              class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white"
+            >
+              {{ greeting }}, {{ firstName }}
+            </h1>
+            <p class="mt-1.5 text-sm text-gray-500 dark:text-gray-400">
+              <template v-if="todoStore.activeTodos.length > 0">
+                <strong class="text-gray-700 dark:text-gray-300">{{
+                  todoStore.activeTodos.length
+                }}</strong>
+                active
+                {{ todoStore.activeTodos.length === 1 ? "todo" : "todos" }}
+                today.
+              </template>
+              <template v-else> You're all caught up. </template>
+            </p>
+          </div>
+        </div>
+
+        <!-- Stat pills -->
+        <div class="relative flex flex-wrap items-center gap-2 mt-5">
+          <NuxtLink
+            v-for="s in statPills"
+            :key="s.label"
+            :to="s.href"
+            class="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-white/70 dark:bg-gray-900/60 border border-gray-200/80 dark:border-gray-700/60 backdrop-blur-sm hover:border-accent-300 dark:hover:border-accent-700 transition-colors"
+          >
+            <UIcon :name="s.icon" class="size-3.5 shrink-0" :class="s.color" />
+            <span class="text-gray-800 dark:text-gray-200 tabular-nums">{{
+              s.value
+            }}</span>
+            <span class="text-gray-400 dark:text-gray-500">{{ s.label }}</span>
+          </NuxtLink>
+        </div>
+      </div>
+    </template>
+
+    <!-- ── Main content ────────────────────────────────────────────── -->
+    <template #main_content>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <!-- Todos: 2-col card with SVG ring -->
+        <div
+          class="lg:col-span-2 bg-white dark:bg-gray-800/60 rounded-2xl border border-gray-200 dark:border-white/15 overflow-hidden flex flex-col"
+        >
+          <!-- Card header -->
+          <div
+            class="flex items-center gap-3 px-5 py-4 border-b border-gray-100 dark:border-white/10"
+          >
+            <!-- Progress ring -->
+            <div class="relative size-15 shrink-0">
+              <svg class="size-15 -rotate-90" viewBox="0 0 68 68">
+                <circle
+                  cx="34"
+                  cy="34"
+                  :r="RING_R"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="5"
+                  class="text-gray-100 dark:text-gray-800"
+                />
+                <circle
+                  cx="34"
+                  cy="34"
+                  :r="RING_R"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="5"
+                  stroke-linecap="round"
+                  class="text-accent-500 transition-all duration-700"
+                  :stroke-dasharray="RING_C"
+                  :stroke-dashoffset="ringOffset"
+                />
+              </svg>
+              <span
+                class="absolute inset-0 flex items-center justify-center text-xs font-bold text-gray-700 dark:text-gray-300"
+              >
+                {{ todoProgress }}%
+              </span>
+            </div>
+
+            <div class="flex-1 min-w-0">
+              <h2
+                class="text-sm font-semibold text-gray-800 dark:text-gray-300/70"
+              >
+                Active Todos
+              </h2>
+              <p class="text-xs text-gray-400 mt-0.5">
+                {{ todoStore.completedTodos.length }} of
+                {{ todoStore.todos.length }} complete
+              </p>
+            </div>
+          </div>
+
+          <!-- Todo list -->
+          <div class="flex-1">
+            <div
+              v-if="todoStore.loading"
+              class="flex items-center gap-2 px-5 py-6 text-gray-400 text-sm"
+            >
+              <UIcon name="heroicons:arrow-path" class="size-4 animate-spin" />
+              Loading…
+            </div>
+
+            <div
+              v-else-if="activeTodos.length === 0"
+              class="flex flex-col items-center justify-center py-12 text-center"
+            >
+              <div
+                class="p-2 flex justify-center items-center rounded-full bg-gray-100 dark:bg-gray-800"
+              >
+                <UIcon
+                  name="heroicons:check-circle"
+                  class="size-6 text-gray-400 dark:text-gray-500"
+                />
+              </div>
+              <p
+                class="mt-3 text-xs font-medium text-gray-600 dark:text-gray-400"
+              >
+                No active todos
+              </p>
+              <p class="mt-0.5 text-xs text-gray-400 dark:text-gray-500">
+                Your pending tasks will appear here.
+              </p>
+            </div>
+
+            <div
+              v-else
+              class="divide-y divide-gray-100 dark:divide-gray-700/60"
+            >
+              <div
+                v-for="todo in activeTodos"
+                :key="todo.identifier"
+                class="group flex items-center gap-3 px-5 py-3 hover:bg-gray-50 dark:hover:bg-gray-800/40 transition-colors"
+              >
+                <span
+                  class="size-1.5 rounded-full shrink-0"
+                  :class="priorityDot[todo.priority]"
+                />
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm text-gray-800 dark:text-gray-200 truncate">
+                    {{ todo.title }}
+                  </p>
+                  <p v-if="todo.dueDate" class="text-xs text-gray-400 mt-0.5">
+                    Due {{ formatDate(todo.dueDate) }}
+                  </p>
+                </div>
+                <span
+                  class="text-xs text-gray-400 dark:text-gray-500 capitalize shrink-0"
+                >
+                  {{ todo.priority }}
+                </span>
+                <button
+                  class="opacity-0 group-hover:opacity-100 transition-opacity text-gray-300 hover:text-red-400 dark:text-gray-700 dark:hover:text-red-400 shrink-0"
+                  @click="todoStore.deleteTodo(todo.identifier)"
+                >
+                  <UIcon name="heroicons:trash" class="size-3.5" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right column -->
+        <div class="flex flex-col gap-4">
+          <!-- Recent notes -->
+          <div
+            class="flex-1 bg-white dark:bg-gray-800/60 rounded-2xl border border-gray-200 dark:border-white/15 overflow-hidden flex flex-col"
+          >
+            <div
+              class="flex items-center justify-between px-4 py-3.5 border-b border-gray-100 dark:border-white/10"
+            >
+              <h2
+                class="text-sm font-semibold text-gray-700 dark:text-gray-300/70 flex items-center gap-1.5"
+              >
+                <UIcon
+                  name="heroicons:document-text"
+                  class="size-4 text-violet-400"
+                />
+                Recent notes
+              </h2>
+            </div>
+
+            <div
+              v-if="noteStore.loading"
+              class="flex items-center gap-2 p-4 text-gray-400 text-xs"
+            >
+              <UIcon
+                name="heroicons:arrow-path"
+                class="size-3.5 animate-spin"
+              />
+              Loading…
+            </div>
+            <div
+              v-else-if="recentNotes.length === 0"
+              class="flex-1 flex flex-col items-center justify-center py-8 text-center"
+            >
+              <div
+                class="p-2 flex justify-center items-center rounded-full bg-gray-100 dark:bg-gray-800"
+              >
+                <UIcon
+                  name="heroicons:document-text"
+                  class="size-6 text-gray-400 dark:text-gray-500"
+                />
+              </div>
+              <p
+                class="mt-3 text-xs font-medium text-gray-600 dark:text-gray-400"
+              >
+                No notes yet
+              </p>
+              <p class="mt-0.5 text-xs text-gray-400 dark:text-gray-500">
+                Your recent notes will appear here.
+              </p>
+            </div>
+            <div
+              v-else
+              class="divide-y divide-gray-100 dark:divide-gray-700/60"
+            >
+              <NuxtLink
+                v-for="note in recentNotes"
+                :key="note.identifier"
+                to="/notes"
+                class="group flex items-start gap-2.5 px-4 py-2.5 hover:bg-gray-50 dark:hover:bg-gray-800/40 transition-colors"
+              >
+                <div
+                  class="size-6 rounded-md bg-violet-50 dark:bg-violet-950/60 flex items-center justify-center shrink-0 mt-0.5"
+                >
+                  <UIcon
+                    name="heroicons:document-text"
+                    class="size-3 text-violet-400"
+                  />
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p
+                    class="text-xs font-medium text-gray-800 dark:text-gray-200 truncate group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors"
+                  >
+                    {{ note.title }}
+                  </p>
+                  <p class="text-xs text-gray-400 truncate mt-0.5">
+                    {{ stripHtml(note.content) || "No content" }}
+                  </p>
+                </div>
+                <span class="text-xs text-gray-300 dark:text-gray-600 shrink-0">
+                  {{ formatDate(note.updatedAt) }}
+                </span>
+              </NuxtLink>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bookmarks: full-width row -->
+        <div
+          class="lg:col-span-3 bg-white dark:bg-gray-800/60 rounded-2xl border border-gray-200 dark:border-white/15 overflow-hidden"
+        >
+          <div
+            class="flex items-center justify-between px-5 py-3.5 border-b border-gray-100 dark:border-white/10"
+          >
+            <h2
+              class="text-sm font-semibold text-gray-700 dark:text-gray-300/70 flex items-center gap-1.5"
+            >
+              <UIcon name="heroicons:bookmark" class="size-4 text-accent-400" />
+              Recent bookmarks
+            </h2>
+          </div>
+
+          <div
+            v-if="bookmarkStore.loading"
+            class="flex items-center gap-2 p-5 text-gray-400 text-sm"
+          >
+            <UIcon name="heroicons:arrow-path" class="size-4 animate-spin" />
+            Loading…
+          </div>
+          <div
+            v-else-if="recentBookmarks.length === 0"
+            class="flex flex-col items-center justify-center py-10 text-center"
+          >
+            <div
+              class="p-2 flex justify-center items-center rounded-full bg-gray-100 dark:bg-gray-800"
+            >
+              <UIcon
+                name="heroicons:bookmark"
+                class="size-6 text-gray-400 dark:text-gray-500"
+              />
+            </div>
+            <p
+              class="mt-3 text-xs font-medium text-gray-600 dark:text-gray-400"
+            >
+              No bookmarks yet
+            </p>
+            <p class="mt-0.5 text-xs text-gray-400 dark:text-gray-500">
+              Saved bookmarks will appear here.
+            </p>
+          </div>
+          <div
+            v-else
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-gray-100 dark:divide-gray-700/60"
+          >
+            <div
+              v-for="bm in recentBookmarks"
+              :key="bm.identifier"
+              class="group flex items-start gap-3 p-4 hover:bg-gray-50 dark:hover:bg-gray-800/40 transition-colors cursor-pointer"
+              @click="openUrl(bm.url)"
+            >
+              <div
+                class="size-7 rounded-lg bg-accent-50 dark:bg-accent-950/60 flex items-center justify-center shrink-0 mt-0.5"
+              >
+                <UIcon
+                  name="heroicons:bookmark-solid"
+                  class="size-3.5 text-accent-400"
+                />
+              </div>
+              <div class="flex-1 min-w-0">
+                <p
+                  class="text-xs font-medium text-gray-800 dark:text-gray-200 truncate group-hover:text-accent-600 dark:group-hover:text-accent-400 transition-colors"
+                >
+                  {{ bm.title }}
+                </p>
+                <p class="text-xs text-gray-400 truncate mt-0.5">
+                  {{ bm.url }}
+                </p>
+                <span
+                  v-if="bm.tag"
+                  class="inline-block mt-1.5 text-xs px-1.5 py-0.5 rounded bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 capitalize"
+                  >{{ bm.tag }}</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+  </NuxtLayout>
+</template>

@@ -1,7 +1,14 @@
+import { resolve } from "path"
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  alias: {
+    "@desktop": resolve(__dirname, "app/desktop"),
+    "@mobile": resolve(__dirname, "app/mobile"),
+  },
   compatibilityDate: "2025-07-15",
   devtools: { enabled: true },
+
   modules: [
     // "@nuxt/a11y",
     "@nuxtjs/apollo",
