@@ -1,8 +1,8 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
-  "productName": "nuxt-app",
-  "version": "0.1.0",
-  "identifier": "com.tauri.dev",
+  "productName": "Lunar",
+  "version": "0.8.34",
+  "identifier": "com.wild.almonds",
   "build": {
     "beforeDevCommand": "npm run dev",
     "beforeBuildCommand": "npm run generate",
@@ -10,31 +10,40 @@
     "frontendDist": "../dist"
   },
   "app": {
+    "macOSPrivateApi": true,
     "windows": [
       {
-        "title": "nuxt-app",
-        "width": 800,
-        "height": 600,
+        "title": "Lunar",
+        "width": 1200,
+        "height": 800,
         "resizable": true,
-        "fullscreen": false
+        "fullscreen": false,
+        "decorations": false,
+        "shadow": false,
+        "transparent": true
       }
     ],
+    "withGlobalTauri": true,
     "security": {
       "csp": null
     }
   },
   "bundle": {
+    "android": {
+      "autoIncrementVersionCode": true,
+      "minSdkVersion": 24
+    },
     "active": true,
     "targets": "all",
+    "resources": {
+      "resources/*": "./"
+    },
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
       "icons/128x128@2x.png",
       "icons/icon.icns",
       "icons/icon.ico"
-    ],
-    "android": {
-      "debugApplicationIdSuffix": ".debug"
-    }
+    ]
   }
 }

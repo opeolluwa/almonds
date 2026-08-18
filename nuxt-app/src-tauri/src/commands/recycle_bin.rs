@@ -1,0 +1,108 @@
+use lunar::{
+    adapters::meta::RequestMeta, entities::recycle_bin,
+    entities::sea_orm_active_enums::ItemType as RecycleBinItemType,
+    repositories::recycle_bin::RecycleBinRepositoryExt,
+};
+use tauri::State;
+use uuid::Uuid;
+
+use crate::{adapters::recycle_bin::CreateRecycleBinEntry, errors::AppError, state::app::AppState};
+
+#[tauri::command]
+pub async fn create_recycle_bin_entry(
+    state: State<'_, AppState>,
+    entry: CreateRecycleBinEntry,
+    meta: Option<RequestMeta>,
+) -> Result<recycle_bin::Model, AppError> {
+    state
+        .recycle_bin_repository
+        .store(&entry.into(), &meta)
+        .await
+        .map_err(Into::into)
+}
+
+#[tauri::command]
+pub async fn get_all_recycle_bin_entries(
+    state: State<'_, AppState>,
+    meta: Option<RequestMeta>,
+) -> Result<Vec<recycle_bin::Model>, AppError> {
+    state
+        .recycle_bin_repository
+        .find_all(&meta)
+        .await
+        .map_err(Into::into)
+}
+
+#[tauri::command]
+pub async fn get_recycle_bin_entry(
+    state: State<'_, AppState>,
+    identifier: Uuid,
+    meta: Option<RequestMeta>,
+) -> Result<Option<recycle_bin::Model>, AppError> {
+    state
+        .recycle_bin_repository
+        .find_by_id(&identifier, &meta)
+        .await
+        .map_err(Into::into)
+}
+
+#[tauri::command]
+pub async fn get_recycle_bin_entries_by_type(
+    state: State<'_, AppState>,
+    item_type: RecycleBinItemType,
+    meta: Option<RequestMeta>,
+) -> Result<Vec<recycle_bin::Model>, AppError> {
+    state
+        .recycle_bin_repository
+        .find_by_item_type(&item_type, &meta)
+        .await
+        .map_err(Into::into)
+}
+
+#[tauri::command]
+pub async fn purge_recycle_bin_entry(
+    state: State<'_, AppState>,
+    identifier: Uuid,
+    meta: Option<RequestMeta>,
+) -> Result<(), AppError> {
+    state
+        .recycle_bin_repository
+        .purge(&identifier, &meta)
+        .await
+        .map_err(Into::into)
+}
+
+#[tauri::command]
+pub async fn purge_all_recycle_bin_entries(
+    state: State<'_, AppState>,
+    meta: Option<RequestMeta>,
+) -> Result<(), AppError> {
+    state
+        .recycle_bin_repository
+        .purge_all(&meta)
+        .await
+        .map_err(Into::into)
+}
+
+#[tauri::command]
+pub async fn get_unsynced_recycle_bin(
+    state: State<'_, AppState>,
+) -> Result<Vec<recycle_bin::Model>, AppError> {
+    state
+        .recycle_bin_repository
+        .extract_unsynced()
+        .await
+        .map_err(Into::into)
+}
+
+#[tauri::command]
+pub async fn clear_synced_recycle_bin(
+    state: State<'_, AppState>,
+    identifiers: Vec<String>,
+) -> Result<(), AppError> {
+    state
+        .recycle_bin_repository
+        .clear_synced(identifiers)
+        .await
+        .map_err(Into::into)
+}
