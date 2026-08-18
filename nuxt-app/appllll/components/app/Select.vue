@@ -1,0 +1,51 @@
+<script setup lang="ts">
+defineProps<{
+  label?: string;
+  icon?: string;
+  className?: string;
+  name?: string;
+  trailingIcon?: string;
+  placeholder?: string;
+  hint?: string;
+  avatar?: string;
+  disabled?: boolean;
+  items: string[] | { label: string; value: string }[];
+}>();
+
+const model = defineModel<string>();
+</script>
+
+<template>
+  <UFormField
+    v-slot="{ error }"
+    :label="label"
+    :hint="hint"
+    :ui="{
+      error: 'text-red-500 mt-1',
+      label: 'text-xs font-medium text-gray-600 dark:text-gray-400 capitalize',
+      hint: 'mr-auto text-gray-400 dark:text-gray-600 font-normal ml-1',
+      root: 'lowercase',
+    }"
+  >
+    <USelectMenu
+      v-model="model"
+      :items="items"
+      :icon="icon"
+      :trailing-icon="trailingIcon"
+      value-key="value"
+      :avatar="{ src: avatar, loading: 'lazy' }"
+      :disabled="disabled"
+      :placeholder="placeholder"
+      :ui="{
+        base: 'lowercase py-3',
+        trailingIcon: 'size-5',
+      }"
+      :class="[
+        'w-full transition-colors first:capitalize bg-transparent ' + className,
+        error
+          ? 'border-red-500 focus-within:border-red-500'
+          : 'border-gray-300 dark:border-gray-600 focus-within:border-black dark:focus-within:border-gray-400',
+      ]"
+    />
+  </UFormField>
+</template>

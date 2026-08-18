@@ -1,0 +1,137 @@
+import type { CreateRecycleBinEntry, ItemType, RecycleBin } from "lunar";
+import { defineStore } from "pinia";
+import { invoke } from "~/utils/invoke";
+
+export type RecycleBinItemType = ItemType;
+
+export type RecycleBinEntry = RecycleBin;
+
+export type CreateRecycleBinEntryPayload = Partial<CreateRecycleBinEntry> & {
+  itemId: string;
+  itemType: ItemType;
+  payload: string;
+};
+
+export const useRecycleBinStore = defineStore("recycle_bin_store", {
+  state: () => ({
+    entries: [] as RecycleBinEntry[],
+    loading: false,
+  }),
+
+  getters: {
+    byType: (state) => (type: RecycleBinItemType) =>
+      state.entries.filter((e) => e.itemType === type),
+
+    typeCounts: (state) => {
+      const counts: Record<string, number> = {};
+
+      for (const e of state.entries) {
+        counts[e.itemType] = (counts[e.itemType] ?? 0) + 1;
+      }
+
+      return counts;
+    },
+  },
+
+  actions: {
+    async fetchEntries() {
+      this.loading = true;
+
+      try {
+        this.entries = await invoke<RecycleBinEntry[]>(
+          "get_all_recycle_bin_entries",
+          {
+            meta: await getWorkspaceMeta(),
+          },
+        );
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    async createEntry(
+      payload: CreateRecycleBinEntryPayload,
+    ): Promise<RecycleBinEntry> {
+      const created = await invoke<RecycleBinEntry>(
+        "create_recycle_bin_entry",
+        {
+          entry: payload,
+          meta: await getWorkspaceMeta(),
+        },
+      );
+
+      this.entries.unshift(created);
+
+      return created;
+    },
+
+    async purgeEntry(identifier: string) {
+      await invoke("purge_recycle_bin_entry", {
+        identifier,
+        meta: await getWorkspaceMeta(),
+      });
+
+      this.entries = this.entries.filter((e) => e.identifier !== identifier);
+    },
+
+    async purgeAll() {
+      await invoke("purge_all_recycle_bin_entries", {
+        meta: await getWorkspaceMeta(),
+      });
+
+      this.entries = [];
+    },
+
+    async fetchUnsynced() {
+      try {
+        const recycleBin = await invoke<RecycleBinEntry[]>(
+          "get_unsynced_recycle_bin",
+        );
+        return recycleBin;
+      } catch (error) {
+        console.error("Error fetching unsynced recycle bin:", error);
+        return [];
+      }
+    },
+
+    async syncUpstream() {
+      const recycleBin = await this.fetchUnsynced();
+      if (!recycleBin.length) return;
+
+      const input = recycleBin.map((e) => ({
+        identifier: e.identifier,
+        item_id: e.itemId,
+        item_type: e.itemType,
+        payload: e.payload,
+        deleted_at: e.deletedAt,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        workspace_identifier: (e as any).workspaceIdentifier ?? null,
+      }));
+      const query = gql`
+        mutation SyncRecycleBin($input: [SyncRecycleBinInput!]!) {
+          sync_recycle_bin_item(input: $input) {
+            success
+            error_message
+            identifier
+          }
+        }
+      `;
+
+      const { mutate } = useMutation(query, { variables: { input } });
+
+      try {
+        const data = await mutate();
+        console.log(
+          "Recycle bin sync response:",
+          JSON.stringify(data, null, 2),
+        );
+      } catch (error) {
+        console.error("Error syncing recycle bin:", error);
+      }
+    },
+
+    async clearQueue(identifiers: string[]) {
+      await invoke("clear_synced_recycle_bin", { identifiers });
+    },
+  },
+});

@@ -1,0 +1,207 @@
+import type { CreateTodo, Todo, UpdateTodo } from "lunar";
+import { defineStore } from "pinia";
+import { invoke } from "~/utils/invoke";
+
+export type { Todo };
+
+export type CreateTodoPayload = Partial<CreateTodo> &
+  Pick<CreateTodo, "title" | "priority"> & { time?: string };
+
+export type UpdateTodoPayload = Partial<UpdateTodo>;
+
+export const useTodoStore = defineStore("todo_store", {
+  state: () => ({
+    todos: [] as Todo[],
+    loading: false,
+  }),
+
+  getters: {
+    activeTodos: (state) => state.todos.filter((t) => !t.done),
+    completedTodos: (state) => state.todos.filter((t) => t.done),
+    highPriorityCount: (state) =>
+      state.todos.filter((t) => t.priority === "high").length,
+    mediumPriorityCount: (state) =>
+      state.todos.filter((t) => t.priority === "medium").length,
+    lowPriorityCount: (state) =>
+      state.todos.filter((t) => t.priority === "low").length,
+  },
+
+  actions: {
+    async fetchTodos() {
+      this.loading = true;
+      try {
+        this.todos = await invoke<Todo[]>("get_all_todos", {
+          meta: await getWorkspaceMeta(),
+        });
+      } catch (error) {
+        console.error("[todos] failed to fetch", error);
+      } finally {
+        this.loading = false;
+      }
+    },
+
+    async createTodo(payload: CreateTodoPayload): Promise<Todo> {
+      const created = await invoke<Todo>("create_todo", {
+        todo: payload,
+        meta: await getWorkspaceMeta(),
+      });
+
+      this.todos.unshift(created);
+      return created;
+    },
+
+    async updateTodo(
+      identifier: string,
+      payload: UpdateTodoPayload,
+    ): Promise<Todo> {
+      const updated = await invoke<Todo>("update_todo", {
+        identifier,
+        todo: payload,
+        meta: await getWorkspaceMeta(),
+      });
+
+      const idx = this.todos.findIndex((t) => t.identifier === identifier);
+      if (idx !== -1) this.todos[idx] = updated;
+
+      return updated;
+    },
+
+    async toggleDone(identifier: string, done: boolean): Promise<Todo> {
+      const updated = await invoke<Todo>("mark_todo_done", {
+        identifier,
+        done,
+        meta: await getWorkspaceMeta(),
+      });
+
+      const idx = this.todos.findIndex((t) => t.identifier === identifier);
+      if (idx !== -1) this.todos[idx] = updated;
+
+      return updated;
+    },
+
+    async changePriority(
+      identifier: string,
+      priority: "high" | "medium" | "low",
+    ): Promise<Todo> {
+      const updated = await invoke<Todo>("change_todo_priority", {
+        identifier,
+        priority,
+        meta: await getWorkspaceMeta(),
+      });
+
+      const idx = this.todos.findIndex((t) => t.identifier === identifier);
+      if (idx !== -1) this.todos[idx] = updated;
+
+      return updated;
+    },
+
+    async updateDueDate(
+      identifier: string,
+      dueDate: string | null,
+    ): Promise<Todo> {
+      const updated = await invoke<Todo>("update_todo_due_date", {
+        identifier,
+        dueDate,
+        meta: await getWorkspaceMeta(),
+      });
+
+      const idx = this.todos.findIndex((t) => t.identifier === identifier);
+      if (idx !== -1) this.todos[idx] = updated;
+
+      return updated;
+    },
+
+    async deleteTodo(identifier: string) {
+      await invoke("delete_todo", {
+        identifier,
+        meta: await getWorkspaceMeta(),
+      });
+
+      this.todos = this.todos.filter((t) => t.identifier !== identifier);
+    },
+
+    async duplicateTodo(
+      identifier: string,
+      sourceWorkspaceId: string,
+      targetWorkspaceId: string,
+    ): Promise<Todo> {
+      const updated = await invoke<Todo>("duplicate_todo", {
+        identifier,
+        sourceWorkspaceId,
+        targetWorkspaceId,
+        meta: await getWorkspaceMeta(),
+      });
+
+      this.todos.push(updated);
+      return updated;
+    },
+
+    async transferTodo(
+      identifier: string,
+      sourceWorkspaceId: string,
+      targetWorkspaceId: string,
+    ): Promise<Todo> {
+      const updated = await invoke<Todo>("transfer_todo", {
+        identifier,
+        sourceWorkspaceId,
+        targetWorkspaceId,
+        meta: await getWorkspaceMeta(),
+      });
+
+      const idx = this.todos.findIndex((t) => t.identifier === identifier);
+      if (idx !== -1) this.todos[idx] = updated;
+      return updated;
+    },
+
+    async fetchUnsynced() {
+      try {
+        const todos = await invoke<Todo[]>("get_unsynced_todos");
+        return todos;
+      } catch (error) {
+        console.error("Error fetching unsynced todos:", error);
+        return [];
+      }
+    },
+
+    async syncUpstream() {
+      const todos = await this.fetchUnsynced();
+      if (!todos.length) return;
+
+      const input = todos.map((t) => ({
+        identifier: t.identifier,
+        title: t.title,
+        description: t.description ?? null,
+        due_date: t.dueDate ?? null,
+        priority: t.priority,
+        done: t.done,
+        created_at: t.createdAt,
+        updated_at: t.updatedAt,
+        due_time: t.dueTime ?? null,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        workspace_identifier: (t as any).workspaceIdentifier ?? null,
+      }));
+      const query = gql`
+        mutation SyncTodos($input: [SyncTodoInput!]!) {
+          sync_todo(input: $input) {
+            success
+            error_message
+            identifier
+          }
+        }
+      `;
+
+      const { mutate } = useMutation(query, { variables: { input } });
+
+      try {
+        const data = await mutate();
+        console.log("Todos sync response:", JSON.stringify(data, null, 2));
+      } catch (error) {
+        console.error("Error syncing todos:", error);
+      }
+    },
+
+    async clearQueue(identifiers: string[]) {
+      await invoke("clear_synced_todos", { identifiers });
+    },
+  },
+});
