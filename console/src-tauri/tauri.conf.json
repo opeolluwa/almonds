@@ -2,12 +2,12 @@
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
   "productName": "Lunar",
   "version": "0.8.34",
-  "identifier": "com.wild.almonds",
+  "identifier": "com.opeolluwa.lunar",
   "build": {
-    "frontendDist": "../.output/public",
-    "devUrl": "http://localhost:3000",
     "beforeDevCommand": "npm run dev",
-    "beforeBuildCommand": "npm run generate"
+    "beforeBuildCommand": "npm run generate",
+    "devUrl": "http://localhost:3000",
+    "frontendDist": "../dist"
   },
   "app": {
     "macOSPrivateApi": true,
@@ -29,6 +29,10 @@
     }
   },
   "bundle": {
+    "android": {
+      "autoIncrementVersionCode": true,
+      "minSdkVersion": 24
+    },
     "active": true,
     "targets": "all",
     "resources": {

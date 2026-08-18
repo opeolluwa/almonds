@@ -5,7 +5,7 @@
   "scripts": {
     "build": "nuxt build",
     "prebuild": "node scripts/sync-lunar-schema.mjs",
-    "dev": "nuxt dev --port=3000",
+    "dev": "nuxt dev --host 0.0.0.0 --port 3000",
     "predev": "node scripts/sync-lunar-schema.mjs",
     "generate": "nuxt generate",
     "pregenerate": "node scripts/sync-lunar-schema.mjs",
@@ -66,6 +66,7 @@
     "tailwind-scrollbar": "^4.0.2",
     "uuid": "^14.0.1",
     "v-calendar": "^3.1.2",
+    "vant": "^4.10.0",
     "villus": "^3.5.2",
     "vue": "^3.5.28",
     "vue-router": "^4.6.4"
@@ -75,6 +76,7 @@
     "@iconify-json/lucide": "^1.2.98",
     "@iconify-json/ri": "^1.2.10",
     "@nuxtjs/apollo": "^5.0.0-alpha.16",
+    "@tauri-apps/api": "^2.10.1",
     "@tauri-apps/cli": "^2.10.0",
     "@types/lodash": "^4.17.23",
     "@typescript-eslint/eslint-plugin": "^8.50.0",
