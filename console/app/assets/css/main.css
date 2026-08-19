@@ -83,27 +83,14 @@ body {
   height: 100%;
   overflow: hidden;
   overscroll-behavior: none;
-  /*background-color: transparent;*/
-  
+  background-color: transparent;
+  border: none !important;
 }
 
 * {
-  /*user-select: none;*/
+  user-select: none;
 }
 
-/*
-  Remap Tailwind's dark-mode gray layers to the active surface palette.
-  In Tailwind v4, bg-gray-900 / border-gray-800 etc. resolve via these
-  CSS custom properties, so overriding them here is all that's needed.
-
-  Visual elevation model (darkest → lightest):
-    surface-950  →  main content canvas      (dark:bg-surface-950)
-    surface-900  →  page body background     (.dark body)
-    surface-800  →  sidebar / header panels  (dark:bg-gray-900)
-    surface-700  →  cards / elevated panels  (dark:bg-gray-800)
-    surface-600  →  borders / dividers       (dark:border-gray-700)
-    surface-500  →  active/selected items    (dark:bg-gray-600)
-*/
 .dark {
   --color-gray-900: var(--color-surface-800);
   --color-gray-800: var(--color-surface-700);
@@ -116,7 +103,7 @@ body {
 }
 
 .titlebar {
-  @apply fixed top-0 left-0 right-0 h-14 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 items-center p-2;
+  @apply fixed top-0 left-0 right-0 h-14 border-b rounded-t-xl border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 items-center p-2;
 }
 
 .scrollbar-config {
@@ -128,7 +115,7 @@ body {
 }
 
 #wild_almonds_app {
-  @apply mt-14 rounded-b-2xl overflow-hidden bg-gray-50 dark:bg-surface-950 ring-1 ring-gray-200/80 dark:ring-white/10 shadow-2xl;
+  @apply mt-14 rounded-b-xl overflow-hidden bg-gray-50 dark:bg-surface-950 ring-1 ring-gray-200/80 dark:ring-white/10 ;
 }
 
 /* Custom accent color */
@@ -218,8 +205,6 @@ h6.notes_heading {
   height: 12rem;
 }
 
-
-
 .scrollbar-config {
   @apply scrollbar-thumb-rounded-full scrollbar-w-[0.25px] scrollbar-corner-accent-400 scrollbar-h-20 scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-accent-600 scrollbar-track-transparent;
 }
@@ -227,7 +212,6 @@ h6.notes_heading {
 .scrollbar-config-dark {
   @apply scrollbar-thumb-rounded-full scrollbar-w-[0.25px] scrollbar-corner-gray-900 scrollbar-h-20 scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-gray-900 scrollbar-track-transparent;
 }
-
 
 #auth_layout form {
   @apply mt-4;
