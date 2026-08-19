@@ -1,13 +1,9 @@
 <template>
-  <UApp>
-    <NuxtLayout>
-      <NuxtPage />
-    </NuxtLayout>
-  </UApp>
+  <IonApp>
+    <IonRouterOutlet />
+  </IonApp>
 </template>
 
-<script lang="ts" setup>
-
-</script>
+<script lang="ts" setup></script>
 
 <style scoped></style>

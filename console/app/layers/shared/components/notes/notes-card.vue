@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useNoteStore } from "@shared/stores/notes";
+import { useWorkspacesStore } from "@shared/stores/workspaces";
 
 const props = defineProps<{
   identifier: string;

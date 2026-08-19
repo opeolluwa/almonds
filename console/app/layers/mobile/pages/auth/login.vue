@@ -1,34 +1,34 @@
-<script setup lang="ts">
-definePageMeta({ layout: "auth" });
-import {
-  kPage,
-  kNavbar,
-  kBlock,
-  kButton,
-  kList,
-  kListItem,
-  kLink,
-  kBlockTitle,
-} from 'konsta/vue';
-
-</script>
-
 <template>
-  <k-page>
-    <k-navbar title="My App" />
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Pull to Refresh</ion-title>
+    </ion-toolbar>
+  </ion-header>
 
-    <k-block strong>
-      <p>Here is your Nuxt & Konsta UI app. Let's see what we have here.</p>
-    </k-block>
-    <k-block-title>Navigation</k-block-title>
-    <k-list>
-      <k-list-item href="/about/" title="About" />
-      <k-list-item href="/form/" title="Form" />
-    </k-list>
+  <ion-content class="ion-padding">
+    <ion-refresher slot="fixed" @ionRefresh="handleRefresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
 
-    <k-block strong class="flex space-x-4">
-      <k-button>Button 1</k-button>
-      <k-button>Button 2</k-button>
-    </k-block>
-  </k-page>
+    <p>Pull this content down to trigger the refresh.</p>
+  </ion-content>
 </template>
+
+<script setup lang="ts">
+import {
+  IonContent,
+  IonHeader,
+  IonRefresher,
+  IonRefresherContent,
+  IonTitle,
+  IonToolbar,
+} from "@ionic/vue";
+import type { RefresherCustomEvent } from "@ionic/vue";
+
+const handleRefresh = (event: RefresherCustomEvent) => {
+  setTimeout(() => {
+    // Any calls to load data go here
+    event.target.complete();
+  }, 2000);
+};
+</script>

@@ -37,7 +37,7 @@ export default defineNuxtConfig({
     "./assets/css/main.css",
     "highlight.js/styles/atom-one-dark.css",
     "@domternal/theme",
-    // vant/lib/index.css moved to app/layers/mobile/nuxt.config.ts
+   
   ],
 
   colorMode: {
@@ -52,11 +52,29 @@ export default defineNuxtConfig({
   },
 
   devServer: { host: "0" },
+  icon: {
+    serverBundle: {
+      collections: ["heroicons", "lucide", "ri"],
+    },
+  },
 
   vite: {
     clearScreen: false,
     envPrefix: ["VITE_", "TAURI_"],
     server: { strictPort: true },
+    optimizeDeps: {
+      include: [
+        "@nuxt/ui > prosemirror-state",
+        "@nuxt/ui > prosemirror-transform",
+        "@nuxt/ui > prosemirror-model",
+        "@nuxt/ui > prosemirror-view",
+        "@nuxt/ui > prosemirror-gapcursor",
+        "rehackt",
+      ],
+      // PGlite ships its own wasm + FS assets; pre-bundling it breaks
+      // `new PGlite("idb://lunar")` in dev ("Invalid FS bundle size").
+      exclude: ["@electric-sql/pglite"],
+    },
   },
 
   ignore: ["**/src-tauri/**"],

@@ -20,7 +20,7 @@ const authenticated = ref(true);
 
 const route = useRoute();
 const isAuthRoute = computed(() => route.path.startsWith("/auth"));
-
+import "@domternal/theme";
 const showWorkspaceLock = ref(false);
 
 onMounted(async () => {

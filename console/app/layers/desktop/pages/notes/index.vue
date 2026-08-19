@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import NotesCard from "@shared/components/notes/notes-card.vue";
+import { useNoteStore } from "@shared/stores/notes";
 definePageMeta({ layout: false });
 
 const noteStore = useNoteStore();

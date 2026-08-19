@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useNoteStore } from "@shared/stores/notes";
 import { onBeforeRouteLeave } from "vue-router";
 
 definePageMeta({ layout: false, name: "New note", keepalive: true });
@@ -96,7 +97,7 @@ onBeforeRouteLeave(async () => {
       />
     </template>
     <template #main_content>
-      <NotesEditor v-model="content" />
+    <NotesEditor v-model="content" />
       <p v-if="error" class="text-xs text-red-500 mt-6">
         {{ error }}
       </p>
@@ -158,3 +159,5 @@ onBeforeRouteLeave(async () => {
     </template>
   </NuxtLayout>
 </template>
+
+<style></style>

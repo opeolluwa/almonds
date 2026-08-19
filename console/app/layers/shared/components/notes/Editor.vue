@@ -172,4 +172,13 @@ function handleUpdate({ editor }: { editor: any }) {
   </div>
 </template>
 
-<style></style>
+<style>
+.dm-editor {
+  --dm-editor-bg: transparent;
+  --dm-editor-border-radius: 0;
+  --dm-editor-shadow: none;
+  --dm-editor-border: none;
+  --dm-border-color: #cccccc;
+  --dm-code-surface: transparent
+}
+</style>

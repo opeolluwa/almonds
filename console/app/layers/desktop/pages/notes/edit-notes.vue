@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useNoteStore } from "@shared/stores/notes";
 import { onBeforeRouteLeave } from "vue-router";
 
 definePageMeta({ layout: false, keepalive: true, name: "Edit notes" });
@@ -43,10 +44,7 @@ const hasChanges = computed(() => {
   if (!original.value) return false;
   const origTitle =
     original.value.title === "Untitled" ? "" : original.value.title;
-  return (
-    title.value !== origTitle ||
-    content.value !== original.value.content
-  );
+  return title.value !== origTitle || content.value !== original.value.content;
 });
 
 // ── save ──────────────────────────────────────────────────────────────────────

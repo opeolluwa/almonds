@@ -1,6 +1,9 @@
 import type { CreateWorkspace, UpdateWorkspace, Workspaces } from "lunar";
 import { defineStore } from "pinia";
 import { invoke } from "@shared/utils/invoke";
+import { useNoteStore } from "./notes";
+import { useTodoStore } from "./todo";
+import { useBookmarkStore } from "./bookmarks";
 
 export type Workspace = Workspaces;
 
