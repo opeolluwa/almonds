@@ -1,7 +1,9 @@
 <template>
-  <IonApp>
-    <IonRouterOutlet />
-  </IonApp>
+  <UApp>
+    <IonApp>
+      <IonRouterOutlet />
+    </IonApp>
+  </UApp>
 </template>
 
 <script lang="ts" setup></script>
