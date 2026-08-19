@@ -30,4 +30,5 @@ prod.db
 backup.sql
 pgdump.sql
 console/src-tauri/almonds-pglite
-console/app/assets/lunar/
+# Generated PGlite migration SQL (synced by scripts/sync-lunar-schema.mjs)
+console/app/layers/shared/data/lunar/migrations/

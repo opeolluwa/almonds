@@ -1,115 +1,75 @@
-# Lunar
+# Nuxt Minimal Starter
 
-A personal productivity console app built with Tauri, Nuxt 4, and Vue 3. Lunar brings your notes, snippets, bookmarks, tasks, and AI conversations into one unified workspace.
+Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
----
+## Setup
 
-## Features
-
-- **Notes** — Create and manage personal notes
-- **Bookmarks** — Save and organize web links
-- **Snippets** — Store reusable code with syntax highlighting
-- **Todo** — Track tasks and to-dos
-- **Ollama** — Chat with local AI models via Ollama
-- **Scratch Pad** — A quick freeform writing space
-- **Moodboard** — Visual inspiration board
-- **Settings** — Customize the app to your preference
-
----
-
-## Tech Stack
-
-| Layer | Technology |
-|---|---|
-| Framework | Nuxt 4 + Vue 3 |
-| Console | Tauri v2 |
-| UI | @nuxt/ui + Tailwind CSS |
-| State | Pinia + persisted state |
-| Database | Tauri SQL plugin |
-| i18n | @nuxtjs/i18n |
-| Linting | ESLint + Prettier |
-
----
-
-## Getting Started
-
-### Prerequisites
-
-- [Node.js](https://nodejs.org/) >= 18
-- [Rust](https://www.rust-lang.org/tools/install) (for Tauri)
-- [Ollama](https://ollama.com/) (optional, required for AI features)
-
-### Installation
+Make sure to install dependencies:
 
 ```bash
-# Clone the repository
-git clone https://github.com/opeolluwa/lunar.git
-cd lunar
-
-# Install dependencies
+# npm
 npm install
+
+# pnpm
+pnpm install
+
+# yarn
+yarn install
+
+# bun
+bun install
 ```
 
-### Development
+## Development Server
+
+Start the development server on `http://localhost:3000`:
 
 ```bash
-# Start the Nuxt dev server (web only)
+# npm
 npm run dev
 
-# Start the Tauri console app in dev mode
-npm run tauri dev
+# pnpm
+pnpm dev
+
+# yarn
+yarn dev
+
+# bun
+bun run dev
 ```
 
-### Build
+## Production
+
+Build the application for production:
 
 ```bash
-# Build the Nuxt app
+# npm
 npm run build
 
-# Build the Tauri console app
-npm run tauri build
+# pnpm
+pnpm build
+
+# yarn
+yarn build
+
+# bun
+bun run build
 ```
 
-### Other Commands
+Locally preview production build:
 
 ```bash
-npm run preview      # Preview production build
-npm run lint         # Run ESLint
-npm run lint:fix     # Auto-fix lint issues
-npm run format       # Format code with Prettier
+# npm
+npm run preview
+
+# pnpm
+pnpm preview
+
+# yarn
+yarn preview
+
+# bun
+bun run preview
 ```
 
----
-
-## Roadmap
-
-Planned features and improvements, based on the current navigation structure:
-
-### Core Modules
-
-- [ ] **Notes** — rich text editing, tagging, search
-- [ ] **Bookmarks** — import/export, folder organization, favicon fetch
-- [ ] **Snippets** — language detection, copy-to-clipboard, tagging
-- [ ] **Todo** — due dates, priorities, recurring tasks
-- [ ] **Scratch Pad** — auto-save, markdown preview
-- [ ] **Moodboard** — drag-and-drop image layout, image upload
-
-### AI / Ollama
-
-- [ ] Persistent conversation history
-- [ ] Multi-model support
-- [ ] Context-aware responses using workspace content
-
-### App-wide
-
-- [ ] Global search across all modules
-- [ ] Notifications centre
-- [ ] Data export (JSON / Markdown)
-- [ ] Sync across devices
-- [ ] Plugin/extension system
-
----
-
-## License
-
-MIT License — see [LICENSE](LICENSE) for details.
+Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.

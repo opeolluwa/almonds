@@ -2,7 +2,7 @@
 # will have compiled files and executables
 /target/
 /gen/schemas
-almonds.db
+almonds.*.*
 
 
 backup.sql 

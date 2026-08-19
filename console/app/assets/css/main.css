@@ -18,7 +18,58 @@
   --app-accent-800: #075985;
   --app-accent-900: #0c4a6e;
   --app-accent-950: #082f49;
-}
+
+
+
+    /* Accent */
+    --ion-color-primary: #0ea5e9;
+    --ion-color-primary-rgb: 14, 165, 233;
+    --ion-color-primary-contrast: #ffffff;
+    --ion-color-primary-contrast-rgb: 255, 255, 255;
+    --ion-color-primary-shade: #0c91cd;
+    --ion-color-primary-tint: #26aeea;
+  
+    /* App */
+    --ion-background-color: #ffffff;
+    --ion-background-color-rgb: 255, 255, 255;
+  
+    --ion-text-color: #0c4a6e;
+    --ion-text-color-rgb: 12, 74, 110;
+  
+    --ion-backdrop-color: #082f49;
+    --ion-backdrop-opacity: 0.4;
+  
+    --ion-overlay-background-color: #ffffff;
+  
+    --ion-border-color: #bae6fd;
+    --ion-box-shadow-color: #082f49;
+  
+    /* Toolbar */
+    --ion-toolbar-background: #ffffff;
+    --ion-toolbar-border-color: #e0f2fe;
+    --ion-toolbar-color: #0c4a6e;
+  
+    --ion-toolbar-segment-color: #0369a1;
+    --ion-toolbar-segment-color-checked: #0ea5e9;
+    --ion-toolbar-segment-background: transparent;
+    --ion-toolbar-segment-background-checked: #e0f2fe;
+    --ion-toolbar-segment-indicator-color: #0ea5e9;
+  
+    /* Items */
+    --ion-item-background: #ffffff;
+    --ion-item-border-color: #e0f2fe;
+    --ion-item-color: #0c4a6e;
+  
+    /* Inputs */
+    --ion-placeholder-color: #7dd3fc;
+  
+    /* Tabs */
+    --ion-tab-bar-background: #ffffff;
+    --ion-tab-bar-background-focused: #f0f9ff;
+    --ion-tab-bar-border-color: #e0f2fe;
+    --ion-tab-bar-color: #0369a1;
+    --ion-tab-bar-color-selected: #0ea5e9;
+  }
 
 @theme inline {
   --color-accent-50: var(--app-accent-50);
@@ -84,25 +135,13 @@ body {
   overflow: hidden;
   overscroll-behavior: none;
   background-color: transparent;
+  border: none !important;
 }
 
 * {
   user-select: none;
 }
 
-/*
-  Remap Tailwind's dark-mode gray layers to the active surface palette.
-  In Tailwind v4, bg-gray-900 / border-gray-800 etc. resolve via these
-  CSS custom properties, so overriding them here is all that's needed.
-
-  Visual elevation model (darkest → lightest):
-    surface-950  →  main content canvas      (dark:bg-surface-950)
-    surface-900  →  page body background     (.dark body)
-    surface-800  →  sidebar / header panels  (dark:bg-gray-900)
-    surface-700  →  cards / elevated panels  (dark:bg-gray-800)
-    surface-600  →  borders / dividers       (dark:border-gray-700)
-    surface-500  →  active/selected items    (dark:bg-gray-600)
-*/
 .dark {
   --color-gray-900: var(--color-surface-800);
   --color-gray-800: var(--color-surface-700);
@@ -115,7 +154,7 @@ body {
 }
 
 .titlebar {
-  @apply fixed top-0 left-0 right-0 h-14 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 items-center p-2;
+  @apply fixed top-0 left-0 right-0 h-14 border-b rounded-t-xl border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 items-center p-2;
 }
 
 .scrollbar-config {
@@ -127,7 +166,7 @@ body {
 }
 
 #wild_almonds_app {
-  @apply mt-14 rounded-b-xl overflow-hidden bg-gray-50 dark:bg-surface-950 ring-1 ring-gray-200/80 dark:ring-white/10 shadow-2xl;
+  @apply mt-14 rounded-b-xl overflow-hidden bg-gray-50 dark:bg-surface-950 ring-1 ring-gray-200/80 dark:ring-white/10 ;
 }
 
 /* Custom accent color */
@@ -139,6 +178,7 @@ body {
   --dm-editor-shadow: none;
   --dm-editor-border: none;
   --dm-border-color: #cccccc;
+  --dm-code-surface: transparent
 }
 
 .dark .dm-editor {
@@ -147,7 +187,8 @@ body {
 
 .notes-editor .dm-editor .ProseMirror {
   padding-top: 0;
-  min-height: auto;
+  min-height: 25vh;
+  background: transparent;
 }
 
 /* Custom toolbar */
@@ -215,4 +256,27 @@ h6.notes_heading {
 
 .dm-floating-menu {
   height: 12rem;
+}
+
+.scrollbar-config {
+  @apply scrollbar-thumb-rounded-full scrollbar-w-[0.25px] scrollbar-corner-accent-400 scrollbar-h-20 scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-accent-600 scrollbar-track-transparent;
+}
+
+.scrollbar-config-dark {
+  @apply scrollbar-thumb-rounded-full scrollbar-w-[0.25px] scrollbar-corner-gray-900 scrollbar-h-20 scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-gray-900 scrollbar-track-transparent;
+}
+
+#auth_layout form {
+  @apply mt-4;
+}
+
+#auth_layout h2 {
+  @apply text-2xl font-bold text-gray-800 dark:text-white md:mt-4 text-center;
+}
+#auth_layout h2 + p {
+  @apply text-gray-600 dark:text-gray-400  text-center;
+}
+
+#auth_layout button {
+  @apply text-center first-letter:uppercase justify-center items-center;
 }
