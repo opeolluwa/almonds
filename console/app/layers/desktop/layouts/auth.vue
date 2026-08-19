@@ -22,7 +22,7 @@
         leave-to-class="opacity-0"
       >
         <slot />
-        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eveniet veniam voluptates rem eius, voluptatibus laborum nulla porro ipsa! Dolorum cupiditate vero voluptatem animi repudiandae magnam maiores ex voluptate rerum reprehenderit.
+       
       </Transition>
     </div>
 
@@ -35,20 +35,7 @@ import { IS_WEB } from "@shared/env";
 </script>
 
 <style lang="css">
-@reference "@/assets/css/main.css";
+/*@reference "@/assets/css/main.css";*/
 
-#auth_layout form {
-  @apply mt-4;
-}
 
-#auth_layout h2 {
-  @apply text-2xl font-bold text-gray-800 dark:text-white md:mt-4 text-center;
-}
-#auth_layout h2 + p {
-  @apply text-gray-600 dark:text-gray-400  text-center;
-}
-
-#auth_layout button {
-  @apply text-center first-letter:uppercase justify-center items-center;
-}
 </style>
