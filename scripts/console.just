@@ -3,13 +3,18 @@ watch-frontend:
     npm run dev
 
 [working-directory: 'console']
+watch-frontend-mobile:
+   NUXT_APP_TARGET=mobile npm run dev
+
+    
+[working-directory: 'console']
 watch-tauri:
     npm run tauri dev
 
 [working-directory: 'console']
 watch-mobile:
     ./src-tauri/gen/android/gradlew --stop
-    npm run tauri android dev 
+    NUXT_APP_TARGET=mobile npm run tauri android dev 
 
 [working-directory: 'console']
 watch-mobile-device HOST:
@@ -17,7 +22,7 @@ watch-mobile-device HOST:
 
 [working-directory: 'console']
 watch-ios:
-    npm run tauri ios dev
+   npm run tauri ios dev
 
 [working-directory: 'console']
 watch-ios-device HOST:
@@ -25,7 +30,7 @@ watch-ios-device HOST:
 
 [working-directory: 'console']
 watch-console:
-    npm run dev & npm run tauri dev
+    NUXT_APP_TARGET=desktop npm run dev & npm run tauri dev
 
 [working-directory: 'console']
 build-console:

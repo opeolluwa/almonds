@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
+@import 'konsta/vue/theme.css';
 /* @plugin 'tailwind-scrollbar'; */
 
 @plugin 'tailwind-scrollbar' {

@@ -1,16 +1,6 @@
 import { resolve } from "path";
 
-const isMobile =
-  process.env.TAURI_PLATFORM === "android" ||
-  process.env.TAURI_PLATFORM === "ios";
-
-export const isMobileScreen = useMediaQuery("(max-width: 1023px)", {
-  ssrWidth: 768,
-});
-
-// const isMobile = isMobileOs && isMobileScreen;
-
-import { useMediaQuery } from "@vueuse/core";
+const isMobile = process.env.NUXT_APP_TARGET === "mobile";
 
 export default defineNuxtConfig({
   srcDir: "app",
