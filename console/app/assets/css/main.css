@@ -128,7 +128,7 @@ body {
 }
 
 #wild_almonds_app {
-  @apply mt-14 rounded-b-xl overflow-hidden bg-gray-50 dark:bg-surface-950 ring-1 ring-gray-200/80 dark:ring-white/10 shadow-2xl;
+  @apply mt-14 rounded-b-2xl overflow-hidden bg-gray-50 dark:bg-surface-950 ring-1 ring-gray-200/80 dark:ring-white/10 shadow-2xl;
 }
 
 /* Custom accent color */
@@ -216,4 +216,14 @@ h6.notes_heading {
 
 .dm-floating-menu {
   height: 12rem;
+}
+
+
+
+.scrollbar-config {
+  @apply scrollbar-thumb-rounded-full scrollbar-w-[0.25px] scrollbar-corner-accent-400 scrollbar-h-20 scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-accent-600 scrollbar-track-transparent;
+}
+
+.scrollbar-config-dark {
+  @apply scrollbar-thumb-rounded-full scrollbar-w-[0.25px] scrollbar-corner-gray-900 scrollbar-h-20 scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-gray-900 scrollbar-track-transparent;
 }

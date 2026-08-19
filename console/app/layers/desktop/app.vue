@@ -5,8 +5,6 @@ import {
 } from "@tauri-apps/plugin-notification";
 import { useAlarmScheduler } from "@shared/composables/useAlarmScheduler";
 import { useWorkspaceSetup } from "@shared/composables/useWorkspaceSetup";
-import { IS_WEB } from "@shared/env";
-import "@domternal/theme";
 import { useWorkspacesStore } from "@shared/stores/workspaces";
 const { init: initFontSize } = useFontSize();
 const { init: initDarkTheme } = useDarkTheme();
@@ -81,13 +79,3 @@ onMounted(async () => {
   </Body>
 </template>
 
-<style>
-@reference "./assets/css/main.css";
-.scrollbar-config {
-  @apply scrollbar-thumb-rounded-full scrollbar-w-[0.25px] scrollbar-corner-accent-400 scrollbar-h-20 scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-accent-600 scrollbar-track-transparent;
-}
-
-.scrollbar-config-dark {
-  @apply scrollbar-thumb-rounded-full scrollbar-w-[0.25px] scrollbar-corner-gray-900 scrollbar-h-20 scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-gray-900 scrollbar-track-transparent;
-}
-</style>

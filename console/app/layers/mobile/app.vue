@@ -1,5 +1,11 @@
 <template>
-  Lorem ipsum dolor sit amet consectetur, adipisicing elit. Facere numquam
-  voluptatem quasi aliquam non veniam aspernatur repellat optio nesciunt, itaque
-  similique ut in facilis fugit asperiores magnam quaerat sed ea!
+  <UApp>
+    <NuxtLayout>
+      <NuxtPage />
+    </NuxtLayout>
+  </UApp>
 </template>
+
+<script lang="ts" setup></script>
+
+<style scoped></style>

@@ -1,14 +1,16 @@
 import { resolve } from "path";
 
-// const isMobile =
-//   process.env.TAURI_PLATFORM === "android" ||
-//   process.env.TAURI_PLATFORM === "ios"
+const isMobile =
+  process.env.TAURI_PLATFORM === "android" ||
+  process.env.TAURI_PLATFORM === "ios";
 
-import { useMediaQuery } from "@vueuse/core";
-
-export const isMobile = useMediaQuery("(max-width: 1023px)", {
+export const isMobileScreen = useMediaQuery("(max-width: 1023px)", {
   ssrWidth: 768,
 });
+
+// const isMobile = isMobileOs && isMobileScreen;
+
+import { useMediaQuery } from "@vueuse/core";
 
 export default defineNuxtConfig({
   srcDir: "app",
@@ -42,10 +44,10 @@ export default defineNuxtConfig({
   ],
 
   css: [
+    "./assets/css/main.css",
     "highlight.js/styles/atom-one-dark.css",
     "@domternal/theme",
     // vant/lib/index.css moved to app/layers/mobile/nuxt.config.ts
-    // "./layers/shared/assets/css/main.css",
   ],
 
   colorMode: {
