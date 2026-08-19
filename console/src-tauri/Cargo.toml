@@ -24,7 +24,7 @@ lunar = { version = "0.1.0", path = "../../lunar", features = ["markdown2pdf"] }
 sanitizer = { version = "1.0.0", features = ["derive"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-tauri = { version = "2.10.0", features = ["macos-private-api", "tray-icon"] }
+tauri = { version = "2.11.5", features = ["macos-private-api", "tray-icon"] }
 tauri-plugin-clipboard-manager = "2"
 tauri-plugin-log = "2"
 tauri-plugin-notification = "2"
@@ -44,4 +44,4 @@ tauri-plugin-single-instance = "2"
 tauri-plugin-window-state = "2"
 
 [build-dependencies]
-tauri-build = { version = "2.5.4", features = [] }
+tauri-build = { version = "2.6.3", features = [] }
