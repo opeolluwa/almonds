@@ -5,7 +5,7 @@ import {
 } from "@tauri-apps/plugin-notification";
 import { useAlarmScheduler } from "@shared/composables/useAlarmScheduler";
 import { useWorkspaceSetup } from "@shared/composables/useWorkspaceSetup";
-import { IS_WEB } from "@shared/plugins/lunar.client";
+import { IS_WEB } from "@shared/env";
 import "@domternal/theme";
 import { useWorkspacesStore } from "@shared/stores/workspaces";
 const { init: initFontSize } = useFontSize();

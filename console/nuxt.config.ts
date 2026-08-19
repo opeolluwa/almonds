@@ -1,8 +1,14 @@
-import { resolve } from "path"
+import { resolve } from "path";
 
-const isMobile =
-  process.env.TAURI_PLATFORM === "android" ||
-  process.env.TAURI_PLATFORM === "ios"
+// const isMobile =
+//   process.env.TAURI_PLATFORM === "android" ||
+//   process.env.TAURI_PLATFORM === "ios"
+
+import { useMediaQuery } from "@vueuse/core";
+
+export const isMobile = useMediaQuery("(max-width: 1023px)", {
+  ssrWidth: 768,
+});
 
 export default defineNuxtConfig({
   srcDir: "app",
@@ -15,7 +21,6 @@ export default defineNuxtConfig({
     "@desktop": resolve(__dirname, "app/layers/desktop"),
     "@mobile": resolve(__dirname, "app/layers/mobile"),
     "@shared": resolve(__dirname, "app/layers/shared"),
-    
   },
 
   compatibilityDate: "2025-07-15",
@@ -63,4 +68,4 @@ export default defineNuxtConfig({
   },
 
   ignore: ["**/src-tauri/**"],
-})
+});

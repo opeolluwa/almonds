@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts" setup>
-import { IS_WEB } from "@shared/plugins/lunar.client";
+import { IS_WEB } from "@shared/env";
 </script>
 
 <style lang="css">

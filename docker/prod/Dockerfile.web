@@ -2,7 +2,7 @@
 
 # --- Stage 1: regenerate lunar migration SQL from source -------------------
 # The SPA replays these PGlite migrations at runtime (synced into
-# console/app/assets/lunar/migrations by the prebuild hook). No wasm-pack is
+# console/app/layers/shared/data/lunar/migrations by the prebuild hook). No wasm-pack is
 # needed: the console only consumes lunar types + this SQL.
 FROM rust:1.94-slim-bookworm AS migrations
 

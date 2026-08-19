@@ -22,6 +22,7 @@
         leave-to-class="opacity-0"
       >
         <slot />
+        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eveniet veniam voluptates rem eius, voluptatibus laborum nulla porro ipsa! Dolorum cupiditate vero voluptatem animi repudiandae magnam maiores ex voluptate rerum reprehenderit.
       </Transition>
     </div>
 
@@ -30,11 +31,11 @@
 </template>
 
 <script lang="ts" setup>
-import { IS_WEB } from "@shared/plugins/lunar.client";
+import { IS_WEB } from "@shared/env";
 </script>
 
 <style lang="css">
-@reference "./assets/css/main.css";
+@reference "@/assets/css/main.css";
 
 #auth_layout form {
   @apply mt-4;

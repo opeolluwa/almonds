@@ -1,12 +1,12 @@
 import { PGlite } from "@electric-sql/pglite";
 
-const migrationModules = import.meta.glob(
-  "../../assets/lunar/migrations/*.sql",
-  {
-    eager: true,
-    as: "raw",
-  },
-);
+const migrationModules = import.meta.glob<{
+  default: string;
+}>("../../data/lunar/migrations/*.sql", {
+  eager: true,
+  query: "?raw",
+  import: "default",
+});
 
 let dbPromise: Promise<PGlite> | null = null;
 

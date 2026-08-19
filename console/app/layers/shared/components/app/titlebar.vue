@@ -5,7 +5,7 @@ import { getCurrentWindow } from "@tauri-apps/api/window";
 import { platform } from "@tauri-apps/plugin-os";
 import { useEventListener } from "@vueuse/core";
 import { computed, onMounted, watch } from "vue";
-import { IS_WEB } from "@shared/plugins/lunar.client";
+import { IS_WEB } from "@shared/env";
 import { useUserPreferenceStore } from "@shared/stores/workspace-preferences";
 
 const props = defineProps<{ authenticated?: boolean }>();
@@ -95,7 +95,7 @@ useEventListener("keydown", (e: KeyboardEvent) => {
   <div
     class="titlebar flex items-center gap-2 px-2 h-12"
     data-tauri-drag-region
-    :class="{ 'rounded-t-xl': !IS_WEB }"
+    :class="{ 'rounded-t-2xl': !IS_WEB }"
   >
     <!-- mobile nav toggle -->
     <div v-if="authenticated">
