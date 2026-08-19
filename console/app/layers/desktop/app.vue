@@ -3,16 +3,19 @@ import {
   isPermissionGranted,
   requestPermission,
 } from "@tauri-apps/plugin-notification";
-// import { useAlarmScheduler } from "@shared/composables/useAlarmScheduler";
-// import { useWorkspaceSetup } from "@shared/composables/useWorkspaceSetup";
-// import { IS_WEB } from "@shared/plugins/lunar.client";
+import { useAlarmScheduler } from "@shared/composables/useAlarmScheduler";
+import { useWorkspaceSetup } from "@shared/composables/useWorkspaceSetup";
+import { IS_WEB } from "@shared/plugins/lunar.client";
 import "@domternal/theme";
-import { useWorkspacesStore } from "../shared/stores/workspaces";
+import { useWorkspacesStore } from "@shared/stores/workspaces";
 const { init: initFontSize } = useFontSize();
 const { init: initDarkTheme } = useDarkTheme();
-const { checkSetup, initializing } = useUserSetup();
-const { checkSetup: checkWorkspaceSetup, initializing: workspaceInitializing } =
-  useWorkspaceSetup();
+const { setupRequired, checkSetup, initializing } = useUserSetup();
+const {
+  setupRequired: workspaceSetupRequired,
+  checkSetup: checkWorkspaceSetup,
+  initializing: workspaceInitializing,
+} = useWorkspaceSetup();
 
 useAlarmScheduler();
 const authenticated = ref(true);
@@ -54,6 +57,12 @@ onMounted(async () => {
       <NuxtPage />
     </NuxtLayout>
     <AppNotification />
+    <UserSetupModal v-if="setupRequired" />
+    <WorkspaceSetupModal v-if="workspaceSetupRequired" />
+    <WorkspaceLockModal
+      v-if="showWorkspaceLock && !setupRequired && !workspaceSetupRequired"
+      @unlocked="showWorkspaceLock = false"
+    />
 
     <Transition
       enter-active-class="transition-opacity duration-200"
@@ -76,7 +85,7 @@ onMounted(async () => {
 </template>
 
 <style>
-@reference "@/assets/css/main.css";
+@reference "./assets/css/main.css";
 .scrollbar-config {
   @apply scrollbar-thumb-rounded-full scrollbar-w-[0.25px] scrollbar-corner-accent-400 scrollbar-h-20 scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-accent-600 scrollbar-track-transparent;
 }

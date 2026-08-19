@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useReminderStore } from "~/stores/reminder";
+import { useReminderStore } from "@shared/stores/reminder";
 
 definePageMeta({ layout: false, name: "Create Reminder" });
 

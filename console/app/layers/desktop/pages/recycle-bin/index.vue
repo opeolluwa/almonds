@@ -2,7 +2,7 @@
 import {
   useRecycleBinStore,
   type RecycleBinItemType,
-} from "~/stores/recycle-bin";
+} from "@shared/stores/recycle-bin";
 
 definePageMeta({ layout: false });
 

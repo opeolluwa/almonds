@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useSnippetStore } from "~/stores/snippets";
-import SnippetCard from "~/components/snippets/snippet-card.vue";
+import { useSnippetStore } from "@shared/stores/snippets";
+import SnippetCard from "@shared/components/snippets/snippet-card.vue";
 definePageMeta({ layout: false });
 
 const snippetStore = useSnippetStore();

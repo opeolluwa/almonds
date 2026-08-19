@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import { useAuthStore } from "@shared/stores/auth";
 import { useCountdown } from "@vueuse/core";
 
-definePageMeta({ layout: "desktop-auth" });
+definePageMeta({ layout: "auth" });
 
 const route = useRoute();
 const authApi = useAuthApi();

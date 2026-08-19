@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { Bookmark } from "~/stores/bookmarks";
 import MetaControls from "~/components/meta/meta-controls.vue";
+import { useBookmarkStore } from "@shared/stores/bookmarks";
+import { useWorkspacesStore } from "@shared/stores/workspaces";
 
 const bookmarksStore = useBookmarkStore();
 const workspaceStore = useWorkspacesStore();

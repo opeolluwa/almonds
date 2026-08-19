@@ -30,11 +30,11 @@
 </template>
 
 <script lang="ts" setup>
-import { IS_WEB } from "~/plugins/lunar.client";
+import { IS_WEB } from "@shared/plugins/lunar.client";
 </script>
 
 <style lang="css">
-@reference "@/assets/css/main.css";
+@reference "./assets/css/main.css";
 
 #auth_layout form {
   @apply mt-4;

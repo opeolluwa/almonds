@@ -1,5 +1,7 @@
 <script setup lang="ts">
-definePageMeta({ layout: "desktop-auth" });
+import { useAuthStore } from '@shared/stores/auth';
+
+definePageMeta({ layout: "auth" });
 
 const route = useRoute();
 const authApi = useAuthApi();

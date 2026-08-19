@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useTodoStore } from "~/stores/todo";
+import { useTodoStore } from "@shared/stores/todo";
 
 definePageMeta({ layout: false, name: "Edit Todo" });
 

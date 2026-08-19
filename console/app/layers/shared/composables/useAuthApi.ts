@@ -1,3 +1,4 @@
+import { useAuthStore } from "@shared/stores/auth";
 import type { FetchError } from "ofetch";
 import { $fetch } from "ofetch";
 

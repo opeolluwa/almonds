@@ -1,3 +1,5 @@
+import { useAuthStore } from "@shared/stores/auth";
+
 export default defineNuxtRouteMiddleware((to) => {
   const authStore = useAuthStore();
   const isAuthRoute = to.path.startsWith("/auth");

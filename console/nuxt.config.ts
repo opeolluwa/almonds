@@ -40,7 +40,7 @@ export default defineNuxtConfig({
     "highlight.js/styles/atom-one-dark.css",
     "@domternal/theme",
     // vant/lib/index.css moved to app/layers/mobile/nuxt.config.ts
-    "@/assets/css/main.css",
+    // "./layers/shared/assets/css/main.css",
   ],
 
   colorMode: {

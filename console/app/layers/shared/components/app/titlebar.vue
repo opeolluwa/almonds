@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useAuthStore } from "@shared/stores/auth";
+import { useSyncQueueStore } from "@shared/stores/sync-queue";
 import { getCurrentWindow } from "@tauri-apps/api/window";
 import { platform } from "@tauri-apps/plugin-os";
 import { useEventListener } from "@vueuse/core";

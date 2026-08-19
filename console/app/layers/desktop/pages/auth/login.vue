@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type { LoginRequest } from "~/composables/useAuthApi";
+import { useAuthStore } from "@shared/stores/auth";
+import type { LoginRequest } from "@shared/composables/useAuthApi";
 
 definePageMeta({ layout: false });
 
@@ -56,7 +57,7 @@ function continueWithoutLogin() {
 </script>
 
 <template>
-  <NuxtLayout name="desktop-auth">
+  <NuxtLayout name="auth">
     <div class="flex flex-col gap-5">
       <div class="flex flex-col gap-1">
         <h2 class="text-lg font-semibold text-gray-900 dark:text-white">

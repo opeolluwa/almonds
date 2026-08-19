@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { safeOpenUrl as openUrl } from "~/utils/safe-open-url";
-import { useBookmarkStore, type BookmarkTag } from "~/stores/bookmarks";
+import { safeOpenUrl as openUrl } from "@shared/utils/safe-open-url";
+import { useBookmarkStore, type BookmarkTag } from "@shared/stores/bookmarks";
 
 definePageMeta({ layout: false });
 

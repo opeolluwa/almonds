@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import TodoCard from "~/components/todo/todo-card.vue";
-import { useTodoStore } from "~/stores/todo";
+import TodoCard from "@shared/components/todo/todo-card.vue";
+import { useTodoStore } from "@shared/stores/todo";
 
 definePageMeta({ layout: false });
 

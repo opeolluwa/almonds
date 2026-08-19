@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useTodoStore } from "@shared/stores/todo";
+import { useWorkspacesStore } from "@shared/stores/workspaces";
 import type { Todo } from "~/stores/todo";
 
 const { todo } = defineProps<{

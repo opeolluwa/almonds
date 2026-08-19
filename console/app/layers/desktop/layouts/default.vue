@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import _ from "lodash";
 
-import { primaryRoutes, secondaryRoutes } from "@/data/routes";
+import { primaryRoutes, secondaryRoutes } from "@shared/data/routes";
 import { useUserPreferenceStore } from "@shared/stores/workspace-preferences";
-import { useWorkspacesStore } from "~/stores/workspaces";
+import { useWorkspacesStore } from "@shared/stores/workspaces";
 
 const preferenceStore = useUserPreferenceStore();
 const workspaceStore = useWorkspacesStore();
@@ -64,15 +64,10 @@ const pageTitle = computed(() => {
             </h1>
           </slot>
 
-
           <div
             v-if="!workspaceStore.isCurrentWorkspaceLocked && $slots.primary_cta"
             class="hidden md:flex items-center justify-end mt-5 my-6"
           >
-          <!-- <div
-            v-if="!workspaceStore.isCurrentWorkspaceLocked && $slots.primary_cta"
-            class="hidden md:flex items-center justify-end mt-5 my-6"
-          > -->
             <slot name="primary_cta" />
           </div>
 

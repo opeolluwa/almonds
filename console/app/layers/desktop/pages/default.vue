@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import _ from "lodash";
 
-import { primaryRoutes, secondaryRoutes } from "~/data/routes";
-import { useUserPreferenceStore } from "~/stores/workspace-preferences";
-import { useWorkspacesStore } from "~/stores/workspaces";
+import { primaryRoutes, secondaryRoutes } from "@shared/data/routes";
+import { useUserPreferenceStore } from "@shared/stores/workspace-preferences";
+import { useWorkspacesStore } from "@shared/stores/workspaces";
 
 const preferenceStore = useUserPreferenceStore();
 const workspaceStore = useWorkspacesStore();

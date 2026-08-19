@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { SNIPPET_LANGUAGES } from "~/data/languages";
+import { SNIPPET_LANGUAGES } from "@shared/data/languages";
 
 definePageMeta({ layout: false });
 

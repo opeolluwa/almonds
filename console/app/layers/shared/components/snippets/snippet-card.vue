@@ -2,6 +2,7 @@
 import hljs from "highlight.js/lib/common";
 import "highlight.js/styles/github.css"; // light
 import "highlight.js/styles/github-dark.css"; // dark
+import { useWorkspacesStore } from "@shared/stores/workspaces";
 
 const hlLanguageMap: Record<string, string> = {
   C: "c",
