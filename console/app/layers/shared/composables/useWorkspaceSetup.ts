@@ -1,4 +1,4 @@
-import { useWorkspacesStore } from "~/stores/workspaces";
+import { useWorkspacesStore } from "@shared/stores/workspaces";
 
 export function useWorkspaceSetup() {
   const store = useWorkspacesStore();

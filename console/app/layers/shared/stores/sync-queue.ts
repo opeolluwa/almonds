@@ -1,16 +1,16 @@
-import { ref } from "vue";
+import { gql } from "@apollo/client";
+import { useBookmarkStore } from "@shared/stores/bookmarks";
+import { useNoteStore } from "@shared/stores/notes";
+import { useNotificationStore } from "@shared/stores/notifications";
+import { useRecycleBinStore } from "@shared/stores/recycle-bin";
+import { useReminderStore } from "@shared/stores/reminder";
+import { useSnippetStore } from "@shared/stores/snippets";
+import { useTodoStore } from "@shared/stores/todo";
+import { useUserPreferenceStore } from "@shared/stores/workspace-preferences";
+import { useWorkspacesStore } from "@shared/stores/workspaces";
 import { useNetwork } from "@vueuse/core";
 import { defineStore } from "pinia";
-import { useBookmarkStore } from "~/stores/bookmarks";
-import { useNoteStore } from "@shared/stores/notes";
-import { useTodoStore } from "@shared/stores/todo";
-import { useWorkspacesStore } from "@shared/stores/workspaces";
-import { useReminderStore } from "@shared/stores/reminder";
-import { useUserPreferenceStore } from "@shared/stores/workspace-preferences";
-import { useSnippetStore } from "~/stores/snippets";
-import { useRecycleBinStore } from "~/stores/recycle-bin";
-import { useNotificationStore } from "~/stores/notifications";
-import { gql } from "@apollo/client";
+import { ref } from "vue";
 
 export const useSyncQueueStore = defineStore("sync_queue_store", () => {
   const { isOnline } = useNetwork();

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useWorkspacesStore } from '@shared/stores/workspaces';
+
 const props = defineProps<{
   open: boolean;
   workspaceId: string;

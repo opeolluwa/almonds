@@ -2,12 +2,12 @@
 // plain browser (web deployment). The Tauri build talks to the native SQLite
 // backend through IPC instead, so this is skipped when Tauri internals are
 // present.
-import { createLunarConsoleApi } from "~/utils/lunar";
+import { createLunarConsoleApi } from "../utils/lunar";
 
 export const IS_WEB =
   typeof window !== "undefined" && !window.__TAURI_INTERNALS__;
 export const IS_TAURI = !IS_WEB;
-export const LUNAR_API = IS_WEB ? window.lunar : undefined;
+export const LUNAR_API = IS_WEB ? window?.lunar : undefined;
 export const LUNAR_EXISTS = IS_WEB && window.lunar !== undefined;
 
 export default defineNuxtPlugin(async () => {

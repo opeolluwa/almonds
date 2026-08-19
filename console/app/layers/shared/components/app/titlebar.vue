@@ -5,7 +5,8 @@ import { getCurrentWindow } from "@tauri-apps/api/window";
 import { platform } from "@tauri-apps/plugin-os";
 import { useEventListener } from "@vueuse/core";
 import { computed, onMounted, watch } from "vue";
-import { IS_WEB } from "~/plugins/lunar.client";
+import { IS_WEB } from "@shared/plugins/lunar.client";
+import { useUserPreferenceStore } from "@shared/stores/workspace-preferences";
 
 const props = defineProps<{ authenticated?: boolean }>();
 const authStore = useAuthStore();

@@ -1,6 +1,5 @@
-import { useWorkspacesStore } from "@/stores/workspaces";
-import type { RequestMeta } from "~/adapters/request-meta";
-
+import { useWorkspacesStore } from "@shared/stores/workspaces";
+import type { RequestMeta } from "lunar";
 export async function getWorkspaceMeta(): Promise<RequestMeta> {
   const workspaceStore = useWorkspacesStore();
 

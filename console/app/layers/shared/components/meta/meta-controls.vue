@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import type { DropdownMenuItem } from "@nuxt/ui";
+import { useWorkspacesStore } from "@shared/stores/workspaces";
 
 const { notify } = useAppNotification();
 
