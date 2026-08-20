@@ -6,6 +6,7 @@ words = [
     "creds",
     "dompurify",
     "lowlight",
+    "lucide",
     "rustls",
     "seaography",
     "serde",
