@@ -12,7 +12,9 @@
         <UIcon name="lucide:arrow-left" class="size-5" />
       </NuxtLink>
     </div>
-    <slot />
+    <div class="mt-4">
+      <slot />
+    </div>
   </main>
 </template>
 

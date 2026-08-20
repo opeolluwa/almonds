@@ -79,7 +79,7 @@ async function handleSetPassword() {
 </script>
 
 <template>
-  <div class="flex flex-col gap-5 flex-1">
+  <div class="flex flex-col  flex-1">
     <div class="flex flex-col gap-1">
       <template v-if="step === 'email'">
         <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
@@ -111,7 +111,7 @@ async function handleSetPassword() {
           type="email"
           name="email"
           label="Email"
-          hint="required"
+          
           placeholder="you@example.com"
           size="lg"
           :disabled="loading"
@@ -133,7 +133,7 @@ async function handleSetPassword() {
           type="password"
           name="password"
           label="New password"
-          hint="required"
+          
           placeholder="At least 6 characters"
           size="lg"
           :disabled="loading"
@@ -147,7 +147,7 @@ async function handleSetPassword() {
           type="password"
           name="confirmPassword"
           label="Confirm new password"
-          hint="required"
+          
           placeholder="Repeat your new password"
           size="lg"
           :disabled="loading"

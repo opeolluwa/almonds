@@ -86,37 +86,35 @@ export const secondaryRoutes: Route[] = [
   },
 ];
 
-
 export const mobile_default_layer: Route[] = [
   {
     path: "/",
     name: "Home",
-    icon: "lucide:house",
-    activeIcon: "lucide:house",
+    icon: "ri:home-line",
+    activeIcon: "ri:home-fill",
   },
   {
     path: "/notes",
     name: "Notes",
-    icon: "lucide:square-text",
-    activeIcon: "lucide:square-text",
+    icon: "ri:booklet-line",
+    activeIcon: "ri:booklet-fill",
   },
   {
     path: "/bookmarks",
     name: "Bookmarks",
-    icon: "lucide:bookmark",
-    activeIcon: "lucide:bookmark",
+    icon: "ri:bookmark-line",
+    activeIcon: "ri:bookmark-fill",
   },
   {
     path: "/todo",
     name: "Tasks",
-    icon: "lucide:square-check-big",
-    activeIcon: "lucide:square-check-big",
+    icon: "ri:calendar-todo-line",
+    activeIcon: "ri:calendar-todo-fill",
   },
   {
-    path: "/settings",
+    path: "/settings?tab=account",
     name: "Account",
-    icon: "lucide:circle-user-round",
-    activeIcon: "lucide:circle-user-round",
+    icon: "ri:user-line",
+    activeIcon: "ri:user-fill",
   },
 ];
-

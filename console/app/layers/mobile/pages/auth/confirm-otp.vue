@@ -93,7 +93,7 @@ async function handleSubmit() {
 </script>
 
 <template>
-  <div class="flex flex-col gap-5 flex-1">
+  <div class="flex flex-col  flex-1">
     <div class="flex flex-col gap-1">
       <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
         {{ title }}

@@ -8,7 +8,7 @@
     </div>
 
     <nav
-      class="fixed bottom-0 inset-x-0 z-50 flex items-center justify-around border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900"
+      class="fixed bottom-0 inset-x-0 z-50 flex items-center justify-around border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 pt-3 pb-2.5"
     >
       <NuxtLink
         v-for="item in mobile_default_layer"
@@ -23,7 +23,7 @@
       >
         <UIcon
           :name="isActive(item.path) ? item.activeIcon : item.icon"
-          class="size-5"
+          class="size-6"
         />
         {{ item.name }}
       </NuxtLink>

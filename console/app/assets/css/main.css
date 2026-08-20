@@ -76,7 +76,6 @@
 
 html {
   font-size: var(--font-size-base, 15px);
-  @apply bg-gray-50 dark:bg-surface-950;
 }
 
 body {
@@ -85,6 +84,7 @@ body {
   overflow: hidden;
   overscroll-behavior: none;
   border: none !important;
+  @apply bg-transparent; /** needed for curved desktop borders*/
 }
 
 * {
@@ -215,7 +215,7 @@ h6.notes_heading {
   @apply scrollbar-thumb-rounded-full scrollbar-w-[0.25px] scrollbar-corner-gray-900 scrollbar-h-20 scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-gray-900 scrollbar-track-transparent;
 }
 
-#auth_layout form{
+#auth_layout form {
   @apply mt-4;
 }
 
@@ -232,9 +232,12 @@ h6.notes_heading {
   @apply text-center first-letter:uppercase justify-center items-center;
 }
 
-#auth_layout_mobile form {
+#auth_layout_mobile {
   @apply mt-24;
-  height: calc(100vh - 112px);
+}
+
+#auth_layout_mobile form {
+  @apply gap-6 mt-8;
 }
 
 #auth_layout_mobile h2,

@@ -46,7 +46,7 @@ async function handleSubmit() {
 </script>
 
 <template>
-  <div class="flex flex-col gap-5 flex-1">
+  <div class="flex flex-col  flex-1">
     <div class="flex flex-col gap-1">
       <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
         Create your account
@@ -62,7 +62,7 @@ async function handleSubmit() {
         type="email"
         name="email"
         label="Email"
-        hint="required"
+        
         placeholder="you@example.com"
         size="lg"
         :disabled="loading"
@@ -76,7 +76,7 @@ async function handleSubmit() {
         type="password"
         name="password"
         label="Password"
-        hint="required"
+        
         placeholder="At least 6 characters"
         size="lg"
         :disabled="loading"
@@ -91,7 +91,7 @@ async function handleSubmit() {
         type="password"
         name="confirmPassword"
         label="Confirm password"
-        hint="required"
+        
         placeholder="Repeat your password"
         size="lg"
         :disabled="loading"
