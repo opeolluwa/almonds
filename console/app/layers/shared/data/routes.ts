@@ -112,7 +112,7 @@ export const mobile_default_layer: Route[] = [
     activeIcon: "ri:calendar-todo-fill",
   },
   {
-    path: "/settings?tab=account",
+    path: "/settings",
     name: "Account",
     icon: "ri:user-line",
     activeIcon: "ri:user-fill",

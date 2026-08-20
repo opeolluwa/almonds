@@ -244,3 +244,8 @@ h6.notes_heading {
 #auth_layout_mobile p {
   @apply text-left;
 }
+
+#auth_layout_mobile,
+#default_layout_mobile {
+  @apply bg-gray-50 dark:bg-surface-950;
+}
