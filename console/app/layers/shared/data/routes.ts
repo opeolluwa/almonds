@@ -87,5 +87,36 @@ export const secondaryRoutes: Route[] = [
 ];
 
 
-export const mobileButtomNav= []
-  
+export const mobile_default_layer: Route[] = [
+  {
+    path: "/",
+    name: "Home",
+    icon: "lucide:house",
+    activeIcon: "lucide:house",
+  },
+  {
+    path: "/notes",
+    name: "Notes",
+    icon: "lucide:square-text",
+    activeIcon: "lucide:square-text",
+  },
+  {
+    path: "/bookmarks",
+    name: "Bookmarks",
+    icon: "lucide:bookmark",
+    activeIcon: "lucide:bookmark",
+  },
+  {
+    path: "/todo",
+    name: "Tasks",
+    icon: "lucide:square-check-big",
+    activeIcon: "lucide:square-check-big",
+  },
+  {
+    path: "/settings",
+    name: "Account",
+    icon: "lucide:circle-user-round",
+    activeIcon: "lucide:circle-user-round",
+  },
+];
+

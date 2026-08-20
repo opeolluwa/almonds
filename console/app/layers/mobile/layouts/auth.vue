@@ -1,7 +1,7 @@
 <template>
   <main
-    id="auth_layout"
-    class="mobile_app p-6 flex flex-col bg-gray-50 dark:bg-surface-950"
+    id="auth_layout_mobile"
+    class="p-6  flex flex-col bg-gray-50 dark:bg-surface-950"
   >
     <div class="absolute top-10 left-6">
       <NuxtLink
@@ -20,9 +20,4 @@
 const route = useRoute();
 </script>
 
-<style scoped>
-#auth_layout form input,
-#auth_layout form button {
-  padding: 30px 4px;
-}
-</style>
+
