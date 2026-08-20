@@ -82,50 +82,21 @@ const routes = [
 </script>
 
 <template>
-  <div>
+<div>
+    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Labore ipsam facilis perferendis ut, fugiat blanditiis dicta eum vero vel quae quo dolorem atque, debitis molestiae rem reiciendis ab velit similique.
     <UNavigationMenu
       orientation="vertical"
       :items="routes"
       highlight
       highlight-color="neutral"
-      class="w-full"
-      #item="{ item }"
+      class="w-full text-white"
       :ui="{
-        link: 'px-2 py-2 text-sm rounded-lg transition-colors hover:bg-white/5 data-active:font-medium',
-        linkLeadingIcon: 'size-5  ',
+        link: 'px-2 py-2 text-sm rounded-lg text-white/50 transition-colors hover:bg-white/5 hover:text-white data-active:bg-white/10 data-active:text-white data-active:font-medium',
+        linkLeadingIcon:
+          'size-5 text-white/40 group-hover:text-white group-data-active:text-white',
         label:
-          'mt-4 pt-3 border-t border-white/10 px-2 pb-1.5 text-[11px] font-medium uppercase tracking-[0.14em]',
+          'mt-4 pt-3 border-t border-white/10 px-2 pb-1.5 text-[11px] font-medium uppercase tracking-[0.14em] text-white/30',
       }"
-    >
-      <template v-if="item.type == 'label'">
-        <div
-          class="px-2 py-1.5 text-sm font-medium uppercase text-gray-900 dark:text-white tracking-[0.14em]"
-        >
-          {{ item.label }}
-        </div>
-      </template>
-      <template v-else>
-        <NuxtLink :to="item.to" class="flex items-center gap-4">
-          <div
-            class="size-10 shrink-0 rounded-lg flex items-center justify-center"
-          >
-            <UIcon
-              :name="item.icon"
-              class="size-5 text-accent-700 dark:text-accent-300"
-            />
-          </div>
-          <div class="min-w-0 flex-1">
-            <h3
-              class="text-sm font-medium leading-5 text-gray-900 dark:text-white"
-            >
-              {{ item.label }}
-            </h3>
-            <p class="text-sm text-gray-400 dark:text-gray-500 mt-0.5">
-              {{ item.description }}
-            </p>
-          </div>
-        </NuxtLink>
-      </template>
-    </UNavigationMenu>
-  </div>
+    />
+</div>
 </template>

@@ -1,5 +1,5 @@
 import type { Bookmark, CreateBookmark, Tag, UpdateBookmark } from "lunar";
-import { invoke } from "~/utils/invoke";
+import { invoke } from "@shared/utils/invoke";
 import { defineStore } from "pinia";
 
 export type BookmarkTag = Tag;

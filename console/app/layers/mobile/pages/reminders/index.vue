@@ -1,5 +1,5 @@
 <script setup lang="ts">
-definePageMeta({ layout: "mobile-default" });
+
 </script>
 
 <template>

@@ -85,3 +85,36 @@ export const secondaryRoutes: Route[] = [
     activeIcon: "heroicons:cog-6-tooth-solid",
   },
 ];
+
+export const mobile_default_layer: Route[] = [
+  {
+    path: "/",
+    name: "Home",
+    icon: "ri:home-line",
+    activeIcon: "ri:home-fill",
+  },
+  {
+    path: "/notes",
+    name: "Notes",
+    icon: "ri:booklet-line",
+    activeIcon: "ri:booklet-fill",
+  },
+  {
+    path: "/bookmarks",
+    name: "Bookmarks",
+    icon: "ri:bookmark-line",
+    activeIcon: "ri:bookmark-fill",
+  },
+  {
+    path: "/todo",
+    name: "Tasks",
+    icon: "ri:calendar-todo-line",
+    activeIcon: "ri:calendar-todo-fill",
+  },
+  {
+    path: "/settings",
+    name: "Account",
+    icon: "ri:user-line",
+    activeIcon: "ri:user-fill",
+  },
+];

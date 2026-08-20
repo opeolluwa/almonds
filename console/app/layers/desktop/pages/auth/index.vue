@@ -20,9 +20,7 @@ onMounted(() => {
 });
 
 function validate(): boolean {
-  errors.email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())
-    ? ""
-    : "A valid email is required";
+  errors.email = emailValidator(form.email) ? "" : "A valid email is required";
   errors.password = form.password ? "" : "Password is required";
   return !errors.email && !errors.password;
 }

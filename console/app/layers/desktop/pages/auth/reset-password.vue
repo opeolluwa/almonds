@@ -16,9 +16,7 @@ const loading = ref(false);
 const submitError = ref("");
 
 function validateEmail(): boolean {
-  errors.email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())
-    ? ""
-    : "A valid email is required";
+  errors.email = emailValidator(form.email) ? "" : "A valid email is required";
   return !errors.email;
 }
 

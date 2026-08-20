@@ -1,5 +1,10 @@
 <script setup lang="ts">
-import { safeOpenUrl as openUrl } from "~/utils/safe-open-url";
+import { useBookmarkStore } from "@shared/stores/bookmarks";
+import { useNoteStore } from "@shared/stores/notes";
+import { useReminderStore } from "@shared/stores/reminder";
+import { useSnippetStore } from "@shared/stores/snippets";
+import { useTodoStore } from "@shared/stores/todo";
+import { safeOpenUrl as openUrl } from "@shared/utils/safe-open-url";
 import { onClickOutside } from "@vueuse/core";
 
 const emit = defineEmits<{ close: [] }>();
