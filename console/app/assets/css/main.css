@@ -83,7 +83,7 @@ body {
   height: 100%;
   overflow: hidden;
   overscroll-behavior: none;
-  /*background-color: transparent;*/
+  background-color: transparent;
   border: none !important;
 }
 

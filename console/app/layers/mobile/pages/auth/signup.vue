@@ -13,9 +13,7 @@ const loading = ref(false);
 const submitError = ref("");
 
 function validate(): boolean {
-  errors.email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())
-    ? ""
-    : "A valid email is required";
+  errors.email = emailValidator(form.email) ? "" : "A valid email is required";
   errors.password =
     form.password.length >= 6 ? "" : "Password must be at least 6 characters";
   errors.confirmPassword =
@@ -66,6 +64,7 @@ async function handleSubmit() {
         label="Email"
         hint="required"
         placeholder="you@example.com"
+        size="lg"
         :disabled="loading"
       />
       <p v-if="errors.email" class="text-xs text-red-500 -mt-3">
@@ -79,6 +78,7 @@ async function handleSubmit() {
         label="Password"
         hint="required"
         placeholder="At least 6 characters"
+        size="lg"
         :disabled="loading"
         :enable-password-toggle="false"
       />
@@ -93,6 +93,7 @@ async function handleSubmit() {
         label="Confirm password"
         hint="required"
         placeholder="Repeat your password"
+        size="lg"
         :disabled="loading"
         :enable-password-toggle="false"
       />
@@ -107,7 +108,7 @@ async function handleSubmit() {
       </AppButton>
     </form>
 
-    <p class="text-sm text-center text-gray-500 dark:text-gray-400">
+    <p class="text-sm text-center text-gray-500 dark:text-gray-400 absolute left-0 w-full bottom-10">
       Already have an account?
       <NuxtLink
         to="/auth/login"

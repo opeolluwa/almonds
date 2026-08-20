@@ -14,9 +14,7 @@ const loading = ref(false);
 const submitError = ref("");
 
 function validate(): boolean {
-  errors.email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())
-    ? ""
-    : "A valid email is required";
+  errors.email = emailValidator(form.email) ? "" : "A valid email is required";
   errors.password = form.password ? "" : "Password is required";
   return !errors.email && !errors.password;
 }
@@ -62,6 +60,7 @@ async function handleSubmit() {
         label="Email"
         hint="required"
         placeholder="you@example.com"
+        :size="'xl'"
         :disabled="loading"
       />
       <p v-if="errors.email" class="text-xs text-red-500 -mt-3">
@@ -76,6 +75,7 @@ async function handleSubmit() {
           label="Password"
           hint="required"
           placeholder="••••••••"
+          size="lg"
           :disabled="loading"
         />
         <div class="flex justify-end mt-1">
@@ -104,7 +104,7 @@ async function handleSubmit() {
     </form>
 
     <p
-      class="text-sm p-6 text-center text-gray-500 dark:text-gray-400 absolute mx-auto left-0 w-full bottom-0"
+      class="text-sm text-center text-gray-500 dark:text-gray-400 absolute left-0 w-full bottom-10"
     >
       Don't have an account?
       <NuxtLink

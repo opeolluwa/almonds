@@ -75,7 +75,7 @@ async function handleAccept() {
         Accept invitation
       </AppButton>
 
-      <p class="text-sm text-center text-gray-500 dark:text-gray-400">
+      <p class="text-sm text-center text-gray-500 dark:text-gray-400 absolute left-0 w-full bottom-10">
         Prefer to sign in first?
         <NuxtLink
           to="/auth/login"

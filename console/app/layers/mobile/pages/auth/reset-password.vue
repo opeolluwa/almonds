@@ -16,9 +16,7 @@ const loading = ref(false);
 const submitError = ref("");
 
 function validateEmail(): boolean {
-  errors.email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())
-    ? ""
-    : "A valid email is required";
+  errors.email = emailValidator(form.email) ? "" : "A valid email is required";
   return !errors.email;
 }
 
@@ -115,6 +113,7 @@ async function handleSetPassword() {
           label="Email"
           hint="required"
           placeholder="you@example.com"
+          size="lg"
           :disabled="loading"
         />
         <p v-if="errors.email" class="text-xs text-red-500 -mt-3">
@@ -136,6 +135,7 @@ async function handleSetPassword() {
           label="New password"
           hint="required"
           placeholder="At least 6 characters"
+          size="lg"
           :disabled="loading"
         />
         <p v-if="errors.password" class="text-xs text-red-500 -mt-3">
@@ -149,6 +149,7 @@ async function handleSetPassword() {
           label="Confirm new password"
           hint="required"
           placeholder="Repeat your new password"
+          size="lg"
           :disabled="loading"
         />
         <p v-if="errors.confirmPassword" class="text-xs text-red-500 -mt-3">
@@ -169,7 +170,7 @@ async function handleSetPassword() {
       </template>
     </form>
 
-    <p class="text-sm text-center text-gray-500 dark:text-gray-400">
+    <p class="text-sm text-center text-gray-500 dark:text-gray-400 absolute left-0 w-full bottom-10">
       Remembered your password?
       <NuxtLink
         to="/auth/login"

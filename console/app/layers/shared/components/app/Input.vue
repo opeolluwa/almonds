@@ -8,9 +8,11 @@ withDefaults(
     disabled?: boolean;
     type?: string;
     enablePasswordToggle?: boolean;
+    size?: "xs" | "sm" | "md" | "lg" | "xl";
   }>(),
   {
     enablePasswordToggle: true,
+    size: "lg",
   },
 );
 
@@ -36,6 +38,7 @@ const show = ref(false);
         :disabled="disabled"
         :placeholder="placeholder"
         :type="show ? 'text' : 'password'"
+        :size="size"
         :ui="{ base: 'py-3 pl-4 bg-transparent' }"
         :class="[
           'w-full transition-colors',
@@ -64,6 +67,7 @@ const show = ref(false);
         :disabled="disabled"
         :placeholder="placeholder"
         :type="type"
+        :size="size"
         :ui="{ base: 'py-3 pl-4 bg-transparent' }"
         :class="[
           'w-full transition-colors',

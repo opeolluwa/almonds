@@ -19,9 +19,7 @@ const errors = reactive({
 function validate(): boolean {
   errors.firstName = form.firstName.trim() ? "" : "First name is required";
   errors.lastName = form.lastName.trim() ? "" : "Last name is required";
-  errors.email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())
-    ? ""
-    : "A valid email is required";
+  errors.email = emailValidator(form.email) ? "" : "A valid email is required";
   return !errors.firstName && !errors.lastName && !errors.email;
 }
 

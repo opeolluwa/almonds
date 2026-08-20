@@ -11,9 +11,7 @@ const loading = ref(false);
 const submitError = ref("");
 
 function validate(): boolean {
-  errors.email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())
-    ? ""
-    : "A valid email is required";
+  errors.email = emailValidator(form.email) ? "" : "A valid email is required";
   errors.password =
     form.password.length >= 6 ? "" : "Password must be at least 6 characters";
   errors.confirmPassword =
