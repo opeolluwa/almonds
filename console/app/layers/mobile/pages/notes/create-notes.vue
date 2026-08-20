@@ -2,7 +2,7 @@
 import { useNoteStore } from "@shared/stores/notes";
 import { onBeforeRouteLeave } from "vue-router";
 
-definePageMeta({ layout: false, name: "New note", keepalive: true });
+definePageMeta({ name: "New note", keepalive: true });
 
 const router = useRouter();
 const noteStore = useNoteStore();
@@ -81,83 +81,74 @@ onBeforeRouteLeave(async () => {
 </script>
 
 <template>
-  <NuxtLayout name="default">
-    <template #page_title>
-      <textarea
-        v-model="title"
-        placeholder="Untitled"
-        rows="1"
-        :disabled="submitting"
-        class="w-full resize-none bg-transparent outline-none text-3xl font-bold text-gray-900 dark:text-gray-200 placeholder:text-gray-400 dark:placeholder:text-gray-500 leading-tight mb-0 overflow-hidden"
-        @input="
-          ($event.target as HTMLTextAreaElement).style.height = 'auto';
-          ($event.target as HTMLTextAreaElement).style.height =
-            ($event.target as HTMLTextAreaElement).scrollHeight + 'px';
-        "
-      />
-    </template>
-    <template #main_content>
-    <NotesEditor v-model="content" />
-      <p v-if="error" class="text-xs text-red-500 mt-6">
-        {{ error }}
-      </p>
-    </template>
+  <textarea
+    v-model="title"
+    placeholder="Untitled"
+    rows="1"
+    :disabled="submitting"
+    class="w-full resize-none bg-transparent outline-none text-3xl font-bold text-gray-900 dark:text-gray-200 placeholder:text-gray-400 dark:placeholder:text-gray-500 leading-tight mb-0 overflow-hidden"
+    @input="
+      ($event.target as HTMLTextAreaElement).style.height = 'auto';
+      ($event.target as HTMLTextAreaElement).style.height =
+        ($event.target as HTMLTextAreaElement).scrollHeight + 'px';
+    "
+  />
 
-    <template #side_content>
-      <!-- Save -->
-      <UButton
-        block
-        size="sm"
-        :loading="submitting"
-        :disabled="!hasContent"
-        class="mb-2"
-        :ui="{
-          base: 'bg-accent-500 hover:bg-accent-600 disabled:bg-accent-600 disabled:text-gray-100 disabled:cursor-not-allowed py-2',
-        }"
-        @click="handleSave"
-      >
-        Save note
-      </UButton>
-      <UButton
-        block
-        variant="ghost"
-        size="sm"
-        :disabled="submitting"
-        :ui="{
-          base: 'text-accent-500 hover:text-accent-600 disabled:text-accent-600 disabled:text-gray-100 disabled:cursor-not-allowed py-2',
-        }"
-        @click="router.push('/notes')"
-      >
-        Discard
-      </UButton>
+  <NotesEditor v-model="content" />
 
-      <USeparator class="my-5" />
+  <p v-if="error" class="text-xs text-red-500 mt-6">
+    {{ error }}
+  </p>
 
-      <!-- Stats -->
-      <p
-        class="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3"
+  <div class="mt-6 flex flex-col gap-2">
+    <UButton
+      block
+      size="sm"
+      :loading="submitting"
+      :disabled="!hasContent"
+      :ui="{
+        base: 'bg-accent-500 hover:bg-accent-600 disabled:bg-accent-600 disabled:text-gray-100 disabled:cursor-not-allowed py-2',
+      }"
+      @click="handleSave"
+    >
+      Save note
+    </UButton>
+    <UButton
+      block
+      variant="ghost"
+      size="sm"
+      :disabled="submitting"
+      :ui="{
+        base: 'text-accent-500 hover:text-accent-600 disabled:text-accent-600 disabled:text-gray-100 disabled:cursor-not-allowed py-2',
+      }"
+      @click="router.push('/notes')"
+    >
+      Discard
+    </UButton>
+  </div>
+
+  <USeparator class="my-5" />
+
+  <p
+    class="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3"
+  >
+    Document
+  </p>
+  <div class="flex flex-col gap-0.5">
+    <div
+      v-for="stat in [
+        { label: 'Words', value: wordCount },
+        { label: 'Characters', value: charCount },
+      ]"
+      :key="stat.label"
+      class="flex items-center justify-between py-2 border-b border-gray-50 dark:border-gray-800/60 text-xs"
+    >
+      <span class="text-gray-400">{{ stat.label }}</span>
+      <span
+        class="tabular-nums font-semibold text-gray-700 dark:text-gray-200"
       >
-        Document
-      </p>
-      <div class="flex flex-col gap-0.5">
-        <div
-          v-for="stat in [
-            { label: 'Words', value: wordCount },
-            { label: 'Characters', value: charCount },
-          ]"
-          :key="stat.label"
-          class="flex items-center justify-between py-2 border-b border-gray-50 dark:border-gray-800/60 text-xs"
-        >
-          <span class="text-gray-400">{{ stat.label }}</span>
-          <span
-            class="tabular-nums font-semibold text-gray-700 dark:text-gray-200"
-          >
-            {{ stat.value }}
-          </span>
-        </div>
-      </div>
-    </template>
-  </NuxtLayout>
+        {{ stat.value }}
+      </span>
+    </div>
+  </div>
 </template>
-
-<style></style>
