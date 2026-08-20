@@ -1,6 +1,5 @@
 // app/layers/mobile/nuxt.config.ts
 export default defineNuxtConfig({
-  modules: ["@nuxtjs/ionic"],
   ssr: false,
   app: {
     head: {

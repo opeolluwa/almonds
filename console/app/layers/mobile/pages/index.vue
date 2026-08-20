@@ -1,109 +1,113 @@
 <script setup lang="ts">
-  import {
-    IonContent,
-    IonHeader,
-    IonIcon,
-    IonPage,
-    IonTab,
-    IonTabs,
-    IonTabBar,
-    IonTabButton,
-    IonTitle,
-    IonToolbar,
-  } from '@ionic/vue';
-import { playCircle, radio, library, search } from 'ionicons/icons';
-const authenticated = ref(true);
+import { useAuthStore } from "@shared/stores/auth";
+import type { LoginRequest } from "@shared/composables/useAuthApi";
 
-onMounted(() => {
-  if (!authenticated.value) {
-    navigateTo("/auth/login");
+definePageMeta({ layout: "auth" });
+
+const authApi = useAuthApi();
+const authStore = useAuthStore();
+const { notify } = useAppNotification();
+
+const form = reactive<LoginRequest>({ email: "", password: "" });
+const errors = reactive({ email: "", password: "" });
+const loading = ref(false);
+const submitError = ref("");
+
+function validate(): boolean {
+  errors.email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())
+    ? ""
+    : "A valid email is required";
+  errors.password = form.password ? "" : "Password is required";
+  return !errors.email && !errors.password;
+}
+
+async function handleSubmit() {
+  if (!validate()) return;
+  loading.value = true;
+  submitError.value = "";
+  try {
+    const response = await authApi.login({
+      email: form.email.trim(),
+      password: form.password,
+    });
+    authStore.setSession(
+      response.accessToken,
+      response.refreshToken,
+      response.exp,
+    );
+    notify({ message: "Logged in successfully", type: "success" });
+    await navigateTo("/");
+  } catch (error) {
+    submitError.value = (error as Error).message;
+  } finally {
+    loading.value = false;
   }
-});
+}
 </script>
 
 <template>
-  <ion-tabs>
-    <ion-tab tab="home">
-      <ion-page id="home-page">
-        <ion-header>
-          <ion-toolbar>
-            <ion-title>Listen now</ion-title>
-          </ion-toolbar>
-        </ion-header>
-        <ion-content>
-          <div class="example-content">Listen now content</div>
-        </ion-content>
-      </ion-page>
-    </ion-tab>
-    <ion-tab tab="radio">
-      <ion-page id="radio-page">
-        <ion-header>
-          <ion-toolbar>
-            <ion-title>Radio</ion-title>
-          </ion-toolbar>
-        </ion-header>
-        <ion-content>
-          <div class="example-content">Radio content</div>
-        </ion-content>
-      </ion-page>
-    </ion-tab>
-    <ion-tab tab="library">
-      <ion-page id="library-page">
-        <ion-header>
-          <ion-toolbar>
-            <ion-title>Library</ion-title>
-          </ion-toolbar>
-        </ion-header>
-        <ion-content>
-          <div class="example-content">Library content</div>
-        </ion-content>
-      </ion-page>
-    </ion-tab>
-    <ion-tab tab="search">
-      <ion-page id="search-page">
-        <ion-header>
-          <ion-toolbar>
-            <ion-title>Search</ion-title>
-          </ion-toolbar>
-        </ion-header>
-        <ion-content>
-          <div class="example-content">Search content</div>
-        </ion-content>
-      </ion-page>
-    </ion-tab>
+  <div class="flex flex-col gap-5">
+    <div class="flex flex-col gap-1">
+      <h2 class="text-md font-semibold">Welcome back</h2>
+      <p class="text-sm text-gray-500 dark:text-gray-400">
+        Sign in to your Lunar account to continue.
+      </p>
+    </div>
 
-    <ion-tab-bar slot="bottom">
-      <ion-tab-button tab="home">
-        <ion-icon :icon="playCircle" />
-        Listen Now
-      </ion-tab-button>
-      <ion-tab-button tab="radio">
-        <ion-icon :icon="radio" />
-        Radio
-      </ion-tab-button>
-      <ion-tab-button tab="library">
-        <ion-icon :icon="library" />
-        Library
-      </ion-tab-button>
-      <ion-tab-button tab="search">
-        <ion-icon :icon="search" />
-        Search
-      </ion-tab-button>
-    </ion-tab-bar>
-  </ion-tabs>
+    <form class="flex flex-col gap-5 mt-4" @submit.prevent="handleSubmit">
+      <AppInput
+        v-model="form.email"
+        type="email"
+        name="email"
+        label="Email"
+        hint="required"
+        placeholder="you@example.com"
+        :disabled="loading"
+      />
+      <p v-if="errors.email" class="text-xs text-red-500 -mt-3">
+        {{ errors.email }}
+      </p>
+
+      <div>
+        <AppInput
+          v-model="form.password"
+          type="password"
+          name="password"
+          label="Password"
+          hint="required"
+          placeholder="••••••••"
+          :disabled="loading"
+        />
+        <div class="flex justify-end mt-1">
+          <NuxtLink
+            to="/auth/reset-password"
+            class="text-xs text-accent-500 hover:text-accent-600 font-medium"
+          >
+            Forgot password?
+          </NuxtLink>
+        </div>
+      </div>
+      <p v-if="errors.password" class="text-xs text-red-500 -mt-3">
+        {{ errors.password }}
+      </p>
+
+      <p v-if="submitError" class="text-sm text-red-500">{{ submitError }}</p>
+
+      <AppButton type="submit" class="text-center align-center" :loading="loading" :disabled="loading">
+        Sign in
+      </AppButton>
+    </form>
+
+    <p
+      class="text-sm p-6 text-center text-gray-500 dark:text-gray-400 absolute mx-auto left-0 w-full bottom-0"
+    >
+      Don't have an account?
+      <NuxtLink
+        to="/auth/signup"
+        class="text-accent-500 hover:text-accent-600 font-medium"
+      >
+        Sign up
+      </NuxtLink>
+    </p>
+  </div>
 </template>
-
-
-
-<style scoped>
-  /* This style is for demonstration purposes only. */
-  /* It's not required for the tabs to function. */
-  .example-content {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-  }
-</style>
-
-

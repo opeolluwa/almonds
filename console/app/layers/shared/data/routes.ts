@@ -85,3 +85,7 @@ export const secondaryRoutes: Route[] = [
     activeIcon: "heroicons:cog-6-tooth-solid",
   },
 ];
+
+
+export const mobileButtomNav= []
+  

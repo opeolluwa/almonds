@@ -1,8 +1,8 @@
 <template>
-  <UApp>
-    <IonApp>
-      <IonRouterOutlet />
-    </IonApp>
+  <UApp id="lunar_mobile">
+    <NuxtLayout>
+      <NuxtPage />
+    </NuxtLayout>
   </UApp>
 </template>
 
