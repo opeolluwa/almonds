@@ -83,7 +83,7 @@ body {
   height: 100%;
   overflow: hidden;
   overscroll-behavior: none;
-  background-color: transparent;
+  /*background-color: transparent;*/
   border: none !important;
 }
 
@@ -232,4 +232,13 @@ h6.notes_heading {
 
 #auth_layout button {
   @apply text-center first-letter:uppercase justify-center items-center;
+}
+
+#auth_layout.mobile_app {
+  @apply mt-8;
+}
+
+#auth_layout.mobile_app h2,
+#auth_layout.mobile_app p {
+  @apply text-left;
 }

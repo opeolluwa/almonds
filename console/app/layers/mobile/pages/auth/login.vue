@@ -48,7 +48,7 @@ async function handleSubmit() {
 <template>
   <div class="flex flex-col gap-5">
     <div class="flex flex-col gap-1">
-      <h2 class="text-md font-semibold">Welcome back</h2>
+      <h2 class="text-lg font-semibold">Welcome back</h2>
       <p class="text-sm text-gray-500 dark:text-gray-400">
         Sign in to your Lunar account to continue.
       </p>
@@ -93,7 +93,12 @@ async function handleSubmit() {
 
       <p v-if="submitError" class="text-sm text-red-500">{{ submitError }}</p>
 
-      <AppButton type="submit" class="text-center align-center" :loading="loading" :disabled="loading">
+      <AppButton
+        type="submit"
+        class="text-center align-center"
+        :loading="loading"
+        :disabled="loading"
+      >
         Sign in
       </AppButton>
     </form>
