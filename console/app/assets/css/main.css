@@ -76,6 +76,7 @@
 
 html {
   font-size: var(--font-size-base, 15px);
+  @apply bg-gray-50 dark:bg-surface-950;
 }
 
 body {
@@ -83,12 +84,7 @@ body {
   height: 100%;
   overflow: hidden;
   overscroll-behavior: none;
-  background-color: transparent;
   border: none !important;
-}
-
-body#lunar_mobile {
-  background-color: unset;
 }
 
 * {
@@ -235,7 +231,8 @@ h6.notes_heading {
 }
 
 #auth_layout.mobile_app {
-  @apply mt-8;
+  @apply mt-24;
+  height: calc(100vh - 112px);
 }
 
 #auth_layout.mobile_app h2,

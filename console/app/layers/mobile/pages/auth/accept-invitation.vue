@@ -30,7 +30,7 @@ async function handleAccept() {
 </script>
 
 <template>
-  <div class="flex flex-col gap-5">
+  <div class="flex flex-col gap-5 flex-1">
     <div class="flex flex-col gap-1 text-center">
       <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
         You're invited!
@@ -75,7 +75,7 @@ async function handleAccept() {
         Accept invitation
       </AppButton>
 
-      <p class="text-sm text-center text-gray-500 dark:text-gray-400 absolute left-0 w-full bottom-10">
+      <p class="text-sm text-left text-gray-500 dark:text-gray-400 pt-4">
         Prefer to sign in first?
         <NuxtLink
           to="/auth/login"

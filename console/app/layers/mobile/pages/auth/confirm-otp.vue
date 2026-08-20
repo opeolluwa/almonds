@@ -93,7 +93,7 @@ async function handleSubmit() {
 </script>
 
 <template>
-  <div class="flex flex-col gap-5">
+  <div class="flex flex-col gap-5 flex-1">
     <div class="flex flex-col gap-1">
       <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
         {{ title }}
@@ -145,7 +145,7 @@ async function handleSubmit() {
       </AppButton>
     </form>
 
-    <p class="text-sm text-center text-gray-500 dark:text-gray-400 absolute left-0 w-full bottom-10">
+    <p class="text-sm text-left text-gray-500 dark:text-gray-400 pt-4">
       {{ flow === "reset" ? "Remembered your password?" : "Already verified?" }}
       <NuxtLink
         :to="flow === 'reset' ? '/auth/login' : '/auth/login'"

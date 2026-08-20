@@ -13,6 +13,10 @@ export default defineNuxtConfig({
   },
 
   app: {
+    pageTransition: {
+         name: "fade",
+         mode: "out-in",
+       },
     head: {
       meta: [
         {
