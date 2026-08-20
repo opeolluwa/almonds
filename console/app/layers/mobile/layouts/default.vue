@@ -4,7 +4,7 @@
     class="flex flex-col bg-gray-50 dark:bg-surface-950"
   >
     <header
-      class="absolute top-0 py-7 pb-4 h-12 flex items-center justify-between px-6 z-50 left-0 w-full bg-white dark:bg-surface-950"
+      class="absolute top-0 py-7 flex items-center justify-between px-6 z-50 left-0 w-full bg-white dark:bg-surface-950"
     >
       <NuxtLink @click="router.back()" class="inline-flex">
         <UIcon name="lucide:arrow-left" class="size-5" />
@@ -14,11 +14,16 @@
         <UIcon name="heroicons:bell" class="size-5" />
       </NuxtLink>
     </header>
-    <div class="flex-1 overflow-y-auto p-6 pb-24" id="viewport_mobile">
+    <div
+      class="flex-1 overflow-y-auto p-6"
+      :class="hideHeaderAndNav ? 'pb-6 pt-6' : 'pb-24 pt-[50px]'"
+      id="viewport_mobile"
+    >
       <slot />
     </div>
 
     <nav
+      v-if="!hideHeaderAndNav"
       class="fixed bottom-0 inset-x-0 z-50 flex items-center justify-around border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 pt-3 pb-2.5"
     >
       <NuxtLink
@@ -47,6 +52,12 @@ import { mobile_default_layer } from "@shared/data/routes";
 const route = useRoute();
 const router = useRouter();
 
+const hideHeaderAndNav = computed(() => {
+  return (
+    route.path.includes("/create-notes") || route.path.includes("/edit-notes")
+  );
+});
+
 function isActive(path: string): boolean {
   if (path === "/") return route.path === "/";
   return route.path.startsWith(path);
@@ -54,9 +65,7 @@ function isActive(path: string): boolean {
 </script>
 
 <style scoped>
-
 #viewport_mobile {
-  min-height: calc(100dvh - 64px);
-  padding-top: 50px;
+  min-height: calc(80dvh);
 }
 </style>

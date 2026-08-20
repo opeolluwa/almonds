@@ -251,5 +251,5 @@ h6.notes_heading {
 }
 
 #default_layout_mobile {
-  height: calc(100dvh - 64px);
+  height: calc(100dvh);
 }

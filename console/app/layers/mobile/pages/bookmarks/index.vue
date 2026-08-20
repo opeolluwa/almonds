@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import { safeOpenUrl as openUrl } from "@shared/utils/safe-open-url";
-import BookmarkCard from "@shared/components/bookmark/card.vue";
 import { useBookmarkStore } from "@shared/stores/bookmarks";
-
+import EmptyState from "@shared/components/app/EmptyState.vue";
 const bookmarkStore = useBookmarkStore();
 </script>
 
