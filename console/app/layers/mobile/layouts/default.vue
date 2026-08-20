@@ -1,7 +1,7 @@
 <template>
   <main
-    id="default_layout"
-    class="mobile_app flex flex-col bg-gray-50 dark:bg-surface-950"
+    id="default_layout_mobile"
+    class="flex flex-col bg-gray-50 dark:bg-surface-950"
   >
     <header
       class="absolute top-0 py-7 pb-4 h-12 flex items-center justify-between px-6 z-50 left-0 w-full bg-white dark:bg-surface-950"
@@ -54,9 +54,6 @@ function isActive(path: string): boolean {
 </script>
 
 <style scoped>
-#default_layout {
-  height: 100dvh;
-}
 
 #viewport_mobile {
   min-height: calc(100dvh - 64px);

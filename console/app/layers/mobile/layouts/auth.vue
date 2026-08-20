@@ -1,8 +1,5 @@
 <template>
-  <main
-    id="auth_layout_mobile"
-    class="p-6  flex flex-col bg-gray-50 dark:bg-surface-950"
-  >
+  <main id="auth_layout_mobile" class="p-6 flex flex-col">
     <div class="absolute top-10 left-6">
       <NuxtLink
         v-if="route.path !== '/auth/login'"
@@ -21,5 +18,3 @@
 <script lang="ts" setup>
 const route = useRoute();
 </script>
-
-

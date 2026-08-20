@@ -247,5 +247,9 @@ h6.notes_heading {
 
 #auth_layout_mobile,
 #default_layout_mobile {
-  @apply bg-gray-50 dark:bg-surface-950;
+  /*@apply bg-gray-50 dark:bg-surface-950;*/
+}
+
+#default_layout_mobile {
+  height: calc(100dvh - 64px);
 }
