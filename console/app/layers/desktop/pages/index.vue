@@ -137,7 +137,6 @@ const statPills = computed(() => [
 
 <template>
   <NuxtLayout name="default">
-
     <template #page_title>
       <div
         class="relative -mx-6 -mt-6 px-6 pt-7 pb-6 overflow-hidden bg-linear-to-br from-accent-500/10 via-violet-400/5 to-transparent dark:from-accent-500/12 dark:via-violet-500/6 dark:to-transparent border-b border-gray-100 dark:border-gray-800"

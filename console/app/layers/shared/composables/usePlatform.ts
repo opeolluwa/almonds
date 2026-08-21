@@ -9,10 +9,15 @@ export function usePlatform() {
 
   return {
     platformName,
-    isMobile: computed(() => platformName.value === "android" || platformName.value === "ios"),
+    isMobile: computed(
+      () => platformName.value === "android" || platformName.value === "ios",
+    ),
     isWeb: computed(() => platformName.value === "web"),
-    isDesktop: computed(() =>
-      platformName.value === "macos" || platformName.value === "windows" || platformName.value === "linux",
+    isDesktop: computed(
+      () =>
+        platformName.value === "macos" ||
+        platformName.value === "windows" ||
+        platformName.value === "linux",
     ),
   };
 }

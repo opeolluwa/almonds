@@ -65,7 +65,9 @@ const pageTitle = computed(() => {
           </slot>
 
           <div
-            v-if="!workspaceStore.isCurrentWorkspaceLocked && $slots.primary_cta"
+            v-if="
+              !workspaceStore.isCurrentWorkspaceLocked && $slots.primary_cta
+            "
             class="hidden md:flex items-center justify-end mt-5 my-6"
           >
             <slot name="primary_cta" />

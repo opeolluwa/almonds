@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useAuthStore } from '@shared/stores/auth';
+import { useAuthStore } from "@shared/stores/auth";
 
 definePageMeta({ layout: "auth" });
 

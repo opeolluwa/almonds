@@ -53,9 +53,7 @@ export const useWorkspacesStore = defineStore("workspaces_store", {
         if (!this.activeWorkspaceId && this.workspaces.length > 0) {
           // Prefer the default workspace on first load
           const defaultWs = this.workspaces.find((w) => w.isDefault);
-          this.activeWorkspaceId = (
-            defaultWs ?? this.workspaces[0]
-          ).identifier;
+          this.activeWorkspaceId = (defaultWs ?? this.workspaces[0]).identifier;
         }
       } catch (error) {
         console.error("[workspaces] failed to fetch", error);

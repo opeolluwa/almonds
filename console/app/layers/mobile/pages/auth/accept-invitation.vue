@@ -30,7 +30,7 @@ async function handleAccept() {
 </script>
 
 <template>
-  <div class="flex flex-col  flex-1">
+  <div class="flex flex-col flex-1">
     <div class="flex flex-col gap-1 text-center">
       <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
         You're invited!

@@ -14,8 +14,5 @@ export default defineNuxtConfig({
     "@vueuse/nuxt",
   ],
 
-  css: [
-    "highlight.js/styles/atom-one-dark.css",
-    "@domternal/theme",
-  ],
-})
+  css: ["highlight.js/styles/atom-one-dark.css", "@domternal/theme"],
+});

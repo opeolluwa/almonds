@@ -1,7 +1,7 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
   "productName": "Lunar",
-  "version": "0.8.40",
+  "version": "0.8.41",
   "identifier": "com.opeolluwa.lunar",
   "build": {
     "beforeDevCommand": "npm run dev",

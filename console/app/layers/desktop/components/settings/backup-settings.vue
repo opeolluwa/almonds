@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useBackupSettingsStore } from '@shared/stores/backup-settings';
+import { useBackupSettingsStore } from "@shared/stores/backup-settings";
 
 type BackupProvider = "local" | "cloud" | "self-hosted";
 

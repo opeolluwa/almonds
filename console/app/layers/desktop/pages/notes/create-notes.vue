@@ -97,7 +97,7 @@ onBeforeRouteLeave(async () => {
       />
     </template>
     <template #main_content>
-    <NotesEditor v-model="content" />
+      <NotesEditor v-model="content" />
       <p v-if="error" class="text-xs text-red-500 mt-6">
         {{ error }}
       </p>

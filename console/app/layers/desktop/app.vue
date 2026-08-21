@@ -6,6 +6,7 @@ import {
 import { useAlarmScheduler } from "@shared/composables/useAlarmScheduler";
 import { useWorkspaceSetup } from "@shared/composables/useWorkspaceSetup";
 import { useWorkspacesStore } from "@shared/stores/workspaces";
+import "@domternal/theme";
 const { init: initFontSize } = useFontSize();
 const { init: initDarkTheme } = useDarkTheme();
 const { setupRequired, checkSetup, initializing } = useUserSetup();
@@ -20,7 +21,6 @@ const authenticated = ref(true);
 
 const route = useRoute();
 const isAuthRoute = computed(() => route.path.startsWith("/auth"));
-import "@domternal/theme";
 const showWorkspaceLock = ref(false);
 
 onMounted(async () => {
@@ -78,4 +78,3 @@ onMounted(async () => {
     </UApp>
   </Body>
 </template>
-

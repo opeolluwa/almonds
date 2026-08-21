@@ -84,12 +84,12 @@ const routes = [
 <template>
   <div>
     <UNavigationMenu
+      #item="{ item }"
       orientation="vertical"
       :items="routes"
       highlight
       highlight-color="neutral"
       class="w-full"
-      #item="{ item }"
       :ui="{
         link: 'px-2 py-2 text-sm rounded-lg transition-colors hover:bg-white/5 data-active:font-medium',
         linkLeadingIcon: 'size-5  ',
