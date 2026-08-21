@@ -1,7 +1,7 @@
 import { resolve } from "path";
 
-// const isMobile = process.env.NUXT_APP_TARGET === "mobile";
-const isMobile = true;
+const isMobile = process.env.NUXT_APP_TARGET === "mobile";
+// const isMobile = true;
 export default defineNuxtConfig({
   srcDir: "app",
   extends: [
@@ -37,7 +37,6 @@ export default defineNuxtConfig({
     "./assets/css/main.css",
     "highlight.js/styles/atom-one-dark.css",
     "@domternal/theme",
-   
   ],
 
   colorMode: {

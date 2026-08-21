@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import TodoCard from "@shared/components/todo/todo-card.vue";
 import { useTodoStore } from "@shared/stores/todo";
+import EmptyState from "@shared/components/app/EmptyState.vue";
 
 const todoStore = useTodoStore();
 const router = useRouter();

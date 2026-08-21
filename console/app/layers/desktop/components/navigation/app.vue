@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { primaryRoutes, secondaryRoutes } from "~/data/routes";
-import { useSidebarStore } from "~/stores/sidebar";
+import { primaryRoutes, secondaryRoutes } from "@shared/data/routes";
+import { useSidebarStore } from "@shared/stores/sidebar";
 
 const route = useRoute();
 const colorMode = useColorMode();

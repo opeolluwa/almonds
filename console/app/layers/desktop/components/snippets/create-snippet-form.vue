@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { CreateSnippetPayload } from "~/stores/snippets";
-import { SNIPPET_LANGUAGES } from "~/data/languages";
+import type { CreateSnippetPayload } from "@shared/stores/snippets";
+import { SNIPPET_LANGUAGES } from "@shared/data/languages";
 const snippetStore = useSnippetStore();
 const router = useRouter();
 
