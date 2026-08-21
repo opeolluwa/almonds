@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import type { BookmarkTag, CreateBookmarkPayload } from "@shared/stores/bookmarks";
+import type {
+  BookmarkTag,
+  CreateBookmarkPayload,
+} from "@shared/stores/bookmarks";
 import _ from "lodash";
 
 defineProps<{

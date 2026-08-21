@@ -6,7 +6,7 @@
     <header
       class="absolute top-0 py-7 flex items-center justify-between px-6 z-50 left-0 w-full bg-white dark:bg-surface-950"
     >
-      <NuxtLink @click="router.back()" class="inline-flex">
+      <NuxtLink class="inline-flex" @click="router.back()">
         <UIcon name="lucide:arrow-left" class="size-5" />
       </NuxtLink>
 
@@ -15,9 +15,9 @@
       </NuxtLink>
     </header>
     <div
+      id="viewport_mobile"
       class="flex-1 overflow-y-auto p-6"
       :class="hideHeaderAndNav ? 'pb-6 pt-6' : 'pb-24 pt-[50px]'"
-      id="viewport_mobile"
     >
       <slot />
     </div>

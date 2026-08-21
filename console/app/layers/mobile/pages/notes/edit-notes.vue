@@ -134,10 +134,7 @@ onMounted(async () => {
   </div>
 
   <!-- Loading -->
-  <div
-    v-else-if="noteStore.loading && !original"
-    class="flex flex-col gap-4"
-  >
+  <div v-else-if="noteStore.loading && !original" class="flex flex-col gap-4">
     <USkeleton class="h-10 rounded-lg w-64" />
     <USkeleton class="h-4 rounded-lg w-32" />
     <USkeleton class="h-96 rounded-lg" />
@@ -185,9 +182,7 @@ onMounted(async () => {
       >
         Discard
       </UButton>
-      <p
-        class="text-center text-[10px] text-gray-300 dark:text-gray-600 mt-1"
-      >
+      <p class="text-center text-[10px] text-gray-300 dark:text-gray-600 mt-1">
         {{
           submitting
             ? "Saving…"
@@ -207,11 +202,18 @@ onMounted(async () => {
       Document
     </p>
     <div class="flex flex-col gap-0.5">
-      <div class="flex items-center justify-between text-xs py-2 border-b border-gray-50 dark:border-gray-800/60">
+      <div
+        class="flex items-center justify-between text-xs py-2 border-b border-gray-50 dark:border-gray-800/60"
+      >
         <span class="text-gray-400">Words</span>
-        <span class="font-medium text-gray-700 dark:text-gray-300 tabular-nums">{{ wordCount }}</span>
+        <span
+          class="font-medium text-gray-700 dark:text-gray-300 tabular-nums"
+          >{{ wordCount }}</span
+        >
       </div>
-      <div class="flex items-center justify-between text-xs py-2 border-b border-gray-50 dark:border-gray-800/60">
+      <div
+        class="flex items-center justify-between text-xs py-2 border-b border-gray-50 dark:border-gray-800/60"
+      >
         <span class="text-gray-400">Modified</span>
         <span class="font-medium text-gray-700 dark:text-gray-300">
           {{

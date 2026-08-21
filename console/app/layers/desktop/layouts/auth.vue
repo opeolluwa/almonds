@@ -22,7 +22,6 @@
         leave-to-class="opacity-0"
       >
         <slot />
-       
       </Transition>
     </div>
 
@@ -36,6 +35,4 @@ import { IS_WEB } from "@shared/env";
 
 <style lang="css">
 /*@reference "@/assets/css/main.css";*/
-
-
 </style>

@@ -160,7 +160,11 @@ function handleUpdate({ editor }: { editor: any }) {
 </script>
 
 <template>
-  <div :class="{ 'dm-theme-dark': isDark }" :style="dmVars" class="notes-editor -ml-12">
+  <div
+    :class="{ 'dm-theme-dark': isDark }"
+    :style="dmVars"
+    class="notes-editor -ml-12"
+  >
     <Domternal
       :extensions="extensions"
       :content="initialContent"
@@ -179,6 +183,6 @@ function handleUpdate({ editor }: { editor: any }) {
   --dm-editor-shadow: none;
   --dm-editor-border: none;
   --dm-border-color: #cccccc;
-  --dm-code-surface: transparent
+  --dm-code-surface: transparent;
 }
 </style>

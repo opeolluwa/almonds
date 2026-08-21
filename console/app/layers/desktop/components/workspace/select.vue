@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { useWorkspacesStore } from '@shared/stores/workspaces';
+import { useWorkspacesStore } from "@shared/stores/workspaces";
 
 const workspaceStore = useWorkspacesStore();
 const showCreateModal = ref(false);

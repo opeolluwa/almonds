@@ -7,6 +7,7 @@ definePageMeta({ layout: "auth" });
 const authApi = useAuthApi();
 const authStore = useAuthStore();
 const { notify } = useAppNotification();
+const { rememberEmail } = useRememberedEmail();
 
 const form = reactive<LoginRequest>({ email: "", password: "" });
 const errors = reactive({ email: "", password: "" });
@@ -33,6 +34,7 @@ async function handleSubmit() {
       response.refreshToken,
       response.exp,
     );
+    rememberEmail(form.email.trim());
     notify({ message: "Logged in successfully", type: "success" });
     await navigateTo("/");
   } catch (error) {
@@ -44,7 +46,7 @@ async function handleSubmit() {
 </script>
 
 <template>
-  <div class="flex flex-col  flex-1">
+  <div class="flex flex-col flex-1">
     <div class="flex flex-col gap-1">
       <h2 class="text-lg font-semibold">Welcome back</h2>
       <p class="text-sm text-gray-500 dark:text-gray-400">
@@ -52,13 +54,12 @@ async function handleSubmit() {
       </p>
     </div>
 
-    <form class="flex flex-col  mt-4" @submit.prevent="handleSubmit">
+    <form class="flex flex-col mt-4" @submit.prevent="handleSubmit">
       <AppInput
         v-model="form.email"
         type="email"
         name="email"
         label="Email"
-        
         placeholder="you@example.com"
         size="lg"
         :disabled="loading"
@@ -73,7 +74,6 @@ async function handleSubmit() {
           type="password"
           name="password"
           label="Password"
-          
           placeholder="••••••••"
           size="lg"
           :disabled="loading"

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useAuthStore } from '@shared/stores/auth';
+import { useAuthStore } from "@shared/stores/auth";
 
 definePageMeta({ layout: "auth" });
 
@@ -79,7 +79,7 @@ async function handleSetPassword() {
 </script>
 
 <template>
-  <div class="flex flex-col  flex-1">
+  <div class="flex flex-col flex-1">
     <div class="flex flex-col gap-1">
       <template v-if="step === 'email'">
         <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
@@ -111,7 +111,6 @@ async function handleSetPassword() {
           type="email"
           name="email"
           label="Email"
-          
           placeholder="you@example.com"
           size="lg"
           :disabled="loading"
@@ -133,7 +132,6 @@ async function handleSetPassword() {
           type="password"
           name="password"
           label="New password"
-          
           placeholder="At least 6 characters"
           size="lg"
           :disabled="loading"
@@ -147,7 +145,6 @@ async function handleSetPassword() {
           type="password"
           name="confirmPassword"
           label="Confirm new password"
-          
           placeholder="Repeat your new password"
           size="lg"
           :disabled="loading"
