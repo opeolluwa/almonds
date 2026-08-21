@@ -1,5 +1,5 @@
 <script setup lang="ts">
-definePageMeta({ layout: "desktop-auth" });
+definePageMeta({ layout: "auth" });
 
 const authApi = useAuthApi();
 const authStore = useAuthStore();

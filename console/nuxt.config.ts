@@ -76,11 +76,5 @@ export default defineNuxtConfig({
     },
   },
 
-  app: {
-    pageTransition: {
-      name: "fade",
-      mode: "out-in",
-    },
-  },
   ignore: ["**/src-tauri/**"],
 });
