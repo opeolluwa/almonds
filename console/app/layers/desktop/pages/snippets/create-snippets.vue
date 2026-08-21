@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import CreateSnippetForm from "@shared/components/snippets/create-snippet-form.vue";
+import CreateSnippetForm from "@desktop/components/snippets/create-snippet-form.vue";
 
 definePageMeta({ layout: false, name: "Create snippet" });
 </script>

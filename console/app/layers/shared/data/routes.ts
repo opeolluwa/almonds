@@ -9,65 +9,65 @@ export const primaryRoutes: Route[] = [
   {
     path: "/",
     name: "Home",
-    icon: "heroicons:home",
-    activeIcon: "heroicons:home-solid",
+    icon: "ri:home-line",
+    activeIcon: "ri:home-fill",
   },
   {
     path: "/notes",
     name: "Notes",
-    icon: "heroicons:document-text",
-    activeIcon: "heroicons:document-text-solid",
+    icon: "ri:booklet-line",
+    activeIcon: "ri:booklet-fill",
   },
 
   //     {
   //     path: "/calendar",
   //     name: "Calendar",
-  //     icon: "heroicons:calendar-days",
-  //     activeIcon: "heroicons:calendar-days-solid",
+  //     icon: "ri:calendar-line",
+  //     activeIcon: "ri:calendar-fill",
   //   },
   {
     path: "/bookmarks",
     name: "Bookmarks",
-    icon: "heroicons:bookmark",
-    activeIcon: "heroicons:bookmark-solid",
+    icon: "ri:bookmark-line",
+    activeIcon: "ri:bookmark-fill",
   },
 
   {
     path: "/reminders",
     name: "Reminders",
-    icon: "heroicons:clock",
-    activeIcon: "heroicons:clock-solid",
+    icon: "ri:alarm-line",
+    activeIcon: "ri:alarm-fill",
   },
 
   // {
   //   path: "/ollama",
   //   name: "Ollama",
-  //   icon: "heroicons:cpu-chip",
-  //   activeIcon: "heroicons:cpu-chip-solid",
+  //   icon: "ri:cpu-line",
+  //   activeIcon: "ri:cpu-fill",
   // },
   {
     path: "/snippets",
     name: "Snippets",
-    icon: "heroicons:code-bracket",
-    activeIcon: "heroicons:code-bracket-solid",
+    icon: "ri:code-s-slash-line",
+    activeIcon: "ri:code-s-slash-fill",
   },
   {
     path: "/todo",
     name: "Todo",
-    icon: "heroicons:check-circle",
-    activeIcon: "heroicons:check-circle-solid",
+    icon: "ri:calendar-todo-line",
+    activeIcon: "ri:calendar-todo-fill",
   },
   {
     path: "/moodboard",
     name: "Moodboard",
-    icon: "heroicons:squares-2x2",
-    activeIcon: "heroicons:squares-2x2-solid",
+    icon: "ri:layout-grid-line",
+    activeIcon: "ri:layout-grid-fill",
   },
   {
     path: "/scratch-pad",
     name: "Scratch Pad",
-    icon: "heroicons:pencil-square",
-    activeIcon: "heroicons:pencil-square-solid",
+    icon: "ri:pencil-line",
+    activeIcon: "ri:pencil-fill",
   },
 ];
 
@@ -75,14 +75,14 @@ export const secondaryRoutes: Route[] = [
   {
     path: "/recycle-bin",
     name: "Recycle Bin",
-    icon: "heroicons:trash",
-    activeIcon: "heroicons:trash-solid",
+    icon: "ri:delete-bin-line",
+    activeIcon: "ri:delete-bin-fill",
   },
   {
     path: "/settings",
     name: "Settings",
-    icon: "heroicons:cog-6-tooth",
-    activeIcon: "heroicons:cog-6-tooth-solid",
+    icon: "ri:settings-3-line",
+    activeIcon: "ri:settings-3-fill",
   },
 ];
 

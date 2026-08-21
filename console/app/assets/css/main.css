@@ -137,7 +137,7 @@ body {
 .notes-editor .dm-editor .ProseMirror {
   padding-top: 0;
   min-height: 25vh;
-  background: transparent;
+  /*background: transparent;*/
 }
 
 /* Custom toolbar */

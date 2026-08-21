@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { BookmarkTag } from "~/stores/bookmarks";
+import type { BookmarkTag } from "@shared/stores/bookmarks";
 
 defineProps<{
   tags: { label: string; value: BookmarkTag | "all" }[];

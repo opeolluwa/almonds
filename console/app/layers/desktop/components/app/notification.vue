@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { NotificationType } from "~/composables/useAppNotification";
+import type { NotificationType } from "@shared/composables/useAppNotification";
 
 const { notification, dismiss } = useAppNotification();
 
