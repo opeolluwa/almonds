@@ -1,7 +1,7 @@
 <template>
   <main
     id="default_layout_mobile"
-    class="flex flex-col bg-gray-50 dark:bg-surface-950"
+    class="flex h-dvh flex-col overflow-hidden bg-gray-50 dark:bg-surface-950"
   >
     <header
       class="absolute top-0 py-7 flex items-center justify-between px-6 z-50 left-0 w-full bg-white dark:bg-surface-950"
@@ -16,7 +16,7 @@
     </header>
     <div
       id="viewport_mobile"
-      class="flex-1 overflow-y-auto p-6"
+      class="min-h-0 flex-1 overscroll-contain overflow-y-auto p-6"
       :class="hideHeaderAndNav ? 'pb-6 pt-6' : 'pb-24 pt-[50px]'"
     >
       <slot />
@@ -25,6 +25,7 @@
     <nav
       v-if="!hideHeaderAndNav"
       class="fixed bottom-0 inset-x-0 z-50 flex items-center justify-around border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 pt-3 pb-2.5"
+      style="padding-bottom: max(0.625rem, env(safe-area-inset-bottom))"
     >
       <NuxtLink
         v-for="item in mobile_default_layer"
@@ -63,9 +64,3 @@ function isActive(path: string): boolean {
   return route.path.startsWith(path);
 }
 </script>
-
-<style scoped>
-#viewport_mobile {
-  min-height: calc(80dvh);
-}
-</style>

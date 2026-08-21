@@ -14,7 +14,7 @@ const loading = ref(false);
 const submitError = ref("");
 
 onMounted(() => {
-  if (!rememberedEmail.value) navigateTo("/auth/login");
+  // if (!rememberedEmail.value) navigateTo("/auth/login");
 });
 
 function validate(): boolean {
