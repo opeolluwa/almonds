@@ -2,6 +2,7 @@
 import { useNoteStore } from "@shared/stores/notes";
 import { onBeforeRouteLeave } from "vue-router";
 import EditorToolBar from "@mobile/components/notes/EditorToolBar.vue";
+import NoteTitleInput from "@shared/components/notes/note-title-input.vue";
 definePageMeta({ name: "New note", layout: "notes", keepalive: true });
 
 const router = useRouter();
@@ -82,7 +83,11 @@ onBeforeRouteLeave(async () => {
 
     <AppFab
       icon="ri:save-line"
-      style="bottom: calc(env(safe-area-inset-bottom) + 4.5rem)"
+      style="
+        bottom: calc(
+          var(--kb-inset, 0px) + env(safe-area-inset-bottom) + 4.5rem
+        );
+      "
       @click="handleSave"
     />
   </div>
