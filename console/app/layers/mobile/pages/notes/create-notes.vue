@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useNoteStore } from "@shared/stores/notes";
 import { onBeforeRouteLeave } from "vue-router";
+import EditorToolBar from "@mobile/components/notes/EditorToolBar.vue";
 definePageMeta({ name: "New note", layout: "notes", keepalive: true });
 
 const router = useRouter();
@@ -80,7 +81,11 @@ onBeforeRouteLeave(async () => {
       "
     />
 
-    <NotesEditor v-model="content" />
+    <NotesEditor v-model="content">
+      <template #toolbar>
+        <EditorToolBar />
+      </template>
+    </NotesEditor>
 
     <p v-if="error" class="text-xs text-red-500 mt-6">
       {{ error }}

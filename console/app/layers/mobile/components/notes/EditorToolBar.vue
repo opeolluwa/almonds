@@ -1,8 +1,14 @@
 <script lang="ts" setup>
 import { useCurrentEditor, useEditorState } from "@domternal/vue";
 import type { Editor } from "@domternal/core";
+import { emojis } from "@domternal/extension-emoji";
 
 const { editor } = useCurrentEditor();
+
+// TEMP DEBUG
+if (typeof window !== "undefined") {
+  (window as unknown as Record<string, unknown>).__tbEditor = editor;
+}
 
 interface Snapshot {
   bold: boolean;
@@ -10,6 +16,8 @@ interface Snapshot {
   underline: boolean;
   strike: boolean;
   code: boolean;
+  superscript: boolean;
+  subscript: boolean;
   headingLevel: number | null;
   bulletList: boolean;
   orderedList: boolean;
@@ -19,6 +27,7 @@ interface Snapshot {
   alignCenter: boolean;
   alignRight: boolean;
   linkHref: string | null;
+  color: string | null;
   canUndo: boolean;
   canRedo: boolean;
   inTable: boolean;
@@ -30,6 +39,8 @@ const IDLE: Snapshot = {
   underline: false,
   strike: false,
   code: false,
+  superscript: false,
+  subscript: false,
   headingLevel: null,
   bulletList: false,
   orderedList: false,
@@ -39,6 +50,7 @@ const IDLE: Snapshot = {
   alignCenter: false,
   alignRight: false,
   linkHref: null,
+  color: null,
   canUndo: false,
   canRedo: false,
   inTable: false,
@@ -50,6 +62,8 @@ const snapshot = useEditorState(editor, (ed): Snapshot => ({
   underline: ed.isActive("underline"),
   strike: ed.isActive("strike"),
   code: ed.isActive("code"),
+  superscript: ed.isActive("superscript"),
+  subscript: ed.isActive("subscript"),
   headingLevel:
     ([1, 2, 3] as const).find((l) => ed.isActive("heading", { level: l })) ??
     null,
@@ -63,6 +77,7 @@ const snapshot = useEditorState(editor, (ed): Snapshot => ({
   linkHref: ed.isActive("link")
     ? String(ed.getAttributes("link").href ?? "")
     : null,
+  color: (ed.getAttributes("textStyle").color as string | undefined) ?? null,
   canUndo: ed.can().undo(),
   canRedo: ed.can().redo(),
   inTable: ed.isActive("table"),
@@ -135,6 +150,12 @@ function onLinkTriggerMousedown(event: MouseEvent) {
   savedLinkSelection.value = ed
     ? { from: ed.state.selection.from, to: ed.state.selection.to }
     : null;
+  console.log(
+    "[tb] mousedown capture:",
+    JSON.stringify(savedLinkSelection.value),
+    "focused:",
+    String(ed?.view.hasFocus()),
+  );
   event.preventDefault();
 }
 
@@ -154,11 +175,33 @@ function withRestoredSelection(
   if (sel && sel.from <= sel.to && sel.to <= ed.state.doc.content.size) {
     chain.setTextSelection(sel);
   }
-  fn(chain.extendMarkRange("link"));
+  // eslint-disable-next-line no-console
+  console.log("[tb] pre-run selection:", JSON.stringify(ed.state.selection.toJSON()));
+  const result = fn(chain.extendMarkRange("link"));
+  // eslint-disable-next-line no-console
+  console.log(
+    "[tb] post-run:",
+    JSON.stringify({
+      ok: result,
+      sel: ed.state.selection.toJSON(),
+      text: ed.state.doc.textBetween(0, 40, "|", ""),
+    }),
+  );
 }
 
 function applyLink() {
   const href = normalizeUrl(linkDraft.value);
+  console.log(
+    "[tb] applyLink sel-at-apply:",
+    JSON.stringify(
+      editor.value
+        ? {
+            cur: editor.value.state.selection.toJSON(),
+            saved: savedLinkSelection.value,
+          }
+        : null,
+    ),
+  );
   if (!href) {
     removeLink();
     return;
@@ -191,10 +234,58 @@ async function handleImagePick(event: Event) {
   }
 }
 
+const emojiOpen = ref(false);
+const emojiQuery = ref("");
+
+const emojiGroups = computed(() => {
+  const q = emojiQuery.value.trim().toLowerCase();
+  const source = q
+    ? emojis.filter(
+        (e) => e.name.includes(q) || e.emoji.includes(q) || e.group.toLowerCase().includes(q),
+      )
+    : emojis;
+  const map = new Map<string, typeof emojis>();
+  for (const item of source.slice(0, 120)) {
+    const list = map.get(item.group) ?? [];
+    list.push(item);
+    map.set(item.group, list);
+  }
+  return [...map.entries()];
+});
+
+function insertEmoji(name: string) {
+  exec((ed) => ed.chain().focus().insertEmoji(name).run());
+  emojiOpen.value = false;
+  emojiQuery.value = "";
+}
+
+const colorOpen = ref(false);
+
+const colorPalette = computed<string[]>(() => {
+  const ext = editor.value?.extensionManager.extensions.find(
+    (e) => e.name === "textColor",
+  );
+  const colors = (
+    ext?.options as { colors?: string[] } | undefined
+  )?.colors;
+  return colors ?? [];
+});
+
+function applyColor(color: string | null) {
+  exec((ed) => {
+    const chain = ed.chain().focus().extendMarkRange("textStyle");
+    if (color === null) chain.unsetTextColor().run();
+    else chain.setTextColor(color).run();
+  });
+  colorOpen.value = false;
+}
+
 type Tool =
   | { kind: "sep" }
   | { kind: "headings" }
   | { kind: "link" }
+  | { kind: "color" }
+  | { kind: "emoji" }
   | {
       kind: "btn";
       icon: string;
@@ -257,6 +348,20 @@ const tools = computed<Tool[]>(() => [
     active: s.value.code,
     action: () => exec((ed) => ed.chain().focus().toggleCode().run()),
   },
+  {
+    kind: "btn",
+    icon: "ri:superscript",
+    label: "Superscript",
+    active: s.value.superscript,
+    action: () => exec((ed) => ed.chain().focus().toggleSuperscript().run()),
+  },
+  {
+    kind: "btn",
+    icon: "ri:subscript",
+    label: "Subscript",
+    active: s.value.subscript,
+    action: () => exec((ed) => ed.chain().focus().toggleSubscript().run()),
+  },
   { kind: "sep" },
   {
     kind: "btn",
@@ -311,6 +416,8 @@ const tools = computed<Tool[]>(() => [
   },
   { kind: "sep" },
   { kind: "link" },
+  { kind: "color" },
+  { kind: "emoji" },
   {
     kind: "btn",
     icon: "ri:image-add-line",
@@ -335,6 +442,18 @@ const tools = computed<Tool[]>(() => [
     icon: "ri:separator",
     label: "Divider",
     action: () => exec((ed) => ed.chain().focus().setHorizontalRule().run()),
+  },
+  {
+    kind: "btn",
+    icon: "lucide:sigma",
+    label: "Inline equation",
+    action: () => exec((ed) => ed.chain().focus().insertMathInline().run()),
+  },
+  {
+    kind: "btn",
+    icon: "lucide:square-sigma",
+    label: "Equation block",
+    action: () => exec((ed) => ed.chain().focus().insertMathBlock().run()),
   },
   {
     kind: "btn",
@@ -465,7 +584,7 @@ const tableOps = computed(() => [
             title="Link"
             aria-label="Link"
             :class="btnClass(s.linkHref !== null)"
-            @mousedown.prevent
+            @mousedown="onLinkTriggerMousedown"
           >
             <UIcon name="ri:link" class="size-5" />
           </button>
@@ -497,6 +616,118 @@ const tableOps = computed(() => [
                 @click="removeLink"
               />
             </form>
+          </template>
+        </UPopover>
+
+        <UPopover
+          v-else-if="tool.kind === 'color'"
+          v-model:open="colorOpen"
+          :content="{ side: 'top', align: 'start' }"
+          :ui="{ content: 'p-2' }"
+        >
+          <button
+            type="button"
+            title="Text color"
+            aria-label="Text color"
+            :class="btnClass(s.color !== null)"
+            @mousedown.prevent
+          >
+            <span class="flex flex-col items-center leading-none">
+              <UIcon name="ri:font-color" class="size-5" />
+              <span
+                class="mt-0.5 block h-0.5 w-4 rounded-full bg-current"
+                :style="s.color ? { backgroundColor: s.color } : undefined"
+              />
+            </span>
+          </button>
+          <template #content>
+            <div class="grid w-44 grid-cols-5 gap-1">
+              <button
+                v-for="c in colorPalette"
+                :key="c"
+                type="button"
+                :title="c"
+                :aria-label="`Color ${c}`"
+                class="flex size-7 items-center justify-center rounded-md transition hover:bg-gray-100 dark:hover:bg-gray-800"
+                @click="applyColor(c)"
+              >
+                <span
+                  class="size-5 rounded-full border border-gray-300 dark:border-gray-600"
+                  :style="{ backgroundColor: c }"
+                />
+              </button>
+            </div>
+            <div class="mt-2 border-t border-gray-100 pt-1.5 dark:border-gray-800">
+              <button
+                type="button"
+                class="flex w-full items-center gap-1.5 rounded-md px-1 py-1 text-xs text-gray-500 transition-colors hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
+                @click="applyColor(null)"
+              >
+                <UIcon name="ri:close-circle-line" class="size-3.5" />
+                Default
+              </button>
+            </div>
+          </template>
+        </UPopover>
+
+        <UPopover
+          v-else-if="tool.kind === 'emoji'"
+          v-model:open="emojiOpen"
+          :content="{ side: 'top', align: 'start' }"
+          :ui="{ content: 'p-2' }"
+        >
+          <button
+            type="button"
+            title="Emoji"
+            aria-label="Emoji"
+            :class="btnClass(false)"
+            @mousedown.prevent
+          >
+            <UIcon name="ri:emotion-happy-line" class="size-5" />
+          </button>
+          <template #content>
+            <div class="w-64 max-w-[calc(100vw-2rem)]">
+              <UInput
+                v-model="emojiQuery"
+                icon="ri:search-line"
+                placeholder="Search emoji…"
+                size="sm"
+                class="w-full"
+              />
+              <div
+                class="mt-2 max-h-52 overflow-y-auto overscroll-contain pr-0.5"
+              >
+                <template
+                  v-for="[group, items] in emojiGroups"
+                  :key="group"
+                >
+                  <p
+                    class="px-1 pb-1 pt-2 text-[10px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500"
+                  >
+                    {{ group }}
+                  </p>
+                  <div class="grid grid-cols-8 gap-0.5">
+                    <button
+                      v-for="item in items"
+                      :key="item.name"
+                      type="button"
+                      :title="item.name.replaceAll('_', ' ')"
+                      :aria-label="item.name.replaceAll('_', ' ')"
+                      class="flex size-7 items-center justify-center rounded-md text-lg leading-none transition hover:bg-gray-100 dark:hover:bg-gray-800"
+                      @click="insertEmoji(item.name)"
+                    >
+                      {{ item.emoji }}
+                    </button>
+                  </div>
+                </template>
+                <p
+                  v-if="emojiGroups.length === 0"
+                  class="py-4 text-center text-xs text-gray-400"
+                >
+                  No emoji found
+                </p>
+              </div>
+            </div>
           </template>
         </UPopover>
 

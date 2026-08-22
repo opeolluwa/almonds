@@ -32,7 +32,9 @@ const editorHeaderTitle = computed(() =>
       </span>
     </header>
     <AppViewport :hide-header-and-nav="showEditorToolBar">
-      <slot />
+<div class="mt-4">
+          <slot />
+</div>
     </AppViewport>
 
     <AppSideNav :mobile-nav-open="mobileNavOpen" />

@@ -10,3 +10,5 @@ backup.sql
 
  almonds-pglite
  console/src-tauri/almonds-pglite
+
+src-tauri/gen/keystore.properties

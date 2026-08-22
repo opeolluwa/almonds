@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { marked } from "marked";
 import DOMPurify from "dompurify";
+import katex from "katex";
 import { Domternal } from "@domternal/vue";
 import type { Editor } from "@domternal/core";
 import { Details } from "@domternal/extension-details";
@@ -15,6 +16,7 @@ import {
   Text,
   TextStyle,
   TextAlign,
+  TextColor,
   Code,
   Heading,
   ListItem,
@@ -29,7 +31,12 @@ import {
 } from "@domternal/core";
 import { Table } from "@domternal/extension-table";
 import { Image } from "@domternal/extension-image";
-import EditorToolBar from "./EditorToolBar.vue";
+import {
+  MathInline,
+  MathBlock,
+  createKatexRenderer,
+} from "@domternal/extension-math";
+import "katex/dist/katex.min.css";
 
 import {
   Emoji,
@@ -47,6 +54,7 @@ import {
 const colorMode = useColorMode();
 const isDark = computed(() => colorMode.value === "dark");
 const lowlight = createLowlight(all);
+const mathRenderer = createKatexRenderer(katex);
 const dmVars = computed(() =>
   isDark.value
     ? {
@@ -92,6 +100,7 @@ const extensions = [
   TextStyle,
   Code,
   TextAlign,
+  TextColor,
   BlockHandle.configure({ nested: true }),
   BlockContextMenu,
   SlashCommand,
@@ -102,6 +111,8 @@ const extensions = [
     HTMLAttributes: { class: "notes_heading" },
   }),
   CodeBlockLowlight.configure({ lowlight }),
+  MathInline.configure({ renderer: mathRenderer }),
+  MathBlock.configure({ renderer: mathRenderer }),
   Emoji.configure({
     emojis,
     suggestion: { render: createEmojiSuggestionRenderer() },
@@ -183,8 +194,8 @@ function handleUpdate({ editor }: { editor: any }) {
       :on-destroy="handleDestroy"
     >
       <Domternal.Content class="bg-transparent -ml-12" />
-       <Domternal.BubbleMenu class="mb-5" />
-      <EditorToolBar />
+      <Domternal.BubbleMenu class="mb-5" />
+      <slot name="toolbar" />
     </Domternal>
   </div>
 </template>

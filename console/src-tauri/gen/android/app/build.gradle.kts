@@ -1,4 +1,5 @@
 import java.util.Properties
+import java.io.FileInputStream
 
 plugins {
     id("com.android.application")
@@ -37,12 +38,16 @@ android {
             }
         }
         getByName("release") {
-            isMinifyEnabled = true
-            proguardFiles(
-                *fileTree(".") { include("**/*.pro") }
-                    .plus(getDefaultProguardFile("proguard-android-optimize.txt"))
-                    .toList().toTypedArray()
-            )
+          val keystorePropertiesFile = rootProject.file("keystore.properties")
+          val keystoreProperties = Properties()
+          if (keystorePropertiesFile.exists()) {
+              keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+          }
+  
+          keyAlias = keystoreProperties["keyAlias"] as String
+          keyPassword = keystoreProperties["password"] as String
+          storeFile = file(keystoreProperties["storeFile"] as String)
+          storePassword = keystoreProperties["password"] as String
         }
     }
     kotlinOptions {

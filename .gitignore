@@ -32,3 +32,6 @@ pgdump.sql
 console/src-tauri/almonds-pglite
 # Generated PGlite migration SQL (synced by scripts/sync-lunar-schema.mjs)
 console/app/layers/shared/data/lunar/migrations/
+
+
+console/src-tauri/gen/keystore.properties

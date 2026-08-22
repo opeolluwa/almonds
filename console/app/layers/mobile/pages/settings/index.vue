@@ -84,7 +84,7 @@ const routes = [
         </div>
       </template>
       <template v-else>
-        <NuxtLink :to="item.to" class="flex items-center gap-4">
+        <NuxtLink :to="item.to" class="flex items-center gap-y-8 gap-x-3 mb-3">
           <div
             class="size-10 shrink-0 rounded-lg flex items-center justify-center"
           >
