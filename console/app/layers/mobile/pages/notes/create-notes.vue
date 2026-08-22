@@ -68,18 +68,7 @@ onBeforeRouteLeave(async () => {
 
 <template>
   <div class="pb-24">
-    <textarea
-      v-model="title"
-      placeholder="Untitled"
-      rows="1"
-      :disabled="submitting"
-      class="w-full resize-none bg-transparent outline-none text-xl mt-2 font-bold text-gray-900 dark:text-gray-200 placeholder:text-gray-400 dark:placeholder:text-gray-500 leading-tight mb-0 overflow-hidden"
-      @input="
-        ($event.target as HTMLTextAreaElement).style.height = 'auto';
-        ($event.target as HTMLTextAreaElement).style.height =
-          ($event.target as HTMLTextAreaElement).scrollHeight + 'px';
-      "
-    />
+    <NoteTitleInput v-model="title" :disabled="submitting" />
 
     <NotesEditor v-model="content">
       <template #toolbar>
