@@ -1,5 +1,4 @@
 import java.util.Properties
-import java.io.FileInputStream
 
 plugins {
     id("com.android.application")
@@ -25,6 +24,20 @@ android {
         versionCode = tauriProperties.getProperty("tauri.android.versionCode", "1").toInt()
         versionName = tauriProperties.getProperty("tauri.android.versionName", "1.0")
     }
+    signingConfigs {
+        create("release") {
+            val propsFile = rootProject.file("../keystore.properties")
+            require(propsFile.exists()) {
+                "Release signing config not found at ${propsFile.path}. " +
+                    "Create it with keys: keyAlias, keyPassword, storePassword, storeFile"
+            }
+            val p = Properties().apply { propsFile.inputStream().use { load(it) } }
+            keyAlias = p["keyAlias"] as String
+            keyPassword = p["keyPassword"] as String
+            storeFile = file(p["storeFile"] as String)
+            storePassword = p["storePassword"] as String
+        }
+    }
     buildTypes {
         getByName("debug") {
             manifestPlaceholders["usesCleartextTraffic"] = "true"
@@ -38,16 +51,8 @@ android {
             }
         }
         getByName("release") {
-          val keystorePropertiesFile = rootProject.file("keystore.properties")
-          val keystoreProperties = Properties()
-          if (keystorePropertiesFile.exists()) {
-              keystoreProperties.load(FileInputStream(keystorePropertiesFile))
-          }
-  
-          keyAlias = keystoreProperties["keyAlias"] as String
-          keyPassword = keystoreProperties["password"] as String
-          storeFile = file(keystoreProperties["storeFile"] as String)
-          storePassword = keystoreProperties["password"] as String
+            isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     kotlinOptions {

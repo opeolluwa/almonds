@@ -155,7 +155,11 @@ onMounted(async () => {
 
       <AppFab
         icon="ri:save-line"
-        style="bottom: calc(env(safe-area-inset-bottom) + 4.5rem)"
+        style="
+          bottom: calc(
+            var(--kb-inset, 0px) + env(safe-area-inset-bottom) + 4.5rem
+          );
+        "
         @click="handleSave"
       />
     </template>
