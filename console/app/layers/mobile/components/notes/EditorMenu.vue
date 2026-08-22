@@ -12,6 +12,6 @@ const { editor } = useCurrentEditor();
         overflow-x-scroll;
     "
   >
-    test menu
+    test menu Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum animi optio ullam obcaecati magni quidem aperiam dolore nam odit aut inventore quaerat ipsum harum repellendus consectetur, ducimus error corporis quasi!
   </nav>
 </template>
