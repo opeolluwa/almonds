@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { pl } from "@nuxt/ui/runtime/locale/index.js";
-
 withDefaults(
   defineProps<{
     label?: string;
@@ -11,6 +9,7 @@ withDefaults(
     disabled?: boolean;
     type?: string;
     enablePasswordToggle?: boolean;
+    trailingIcon?: string;
     size?: "xs" | "sm" | "md" | "lg" | "xl";
   }>(),
   {
@@ -22,6 +21,7 @@ withDefaults(
     type: undefined,
     placeholder: undefined,
     hint: undefined,
+    trailingIcon: undefined,
   },
 );
 
@@ -46,12 +46,12 @@ const show = ref(false);
         v-model="model"
         :icon="icon"
         :disabled="disabled"
-
+        :placeholder="placeholder"
         :type="show ? 'text' : 'password'"
         :size="size"
+        :trailing-icon="trailingIcon"
         :ui="{
-          base: 'py-3 pl-4 bg-transparent',
-
+          base: icon ? 'py-3 bg-transparent' : 'py-3 pl-4 bg-transparent',
         }"
         :class="[
           'w-full transition-colors',
@@ -74,6 +74,7 @@ const show = ref(false);
         </template>
       </UInput>
     </template>
+    
     <template v-else>
       <UInput
         v-model="model"
@@ -82,7 +83,9 @@ const show = ref(false);
         :placeholder="placeholder"
         :type="type"
         :size="size"
-        :ui="{ base: 'py-3 pl-4 bg-transparent' }"
+        :ui="{
+          base: icon ? 'py-3 bg-transparent' : 'py-3 pl-4 bg-transparent',
+        }"
         :class="[
           'w-full transition-colors',
           error

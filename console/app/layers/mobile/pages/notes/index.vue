@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import EmptyState from "@shared/components/app/EmptyState.vue";
-import type { NoteSort } from "@shared/components/notes";
+import {
+  NOTE_SORT_OPTIONS,
+  sortNotes,
+  type NoteSort,
+} from "@shared/utils/sorting";
 import { useNoteStore } from "@shared/stores/notes";
 import NotesCard from "@shared/components/notes/notes-card.vue";
 const noteStore = useNoteStore();
@@ -17,49 +21,6 @@ onMounted(async () => {
 
 onUnmounted(() => clearSearch());
 
-const sortItems = computed(() => [
-  [
-    {
-      label: "Name A–Z",
-      icon:
-        sortBy.value === "name-asc"
-          ? "heroicons:check"
-          : "heroicons:bars-arrow-up",
-      onSelect: () => {
-        sortBy.value = "name-asc";
-      },
-    },
-    {
-      label: "Name Z–A",
-      icon:
-        sortBy.value === "name-desc"
-          ? "heroicons:check"
-          : "heroicons:bars-arrow-down",
-      onSelect: () => {
-        sortBy.value = "name-desc";
-      },
-    },
-  ],
-  [
-    {
-      label: "Last modified (newest)",
-      icon:
-        sortBy.value === "date-newest" ? "heroicons:check" : "heroicons:clock",
-      onSelect: () => {
-        sortBy.value = "date-newest";
-      },
-    },
-    {
-      label: "Last modified (oldest)",
-      icon:
-        sortBy.value === "date-oldest" ? "heroicons:check" : "heroicons:clock",
-      onSelect: () => {
-        sortBy.value = "date-oldest";
-      },
-    },
-  ],
-]);
-
 const filteredNotes = computed(() => {
   const q = searchQuery.value.trim().toLowerCase();
   const list = q
@@ -70,29 +31,14 @@ const filteredNotes = computed(() => {
       )
     : noteStore.notes;
 
-  return [...list].sort((a, b) => {
-    switch (sortBy.value) {
-      case "name-asc":
-        return a.title.localeCompare(b.title);
-      case "name-desc":
-        return b.title.localeCompare(a.title);
-      case "date-newest":
-        return (
-          new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
-        );
-      case "date-oldest":
-        return (
-          new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime()
-        );
-    }
-  });
+  return sortNotes(list, sortBy.value);
 });
 </script>
 
 <template>
   <div>
     <!-- Create note FAB -->
-    <div v-if="!noteStore.loading && noteStore.notes.length > 0">
+    <div v-if="!noteStore.loading && filteredNotes.length > 0">
       <AppFab
         aria-label="Add note"
         @click="navigateTo('/notes/create-notes')"
@@ -121,7 +67,7 @@ const filteredNotes = computed(() => {
 
       <template v-else>
         <!-- Search + sort controls -->
-        <div class="flex items-center gap-2 mb-3">
+        <div class="mb-3">
           <AppInput
             v-model="searchQuery"
             name="search"
@@ -129,23 +75,12 @@ const filteredNotes = computed(() => {
             placeholder="Search notes..."
             size="sm"
           />
-          <UDropdownMenu
-            :items="sortItems"
-            size="sm"
-            :ui="{
-              content:
-                'min-w-48 rounded-xl shadow-lg border border-gray-100 dark:border-gray-800 py-1',
-              item: 'rounded-lg mx-1 px-3 py-2 gap-2.5 text-sm transition-colors duration-150',
-              separator: 'my-1 mx-2',
-            }"
-          >
-            <button
-              class="flex shrink-0 items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-            >
-              <UIcon name="heroicons:arrows-up-down" class="size-3.5" />
-              Sort
-            </button>
-          </UDropdownMenu>
+          <AppSortMenu
+            v-if="filteredNotes.length > 0"
+            v-model="sortBy"
+            :options="NOTE_SORT_OPTIONS"
+            class="mt-2"
+          />
         </div>
 
         <!-- Empty state: search has no results -->

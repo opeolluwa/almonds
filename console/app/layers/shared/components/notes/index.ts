@@ -1,1 +1,0 @@
-export type NoteSort = "name-asc" | "name-desc" | "date-newest" | "date-oldest";

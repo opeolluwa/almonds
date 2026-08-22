@@ -2,7 +2,7 @@
 import { useNoteStore } from "@shared/stores/notes";
 import { onBeforeRouteLeave } from "vue-router";
 
-definePageMeta({ keepalive: true, name: "Edit notes" });
+definePageMeta({ keepalive: true, name: "Edit notes", layout: "notes" });
 
 const route = useRoute();
 const router = useRouter();

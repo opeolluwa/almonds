@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { useNoteStore } from "@shared/stores/notes";
 import { onBeforeRouteLeave } from "vue-router";
-
-definePageMeta({ name: "New note", keepalive: true });
+definePageMeta({ name: "New note", layout: "notes", keepalive: true });
 
 const router = useRouter();
 const noteStore = useNoteStore();

@@ -170,8 +170,8 @@ function handleUpdate({ editor }: { editor: any }) {
       :content="initialContent"
       :on-update="handleUpdate"
     >
-      <Domternal.Content class="bg-transparent" />
-      <Domternal.BubbleMenu class="mb-5 -ml-12" />
+      <Domternal.Content class="bg-transparent -ml-6" />
+       <Domternal.BubbleMenu class="mb-5" /> 
     </Domternal>
   </div>
 </template>
