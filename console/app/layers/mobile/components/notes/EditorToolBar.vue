@@ -124,10 +124,19 @@ function applyHeading(level: HeadingLevel | null) {
 
 const linkOpen = ref(false);
 const linkDraft = ref("");
+const savedLinkSelection = ref<{ from: number; to: number } | null>(null);
 
 watch(linkOpen, (open) => {
   if (open) linkDraft.value = s.value.linkHref ?? "";
 });
+
+function onLinkTriggerMousedown(event: MouseEvent) {
+  const ed = editor.value;
+  savedLinkSelection.value = ed
+    ? { from: ed.state.selection.from, to: ed.state.selection.to }
+    : null;
+  event.preventDefault();
+}
 
 function normalizeUrl(raw: string) {
   const t = raw.trim();
@@ -136,18 +145,30 @@ function normalizeUrl(raw: string) {
   return `https://${t}`;
 }
 
+function withRestoredSelection(
+  ed: Editor,
+  fn: (chain: ReturnType<Editor["chain"]>) => void,
+) {
+  const chain = ed.chain().focus();
+  const sel = savedLinkSelection.value;
+  if (sel && sel.from <= sel.to && sel.to <= ed.state.doc.content.size) {
+    chain.setTextSelection(sel);
+  }
+  fn(chain.extendMarkRange("link"));
+}
+
 function applyLink() {
   const href = normalizeUrl(linkDraft.value);
   if (!href) {
     removeLink();
     return;
   }
-  exec((ed) => ed.chain().focus().extendMarkRange("link").setLink({ href }).run());
+  exec((ed) => withRestoredSelection(ed, (chain) => chain.setLink({ href }).run()));
   linkOpen.value = false;
 }
 
 function removeLink() {
-  exec((ed) => ed.chain().focus().extendMarkRange("link").unsetLink().run());
+  exec((ed) => withRestoredSelection(ed, (chain) => chain.unsetLink().run()));
   linkOpen.value = false;
 }
 

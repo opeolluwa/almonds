@@ -182,7 +182,7 @@ function handleUpdate({ editor }: { editor: any }) {
       :on-create="handleCreate"
       :on-destroy="handleDestroy"
     >
-      <Domternal.Content class="bg-transparent -ml-6" />
+      <Domternal.Content class="bg-transparent -ml-12" />
        <Domternal.BubbleMenu class="mb-5" />
       <EditorToolBar />
     </Domternal>

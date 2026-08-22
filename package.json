@@ -21,5 +21,8 @@
   "bugs": {
     "url": "https://github.com/opeolluwa/almonds/issues"
   },
-  "homepage": "https://github.com/opeolluwa/almonds#readme"
+  "homepage": "https://github.com/opeolluwa/almonds#readme",
+  "dependencies": {
+    "reka-ui": "^2.10.3"
+  }
 }

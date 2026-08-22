@@ -1,9 +1,6 @@
 <script setup lang="ts">
 const routes = [
-  {
-    label: "Account",
-    type: "label" as const,
-  },
+
   {
     label: "Profile",
     description: "Name, email & avatar",
@@ -22,11 +19,6 @@ const routes = [
     icon: "heroicons:language",
     to: "/settings/locale",
   },
-
-  {
-    label: "Workspace",
-    type: "label" as const,
-  },
   {
     label: "Workspaces",
     description: "Create, secure & manage workspaces",
@@ -39,11 +31,6 @@ const routes = [
     icon: "heroicons:cloud-arrow-up",
     to: "/settings/backup",
   },
-
-  {
-    label: "Intelligence",
-    type: "label" as const,
-  },
   {
     label: "AI & Ollama",
     description: "AI assistants & local models",
@@ -51,10 +38,6 @@ const routes = [
     to: "/settings/ai",
   },
 
-  {
-    label: "Notifications",
-    type: "label" as const,
-  },
   {
     label: "Notifications",
     description: "Alerts & notifications",
@@ -68,10 +51,6 @@ const routes = [
     to: "/settings/alarm",
   },
 
-  {
-    label: "System",
-    type: "label" as const,
-  },
   {
     label: "About",
     description: "Version, build & platform",
