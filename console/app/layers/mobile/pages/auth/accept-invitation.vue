@@ -31,14 +31,11 @@ async function handleAccept() {
 
 <template>
   <div class="flex flex-col flex-1">
-    <div class="flex flex-col gap-1 text-center">
-      <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
-        You're invited!
-      </h2>
-      <p class="text-sm text-gray-500 dark:text-gray-400">
-        You've been invited to join a workspace on Lunar.
-      </p>
-    </div>
+    <AppPageHeader
+      class="text-center"
+      title="You're invited!"
+      description="You've been invited to join a workspace on Lunar."
+    />
 
     <div
       class="flex items-center gap-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 p-4"

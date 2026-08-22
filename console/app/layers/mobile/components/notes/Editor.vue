@@ -170,7 +170,7 @@ function handleUpdate({ editor }: { editor: any }) {
       :content="initialContent"
       :on-update="handleUpdate"
     >
-      <Domternal.Content class="bg-transparent -ml-6" />
+      <Domternal.Content class="bg-transparent" />
        <Domternal.BubbleMenu class="mb-5" /> 
     </Domternal>
   </div>
@@ -184,5 +184,10 @@ function handleUpdate({ editor }: { editor: any }) {
   --dm-editor-border: none;
   --dm-border-color: #cccccc;
   --dm-code-surface: transparent;
+}
+
+.notes-editor .dm-editor .ProseMirror {
+  --dm-editor-padding: 0;
+  --dm-editor-padding-top-extra: 0.25rem;
 }
 </style>

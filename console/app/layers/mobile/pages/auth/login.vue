@@ -47,12 +47,10 @@ async function handleSubmit() {
 
 <template>
   <div class="flex flex-col flex-1">
-    <div class="flex flex-col gap-1">
-      <h2 class="text-lg font-semibold">Welcome back</h2>
-      <p class="text-sm text-gray-500 dark:text-gray-400">
-        Sign in to your Lunar account to continue.
-      </p>
-    </div>
+    <AppPageHeader
+      title="Welcome back"
+      description="Sign in to your Lunar account to continue."
+    />
 
     <form class="flex flex-col mt-4" @submit.prevent="handleSubmit">
       <AppInput

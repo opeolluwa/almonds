@@ -47,14 +47,10 @@ async function handleSubmit() {
 
 <template>
   <div class="flex flex-col flex-1">
-    <div class="flex flex-col gap-1">
-      <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
-        Create your account
-      </h2>
-      <p class="text-sm text-gray-500 dark:text-gray-400">
-        Get started in a few seconds.
-      </p>
-    </div>
+    <AppPageHeader
+      title="Create your account"
+      description="Get started in a few seconds."
+    />
 
     <form class="flex flex-col gap-4" @submit.prevent="handleSubmit">
       <AppInput
