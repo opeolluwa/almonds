@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import EditorToolBar from "@mobile/components/notes/EditorToolBar.vue";
-
 const route = useRoute();
 const { mobileNavOpen } = useMobileNav();
 const showEditorToolBar = computed(() => {
@@ -20,7 +18,6 @@ const showEditorToolBar = computed(() => {
       <slot />
     </AppViewport>
 
-    <EditorToolBar v-if="showEditorToolBar" />
     <AppSideNav :mobile-nav-open="mobileNavOpen" />
   </main>
 </template>

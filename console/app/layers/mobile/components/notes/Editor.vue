@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { marked } from "marked";
 import DOMPurify from "dompurify";
-import { Domternal, useCurrentEditor } from "@domternal/vue";
+import { Domternal } from "@domternal/vue";
+import type { Editor } from "@domternal/core";
 import { Details } from "@domternal/extension-details";
 import { CodeBlockLowlight } from "@domternal/extension-code-block-lowlight";
 import { createLowlight, all } from "lowlight";
@@ -28,6 +29,7 @@ import {
 } from "@domternal/core";
 import { Table } from "@domternal/extension-table";
 import { Image } from "@domternal/extension-image";
+import EditorToolBar from "./EditorToolBar.vue";
 
 import {
   Emoji,
@@ -134,7 +136,15 @@ const extensions = [
 
 const model = defineModel<string>();
 
-const { editor } = useCurrentEditor();
+const editor = shallowRef<Editor | null>(null);
+
+function handleCreate(ed: Editor) {
+  editor.value = ed;
+}
+
+function handleDestroy() {
+  editor.value = null;
+}
 
 defineExpose({
   editor,
@@ -169,9 +179,12 @@ function handleUpdate({ editor }: { editor: any }) {
       :extensions="extensions"
       :content="initialContent"
       :on-update="handleUpdate"
+      :on-create="handleCreate"
+      :on-destroy="handleDestroy"
     >
-      <Domternal.Content class="bg-transparent" />
-       <Domternal.BubbleMenu class="mb-5" /> 
+      <Domternal.Content class="bg-transparent -ml-6" />
+       <Domternal.BubbleMenu class="mb-5" />
+      <EditorToolBar />
     </Domternal>
   </div>
 </template>

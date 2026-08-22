@@ -114,7 +114,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div>
+  <div class="pb-24">
     <!-- Not found -->
     <div
       v-if="!original && !noteStore.loading"

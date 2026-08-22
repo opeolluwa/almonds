@@ -66,7 +66,7 @@ onBeforeRouteLeave(async () => {
 </script>
 
 <template>
-  <div>
+  <div class="pb-24">
     <textarea
       v-model="title"
       placeholder="Untitled"
@@ -86,6 +86,10 @@ onBeforeRouteLeave(async () => {
       {{ error }}
     </p>
 
-    <AppFab icon="ri:save-line" @click="handleSave" />
+    <AppFab
+      icon="ri:save-line"
+      style="bottom: calc(env(safe-area-inset-bottom) + 4.5rem)"
+      @click="handleSave"
+    />
   </div>
 </template>

@@ -4,37 +4,6 @@
   nocompatible: true;
 }
 
-
-@import "tailwindcss";
-
-@utility ripple {
-  position: relative;
-  overflow: hidden;
-
-  &::after {
-    content: "";
-    position: absolute;
-    inset: 50% auto auto 50%;
-    width: 0;
-    height: 0;
-    border-radius: 9999px;
-    background: rgb(255 255 255 / 0.25);
-    transform: translate(-50%, -50%);
-    transition:
-      width 0.3s ease,
-      height 0.3s ease,
-      opacity 0.3s ease;
-    opacity: 0;
-  }
-
-  &:active::after {
-    width: 200%;
-    height: 200%;
-    opacity: 1;
-  }
-}
-
-
 :root {
   --app-primary-50: #f0f9ff;
   --app-primary-100: #e0f2fe;
@@ -111,6 +80,12 @@ body {
   overflow: hidden;
   overscroll-behavior: none;
   border: none !important;
+}
+
+@layer base {
+  body {
+    @apply bg-white text-gray-900 dark:bg-app-dark-800 dark:text-white;
+  }
 }
 
 * {
@@ -273,5 +248,5 @@ h6.notes_heading {
 
 #auth_layout_mobile,
 #default_layout_mobile {
-  /*@apply bg-gray-50 dark:bg-app-dark-800;*/
+  @apply bg-gray-50 dark:bg-app-dark-800;
 }
