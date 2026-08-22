@@ -1,21 +1,27 @@
 <script setup lang="ts">
 import { primaryRoutes, secondaryRoutes } from "@shared/data/routes";
+import { useAuthStore } from "@shared/stores/auth";
+import { useUserPreferenceStore } from "@shared/stores/workspace-preferences";
 
-defineProps({
-  mobileNavOpen: {
-    type: Boolean,
-    default: false,
-  },
+const mobileNavOpen = defineModel<boolean>("mobileNavOpen", {
+  default: false,
 });
 
+const route = useRoute();
 const colorMode = useColorMode();
+
+const authStore = useAuthStore();
+const preferenceStore = useUserPreferenceStore();
+
 const isDark = computed({
   get: () => colorMode.value === "dark",
   set: (v) => (colorMode.preference = v ? "dark" : "light"),
 });
+
 const themeIcon = computed(() =>
   isDark.value ? "heroicons:sun" : "heroicons:moon",
 );
+
 const themeLabel = computed(() => (isDark.value ? "Light mode" : "Dark mode"));
 
 function logout() {
@@ -85,6 +91,7 @@ function isActive(path: string): boolean {
 
         <div class="flex flex-col gap-0.5 px-2 pb-4 shrink-0">
           <USeparator class="mx-1 mb-2" />
+
           <button
             class="flex items-center gap-3 py-2 px-3 text-sm cursor-pointer rounded-lg transition-colors text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 w-full"
             @click="isDark = !isDark"
@@ -92,6 +99,7 @@ function isActive(path: string): boolean {
             <UIcon :name="themeIcon" class="size-4 shrink-0" />
             {{ themeLabel }}
           </button>
+
           <NuxtLink
             v-for="r in secondaryRoutes"
             :key="r.name"
@@ -110,6 +118,7 @@ function isActive(path: string): boolean {
             />
             {{ r.name }}
           </NuxtLink>
+
           <button
             class="flex items-center gap-3 py-2 px-3 text-sm cursor-pointer rounded-lg transition-colors text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 w-full"
             @click="logout"

@@ -119,12 +119,13 @@ const filteredNotes = computed(() => {
       <template v-else>
         <!-- Search + sort controls -->
         <div class="flex items-center gap-2 mb-3">
-          <UInput
+          <AppInput
             v-model="searchQuery"
+            name="search"
             icon="heroicons:magnifying-glass"
             placeholder="Search notes..."
             size="sm"
-            class="flex-1"
+
           />
           <UDropdownMenu
             :items="sortItems"

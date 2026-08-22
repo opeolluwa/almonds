@@ -1,8 +1,11 @@
 <script setup lang="ts">
+import type { pl } from "@nuxt/ui/runtime/locale/index.js";
+
 withDefaults(
   defineProps<{
-    label: string;
-    name: string;
+    label?: string;
+    name?: string;
+    icon?: string;
     placeholder?: string;
     hint?: string;
     disabled?: boolean;
@@ -13,6 +16,12 @@ withDefaults(
   {
     enablePasswordToggle: true,
     size: "lg",
+    label: undefined,
+    name: undefined,
+    icon: undefined,
+    type: undefined,
+    placeholder: undefined,
+    hint: undefined,
   },
 );
 
@@ -35,11 +44,15 @@ const show = ref(false);
     <template v-if="type == 'password'">
       <UInput
         v-model="model"
+        :icon="icon"
         :disabled="disabled"
-        :placeholder="placeholder"
+
         :type="show ? 'text' : 'password'"
         :size="size"
-        :ui="{ base: 'py-3 pl-4 bg-transparent' }"
+        :ui="{
+          base: 'py-3 pl-4 bg-transparent',
+
+        }"
         :class="[
           'w-full transition-colors',
           error
@@ -64,6 +77,7 @@ const show = ref(false);
     <template v-else>
       <UInput
         v-model="model"
+        :icon="icon"
         :disabled="disabled"
         :placeholder="placeholder"
         :type="type"

@@ -40,9 +40,18 @@ const hideHeaderAndNav = computed(() => {
     class="flex h-dvh flex-col overflow-hidden bg-gray-50 dark:bg-app-dark-800"
   >
     <AppHeader v-if="!hideHeaderAndNav" />
-    <Viewport :hide-header-and-nav="hideHeaderAndNav">
+    <!-- <Viewport :hide-header-and-nav="hideHeaderAndNav">
       <slot />
-    </Viewport>
+    </Viewport> -->
+
+    <div
+      id="viewport_mobile"
+      class="min-h-0 flex-1 overscroll-contain overflow-y-auto p-6"
+      :class="hideHeaderAndNav ? 'pb-6 pt-12' : 'pb-24 pt-20'"
+    >
+      <slot />
+    </div>
+    
     <AppBottonNav v-if="!hideHeaderAndNav" />
 
     <AppSideNav :mobile-nav-open="mobileNavOpen" />
