@@ -130,12 +130,10 @@ onUnmounted(() => clearSearch());
         </button>
       </div>
       <!-- Mobile: icon-only round FAB -->
-      <button
-        class="md:hidden flex items-center justify-center w-14 h-14 bg-primary-500 text-white rounded-full shadow-xl active:scale-95 transition-transform"
-        aria-label="Add Bookmark"
-      >
-        <UIcon name="heroicons:plus" class="size-6" />
-      </button>
+      <AppFab
+        aria-label="Add Snippet"
+        @click="navigateTo('/snippets/create-snippets')"
+      />
     </template>
 
     <template #main_content>

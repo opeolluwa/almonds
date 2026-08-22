@@ -105,19 +105,15 @@ async function handleDelete(filename: string) {
         </button>
       </div>
       <!-- Mobile: icon-only round FAB -->
-      <button
+      <AppFab
         :disabled="moodboardStore.uploading"
-        class="md:hidden flex items-center justify-center w-14 h-14 bg-primary-500 text-white rounded-full shadow-xl active:scale-95 transition-transform disabled:opacity-50"
+        :icon="
+          moodboardStore.uploading ? 'heroicons:arrow-path' : 'heroicons:plus'
+        "
         aria-label="Add Image"
+        class="disabled:opacity-50"
         @click="triggerUpload"
-      >
-        <UIcon
-          :name="
-            moodboardStore.uploading ? 'heroicons:arrow-path' : 'heroicons:plus'
-          "
-          :class="['size-6', moodboardStore.uploading && 'animate-spin']"
-        />
-      </button>
+      />
 
       <!-- Hidden file input -->
       <input
@@ -127,7 +123,7 @@ async function handleDelete(filename: string) {
         multiple
         class="hidden"
         @change="handleFileChange"
-      />
+      >
     </template>
 
     <template #main_content>
@@ -181,7 +177,7 @@ async function handleDelete(filename: string) {
               :src="image.src"
               :alt="image.title"
               class="w-full object-cover"
-            />
+            >
             <div
               class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-end justify-between"
             >

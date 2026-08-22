@@ -17,11 +17,5 @@ defineProps<{
   </NuxtLink>
 
   <!-- Mobile: icon-only round FAB -->
-  <NuxtLink
-    :to="to"
-    class="md:hidden flex items-center justify-center w-14 h-14 bg-primary-500 text-white rounded-full shadow-xl active:scale-95 transition-transform"
-    :aria-label="label"
-  >
-    <UIcon v-if="icon" :name="icon" class="size-6" />
-  </NuxtLink>
+  <AppFab :icon="icon" :aria-label="label" @click="navigateTo(to)" />
 </template>
