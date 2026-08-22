@@ -1,7 +1,6 @@
 import { resolve } from "path";
 
-// const isMobile = process.env.NUXT_APP_TARGET === "mobile";
-const isMobile = true;
+const isMobile = process.env.NUXT_APP_TARGET === "mobile";
 export default defineNuxtConfig({
   srcDir: "app",
   extends: [

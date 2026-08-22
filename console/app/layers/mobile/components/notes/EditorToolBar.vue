@@ -1,14 +1,10 @@
 <script lang="ts" setup>
 import { useCurrentEditor, useEditorState } from "@domternal/vue";
-import type { Editor } from "@domternal/core";
+import { getMarkRange, type Command, type Editor } from "@domternal/core";
+import { TextSelection } from "@domternal/pm/state";
 import { emojis } from "@domternal/extension-emoji";
 
 const { editor } = useCurrentEditor();
-
-// TEMP DEBUG
-if (typeof window !== "undefined") {
-  (window as unknown as Record<string, unknown>).__tbEditor = editor;
-}
 
 interface Snapshot {
   bold: boolean;
@@ -150,12 +146,6 @@ function onLinkTriggerMousedown(event: MouseEvent) {
   savedLinkSelection.value = ed
     ? { from: ed.state.selection.from, to: ed.state.selection.to }
     : null;
-  console.log(
-    "[tb] mousedown capture:",
-    JSON.stringify(savedLinkSelection.value),
-    "focused:",
-    String(ed?.view.hasFocus()),
-  );
   event.preventDefault();
 }
 
@@ -166,52 +156,53 @@ function normalizeUrl(raw: string) {
   return `https://${t}`;
 }
 
-function withRestoredSelection(
-  ed: Editor,
-  fn: (chain: ReturnType<Editor["chain"]>) => void,
-) {
-  const chain = ed.chain().focus();
-  const sel = savedLinkSelection.value;
-  if (sel && sel.from <= sel.to && sel.to <= ed.state.doc.content.size) {
-    chain.setTextSelection(sel);
-  }
-  // eslint-disable-next-line no-console
-  console.log("[tb] pre-run selection:", JSON.stringify(ed.state.selection.toJSON()));
-  const result = fn(chain.extendMarkRange("link"));
-  // eslint-disable-next-line no-console
-  console.log(
-    "[tb] post-run:",
-    JSON.stringify({
-      ok: result,
-      sel: ed.state.selection.toJSON(),
-      text: ed.state.doc.textBetween(0, 40, "|", ""),
-    }),
-  );
-}
+// domternal's command registry lacks `setTextSelection`/`extendMarkRange`,
+// which would silently abort any chain using them. This custom command
+// restores the selection and widens it across an adjacent/existing link.
+const selectAndExtendLink = (from: number, to: number): Command =>
+  ({ tr, dispatch }) => {
+    const size = tr.doc.content.size;
+    let start = Math.max(0, Math.min(from, size));
+    let end = Math.max(start, Math.min(to, size));
+    const linkType = tr.doc.type.schema.marks.link;
+    if (linkType) {
+      for (const pos of [start, end]) {
+        const range = getMarkRange(tr.doc.resolve(pos), linkType);
+        if (range) {
+          start = Math.min(start, range.from);
+          end = Math.max(end, range.to);
+        }
+      }
+    }
+    if (dispatch) {
+      dispatch(tr.setSelection(TextSelection.create(tr.doc, start, end)));
+    }
+    return true;
+  };
 
 function applyLink() {
   const href = normalizeUrl(linkDraft.value);
-  console.log(
-    "[tb] applyLink sel-at-apply:",
-    JSON.stringify(
-      editor.value
-        ? {
-            cur: editor.value.state.selection.toJSON(),
-            saved: savedLinkSelection.value,
-          }
-        : null,
-    ),
-  );
-  if (!href) {
-    removeLink();
-    return;
-  }
-  exec((ed) => withRestoredSelection(ed, (chain) => chain.setLink({ href }).run()));
+  exec((ed) => {
+    const chain = ed.chain().focus();
+    const sel = savedLinkSelection.value;
+    if (sel && sel.to <= ed.state.doc.content.size) {
+      chain.command(selectAndExtendLink(sel.from, sel.to));
+    }
+    if (!href) chain.unsetLink().run();
+    else chain.setLink({ href }).run();
+  });
   linkOpen.value = false;
 }
 
 function removeLink() {
-  exec((ed) => withRestoredSelection(ed, (chain) => chain.unsetLink().run()));
+  exec((ed) => {
+    const chain = ed.chain().focus();
+    const sel = savedLinkSelection.value;
+    if (sel && sel.to <= ed.state.doc.content.size) {
+      chain.command(selectAndExtendLink(sel.from, sel.to));
+    }
+    chain.unsetLink().run();
+  });
   linkOpen.value = false;
 }
 
@@ -273,7 +264,7 @@ const colorPalette = computed<string[]>(() => {
 
 function applyColor(color: string | null) {
   exec((ed) => {
-    const chain = ed.chain().focus().extendMarkRange("textStyle");
+    const chain = ed.chain().focus();
     if (color === null) chain.unsetTextColor().run();
     else chain.setTextColor(color).run();
   });
