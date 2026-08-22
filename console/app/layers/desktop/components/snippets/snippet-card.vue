@@ -159,7 +159,7 @@ const handleTransfer = async (targetWorkspaceId: string) => {
         <div class="flex items-center gap-3">
           <span
             v-if="codeMatchInfo"
-            class="px-2 py-0.5 rounded bg-accent-100 dark:bg-accent-900 text-xs text-accent-600 dark:text-accent-400"
+            class="px-2 py-0.5 rounded bg-primary-100 dark:bg-primary-900 text-xs text-primary-600 dark:text-primary-400"
             >code match</span
           >
           <span
@@ -201,7 +201,7 @@ const handleTransfer = async (targetWorkspaceId: string) => {
           :class="
             copied
               ? 'text-green-500'
-              : 'text-accent-600 dark:text-accent-400 hover:text-accent-700'
+              : 'text-primary-600 dark:text-primary-400 hover:text-primary-700'
           "
           @click="copyCode"
         >

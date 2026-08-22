@@ -31,7 +31,7 @@ const workspaceItems = computed(() => [
             ? "heroicons:lock-closed"
             : "heroicons:check-circle",
         class: isActive
-          ? "font-semibold text-accent-500 dark:text-accent-400 capitalize"
+          ? "font-semibold text-primary-500 dark:text-primary-400 capitalize"
           : "text-gray-700 dark:text-gray-300 capitalize",
         onSelect: () => handleWorkspaceSelect(w.identifier),
       };
@@ -65,11 +65,11 @@ const workspaceItems = computed(() => [
       class="hidden md:flex"
     >
       <button
-        class="inline-flex items-center gap-2 px-2.5 py-1.5 hover:bg-accent-100/30 dark:hover:bg-gray-800 transition-colors group capitalize"
+        class="inline-flex items-center gap-2 px-2.5 py-1.5 hover:bg-primary-100/30 dark:hover:bg-gray-800 transition-colors group capitalize"
       >
         <UIcon
           name="heroicons:briefcase"
-          class="size-3.5 text-accent-600 dark:text-accent-400 shrink-0"
+          class="size-3.5 text-primary-600 dark:text-primary-400 shrink-0"
         />
         <span
           class="text-left text-sm font-medium text-gray-800 dark:text-gray-200 truncate max-w-36"

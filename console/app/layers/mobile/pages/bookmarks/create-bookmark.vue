@@ -71,7 +71,7 @@ async function handleSubmit() {
             class="px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
             :class="
               form.tag === tag.value
-                ? 'bg-accent-50 dark:bg-accent-950 text-accent-700 dark:text-accent-300 ring-1 ring-accent-200 dark:ring-accent-800'
+                ? 'bg-primary-50 dark:bg-primary-950 text-primary-700 dark:text-primary-300 ring-1 ring-primary-200 dark:ring-primary-800'
                 : 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
             "
             @click="form.tag = tag.value"

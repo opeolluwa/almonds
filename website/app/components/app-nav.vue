@@ -40,11 +40,7 @@
         </button>
 
         <!-- CTA -->
-        <a
-          href="#download"
-          class="rounded-full px-5 py-2 text-sm font-semibold text-white bg-accent-500 hover:bg-accent-400 transition-colors duration-200"
-        >
-          Download Free
+-primary-primary
         </a>
       </div>
     </div>

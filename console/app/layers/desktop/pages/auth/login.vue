@@ -57,14 +57,10 @@ function continueWithoutLogin() {
 <template>
   <NuxtLayout name="auth">
     <div class="flex flex-col gap-5">
-      <div class="flex flex-col gap-1">
-        <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
-          Welcome back
-        </h2>
-        <p class="text-sm text-gray-500 dark:text-gray-400">
-          Sign in to your Lunar account to continue.
-        </p>
-      </div>
+      <AppPageHeader
+        title="Welcome back"
+        description="Sign in to your Lunar account to continue."
+      />
 
       <form class="flex flex-col gap-4" @submit.prevent="handleSubmit">
         <AppInput
@@ -93,7 +89,7 @@ function continueWithoutLogin() {
           <div class="flex justify-end mt-1">
             <NuxtLink
               to="/auth/reset-password"
-              class="text-xs text-accent-500 hover:text-accent-600 font-medium"
+              class="text-xs text-primary-500 hover:text-primary-600 font-medium"
             >
               Forgot password?
             </NuxtLink>
@@ -114,7 +110,7 @@ function continueWithoutLogin() {
         Don't have an account?
         <NuxtLink
           to="/auth/signup"
-          class="text-accent-500 hover:text-accent-600 font-medium"
+          class="text-primary-500 hover:text-primary-600 font-medium"
         >
           Sign up
         </NuxtLink>

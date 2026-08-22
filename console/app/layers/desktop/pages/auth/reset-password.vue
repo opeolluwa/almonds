@@ -80,24 +80,16 @@ async function handleSetPassword() {
 
 <template>
   <div class="flex flex-col gap-5">
-    <div class="flex flex-col gap-1">
-      <template v-if="step === 'email'">
-        <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
-          Reset your password
-        </h2>
-        <p class="text-sm text-gray-500 dark:text-gray-400">
-          Enter your account email and we'll send you a reset code.
-        </p>
-      </template>
-      <template v-else>
-        <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
-          Set a new password
-        </h2>
-        <p class="text-sm text-gray-500 dark:text-gray-400">
-          Choose a new password for your account.
-        </p>
-      </template>
-    </div>
+    <AppPageHeader
+      v-if="step === 'email'"
+      title="Reset your password"
+      description="Enter your account email and we'll send you a reset code."
+    />
+    <AppPageHeader
+      v-else
+      title="Set a new password"
+      description="Choose a new password for your account."
+    />
 
     <form
       class="flex flex-col gap-4"
@@ -158,7 +150,7 @@ async function handleSetPassword() {
         <AppButton
           type="submit"
           color="primary"
-          class="w-full py-3 bg-accent-500 hover:bg-accent-600 rounded-lg text-white font-medium disabled:opacity-50 text-center"
+          class="w-full py-3 bg-primary-500 hover:bg-primary-600 rounded-lg text-white font-medium disabled:opacity-50 text-center"
           :loading="loading"
           :disabled="loading"
         >
@@ -171,7 +163,7 @@ async function handleSetPassword() {
       Remembered your password?
       <NuxtLink
         to="/auth/login"
-        class="text-accent-500 hover:text-accent-600 font-medium"
+        class="text-primary-500 hover:text-primary-600 font-medium"
       >
         Sign in
       </NuxtLink>

@@ -1,56 +1,19 @@
 <script setup lang="ts">
-import NotesCard from "@desktop/components/notes/notes-card.vue";
+import NotesCard from "@shared/components/notes/notes-card.vue";
+import {
+  NOTE_SORT_OPTIONS,
+  sortNotes,
+  type NoteSort,
+} from "@shared/utils/sorting";
 import { useNoteStore } from "@shared/stores/notes";
+import { formatDate } from "@shared/utils/date";
+
 definePageMeta({ layout: false });
 
 const noteStore = useNoteStore();
 const router = useRouter();
 const { searchQuery, setSearch, clearSearch } = useAppSearch();
-type NoteSort = "name-asc" | "name-desc" | "date-newest" | "date-oldest";
 const sortBy = ref<NoteSort>("date-newest");
-
-const sortItems = computed(() => [
-  [
-    {
-      label: "Name A–Z",
-      icon:
-        sortBy.value === "name-asc"
-          ? "heroicons:check"
-          : "heroicons:bars-arrow-up",
-      onSelect: () => {
-        sortBy.value = "name-asc";
-      },
-    },
-    {
-      label: "Name Z–A",
-      icon:
-        sortBy.value === "name-desc"
-          ? "heroicons:check"
-          : "heroicons:bars-arrow-down",
-      onSelect: () => {
-        sortBy.value = "name-desc";
-      },
-    },
-  ],
-  [
-    {
-      label: "Last modified (newest)",
-      icon:
-        sortBy.value === "date-newest" ? "heroicons:check" : "heroicons:clock",
-      onSelect: () => {
-        sortBy.value = "date-newest";
-      },
-    },
-    {
-      label: "Last modified (oldest)",
-      icon:
-        sortBy.value === "date-oldest" ? "heroicons:check" : "heroicons:clock",
-      onSelect: () => {
-        sortBy.value = "date-oldest";
-      },
-    },
-  ],
-]);
 
 const filteredNotes = computed(() => {
   const q = searchQuery.value.trim().toLowerCase();
@@ -62,31 +25,8 @@ const filteredNotes = computed(() => {
       )
     : noteStore.notes;
 
-  return [...list].sort((a, b) => {
-    switch (sortBy.value) {
-      case "name-asc":
-        return a.title.localeCompare(b.title);
-      case "name-desc":
-        return b.title.localeCompare(a.title);
-      case "date-newest":
-        return (
-          new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
-        );
-      case "date-oldest":
-        return (
-          new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime()
-        );
-    }
-  });
+  return sortNotes(list, sortBy.value);
 });
-
-function formatDate(dateStr: string) {
-  return new Date(dateStr).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-}
 
 onMounted(async () => {
   setSearch({ placeholder: "Search notes..." });
@@ -113,23 +53,7 @@ onUnmounted(() => clearSearch());
         v-if="!noteStore.loading && noteStore.notes.length > 0"
         class="flex justify-end mb-3"
       >
-        <UDropdownMenu
-          :items="sortItems"
-          size="sm"
-          :ui="{
-            content:
-              'min-w-48 rounded-xl shadow-lg border border-gray-100 dark:border-gray-800 py-1',
-            item: 'rounded-lg mx-1 px-3 py-2 gap-2.5 text-sm transition-colors duration-150',
-            separator: 'my-1 mx-2',
-          }"
-        >
-          <button
-            class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-          >
-            <UIcon name="heroicons:arrows-up-down" class="size-3.5" />
-            Sort
-          </button>
-        </UDropdownMenu>
+        <AppSortMenu v-model="sortBy" :options="NOTE_SORT_OPTIONS" />
       </div>
 
       <!-- Loading -->
@@ -157,7 +81,7 @@ onUnmounted(() => clearSearch());
           Create your first note to get started.
         </p>
         <button
-          class="text-xs text-accent-500 hover:text-accent-600 font-medium"
+          class="text-xs text-primary-500 hover:text-primary-600 font-medium"
           @click="navigateTo('/notes/create-notes')"
         >
           Create note
@@ -182,7 +106,7 @@ onUnmounted(() => clearSearch());
           Try a different search term.
         </p>
         <button
-          class="text-xs text-accent-500 hover:text-accent-600 font-medium"
+          class="text-xs text-primary-500 hover:text-primary-600 font-medium"
           @click="searchQuery = ''"
         >
           Clear search

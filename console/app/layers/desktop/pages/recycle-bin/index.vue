@@ -184,7 +184,7 @@ onUnmounted(() => {
         <div class="flex gap-3 mt-3">
           <button
             v-if="searchQuery"
-            class="text-xs text-accent-500 hover:text-accent-600 font-medium"
+            class="text-xs text-primary-500 hover:text-primary-600 font-medium"
             @click="searchQuery = ''"
           >
             Clear search

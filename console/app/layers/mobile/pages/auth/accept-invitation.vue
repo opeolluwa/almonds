@@ -31,22 +31,19 @@ async function handleAccept() {
 
 <template>
   <div class="flex flex-col flex-1">
-    <div class="flex flex-col gap-1 text-center">
-      <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
-        You're invited!
-      </h2>
-      <p class="text-sm text-gray-500 dark:text-gray-400">
-        You've been invited to join a workspace on Lunar.
-      </p>
-    </div>
+    <AppPageHeader
+      class="text-center"
+      title="You're invited!"
+      description="You've been invited to join a workspace on Lunar."
+    />
 
     <div
       class="flex items-center gap-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 p-4"
     >
       <div
-        class="size-10 rounded-lg bg-accent-50 dark:bg-accent-950 flex items-center justify-center shrink-0"
+        class="size-10 rounded-lg bg-primary-50 dark:bg-primary-950 flex items-center justify-center shrink-0"
       >
-        <UIcon name="heroicons:user-group" class="size-5 text-accent-500" />
+        <UIcon name="heroicons:user-group" class="size-5 text-primary-500" />
       </div>
       <div class="min-w-0 flex-1">
         <p
@@ -67,7 +64,7 @@ async function handleAccept() {
     <div v-if="token" class="flex flex-col gap-3">
       <AppButton
         color="primary"
-        class="w-full py-3 bg-accent-500 hover:bg-accent-600 rounded-lg text-white font-medium disabled:opacity-50 text-center"
+        class="w-full py-3 bg-primary-500 hover:bg-primary-600 rounded-lg text-white font-medium disabled:opacity-50 text-center"
         :loading="loading"
         :disabled="loading"
         @click="handleAccept"
@@ -79,7 +76,7 @@ async function handleAccept() {
         Prefer to sign in first?
         <NuxtLink
           to="/auth/login"
-          class="text-accent-500 hover:text-accent-600 font-medium"
+          class="text-primary-500 hover:text-primary-600 font-medium"
         >
           Sign in
         </NuxtLink>
@@ -92,7 +89,7 @@ async function handleAccept() {
       </p>
       <NuxtLink
         to="/auth/login"
-        class="w-full py-3 bg-accent-500 hover:bg-accent-600 rounded-lg text-white font-medium text-center"
+        class="w-full py-3 bg-primary-500 hover:bg-primary-600 rounded-lg text-white font-medium text-center"
       >
         Go to sign in
       </NuxtLink>

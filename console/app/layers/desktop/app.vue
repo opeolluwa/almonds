@@ -78,3 +78,9 @@ onMounted(async () => {
     </UApp>
   </Body>
 </template>
+
+<style>
+body {
+  background-color: transparent;
+}
+</style>

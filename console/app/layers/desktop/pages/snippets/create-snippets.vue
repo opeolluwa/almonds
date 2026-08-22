@@ -28,7 +28,7 @@ definePageMeta({ layout: false, name: "Create snippet" });
         >
           <UIcon
             name="heroicons:light-bulb"
-            class="size-3.5 mt-0.5 shrink-0 text-accent-400"
+            class="size-3.5 mt-0.5 shrink-0 text-primary-400"
           />
           {{ tip }}
         </li>

@@ -3,7 +3,19 @@ import { useUserPreferenceStore } from "@shared/stores/workspace-preferences";
 import { useWorkspacesStore } from "@shared/stores/workspaces";
 import type { Workspace } from "@shared/stores/workspaces";
 
-defineProps<{ open: boolean }>();
+withDefaults(
+  defineProps<{
+    open: boolean;
+    title?: string;
+    description?: string;
+    submitLabel?: string;
+  }>(),
+  {
+    title: "Create a New Workspace",
+    description: "Workspaces allow you to organize your projects and files.",
+    submitLabel: "Save and continue",
+  },
+);
 
 const emit = defineEmits<{
   "update:open": [value: boolean];
@@ -72,8 +84,8 @@ async function handleSubmit() {
 <template>
   <UModal
     :open="open"
-    title="Create a New Workspace"
-    description="Workspaces allow you to organize your projects and files."
+    :title="title"
+    :description="description"
     :ui="{ footer: 'justify-end' }"
     @update:open="handleClose"
   >
@@ -120,7 +132,7 @@ async function handleSubmit() {
         :disabled="loading"
         @click="handleSubmit"
       >
-        Save and continue
+        {{ submitLabel }}
       </UButton>
     </template>
   </UModal>

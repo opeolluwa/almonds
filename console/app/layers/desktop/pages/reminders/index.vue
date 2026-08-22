@@ -110,7 +110,7 @@ onUnmounted(() => clearSearch());
         </p>
         <NuxtLink
           to="/reminders/create-reminder"
-          class="text-xs text-accent-500 hover:text-accent-600 font-medium"
+          class="text-xs text-primary-500 hover:text-primary-600 font-medium"
         >
           Create reminder
         </NuxtLink>
@@ -136,7 +136,7 @@ onUnmounted(() => clearSearch());
         <div class="flex gap-3">
           <button
             v-if="searchQuery"
-            class="text-xs text-accent-500 hover:text-accent-600 font-medium"
+            class="text-xs text-primary-500 hover:text-primary-600 font-medium"
             @click="searchQuery = ''"
           >
             Clear search
@@ -162,7 +162,7 @@ onUnmounted(() => clearSearch());
             class="mt-0.5 p-1.5 rounded-md"
             :class="
               reminder.recurring
-                ? 'bg-accent-50 dark:bg-accent-950'
+                ? 'bg-primary-50 dark:bg-primary-950'
                 : 'bg-gray-100 dark:bg-gray-700'
             "
           >
@@ -173,7 +173,7 @@ onUnmounted(() => clearSearch());
               class="size-4"
               :class="
                 reminder.recurring
-                  ? 'text-accent-500'
+                  ? 'text-primary-500'
                   : 'text-gray-400 dark:text-gray-500'
               "
             />
@@ -219,13 +219,13 @@ onUnmounted(() => clearSearch());
         Summary
       </h2>
       <div class="flex flex-col gap-3 mb-6">
-        <div class="bg-accent-50 dark:bg-accent-950 rounded-lg p-3">
+        <div class="bg-primary-50 dark:bg-primary-950 rounded-lg p-3">
           <p
-            class="text-2xl font-semibold text-accent-700 dark:text-accent-300"
+            class="text-2xl font-semibold text-primary-700 dark:text-primary-300"
           >
             {{ reminderStore.upcomingReminders.length }}
           </p>
-          <p class="text-xs text-accent-500 dark:text-accent-400">Upcoming</p>
+          <p class="text-xs text-primary-500 dark:text-primary-400">Upcoming</p>
         </div>
         <div class="bg-violet-50 dark:bg-violet-950 rounded-lg p-3">
           <p

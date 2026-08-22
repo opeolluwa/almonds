@@ -23,8 +23,8 @@ const categoryConfig: Record<
   },
   alert: {
     icon: "heroicons:exclamation-triangle",
-    color: "text-accent-500 dark:text-accent-400",
-    bg: "bg-accent-50 dark:bg-accent-950",
+    color: "text-primary-500 dark:text-primary-400",
+    bg: "bg-primary-50 dark:bg-primary-950",
     label: "Alert",
   },
 };
@@ -116,7 +116,7 @@ function relativeTime(iso: string) {
             {{ f }}
             <span
               v-if="f === 'unread' && unreadCount > 0"
-              class="ml-1 px-1.5 py-0.5 rounded-full text-[10px] bg-accent-500 text-white"
+              class="ml-1 px-1.5 py-0.5 rounded-full text-[10px] bg-primary-500 text-white"
             >
               {{ unreadCount }}
             </span>
@@ -125,7 +125,7 @@ function relativeTime(iso: string) {
 
         <button
           v-if="unreadCount > 0"
-          class="text-xs text-accent-500 hover:text-accent-600 font-medium"
+          class="text-xs text-primary-500 hover:text-primary-600 font-medium"
           @click="markAllRead"
         >
           Mark all as read
@@ -164,14 +164,14 @@ function relativeTime(iso: string) {
           :class="
             item.isRead
               ? 'border-gray-100 dark:border-gray-700'
-              : 'border-accent-100 dark:border-accent-900 hover:border-accent-200 dark:hover:border-accent-800'
+              : 'border-primary-100 dark:border-primary-900 hover:border-primary-200 dark:hover:border-primary-800'
           "
           @click="markRead(item.identifier)"
         >
           <!-- unread dot -->
           <span
             v-if="!item.isRead"
-            class="absolute top-4 right-4 size-2 rounded-full bg-accent-500"
+            class="absolute top-4 right-4 size-2 rounded-full bg-primary-500"
           />
 
           <!-- category icon -->
@@ -235,13 +235,13 @@ function relativeTime(iso: string) {
           </p>
           <p class="text-[11px] text-gray-400 mt-0.5">Total</p>
         </div>
-        <div class="bg-accent-50 dark:bg-accent-950 rounded-lg p-3 text-center">
+        <div class="bg-primary-50 dark:bg-primary-950 rounded-lg p-3 text-center">
           <p
-            class="text-2xl font-semibold text-accent-600 dark:text-accent-300"
+            class="text-2xl font-semibold text-primary-600 dark:text-primary-300"
           >
             {{ unreadCount }}
           </p>
-          <p class="text-[11px] text-accent-400 mt-0.5">Unread</p>
+          <p class="text-[11px] text-primary-400 mt-0.5">Unread</p>
         </div>
       </div>
 
@@ -313,7 +313,7 @@ function relativeTime(iso: string) {
           class="flex items-center gap-2 py-2 px-3 rounded-lg text-sm w-full transition-colors"
           :class="
             notifications.length > 0
-              ? 'text-accent-500 hover:bg-accent-50 dark:hover:bg-accent-950'
+              ? 'text-primary-500 hover:bg-primary-50 dark:hover:bg-primary-950'
               : 'text-gray-300 dark:text-gray-600 cursor-not-allowed'
           "
           @click="clearAll"

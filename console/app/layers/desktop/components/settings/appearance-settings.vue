@@ -25,7 +25,7 @@ const { fontSize, setFontSize } = useFontSize();
           </div>
           <button
             class="relative w-10 h-6 rounded-full transition-colors"
-            :class="isDark ? 'bg-accent-500' : 'bg-gray-200 dark:bg-gray-600'"
+            :class="isDark ? 'bg-primary-500' : 'bg-gray-200 dark:bg-gray-600'"
             @click="isDark = !isDark"
           >
             <span

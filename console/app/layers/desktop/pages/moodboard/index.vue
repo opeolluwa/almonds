@@ -90,7 +90,7 @@ async function handleDelete(filename: string) {
       <div class="hidden md:flex items-center justify-end">
         <button
           :disabled="moodboardStore.uploading"
-          class="flex items-center gap-2 py-2 px-4 bg-accent-500 text-white rounded-lg text-sm font-medium hover:bg-accent-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          class="flex items-center gap-2 py-2 px-4 bg-primary-500 text-white rounded-lg text-sm font-medium hover:bg-primary-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           @click="triggerUpload"
         >
           <UIcon
@@ -105,19 +105,15 @@ async function handleDelete(filename: string) {
         </button>
       </div>
       <!-- Mobile: icon-only round FAB -->
-      <button
+      <AppFab
         :disabled="moodboardStore.uploading"
-        class="md:hidden flex items-center justify-center w-14 h-14 bg-accent-500 text-white rounded-full shadow-xl active:scale-95 transition-transform disabled:opacity-50"
+        :icon="
+          moodboardStore.uploading ? 'heroicons:arrow-path' : 'heroicons:plus'
+        "
         aria-label="Add Image"
+        class="disabled:opacity-50"
         @click="triggerUpload"
-      >
-        <UIcon
-          :name="
-            moodboardStore.uploading ? 'heroicons:arrow-path' : 'heroicons:plus'
-          "
-          :class="['size-6', moodboardStore.uploading && 'animate-spin']"
-        />
-      </button>
+      />
 
       <!-- Hidden file input -->
       <input
@@ -127,7 +123,7 @@ async function handleDelete(filename: string) {
         multiple
         class="hidden"
         @change="handleFileChange"
-      />
+      >
     </template>
 
     <template #main_content>
@@ -161,7 +157,7 @@ async function handleDelete(filename: string) {
           Add images to start building your moodboard.
         </p>
         <button
-          class="flex items-center gap-2 py-2 px-4 bg-accent-500 text-white rounded-lg text-sm font-medium hover:bg-accent-600 transition-colors"
+          class="flex items-center gap-2 py-2 px-4 bg-primary-500 text-white rounded-lg text-sm font-medium hover:bg-primary-600 transition-colors"
           @click="triggerUpload"
         >
           <UIcon name="heroicons:plus" class="size-4" />
@@ -181,7 +177,7 @@ async function handleDelete(filename: string) {
               :src="image.src"
               :alt="image.title"
               class="w-full object-cover"
-            />
+            >
             <div
               class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-end justify-between"
             >
@@ -255,7 +251,7 @@ async function handleDelete(filename: string) {
           class="w-full h-1.5 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden"
         >
           <div
-            class="h-full bg-accent-500 rounded-full transition-all duration-300"
+            class="h-full bg-primary-500 rounded-full transition-all duration-300"
             :style="{ width: `${downloadProgress}%` }"
           />
         </div>
@@ -270,7 +266,7 @@ async function handleDelete(filename: string) {
           Download the AI model to get smart suggestions for your images.
         </p>
         <button
-          class="flex items-center gap-2 py-1.5 px-3 bg-accent-500 text-white rounded-lg text-xs font-medium hover:bg-accent-600 transition-colors"
+          class="flex items-center gap-2 py-1.5 px-3 bg-primary-500 text-white rounded-lg text-xs font-medium hover:bg-primary-600 transition-colors"
           @click="downloadModel"
         >
           <UIcon name="heroicons:arrow-down-tray" class="size-3.5" />

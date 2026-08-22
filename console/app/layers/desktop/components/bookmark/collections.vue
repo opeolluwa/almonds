@@ -24,7 +24,7 @@ const emit = defineEmits<{
         class="flex items-center gap-3 py-2 px-3 rounded-lg text-sm font-medium w-full text-left transition-colors"
         :class="
           modelValue === 'all'
-            ? 'bg-accent-50 dark:bg-accent-950 text-accent-700 dark:text-accent-300'
+            ? 'bg-primary-50 dark:bg-primary-950 text-primary-700 dark:text-primary-300'
             : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'
         "
         @click="emit('update:modelValue', 'all')"
@@ -40,7 +40,7 @@ const emit = defineEmits<{
         class="flex items-center gap-3 py-2 px-3 rounded-lg text-sm w-full text-left transition-colors"
         :class="
           modelValue === tag.value
-            ? 'bg-accent-50 dark:bg-accent-950 text-accent-700 dark:text-accent-300 font-medium'
+            ? 'bg-primary-50 dark:bg-primary-950 text-primary-700 dark:text-primary-300 font-medium'
             : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800'
         "
         @click="emit('update:modelValue', tag.value as BookmarkTag)"

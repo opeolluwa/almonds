@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { safeOpenUrl as openUrl } from "@shared/utils/safe-open-url";
 import { useBookmarkStore, type BookmarkTag } from "@shared/stores/bookmarks";
+import {
+  BOOKMARK_SORT_OPTIONS,
+  sortBookmarks,
+  type BookmarkSort,
+} from "@shared/utils/sorting";
 
 definePageMeta({ layout: false });
 
@@ -24,51 +29,7 @@ const TAG_ICONS: Record<BookmarkTag, string> = {
 
 const activeTag = ref<BookmarkTag | "all">("all");
 const showAddModal = ref(false);
-type BookmarkSort = "name-asc" | "name-desc" | "date-newest" | "date-oldest";
 const sortBy = ref<BookmarkSort>("date-newest");
-
-const sortItems = computed(() => [
-  [
-    {
-      label: "Name A–Z",
-      icon:
-        sortBy.value === "name-asc"
-          ? "heroicons:check"
-          : "heroicons:bars-arrow-up",
-      onSelect: () => {
-        sortBy.value = "name-asc";
-      },
-    },
-    {
-      label: "Name Z–A",
-      icon:
-        sortBy.value === "name-desc"
-          ? "heroicons:check"
-          : "heroicons:bars-arrow-down",
-      onSelect: () => {
-        sortBy.value = "name-desc";
-      },
-    },
-  ],
-  [
-    {
-      label: "Newest first",
-      icon:
-        sortBy.value === "date-newest" ? "heroicons:check" : "heroicons:clock",
-      onSelect: () => {
-        sortBy.value = "date-newest";
-      },
-    },
-    {
-      label: "Oldest first",
-      icon:
-        sortBy.value === "date-oldest" ? "heroicons:check" : "heroicons:clock",
-      onSelect: () => {
-        sortBy.value = "date-oldest";
-      },
-    },
-  ],
-]);
 
 const filtered = computed(() => {
   let list =
@@ -86,22 +47,7 @@ const filtered = computed(() => {
     );
   }
 
-  return [...list].sort((a, b) => {
-    switch (sortBy.value) {
-      case "name-asc":
-        return a.title.localeCompare(b.title);
-      case "name-desc":
-        return b.title.localeCompare(a.title);
-      case "date-newest":
-        return (
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        );
-      case "date-oldest":
-        return (
-          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-        );
-    }
-  });
+  return sortBookmarks(list, sortBy.value);
 });
 
 onMounted(async () => {
@@ -130,7 +76,7 @@ async function handleCreate(payload: {
         class="hidden md:flex items-center justify-end"
       >
         <button
-          class="flex items-center gap-2 py-2 px-4 bg-accent-500 text-white rounded-lg text-sm font-medium hover:bg-accent-600 transition-colors"
+          class="flex items-center gap-2 py-2 px-4 bg-primary-500 text-white rounded-lg text-sm font-medium hover:bg-primary-600 transition-colors"
           @click="showAddModal = true"
         >
           <UIcon name="heroicons:plus" class="size-4" />
@@ -138,13 +84,7 @@ async function handleCreate(payload: {
         </button>
       </div>
       <!-- Mobile: icon-only round FAB -->
-      <button
-        class="md:hidden flex items-center justify-center w-14 h-14 bg-accent-500 text-white rounded-full shadow-xl active:scale-95 transition-transform"
-        aria-label="Add Bookmark"
-        @click="showAddModal = true"
-      >
-        <UIcon name="heroicons:plus" class="size-6" />
-      </button>
+      <AppFab aria-label="Add Bookmark" @click="showAddModal = true" />
     </template>
 
     <template #main_content>
@@ -155,24 +95,11 @@ async function handleCreate(payload: {
           :tags="TAGS"
           class="flex-1"
         />
-        <UDropdownMenu
+        <AppSortMenu
           v-if="bookmarkStore.bookmarks.length !== 0"
-          :items="sortItems"
-          size="sm"
-          :ui="{
-            content:
-              'min-w-40 rounded-xl shadow-lg border border-gray-100 dark:border-gray-800 py-1',
-            item: 'rounded-lg mx-1 px-3 py-2 gap-2.5 text-sm transition-colors duration-150',
-            separator: 'my-1 mx-2',
-          }"
-        >
-          <button
-            class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors shrink-0"
-          >
-            <UIcon name="heroicons:arrows-up-down" class="size-3.5" />
-            Sort
-          </button>
-        </UDropdownMenu>
+          v-model="sortBy"
+          :options="BOOKMARK_SORT_OPTIONS"
+        />
       </div>
 
       <!-- Loading -->
@@ -206,7 +133,7 @@ async function handleCreate(payload: {
 
         <UButton
           variant="link"
-          class="text-xs text-accent-500 hover:text-accent-600 font-medium cursor-pointer"
+          class="text-xs text-primary-500 hover:text-primary-600 font-medium cursor-pointer"
           @click="showAddModal = true"
         >
           Create bookmark
@@ -235,7 +162,7 @@ async function handleCreate(payload: {
         <div class="flex gap-3">
           <button
             v-if="searchQuery"
-            class="text-xs text-accent-500 hover:text-accent-600 font-medium"
+            class="text-xs text-primary-500 hover:text-primary-600 font-medium"
             @click="searchQuery = ''"
           >
             Clear search

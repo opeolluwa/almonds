@@ -52,7 +52,7 @@ const items = computed(() => [
             class="relative w-10 h-6 rounded-full transition-colors"
             :class="
               item.model.value
-                ? 'bg-accent-500'
+                ? 'bg-primary-500'
                 : 'bg-gray-200 dark:bg-gray-600'
             "
             @click="item.model.value = !item.model.value"

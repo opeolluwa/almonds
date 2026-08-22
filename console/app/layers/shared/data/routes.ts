@@ -86,7 +86,7 @@ export const secondaryRoutes: Route[] = [
   },
 ];
 
-export const mobile_default_layer: Route[] = [
+export const mobileBottomNavRoutes: Route[] = [
   {
     path: "/",
     name: "Home",

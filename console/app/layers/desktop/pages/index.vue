@@ -122,7 +122,7 @@ const statPills = computed(() => [
     label: "Bookmarks",
     value: bookmarkStore.bookmarks.length,
     icon: "heroicons:bookmark-solid",
-    color: "text-accent-500",
+    color: "text-primary-500",
     href: "/bookmarks",
   },
   {
@@ -139,11 +139,11 @@ const statPills = computed(() => [
   <NuxtLayout name="default">
     <template #page_title>
       <div
-        class="relative -mx-6 -mt-6 px-6 pt-7 pb-6 overflow-hidden bg-linear-to-br from-accent-500/10 via-violet-400/5 to-transparent dark:from-accent-500/12 dark:via-violet-500/6 dark:to-transparent border-b border-gray-100 dark:border-gray-800"
+        class="relative -mx-6 -mt-6 px-6 pt-7 pb-6 overflow-hidden bg-linear-to-br from-primary-500/10 via-violet-400/5 to-transparent dark:from-primary-500/12 dark:via-violet-500/6 dark:to-transparent border-b border-gray-100 dark:border-gray-800"
       >
         <!-- Soft blobs -->
         <div
-          class="pointer-events-none absolute -top-10 right-0 size-52 rounded-full bg-accent-300/20 dark:bg-accent-500/10 blur-3xl"
+          class="pointer-events-none absolute -top-10 right-0 size-52 rounded-full bg-primary-300/20 dark:bg-primary-500/10 blur-3xl"
         />
         <div
           class="pointer-events-none absolute bottom-0 left-1/2 size-36 rounded-full bg-violet-300/15 dark:bg-violet-500/8 blur-2xl translate-y-1/2"
@@ -181,7 +181,7 @@ const statPills = computed(() => [
             v-for="s in statPills"
             :key="s.label"
             :to="s.href"
-            class="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-white/70 dark:bg-gray-900/60 border border-gray-200/80 dark:border-gray-700/60 backdrop-blur-sm hover:border-accent-300 dark:hover:border-accent-700 transition-colors"
+            class="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-white/70 dark:bg-gray-900/60 border border-gray-200/80 dark:border-gray-700/60 backdrop-blur-sm hover:border-primary-300 dark:hover:border-primary-700 transition-colors"
           >
             <UIcon :name="s.icon" class="size-3.5 shrink-0" :class="s.color" />
             <span class="text-gray-800 dark:text-gray-200 tabular-nums">{{
@@ -224,7 +224,7 @@ const statPills = computed(() => [
                   stroke="currentColor"
                   stroke-width="5"
                   stroke-linecap="round"
-                  class="text-accent-500 transition-all duration-700"
+                  class="text-primary-500 transition-all duration-700"
                   :stroke-dasharray="RING_C"
                   :stroke-dashoffset="ringOffset"
                 />
@@ -415,7 +415,7 @@ const statPills = computed(() => [
             <h2
               class="text-sm font-semibold text-gray-700 dark:text-gray-300/70 flex items-center gap-1.5"
             >
-              <UIcon name="heroicons:bookmark" class="size-4 text-accent-400" />
+              <UIcon name="heroicons:bookmark" class="size-4 text-primary-400" />
               Recent bookmarks
             </h2>
           </div>
@@ -459,16 +459,16 @@ const statPills = computed(() => [
               @click="openUrl(bm.url)"
             >
               <div
-                class="size-7 rounded-lg bg-accent-50 dark:bg-accent-950/60 flex items-center justify-center shrink-0 mt-0.5"
+                class="size-7 rounded-lg bg-primary-50 dark:bg-primary-950/60 flex items-center justify-center shrink-0 mt-0.5"
               >
                 <UIcon
                   name="heroicons:bookmark-solid"
-                  class="size-3.5 text-accent-400"
+                  class="size-3.5 text-primary-400"
                 />
               </div>
               <div class="flex-1 min-w-0">
                 <p
-                  class="text-xs font-medium text-gray-800 dark:text-gray-200 truncate group-hover:text-accent-600 dark:group-hover:text-accent-400 transition-colors"
+                  class="text-xs font-medium text-gray-800 dark:text-gray-200 truncate group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors"
                 >
                   {{ bm.title }}
                 </p>

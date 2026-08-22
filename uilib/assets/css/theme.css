@@ -5,35 +5,7 @@
 @plugin 'tailwind-scrollbar' {
   nocompatible: true;
 }
-
-:root {
-  --app-accent-50: #fdf2f4;
-  --app-accent-100: #fce7eb;
-  --app-accent-200: #f9d0d9;
-  --app-accent-300: #f4a9b9;
-  --app-accent-400: #ed7694;
-  --app-accent-500: #d02752;
-  --app-accent-600: #bf2249;
-  --app-accent-700: #a11d3f;
-  --app-accent-800: #871b3a;
-  --app-accent-900: #741b36;
-  --app-accent-950: #410a1a;
-}
-
-@theme inline {
-  --color-accent-50: var(--app-accent-50);
-  --color-accent-100: var(--app-accent-100);
-  --color-accent-200: var(--app-accent-200);
-  --color-accent-300: var(--app-accent-300);
-  --color-accent-400: var(--app-accent-400);
-  --color-accent-500: var(--app-accent-500);
-  --color-accent-600: var(--app-accent-600);
-  --color-accent-700: var(--app-accent-700);
-  --color-accent-800: var(--app-accent-800);
-  --color-accent-900: var(--app-accent-900);
-  --color-accent-950: var(--app-accent-950);
-}
-
+-primary-primary-primary-primary-primary-primary-primary-primary-primary-primary-primary-primary-primary-primary-primary-primary-primary-primary-primary-primary-primary-primary-primary-primary-primary-primary-primary-primary-primary-primary-primary-primary-primary
 @theme {
   --color-surface-50: #f3f5f6;
   --color-surface-100: #e7eaed;

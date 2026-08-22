@@ -4,6 +4,13 @@ import { useWorkspacesStore } from "@shared/stores/workspaces";
 const { notify } = useAppNotification();
 const workspaceStore = useWorkspacesStore();
 
+// ── create workspace ──────────────────────────────────────────────────────────
+const showCreateModal = ref(false);
+
+function handleCreated() {
+  notify({ message: "Workspace created", type: "success" });
+}
+
 // ── secure workspace ──────────────────────────────────────────────────────────
 const secureTargetId = ref<string | null>(null);
 const securePassword = ref("");
@@ -176,6 +183,20 @@ const workspaces = computed(() => workspaceStore.workspaces ?? []);
 
 <template>
   <div class="flex flex-col gap-4 mt-4">
+    <div class="flex items-center justify-between">
+      <h2 class="text-sm font-semibold text-gray-700 dark:text-gray-200">
+        Workspaces
+      </h2>
+      <div class="w-36">
+        <AppButton
+          :disabled="workspaceStore.loading"
+          @click="showCreateModal = true"
+        >
+          New workspace
+        </AppButton>
+      </div>
+    </div>
+
     <!-- Workspace list -->
     <div
       v-for="workspace in workspaces"
@@ -308,5 +329,14 @@ const workspaces = computed(() => workspaceStore.workspaces ?? []);
         </div>
       </template>
     </UModal>
+
+    <!-- Create workspace modal -->
+    <WorkspaceCreateModal
+      v-model:open="showCreateModal"
+      title="New workspace"
+      description="Workspaces allow you to organize your notes, tasks and bookmarks."
+      submit-label="Create workspace"
+      @created="handleCreated"
+    />
   </div>
 </template>

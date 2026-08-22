@@ -54,7 +54,7 @@ onMounted(() => backupStore.init());
           class="flex items-start gap-3 p-3 rounded-lg border transition-colors text-left"
           :class="
             backupStore.provider === opt.key
-              ? 'border-accent-400 bg-accent-50 dark:bg-accent-950 dark:border-accent-600'
+              ? 'border-primary-400 bg-primary-50 dark:bg-primary-950 dark:border-primary-600'
               : 'border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
           "
           @click="backupStore.provider = opt.key"
@@ -63,7 +63,7 @@ onMounted(() => backupStore.init());
             class="mt-0.5 size-8 rounded-md flex items-center justify-center shrink-0"
             :class="
               backupStore.provider === opt.key
-                ? 'bg-accent-100 dark:bg-accent-900'
+                ? 'bg-primary-100 dark:bg-primary-900'
                 : 'bg-gray-100 dark:bg-gray-700'
             "
           >
@@ -72,7 +72,7 @@ onMounted(() => backupStore.init());
               class="size-4"
               :class="
                 backupStore.provider === opt.key
-                  ? 'text-accent-600 dark:text-accent-400'
+                  ? 'text-primary-600 dark:text-primary-400'
                   : 'text-gray-500 dark:text-gray-400'
               "
             />
@@ -82,7 +82,7 @@ onMounted(() => backupStore.init());
               class="text-sm font-medium"
               :class="
                 backupStore.provider === opt.key
-                  ? 'text-accent-700 dark:text-accent-300'
+                  ? 'text-primary-700 dark:text-primary-300'
                   : 'text-gray-700 dark:text-gray-200'
               "
             >
@@ -93,7 +93,7 @@ onMounted(() => backupStore.init());
           <UIcon
             v-if="backupStore.provider === opt.key"
             name="heroicons:check-circle"
-            class="size-4 text-accent-500 shrink-0 mt-1"
+            class="size-4 text-primary-500 shrink-0 mt-1"
           />
         </button>
       </div>
@@ -101,10 +101,10 @@ onMounted(() => backupStore.init());
       <!-- Almond Cloud CTA -->
       <div
         v-if="backupStore.provider === 'cloud'"
-        class="rounded-lg bg-accent-50 dark:bg-accent-950 border border-accent-100 dark:border-accent-800 p-4 flex items-center justify-between gap-4"
+        class="rounded-lg bg-primary-50 dark:bg-primary-950 border border-primary-100 dark:border-primary-800 p-4 flex items-center justify-between gap-4"
       >
         <div>
-          <p class="text-sm font-medium text-accent-700 dark:text-accent-300">
+          <p class="text-sm font-medium text-primary-700 dark:text-primary-300">
             Almond Cloud
           </p>
           <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
@@ -113,7 +113,7 @@ onMounted(() => backupStore.init());
         </div>
         <NuxtLink
           to="/pricing"
-          class="shrink-0 px-4 py-2 bg-accent-500 text-white text-sm font-medium rounded-lg hover:bg-accent-600 transition-colors flex items-center gap-1.5"
+          class="shrink-0 px-4 py-2 bg-primary-500 text-white text-sm font-medium rounded-lg hover:bg-primary-600 transition-colors flex items-center gap-1.5"
         >
           View plans
           <UIcon name="heroicons:arrow-top-right-on-square" class="size-3.5" />
@@ -134,7 +134,7 @@ onMounted(() => backupStore.init());
             v-model="backupStore.selfHostedApiUrl"
             type="url"
             placeholder="https://sync.example.com/api"
-            class="w-full bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-600 outline-none focus:ring-2 focus:ring-accent-300 dark:focus:ring-accent-600 focus:border-transparent font-mono"
+            class="w-full bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-600 outline-none focus:ring-2 focus:ring-primary-300 dark:focus:ring-primary-600 focus:border-transparent font-mono"
           />
           <p class="text-xs text-gray-400 mt-1">
             Base URL of your self-hosted Almond sync server.
@@ -149,18 +149,18 @@ onMounted(() => backupStore.init());
             v-model="backupStore.selfHostedApiKey"
             type="password"
             placeholder="sk-••••••••••••"
-            class="w-full bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-600 outline-none focus:ring-2 focus:ring-accent-300 dark:focus:ring-accent-600 focus:border-transparent font-mono"
+            class="w-full bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-600 outline-none focus:ring-2 focus:ring-primary-300 dark:focus:ring-primary-600 focus:border-transparent font-mono"
           />
         </div>
         <div class="flex items-center justify-between">
           <button
-            class="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 hover:text-accent-600 dark:hover:text-accent-400 transition-colors"
+            class="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
           >
             <UIcon name="heroicons:signal" class="size-5" />
             Test connection
           </button>
           <button
-            class="px-4 py-2 bg-accent-500 text-white text-sm font-medium rounded-lg hover:bg-accent-600 transition-colors"
+            class="px-4 py-2 bg-primary-500 text-white text-sm font-medium rounded-lg hover:bg-primary-600 transition-colors"
             @click="backupStore.save()"
           >
             {{ !backupStore.savedConfigExists ? "Save" : "Update" }}

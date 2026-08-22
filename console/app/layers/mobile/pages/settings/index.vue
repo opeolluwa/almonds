@@ -1,9 +1,6 @@
 <script setup lang="ts">
 const routes = [
-  {
-    label: "Account",
-    type: "label" as const,
-  },
+
   {
     label: "Profile",
     description: "Name, email & avatar",
@@ -22,11 +19,6 @@ const routes = [
     icon: "heroicons:language",
     to: "/settings/locale",
   },
-
-  {
-    label: "Workspace",
-    type: "label" as const,
-  },
   {
     label: "Workspaces",
     description: "Create, secure & manage workspaces",
@@ -39,11 +31,6 @@ const routes = [
     icon: "heroicons:cloud-arrow-up",
     to: "/settings/backup",
   },
-
-  {
-    label: "Intelligence",
-    type: "label" as const,
-  },
   {
     label: "AI & Ollama",
     description: "AI assistants & local models",
@@ -51,10 +38,6 @@ const routes = [
     to: "/settings/ai",
   },
 
-  {
-    label: "Notifications",
-    type: "label" as const,
-  },
   {
     label: "Notifications",
     description: "Alerts & notifications",
@@ -68,10 +51,6 @@ const routes = [
     to: "/settings/alarm",
   },
 
-  {
-    label: "System",
-    type: "label" as const,
-  },
   {
     label: "About",
     description: "Version, build & platform",
@@ -105,14 +84,11 @@ const routes = [
         </div>
       </template>
       <template v-else>
-        <NuxtLink :to="item.to" class="flex items-center gap-4">
+        <NuxtLink :to="item.to" class="flex items-center gap-y-8 gap-x-3 mb-3">
           <div
             class="size-10 shrink-0 rounded-lg flex items-center justify-center"
           >
-            <UIcon
-              :name="item.icon"
-              class="size-5 text-accent-700 dark:text-accent-300"
-            />
+            <UIcon :name="item.icon" class="size-5" />
           </div>
           <div class="min-w-0 flex-1">
             <h3

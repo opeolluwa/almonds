@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { marked } from "marked";
 import DOMPurify from "dompurify";
-import { Domternal, useCurrentEditor } from "@domternal/vue";
+import katex from "katex";
+import { Domternal } from "@domternal/vue";
+import type { Editor } from "@domternal/core";
 import { Details } from "@domternal/extension-details";
 import { CodeBlockLowlight } from "@domternal/extension-code-block-lowlight";
 import { createLowlight, all } from "lowlight";
@@ -14,6 +16,7 @@ import {
   Text,
   TextStyle,
   TextAlign,
+  TextColor,
   Code,
   Heading,
   ListItem,
@@ -28,6 +31,12 @@ import {
 } from "@domternal/core";
 import { Table } from "@domternal/extension-table";
 import { Image } from "@domternal/extension-image";
+import {
+  MathInline,
+  MathBlock,
+  createKatexRenderer,
+} from "@domternal/extension-math";
+import "katex/dist/katex.min.css";
 
 import {
   Emoji,
@@ -45,22 +54,23 @@ import {
 const colorMode = useColorMode();
 const isDark = computed(() => colorMode.value === "dark");
 const lowlight = createLowlight(all);
+const mathRenderer = createKatexRenderer(katex);
 const dmVars = computed(() =>
   isDark.value
     ? {
-        "--dm-accent": "var(--color-accent-400)",
-        "--dm-accent-hover": "var(--color-accent-300)",
-        "--dm-accent-surface":
-          "color-mix(in srgb, var(--color-accent-400) 15%, transparent)",
+        "--dm-primary": "var(--color-primary-400)",
+        "--dm-primary-hover": "var(--color-primary-300)",
+        "--dm-primary-surface":
+          "color-mix(in srgb, var(--color-primary-400) 15%, transparent)",
         "--dm-bg": "var(--color-surface-900)",
         "--dm-surface": "var(--color-surface-800)",
         "--dm-border-color": "var(--color-surface-700)",
       }
     : {
-        "--dm-accent": "var(--color-accent-500)",
-        "--dm-accent-hover": "var(--color-accent-600)",
-        "--dm-accent-surface":
-          "color-mix(in srgb, var(--color-accent-500) 10%, transparent)",
+        "--dm-primary": "var(--color-primary-500)",
+        "--dm-primary-hover": "var(--color-primary-600)",
+        "--dm-primary-surface":
+          "color-mix(in srgb, var(--color-primary-500) 10%, transparent)",
         "--dm-block-handle-gutter": 0,
       },
 );
@@ -90,6 +100,7 @@ const extensions = [
   TextStyle,
   Code,
   TextAlign,
+  TextColor,
   BlockHandle.configure({ nested: true }),
   BlockContextMenu,
   SlashCommand,
@@ -100,6 +111,8 @@ const extensions = [
     HTMLAttributes: { class: "notes_heading" },
   }),
   CodeBlockLowlight.configure({ lowlight }),
+  MathInline.configure({ renderer: mathRenderer }),
+  MathBlock.configure({ renderer: mathRenderer }),
   Emoji.configure({
     emojis,
     suggestion: { render: createEmojiSuggestionRenderer() },
@@ -134,7 +147,15 @@ const extensions = [
 
 const model = defineModel<string>();
 
-const { editor } = useCurrentEditor();
+const editor = shallowRef<Editor | null>(null);
+
+function handleCreate(ed: Editor) {
+  editor.value = ed;
+}
+
+function handleDestroy() {
+  editor.value = null;
+}
 
 defineExpose({
   editor,
@@ -163,15 +184,18 @@ function handleUpdate({ editor }: { editor: any }) {
   <div
     :class="{ 'dm-theme-dark': isDark }"
     :style="dmVars"
-    class="notes-editor -ml-12"
+    class="notes-editor"
   >
     <Domternal
       :extensions="extensions"
       :content="initialContent"
       :on-update="handleUpdate"
+      :on-create="handleCreate"
+      :on-destroy="handleDestroy"
     >
-      <Domternal.Content class="bg-transparent" />
+      <Domternal.Content class="bg-transparent -ml-12" />
       <Domternal.BubbleMenu class="mb-5" />
+      <slot name="toolbar" />
     </Domternal>
   </div>
 </template>
@@ -184,5 +208,10 @@ function handleUpdate({ editor }: { editor: any }) {
   --dm-editor-border: none;
   --dm-border-color: #cccccc;
   --dm-code-surface: transparent;
+}
+
+.notes-editor .dm-editor .ProseMirror {
+  --dm-editor-padding: 0;
+  --dm-editor-padding-top-extra: 0.25rem;
 }
 </style>

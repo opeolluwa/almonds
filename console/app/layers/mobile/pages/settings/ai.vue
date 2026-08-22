@@ -29,7 +29,7 @@ const models = ["llama3", "codellama", "mistral", "gemma"];
           <input
             v-model="ollamaUrl"
             type="text"
-            class="w-full bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-600 outline-none focus:ring-2 focus:ring-accent-300 dark:focus:ring-accent-600 focus:border-transparent font-mono"
+            class="w-full bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-600 outline-none focus:ring-2 focus:ring-primary-300 dark:focus:ring-primary-600 focus:border-transparent font-mono"
           />
         </div>
         <div>
@@ -44,7 +44,7 @@ const models = ["llama3", "codellama", "mistral", "gemma"];
               class="flex items-center gap-3 py-2 px-3 rounded-lg text-sm transition-colors text-left"
               :class="
                 defaultModel === m
-                  ? 'bg-accent-50 dark:bg-accent-950 text-accent-700 dark:text-accent-300 font-medium'
+                  ? 'bg-primary-50 dark:bg-primary-950 text-primary-700 dark:text-primary-300 font-medium'
                   : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'
               "
               @click="defaultModel = m"
@@ -54,7 +54,7 @@ const models = ["llama3", "codellama", "mistral", "gemma"];
               <UIcon
                 v-if="defaultModel === m"
                 name="heroicons:check"
-                class="size-4 ml-auto text-accent-500"
+                class="size-4 ml-auto text-primary-500"
               />
             </button>
           </div>
@@ -62,7 +62,7 @@ const models = ["llama3", "codellama", "mistral", "gemma"];
       </div>
       <div class="mt-5 flex justify-end">
         <button
-          class="px-4 py-2 bg-accent-500 text-white text-sm font-medium rounded-lg hover:bg-accent-600 transition-colors"
+          class="px-4 py-2 bg-primary-500 text-white text-sm font-medium rounded-lg hover:bg-primary-600 transition-colors"
         >
           Save
         </button>

@@ -1,58 +1,19 @@
 <script setup lang="ts">
 import { useSnippetStore } from "@shared/stores/snippets";
 import SnippetCard from "@desktop/components/snippets/snippet-card.vue";
+import {
+  SNIPPET_SORT_OPTIONS,
+  sortSnippets,
+  type SnippetSort,
+} from "@shared/utils/sorting";
 definePageMeta({ layout: false });
 
 const snippetStore = useSnippetStore();
 const activeLanguage = ref("All");
 const { searchQuery, setSearch, clearSearch } = useAppSearch();
-type SnippetSort = "name-asc" | "name-desc" | "date-newest" | "date-oldest";
 const sortBy = ref<SnippetSort>("date-newest");
 
 const allLanguages = computed(() => ["All", ...snippetStore.languages]);
-
-const sortItems = computed(() => [
-  [
-    {
-      label: "Name A–Z",
-      icon:
-        sortBy.value === "name-asc"
-          ? "heroicons:check"
-          : "heroicons:bars-arrow-up",
-      onSelect: () => {
-        sortBy.value = "name-asc";
-      },
-    },
-    {
-      label: "Name Z–A",
-      icon:
-        sortBy.value === "name-desc"
-          ? "heroicons:check"
-          : "heroicons:bars-arrow-down",
-      onSelect: () => {
-        sortBy.value = "name-desc";
-      },
-    },
-  ],
-  [
-    {
-      label: "Newest first",
-      icon:
-        sortBy.value === "date-newest" ? "heroicons:check" : "heroicons:clock",
-      onSelect: () => {
-        sortBy.value = "date-newest";
-      },
-    },
-    {
-      label: "Oldest first",
-      icon:
-        sortBy.value === "date-oldest" ? "heroicons:check" : "heroicons:clock",
-      onSelect: () => {
-        sortBy.value = "date-oldest";
-      },
-    },
-  ],
-]);
 
 const filteredSnippets = computed(() => {
   let list = snippetStore.snippets;
@@ -72,22 +33,7 @@ const filteredSnippets = computed(() => {
     );
   }
 
-  return [...list].sort((a, b) => {
-    switch (sortBy.value) {
-      case "name-asc":
-        return (a.title ?? "").localeCompare(b.title ?? "");
-      case "name-desc":
-        return (b.title ?? "").localeCompare(a.title ?? "");
-      case "date-newest":
-        return (
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        );
-      case "date-oldest":
-        return (
-          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-        );
-    }
-  });
+  return sortSnippets(list, sortBy.value);
 });
 
 function formatDate(dateStr: string) {
@@ -123,19 +69,17 @@ onUnmounted(() => clearSearch());
         @click="navigateTo('/snippets/create-snippets')"
       >
         <button
-          class="flex items-center gap-2 py-2 px-4 bg-accent-500 text-white rounded-lg text-sm font-medium hover:bg-accent-600 transition-colors"
+          class="flex items-center gap-2 py-2 px-4 bg-primary-500 text-white rounded-lg text-sm font-medium hover:bg-primary-600 transition-colors"
         >
           <UIcon name="heroicons:plus" class="size-4" />
           Add Snippet
         </button>
       </div>
       <!-- Mobile: icon-only round FAB -->
-      <button
-        class="md:hidden flex items-center justify-center w-14 h-14 bg-accent-500 text-white rounded-full shadow-xl active:scale-95 transition-transform"
-        aria-label="Add Bookmark"
-      >
-        <UIcon name="heroicons:plus" class="size-6" />
-      </button>
+      <AppFab
+        aria-label="Add Snippet"
+        @click="navigateTo('/snippets/create-snippets')"
+      />
     </template>
 
     <template #main_content>
@@ -151,7 +95,7 @@ onUnmounted(() => clearSearch());
             class="px-3 py-1 rounded-full text-xs font-medium transition-colors"
             :class="
               activeLanguage === lang
-                ? 'bg-accent-500 text-white'
+                ? 'bg-primary-500 text-white'
                 : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
             "
             @click="activeLanguage = lang"
@@ -159,23 +103,7 @@ onUnmounted(() => clearSearch());
             {{ lang }}
           </button>
         </div>
-        <UDropdownMenu
-          :items="sortItems"
-          size="sm"
-          :ui="{
-            content:
-              'min-w-40 rounded-xl shadow-lg border border-gray-100 dark:border-gray-800 py-1',
-            item: 'rounded-lg mx-1 px-3 py-2 gap-2.5 text-sm transition-colors duration-150',
-            separator: 'my-1 mx-2',
-          }"
-        >
-          <button
-            class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors shrink-0"
-          >
-            <UIcon name="heroicons:arrows-up-down" class="size-3.5" />
-            Sort
-          </button>
-        </UDropdownMenu>
+        <AppSortMenu v-model="sortBy" :options="SNIPPET_SORT_OPTIONS" />
       </div>
 
       <!-- Loading skeletons -->
@@ -204,7 +132,7 @@ onUnmounted(() => clearSearch());
         </p>
         <NuxtLink
           to="/snippets/create-snippets"
-          class="text-xs text-accent-500 hover:text-accent-600 font-medium"
+          class="text-xs text-primary-500 hover:text-primary-600 font-medium"
         >
           Create snippet
         </NuxtLink>
@@ -230,7 +158,7 @@ onUnmounted(() => clearSearch());
         <div class="flex items-center gap-3">
           <button
             v-if="searchQuery"
-            class="text-xs text-accent-500 hover:text-accent-600 font-medium"
+            class="text-xs text-primary-500 hover:text-primary-600 font-medium"
             @click="searchQuery = ''"
           >
             Clear search

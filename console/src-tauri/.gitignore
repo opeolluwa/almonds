@@ -3,10 +3,12 @@
 /target/
 /gen/schemas
 almonds.*.*
-
+almonds.db 
 
 backup.sql 
  sqlite3 almonds.db .dump > backup.sql
 
  almonds-pglite
  console/src-tauri/almonds-pglite
+
+src-tauri/gen/keystore.properties

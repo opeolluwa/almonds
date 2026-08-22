@@ -94,12 +94,7 @@ async function handleSubmit() {
 
 <template>
   <div class="flex flex-col gap-5">
-    <div class="flex flex-col gap-1">
-      <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
-        {{ title }}
-      </h2>
-      <p class="text-sm text-gray-500 dark:text-gray-400">{{ description }}</p>
-    </div>
+    <AppPageHeader :title="title" :description="description" />
 
     <form class="flex flex-col gap-4" @submit.prevent="handleSubmit">
       <div>
@@ -117,7 +112,7 @@ async function handleSubmit() {
           <button
             type="button"
             :disabled="remaining > 0 || !authStore.hasPendingToken"
-            class="text-xs text-accent-500 hover:text-accent-600 font-medium disabled:opacity-40 disabled:cursor-not-allowed"
+            class="text-xs text-primary-500 hover:text-primary-600 font-medium disabled:opacity-40 disabled:cursor-not-allowed"
             @click="handleResend"
           >
             {{
@@ -137,7 +132,7 @@ async function handleSubmit() {
       <AppButton
         type="submit"
         color="primary"
-        class="w-full py-3 bg-accent-500 hover:bg-accent-600 rounded-lg text-white font-medium disabled:opacity-50 text-center"
+        class="w-full py-3 bg-primary-500 hover:bg-primary-600 rounded-lg text-white font-medium disabled:opacity-50 text-center"
         :loading="loading"
         :disabled="loading"
       >
@@ -149,7 +144,7 @@ async function handleSubmit() {
       {{ flow === "reset" ? "Remembered your password?" : "Already verified?" }}
       <NuxtLink
         :to="flow === 'reset' ? '/auth/login' : '/auth/login'"
-        class="text-accent-500 hover:text-accent-600 font-medium"
+        class="text-primary-500 hover:text-primary-600 font-medium"
       >
         Sign in
       </NuxtLink>

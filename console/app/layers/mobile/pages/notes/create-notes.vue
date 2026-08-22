@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useNoteStore } from "@shared/stores/notes";
 import { onBeforeRouteLeave } from "vue-router";
-
-definePageMeta({ name: "New note", keepalive: true });
+import EditorToolBar from "@mobile/components/notes/EditorToolBar.vue";
+definePageMeta({ name: "New note", layout: "notes", keepalive: true });
 
 const router = useRouter();
 const noteStore = useNoteStore();
@@ -21,26 +21,12 @@ onActivated(() => {
   saved.value = false;
 });
 
-// ── word count ────────────────────────────────────────────────────────────────
-const wordCount = computed(() => {
-  const text = content.value.replace(/<[^>]*>/g, " ").trim();
-  if (!text) return 0;
-  return text.split(/\s+/).filter(Boolean).length;
-});
-
-const _readTime = computed(() => Math.max(1, Math.ceil(wordCount.value / 200)));
-
-const charCount = computed(() => {
-  return content.value.replace(/<[^>]*>/g, "").replace(/\s/g, "").length;
-});
-
 const lastSaved = ref<Date | null>(null);
 
 const hasContent = computed(
   () => !!title.value.trim() || !!content.value.trim(),
 );
 
-// ── save ──────────────────────────────────────────────────────────────────────
 async function handleSave() {
   if (!hasContent.value) return;
   submitting.value = true;
@@ -81,22 +67,23 @@ onBeforeRouteLeave(async () => {
 </script>
 
 <template>
-  <textarea
-    v-model="title"
-    placeholder="Untitled"
-    rows="1"
-    :disabled="submitting"
-    class="w-full resize-none bg-transparent outline-none text-xl mt-2 font-bold text-gray-900 dark:text-gray-200 placeholder:text-gray-400 dark:placeholder:text-gray-500 leading-tight mb-0 overflow-hidden"
-    @input="
-      ($event.target as HTMLTextAreaElement).style.height = 'auto';
-      ($event.target as HTMLTextAreaElement).style.height =
-        ($event.target as HTMLTextAreaElement).scrollHeight + 'px';
-    "
-  />
+  <div class="pb-24">
+    <NoteTitleInput v-model="title" :disabled="submitting" />
 
-  <NotesEditor v-model="content" />
+    <NotesEditor v-model="content">
+      <template #toolbar>
+        <EditorToolBar />
+      </template>
+    </NotesEditor>
 
-  <p v-if="error" class="text-xs text-red-500 mt-6">
-    {{ error }}
-  </p>
+    <p v-if="error" class="text-xs text-red-500 mt-6">
+      {{ error }}
+    </p>
+
+    <AppFab
+      icon="ri:save-line"
+      style="bottom: calc(env(safe-area-inset-bottom) + 4.5rem)"
+      @click="handleSave"
+    />
+  </div>
 </template>
