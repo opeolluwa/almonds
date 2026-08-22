@@ -80,7 +80,7 @@ const snoozeOptions: { value: number; label: string }[] = [
               class="flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition-colors"
               :class="
                 settings.defaultSound === null
-                  ? 'bg-accent-50 dark:bg-accent-950'
+                  ? 'bg-primary-50 dark:bg-primary-950'
                   : 'hover:bg-gray-50 dark:hover:bg-gray-700/50'
               "
               @click="update({ defaultSound: null })"
@@ -90,7 +90,7 @@ const snoozeOptions: { value: number; label: string }[] = [
                   class="size-3.5 rounded-full border-2 shrink-0 transition-colors"
                   :class="
                     settings.defaultSound === null
-                      ? 'border-accent-500 bg-accent-500'
+                      ? 'border-primary-500 bg-primary-500'
                       : 'border-gray-300 dark:border-gray-500'
                   "
                 />
@@ -98,7 +98,7 @@ const snoozeOptions: { value: number; label: string }[] = [
                   class="text-sm"
                   :class="
                     settings.defaultSound === null
-                      ? 'text-accent-700 dark:text-accent-300 font-medium'
+                      ? 'text-primary-700 dark:text-primary-300 font-medium'
                       : 'text-gray-600 dark:text-gray-400'
                   "
                   >None</span
@@ -113,7 +113,7 @@ const snoozeOptions: { value: number; label: string }[] = [
               class="flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer transition-colors"
               :class="
                 settings.defaultSound === s.filename
-                  ? 'bg-accent-50 dark:bg-accent-950'
+                  ? 'bg-primary-50 dark:bg-primary-950'
                   : 'hover:bg-gray-50 dark:hover:bg-gray-700/50'
               "
               @click="update({ defaultSound: s.filename })"
@@ -123,7 +123,7 @@ const snoozeOptions: { value: number; label: string }[] = [
                   class="size-3.5 rounded-full border-2 shrink-0 transition-colors"
                   :class="
                     settings.defaultSound === s.filename
-                      ? 'border-accent-500 bg-accent-500'
+                      ? 'border-primary-500 bg-primary-500'
                       : 'border-gray-300 dark:border-gray-500'
                   "
                 />
@@ -131,7 +131,7 @@ const snoozeOptions: { value: number; label: string }[] = [
                   class="text-sm capitalize"
                   :class="
                     settings.defaultSound === s.filename
-                      ? 'text-accent-700 dark:text-accent-300 font-medium'
+                      ? 'text-primary-700 dark:text-primary-300 font-medium'
                       : 'text-gray-600 dark:text-gray-400'
                   "
                   >{{ s.name }}</span
@@ -142,7 +142,7 @@ const snoozeOptions: { value: number; label: string }[] = [
                 class="p-1.5 rounded-md transition-colors shrink-0"
                 :class="
                   playingFilename === s.filename
-                    ? 'text-accent-500 bg-accent-50 dark:bg-accent-950'
+                    ? 'text-primary-500 bg-primary-50 dark:bg-primary-950'
                     : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700'
                 "
                 @click.stop="togglePreview(s.filename)"
@@ -226,7 +226,7 @@ const snoozeOptions: { value: number; label: string }[] = [
             class="relative w-10 h-6 rounded-full transition-colors"
             :class="
               settings.repeatAlarm
-                ? 'bg-accent-500'
+                ? 'bg-primary-500'
                 : 'bg-gray-200 dark:bg-gray-600'
             "
             @click="update({ repeatAlarm: !settings.repeatAlarm })"

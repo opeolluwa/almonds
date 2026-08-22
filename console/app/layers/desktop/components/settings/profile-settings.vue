@@ -86,7 +86,7 @@ async function handleSave() {
       <div class="mt-5 flex justify-end">
         <AppButton
           :disabled="saving"
-          class="px-4 py-2 w-fit bg-accent-500 text-white text-sm font-medium rounded-lg hover:bg-accent-600 transition-colors disabled:opacity-50"
+          class="px-4 py-2 w-fit bg-primary-500 text-white text-sm font-medium rounded-lg hover:bg-primary-600 transition-colors disabled:opacity-50"
           @click="handleSave"
         >
           {{ saving ? "Saving…" : "Save changes" }}

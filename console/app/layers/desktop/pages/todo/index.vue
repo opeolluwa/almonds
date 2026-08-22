@@ -232,7 +232,7 @@ onUnmounted(() => clearSearch());
         </p>
         <NuxtLink
           to="/todo/create-todo"
-          class="text-xs text-accent-500 hover:text-accent-600 font-medium"
+          class="text-xs text-primary-500 hover:text-primary-600 font-medium"
         >
           Create todo
         </NuxtLink>
@@ -258,7 +258,7 @@ onUnmounted(() => clearSearch());
         <div class="flex gap-3">
           <button
             v-if="searchQuery"
-            class="text-xs text-accent-500 hover:text-accent-600 font-medium"
+            class="text-xs text-primary-500 hover:text-primary-600 font-medium"
             @click="searchQuery = ''"
           >
             Clear search
@@ -291,13 +291,13 @@ onUnmounted(() => clearSearch());
         Summary
       </h2>
       <div class="flex flex-col gap-3 mb-6">
-        <div class="bg-accent-50 dark:bg-accent-950 rounded-lg p-3">
+        <div class="bg-primary-50 dark:bg-primary-950 rounded-lg p-3">
           <p
-            class="text-2xl font-semibold text-accent-700 dark:text-accent-300"
+            class="text-2xl font-semibold text-primary-700 dark:text-primary-300"
           >
             {{ todoStore.activeTodos.length }}
           </p>
-          <p class="text-xs text-accent-500 dark:text-accent-400">
+          <p class="text-xs text-primary-500 dark:text-primary-400">
             Active tasks
           </p>
         </div>

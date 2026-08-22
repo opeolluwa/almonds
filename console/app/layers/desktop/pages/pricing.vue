@@ -81,7 +81,7 @@ const yearlyDiscount = 28;
             class="relative w-10 h-6 rounded-full transition-colors"
             :class="
               billingCycle === 'yearly'
-                ? 'bg-accent-500'
+                ? 'bg-primary-500'
                 : 'bg-gray-200 dark:bg-gray-600'
             "
             @click="
@@ -119,7 +119,7 @@ const yearlyDiscount = 28;
             class="flex flex-col rounded-xl border p-5 transition-shadow"
             :class="
               plan.highlight
-                ? 'border-accent-400 dark:border-accent-600 bg-white dark:bg-gray-800 shadow-md ring-1 ring-accent-400 dark:ring-accent-600'
+                ? 'border-primary-400 dark:border-primary-600 bg-white dark:bg-gray-800 shadow-md ring-1 ring-primary-400 dark:ring-primary-600'
                 : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800'
             "
           >
@@ -135,7 +135,7 @@ const yearlyDiscount = 28;
               </div>
               <span
                 v-if="plan.highlight"
-                class="text-xs font-medium px-2 py-0.5 rounded-full bg-accent-100 dark:bg-accent-950 text-accent-700 dark:text-accent-300 shrink-0 ml-2"
+                class="text-xs font-medium px-2 py-0.5 rounded-full bg-primary-100 dark:bg-primary-950 text-primary-700 dark:text-primary-300 shrink-0 ml-2"
               >
                 Popular
               </span>
@@ -170,7 +170,7 @@ const yearlyDiscount = 28;
               class="w-full py-2 rounded-lg text-sm font-medium transition-colors mb-5"
               :class="
                 plan.ctaVariant === 'solid'
-                  ? 'bg-accent-500 text-white hover:bg-accent-600'
+                  ? 'bg-primary-500 text-white hover:bg-primary-600'
                   : 'border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700'
               "
             >
@@ -229,7 +229,7 @@ const yearlyDiscount = 28;
           </div>
           <NuxtLink
             to="/settings"
-            class="shrink-0 flex items-center gap-1.5 text-sm font-medium text-accent-600 dark:text-accent-400 hover:underline"
+            class="shrink-0 flex items-center gap-1.5 text-sm font-medium text-primary-600 dark:text-primary-400 hover:underline"
           >
             Configure
             <UIcon name="heroicons:arrow-right" class="size-3.5" />

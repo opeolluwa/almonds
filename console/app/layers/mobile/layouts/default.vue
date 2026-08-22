@@ -1,7 +1,7 @@
 <template>
   <main
     id="default_layout_mobile"
-    class="flex h-dvh flex-col overflow-hidden bg-gray-50 dark:bg-surface-950"
+    class="flex h-dvh flex-col overflow-hidden bg-gray-50 dark:bg-app-dark-800"
   >
     <AppHeader />
     <div
@@ -14,7 +14,7 @@
 
     <nav
       v-if="!hideHeaderAndNav"
-      class="fixed bottom-0 inset-x-0 z-50 flex items-center justify-around border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 pt-3 pb-2.5"
+      class="fixed bottom-0 inset-x-0 z-50 flex items-center justify-around border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-app-dark-900 pt-3 pb-2.5"
       style="padding-bottom: max(0.625rem, env(safe-area-inset-bottom))"
     >
       <NuxtLink
@@ -24,7 +24,7 @@
         class="flex flex-col items-center gap-0.5 py-2 px-3 text-[10px] transition-colors"
         :class="
           isActive(item.path)
-            ? 'text-accent-500 dark:text-accent-400'
+            ? 'text-primary-500 dark:text-primary-400'
             : 'text-gray-400 dark:text-gray-500'
         "
       >
@@ -42,7 +42,7 @@
       :ui="{ content: 'max-w-64' }"
     >
       <template #content>
-        <div class="flex flex-col h-full bg-white dark:bg-gray-900">
+        <div class="flex flex-col h-full bg-white dark:bg-app-dark-900">
           <div class="shrink-0" style="height: env(safe-area-inset-top)" />
 
           <div
@@ -74,7 +74,7 @@
               class="flex items-center gap-3 py-2 px-3 text-sm cursor-pointer rounded-lg transition-colors"
               :class="
                 isActive(r.path)
-                  ? 'bg-accent-50 dark:bg-accent-950 text-accent-700 dark:text-accent-300 font-medium'
+                  ? 'bg-primary-50 dark:bg-primary-950 text-primary-700 dark:text-primary-300 font-medium'
                   : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
               "
               @click="mobileNavOpen = false"
@@ -103,7 +103,7 @@
               class="flex items-center gap-3 py-2 px-3 text-sm cursor-pointer rounded-lg transition-colors"
               :class="
                 isActive(r.path)
-                  ? 'bg-accent-50 dark:bg-accent-950 text-accent-700 dark:text-accent-300 font-medium'
+                  ? 'bg-primary-50 dark:bg-primary-950 text-primary-700 dark:text-primary-300 font-medium'
                   : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
               "
               @click="mobileNavOpen = false"

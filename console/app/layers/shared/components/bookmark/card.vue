@@ -50,7 +50,7 @@ const handleTransfer = async (targetWorkspaceId: string) => {
   >
     <UIcon
       name="heroicons:bookmark-solid"
-      class="size-5 text-accent-500 shrink-0"
+      class="size-5 text-primary-500 shrink-0"
     />
     <div class="flex-1 min-w-0">
       <h3 class="text-sm font-medium text-gray-800 dark:text-gray-200 truncate">
@@ -61,7 +61,7 @@ const handleTransfer = async (targetWorkspaceId: string) => {
       </div>
     </div>
     <span
-      class="px-2 py-1 rounded-full bg-accent-50 dark:bg-accent-950 text-accent-600 dark:text-accent-300 text-xs font-medium capitalize shrink-0"
+      class="px-2 py-1 rounded-full bg-primary-50 dark:bg-primary-950 text-primary-600 dark:text-primary-300 text-xs font-medium capitalize shrink-0"
     >
       {{ bookmark.tag }}
     </span>
@@ -72,7 +72,7 @@ const handleTransfer = async (targetWorkspaceId: string) => {
       class="opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity flex items-center gap-1"
     >
       <button
-        class="text-gray-400 hover:text-accent-500 transition-colors"
+        class="text-gray-400 hover:text-primary-500 transition-colors"
         title="Preview"
         @click="emit('preview', bookmark)"
       >

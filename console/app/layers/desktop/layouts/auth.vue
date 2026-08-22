@@ -5,7 +5,7 @@
     :class="{ 'rounded-xl': !IS_WEB }"
   >
     <div
-      class="pointer-events-none absolute -top-24 -left-24 size-96 rounded-full bg-accent-300/20 dark:bg-accent-500/10 blur-3xl hidden md:block"
+      class="pointer-events-none absolute -top-24 -left-24 size-96 rounded-full bg-primary-300/20 dark:bg-primary-500/10 blur-3xl hidden md:block"
     />
 
     <div

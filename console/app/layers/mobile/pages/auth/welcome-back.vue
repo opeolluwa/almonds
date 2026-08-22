@@ -56,7 +56,7 @@ async function handleSubmit() {
       <h2 class="text-lg font-semibold">Welcome back, Adeoye</h2>
       <NuxtLink
         to="/auth/login"
-        class="text-xs text-accent-500 hover:text-accent-600 font-medium whitespace-nowrap"
+        class="text-xs text-primary-500 hover:text-primary-600 font-medium whitespace-nowrap"
       >
         Not Adeoye?
       </NuxtLink>
@@ -78,7 +78,7 @@ async function handleSubmit() {
       <div class="flex justify-end mt-1">
         <NuxtLink
           to="/auth/reset-password"
-          class="text-xs text-accent-500 hover:text-accent-600 font-medium"
+          class="text-xs text-primary-500 hover:text-primary-600 font-medium"
         >
           Forgot password?
         </NuxtLink>

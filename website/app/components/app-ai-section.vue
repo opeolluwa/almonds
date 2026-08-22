@@ -3,16 +3,7 @@
     id="ai"
     class="px-6 py-24 border-t border-slate-100 dark:border-white/[0.04]"
   >
-    <div class="mx-auto max-w-7xl">
-      <div
-        class="rounded-3xl overflow-hidden grid md:grid-cols-2 border border-accent-500/15 bg-slate-50 dark:bg-gradient-to-br dark:from-[#111825] dark:to-[#0f1620]"
-      >
-        <!-- Text side -->
-        <div class="p-12 flex flex-col justify-center">
-          <div
-            class="inline-block rounded-full px-3 py-1 text-xs font-medium mb-6 w-fit bg-accent-500/10 text-accent-600 dark:text-accent-400 border border-accent-200 dark:border-accent-500/20"
-          >
-            Local AI · Privacy First
+-primary-primary-primary-primary-primary-primary
           </div>
           <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-5 text-slate-900 dark:text-slate-100">
             AI that runs <span class="gradient-text">on your machine.</span>
@@ -28,11 +19,7 @@
               :key="point"
               class="flex items-start gap-3 text-sm text-slate-600 dark:text-slate-400"
             >
-              <UIcon
-                name="i-heroicons-check"
-                class="size-4 mt-0.5 shrink-0 text-accent-500"
-              />
-              {{ point }}
+-primary
             </li>
           </ul>
         </div>
@@ -55,17 +42,9 @@
               v-for="msg in aiMessages"
               :key="msg.id"
               class="rounded-xl px-4 py-3 text-sm"
-              :class="
-                msg.role === 'user'
-                  ? 'ml-8 bg-accent-500/15 text-slate-800 dark:text-slate-100 border border-accent-500/20'
-                  : 'mr-8 bg-white dark:bg-[#1a2235] text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-white/[0.06]'
-              "
+-primary-primary
             >
-              <div
-                class="text-xs mb-1.5 font-medium"
-                :class="msg.role === 'user' ? 'text-accent-500 dark:text-accent-300' : 'text-slate-400 dark:text-slate-600'"
-              >
-                {{ msg.role === 'user' ? 'You' : 'Ollama' }}
+-primary-primary
               </div>
               {{ msg.text }}
             </div>
@@ -74,11 +53,7 @@
               class="rounded-xl px-4 py-3 flex items-center gap-1.5 w-fit bg-white dark:bg-[#1a2235] border border-slate-200 dark:border-white/[0.06]"
             >
               <span
-                v-for="i in 3"
-                :key="i"
-                class="h-1.5 w-1.5 rounded-full bg-accent-500 animate-pulse-glow"
-                :style="`animation-delay: ${(i - 1) * 0.2}s`"
-              />
+-primary
             </div>
           </div>
         </div>

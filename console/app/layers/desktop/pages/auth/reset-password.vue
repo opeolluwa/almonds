@@ -158,7 +158,7 @@ async function handleSetPassword() {
         <AppButton
           type="submit"
           color="primary"
-          class="w-full py-3 bg-accent-500 hover:bg-accent-600 rounded-lg text-white font-medium disabled:opacity-50 text-center"
+          class="w-full py-3 bg-primary-500 hover:bg-primary-600 rounded-lg text-white font-medium disabled:opacity-50 text-center"
           :loading="loading"
           :disabled="loading"
         >
@@ -171,7 +171,7 @@ async function handleSetPassword() {
       Remembered your password?
       <NuxtLink
         to="/auth/login"
-        class="text-accent-500 hover:text-accent-600 font-medium"
+        class="text-primary-500 hover:text-primary-600 font-medium"
       >
         Sign in
       </NuxtLink>

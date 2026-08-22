@@ -8,14 +8,14 @@ definePageMeta({ layout: "default" });
     <DevOnly>
       <NuxtLink
         to="/auth/signup"
-        class="text-accent-500 hover:text-accent-600 font-medium"
+        class="text-primary-500 hover:text-primary-600 font-medium"
       >
         Sign up
       </NuxtLink>
 
       <NuxtLink
         to="/auth/welcome-back"
-        class="text-accent-500 hover:text-accent-600 font-medium"
+        class="text-primary-500 hover:text-primary-600 font-medium"
       >
         Welcome back
       </NuxtLink>

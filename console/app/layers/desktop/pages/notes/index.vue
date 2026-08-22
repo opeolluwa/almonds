@@ -157,7 +157,7 @@ onUnmounted(() => clearSearch());
           Create your first note to get started.
         </p>
         <button
-          class="text-xs text-accent-500 hover:text-accent-600 font-medium"
+          class="text-xs text-primary-500 hover:text-primary-600 font-medium"
           @click="navigateTo('/notes/create-notes')"
         >
           Create note
@@ -182,7 +182,7 @@ onUnmounted(() => clearSearch());
           Try a different search term.
         </p>
         <button
-          class="text-xs text-accent-500 hover:text-accent-600 font-medium"
+          class="text-xs text-primary-500 hover:text-primary-600 font-medium"
           @click="searchQuery = ''"
         >
           Clear search

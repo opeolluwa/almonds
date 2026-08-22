@@ -3,11 +3,7 @@
     <AppNav />
 
     <main class="mx-auto max-w-3xl px-6 py-20">
-      <!-- Header -->
-      <div class="mb-14">
-        <p class="text-xs font-semibold uppercase tracking-widest text-accent-500 dark:text-accent-400 mb-3">
-          Blog
-        </p>
+-primary-primary
         <h1 class="text-4xl font-bold tracking-tight text-slate-900 dark:text-white">
           From the team
         </h1>
@@ -29,11 +25,7 @@
                 {{ formatDate(post.date) }}
               </time>
               <span v-if="post.author" class="text-xs text-slate-300 dark:text-slate-700">·</span>
-              <span v-if="post.author" class="text-xs text-slate-400">{{ post.author }}</span>
-            </div>
-            <h2 class="text-lg font-semibold text-slate-900 dark:text-white group-hover:text-accent-500 dark:group-hover:text-accent-400 transition-colors duration-150 mb-1.5">
-              {{ post.title }}
-            </h2>
+-primary-primary
             <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed mb-3">
               {{ post.description }}
             </p>

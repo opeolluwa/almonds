@@ -73,7 +73,7 @@ const handleTransfer = async (targetWorkspaceId: string) => {
         class="size-5 transition-colors"
         :class="
           todo.done
-            ? 'text-accent-500'
+            ? 'text-primary-500'
             : 'text-gray-300 dark:text-gray-600 hover:text-gray-400'
         "
       />
@@ -106,7 +106,7 @@ const handleTransfer = async (targetWorkspaceId: string) => {
       class="text-xs shrink-0 px-1.5 py-0.5 rounded-md"
       :class="
         isToday(todo.dueDate)
-          ? 'bg-accent-100 dark:bg-accent-950 text-accent-600 dark:text-accent-300 font-medium'
+          ? 'bg-primary-100 dark:bg-primary-950 text-primary-600 dark:text-primary-300 font-medium'
           : 'text-gray-400'
       "
     >

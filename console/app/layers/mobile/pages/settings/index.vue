@@ -111,7 +111,7 @@ const routes = [
           >
             <UIcon
               :name="item.icon"
-              class="size-5 text-accent-700 dark:text-accent-300"
+              class="size-5 text-primary-700 dark:text-primary-300"
             />
           </div>
           <div class="min-w-0 flex-1">

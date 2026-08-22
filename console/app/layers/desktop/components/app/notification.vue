@@ -17,9 +17,9 @@ const config: Record<
   },
   error: {
     icon: "heroicons:x-circle",
-    bar: "bg-accent-500",
-    text: "text-accent-600 dark:text-accent-400",
-    bg: "bg-white dark:bg-gray-900 border border-accent-200 dark:border-accent-800",
+    bar: "bg-primary-500",
+    text: "text-primary-600 dark:text-primary-400",
+    bg: "bg-white dark:bg-gray-900 border border-primary-200 dark:border-primary-800",
   },
   warning: {
     icon: "heroicons:exclamation-triangle",

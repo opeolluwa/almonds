@@ -144,7 +144,7 @@ const workspaces = computed<DropdownMenuItem[]>(() => [
         icon: isActive
           ? "heroicons:check-circle-solid"
           : "heroicons:check-circle",
-        class: isActive ? "font-semibold text-accent-500" : "",
+        class: isActive ? "font-semibold text-primary-500" : "",
         disabled: w.identifier === currentWorkspaceId.value,
       };
     }),

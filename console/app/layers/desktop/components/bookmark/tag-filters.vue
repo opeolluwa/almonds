@@ -19,7 +19,7 @@ const emit = defineEmits<{
       class="px-3 py-1 rounded-full text-xs font-medium transition-colors"
       :class="
         modelValue === tag.value
-          ? 'bg-accent-500 text-white'
+          ? 'bg-primary-500 text-white'
           : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
       "
       @click="emit('update:modelValue', tag.value)"

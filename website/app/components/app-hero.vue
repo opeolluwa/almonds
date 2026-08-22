@@ -19,14 +19,7 @@
       />
     </div>
 
-    <!-- Badge -->
-    <div
-      class="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm mb-10 border bg-accent-500/10 text-accent-600 dark:text-accent-300 border-accent-200 dark:border-accent-500/35"
-    >
-      <span
-        class="h-1.5 w-1.5 rounded-full bg-accent-500 dark:bg-accent-400 animate-pulse-glow"
-      />
-      Open Source · Free Forever · MIT License
+-primary-primary-primary-primary-primary-primary-primary
     </div>
 
     <!-- Headline -->
@@ -47,11 +40,7 @@
 
     <!-- CTAs -->
     <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
-      <a
-        href="#download"
-        class="inline-flex items-center gap-2.5 rounded-full px-8 py-3.5 text-sm font-semibold text-white bg-accent-500 hover:bg-accent-400 transition-all duration-200 glow-accent"
-      >
-        <UIcon name="i-heroicons-arrow-down-tray" class="size-4" />
+-primary-primary-primary
 
         Download Now
       </a>

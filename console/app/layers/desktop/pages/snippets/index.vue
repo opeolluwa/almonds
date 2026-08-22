@@ -123,7 +123,7 @@ onUnmounted(() => clearSearch());
         @click="navigateTo('/snippets/create-snippets')"
       >
         <button
-          class="flex items-center gap-2 py-2 px-4 bg-accent-500 text-white rounded-lg text-sm font-medium hover:bg-accent-600 transition-colors"
+          class="flex items-center gap-2 py-2 px-4 bg-primary-500 text-white rounded-lg text-sm font-medium hover:bg-primary-600 transition-colors"
         >
           <UIcon name="heroicons:plus" class="size-4" />
           Add Snippet
@@ -131,7 +131,7 @@ onUnmounted(() => clearSearch());
       </div>
       <!-- Mobile: icon-only round FAB -->
       <button
-        class="md:hidden flex items-center justify-center w-14 h-14 bg-accent-500 text-white rounded-full shadow-xl active:scale-95 transition-transform"
+        class="md:hidden flex items-center justify-center w-14 h-14 bg-primary-500 text-white rounded-full shadow-xl active:scale-95 transition-transform"
         aria-label="Add Bookmark"
       >
         <UIcon name="heroicons:plus" class="size-6" />
@@ -151,7 +151,7 @@ onUnmounted(() => clearSearch());
             class="px-3 py-1 rounded-full text-xs font-medium transition-colors"
             :class="
               activeLanguage === lang
-                ? 'bg-accent-500 text-white'
+                ? 'bg-primary-500 text-white'
                 : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
             "
             @click="activeLanguage = lang"
@@ -204,7 +204,7 @@ onUnmounted(() => clearSearch());
         </p>
         <NuxtLink
           to="/snippets/create-snippets"
-          class="text-xs text-accent-500 hover:text-accent-600 font-medium"
+          class="text-xs text-primary-500 hover:text-primary-600 font-medium"
         >
           Create snippet
         </NuxtLink>
@@ -230,7 +230,7 @@ onUnmounted(() => clearSearch());
         <div class="flex items-center gap-3">
           <button
             v-if="searchQuery"
-            class="text-xs text-accent-500 hover:text-accent-600 font-medium"
+            class="text-xs text-primary-500 hover:text-primary-600 font-medium"
             @click="searchQuery = ''"
           >
             Clear search

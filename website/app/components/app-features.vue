@@ -5,11 +5,7 @@
   >
     <div class="mx-auto max-w-7xl">
       <!-- Section header -->
-      <div class="text-center mb-20">
-        <div
-          class="inline-block rounded-full px-3 py-1 text-xs font-medium mb-4 bg-accent-500/10 text-accent-600 dark:text-accent-400 border border-accent-200 dark:border-accent-500/20"
-        >
-          Everything you need
+-primary-primary-primary-primary-primary
         </div>
         <h2 class="text-4xl md:text-5xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
           One workspace.<br />
@@ -27,13 +23,7 @@
           v-for="feature in features"
           :key="feature.title"
           class="rounded-2xl p-7 group transition-all duration-300 card-border bg-slate-50 dark:bg-[#111825]"
-        >
-          <div
-            class="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-accent-500/[0.12]"
-          >
-            <UIcon :name="feature.icon" class="size-5 text-accent-500 dark:text-accent-400" />
-          </div>
-          <h3 class="text-base font-semibold mb-2 text-slate-900 dark:text-slate-100">
+-primary-primary-primary
             {{ feature.title }}
           </h3>
           <p class="text-sm leading-relaxed text-slate-500 dark:text-slate-500">

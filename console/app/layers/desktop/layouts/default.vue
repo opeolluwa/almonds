@@ -179,7 +179,7 @@ const pageTitle = computed(() => {
               class="flex items-center gap-3 py-2 px-3 text-sm cursor-pointer rounded-lg transition-colors"
               :class="
                 isActive(r.path)
-                  ? 'bg-accent-50 dark:bg-accent-950 text-accent-700 dark:text-accent-300 font-medium'
+                  ? 'bg-primary-50 dark:bg-primary-950 text-primary-700 dark:text-primary-300 font-medium'
                   : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
               "
               @click="mobileNavOpen = false"
@@ -209,7 +209,7 @@ const pageTitle = computed(() => {
               class="flex items-center gap-3 py-2 px-3 text-sm cursor-pointer rounded-lg transition-colors"
               :class="
                 isActive(r.path)
-                  ? 'bg-accent-50 dark:bg-accent-950 text-accent-700 dark:text-accent-300 font-medium'
+                  ? 'bg-primary-50 dark:bg-primary-950 text-primary-700 dark:text-primary-300 font-medium'
                   : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
               "
               @click="mobileNavOpen = false"

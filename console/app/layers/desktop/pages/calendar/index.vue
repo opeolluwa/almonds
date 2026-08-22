@@ -178,7 +178,7 @@ const upcomingEvents = computed(() =>
 
 const eventColorClass: Record<string, string> = {
   accent:
-    "bg-accent-100 dark:bg-accent-900 text-accent-700 dark:text-accent-300",
+    "bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300",
   emerald:
     "bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300",
   rose: "bg-rose-100 dark:bg-rose-900 text-rose-700 dark:text-rose-300",
@@ -186,7 +186,7 @@ const eventColorClass: Record<string, string> = {
 };
 
 const eventDotClass: Record<string, string> = {
-  accent: "bg-accent-500",
+  accent: "bg-primary-500",
   emerald: "bg-emerald-500",
   rose: "bg-rose-500",
   amber: "bg-amber-500",
@@ -230,7 +230,7 @@ function formatDisplayDate(dateStr: string): string {
           </button>
         </div>
         <button
-          class="px-3 py-1.5 text-xs font-medium text-accent-600 dark:text-accent-400 border border-accent-200 dark:border-accent-800 rounded-lg hover:bg-accent-50 dark:hover:bg-accent-950 transition-colors"
+          class="px-3 py-1.5 text-xs font-medium text-primary-600 dark:text-primary-400 border border-primary-200 dark:border-primary-800 rounded-lg hover:bg-primary-50 dark:hover:bg-primary-950 transition-colors"
           @click="goToToday"
         >
           Today
@@ -263,7 +263,7 @@ function formatDisplayDate(dateStr: string): string {
             class="inline-flex items-center justify-center size-6 rounded-full text-sm mb-1 transition-colors"
             :class="[
               cell.date === todayStr
-                ? 'bg-accent-500 text-white font-semibold'
+                ? 'bg-primary-500 text-white font-semibold'
                 : selectedDate === cell.date
                   ? 'bg-gray-100 dark:bg-gray-700 font-medium text-gray-800 dark:text-gray-100'
                   : 'text-gray-600 dark:text-gray-400',

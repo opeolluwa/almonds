@@ -3,11 +3,7 @@
     id="developers"
     class="px-6 py-24 border-t border-slate-100 dark:border-white/[0.04]"
   >
-    <div class="mx-auto max-w-7xl">
-      <div class="text-center mb-12">
-        <p class="text-xs font-semibold uppercase tracking-widest text-accent-500 dark:text-accent-400 mb-3">
-          Open Source
-        </p>
+-primary-primary
         <h2 class="text-3xl font-bold tracking-tight text-slate-900 dark:text-white mb-4">
           Built for developers, by developers
         </h2>
@@ -21,11 +17,7 @@
         <div
           v-for="tech in techStack"
           :key="tech.name"
-          class="flex items-center gap-2.5 rounded-xl px-5 py-3 text-sm font-medium transition-all duration-200 card-border bg-slate-50 dark:bg-[#111825] text-slate-600 dark:text-slate-400"
-        >
-          <UIcon :name="tech.icon" class="size-4 text-accent-500 dark:text-accent-400" />
-          {{ tech.name }}
-        </div>
+-primary-primary
       </div>
 
       <!-- Dev links -->

@@ -85,7 +85,7 @@ async function handleSubmit() {
         </p>
         <NuxtLink
           to="/reminders"
-          class="text-xs text-accent-500 hover:text-accent-600 font-medium"
+          class="text-xs text-primary-500 hover:text-primary-600 font-medium"
         >
           Back to reminders
         </NuxtLink>
@@ -102,7 +102,7 @@ async function handleSubmit() {
               type="text"
               placeholder="What should I remind you about?"
               autofocus
-              class="w-full bg-white dark:bg-gray-800 rounded-lg px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 outline-none focus:ring-2 focus:ring-accent-300 dark:focus:ring-accent-600 focus:border-transparent placeholder-gray-400 dark:placeholder-gray-500"
+              class="w-full bg-white dark:bg-gray-800 rounded-lg px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 outline-none focus:ring-2 focus:ring-primary-300 dark:focus:ring-primary-600 focus:border-transparent placeholder-gray-400 dark:placeholder-gray-500"
             />
           </div>
 
@@ -114,7 +114,7 @@ async function handleSubmit() {
               v-model="form.description"
               placeholder="Add more details..."
               rows="3"
-              class="w-full bg-white dark:bg-gray-800 rounded-lg px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 outline-none focus:ring-2 focus:ring-accent-300 dark:focus:ring-accent-600 focus:border-transparent placeholder-gray-400 dark:placeholder-gray-500 resize-none"
+              class="w-full bg-white dark:bg-gray-800 rounded-lg px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 outline-none focus:ring-2 focus:ring-primary-300 dark:focus:ring-primary-600 focus:border-transparent placeholder-gray-400 dark:placeholder-gray-500 resize-none"
             />
           </div>
 
@@ -130,7 +130,7 @@ async function handleSubmit() {
               <input
                 v-model="form.remindAt"
                 type="datetime-local"
-                class="w-full bg-white dark:bg-gray-800 rounded-lg pl-9 pr-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 outline-none focus:ring-2 focus:ring-accent-300 dark:focus:ring-accent-600 focus:border-transparent"
+                class="w-full bg-white dark:bg-gray-800 rounded-lg pl-9 pr-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 outline-none focus:ring-2 focus:ring-primary-300 dark:focus:ring-primary-600 focus:border-transparent"
               />
             </div>
           </div>
@@ -141,7 +141,7 @@ async function handleSubmit() {
               class="relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 focus:outline-none"
               :class="
                 form.recurring
-                  ? 'bg-accent-500'
+                  ? 'bg-primary-500'
                   : 'bg-gray-200 dark:bg-gray-700'
               "
               @click="form.recurring = !form.recurring"
@@ -167,7 +167,7 @@ async function handleSubmit() {
               v-model="form.recurrenceRule"
               type="text"
               placeholder="e.g. FREQ=DAILY;INTERVAL=1"
-              class="w-full bg-white dark:bg-gray-800 rounded-lg px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 outline-none focus:ring-2 focus:ring-accent-300 dark:focus:ring-accent-600 focus:border-transparent placeholder-gray-400 dark:placeholder-gray-500"
+              class="w-full bg-white dark:bg-gray-800 rounded-lg px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 outline-none focus:ring-2 focus:ring-primary-300 dark:focus:ring-primary-600 focus:border-transparent placeholder-gray-400 dark:placeholder-gray-500"
             />
           </div>
 
@@ -182,7 +182,7 @@ async function handleSubmit() {
             <button
               type="submit"
               :disabled="!form.title.trim() || !form.remindAt || submitting"
-              class="px-4 py-2 rounded-lg text-sm font-medium bg-accent-500 text-white hover:bg-accent-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              class="px-4 py-2 rounded-lg text-sm font-medium bg-primary-500 text-white hover:bg-primary-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {{ submitting ? "Saving..." : "Save" }}
             </button>
@@ -201,7 +201,7 @@ async function handleSubmit() {
         >
           <UIcon
             name="heroicons:clock"
-            class="size-4 text-accent-500 shrink-0 mt-px"
+            class="size-4 text-primary-500 shrink-0 mt-px"
           />
           <span>
             <strong class="text-gray-700 dark:text-gray-300">One-time</strong>

@@ -16,7 +16,7 @@ const isTopLevel = computed(() => topLevelPaths.includes(route.path));
 <template>
   <header
     id="mobile_app_header"
-    class="absolute top-0 py-7 flex items-center justify-between px-6 z-50 left-0 w-full bg-white dark:bg-surface-950"
+    class="absolute top-0 py-7 flex items-center justify-between px-6 z-50 left-0 w-full bg-white dark:bg-app-dark-800"
   >
     <UButton
       v-if="isTopLevel"

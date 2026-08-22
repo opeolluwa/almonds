@@ -22,11 +22,11 @@ const info = [
     >
       <div class="flex items-center gap-3 mb-5">
         <div
-          class="size-10 bg-accent-100 dark:bg-accent-950 rounded-lg flex items-center justify-center"
+          class="size-10 bg-primary-100 dark:bg-primary-950 rounded-lg flex items-center justify-center"
         >
           <UIcon
             name="heroicons:sparkles"
-            class="size-5 text-accent-600 dark:text-accent-400"
+            class="size-5 text-primary-600 dark:text-primary-400"
           />
         </div>
         <div>
@@ -55,7 +55,7 @@ const info = [
         </div>
       </div>
       <button
-        class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-accent-600 dark:hover:text-accent-400 transition-colors"
+        class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
       >
         <UIcon name="heroicons:arrow-path" class="size-4" />
         Check for updates

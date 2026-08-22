@@ -112,7 +112,7 @@ onBeforeRouteLeave(async () => {
         :disabled="!hasContent"
         class="mb-2"
         :ui="{
-          base: 'bg-accent-500 hover:bg-accent-600 disabled:bg-accent-600 disabled:text-gray-100 disabled:cursor-not-allowed py-2',
+          base: 'bg-primary-500 hover:bg-primary-600 disabled:bg-primary-600 disabled:text-gray-100 disabled:cursor-not-allowed py-2',
         }"
         @click="handleSave"
       >
@@ -124,7 +124,7 @@ onBeforeRouteLeave(async () => {
         size="sm"
         :disabled="submitting"
         :ui="{
-          base: 'text-accent-500 hover:text-accent-600 disabled:text-accent-600 disabled:text-gray-100 disabled:cursor-not-allowed py-2',
+          base: 'text-primary-500 hover:text-primary-600 disabled:text-primary-600 disabled:text-gray-100 disabled:cursor-not-allowed py-2',
         }"
         @click="router.push('/notes')"
       >

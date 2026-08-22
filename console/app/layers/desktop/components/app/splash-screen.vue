@@ -5,9 +5,9 @@
     <div class="flex flex-col items-center gap-6">
       <!-- Icon -->
       <div
-        class="size-20 rounded-2xl bg-accent-50 dark:bg-accent-950 flex items-center justify-center shadow-sm"
+        class="size-20 rounded-2xl bg-primary-50 dark:bg-primary-950 flex items-center justify-center shadow-sm"
       >
-        <UIcon name="i-lucide-nut" class="size-10 text-accent-500" />
+        <UIcon name="i-lucide-nut" class="size-10 text-primary-500" />
       </div>
 
       <!-- App name -->
@@ -25,12 +25,12 @@
       <!-- Dots loader -->
       <div class="flex items-center gap-1.5">
         <span
-          class="size-1.5 rounded-full bg-accent-400 animate-bounce [animation-delay:-0.3s]"
+          class="size-1.5 rounded-full bg-primary-400 animate-bounce [animation-delay:-0.3s]"
         />
         <span
-          class="size-1.5 rounded-full bg-accent-400 animate-bounce [animation-delay:-0.15s]"
+          class="size-1.5 rounded-full bg-primary-400 animate-bounce [animation-delay:-0.15s]"
         />
-        <span class="size-1.5 rounded-full bg-accent-400 animate-bounce" />
+        <span class="size-1.5 rounded-full bg-primary-400 animate-bounce" />
       </div>
     </div>
   </div>

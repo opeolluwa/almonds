@@ -107,7 +107,7 @@ async function handleSubmit() {
       Already have an account?
       <NuxtLink
         to="/auth/login"
-        class="text-accent-500 hover:text-accent-600 font-medium"
+        class="text-primary-500 hover:text-primary-600 font-medium"
       >
         Sign in
       </NuxtLink>

@@ -72,7 +72,7 @@ onMounted(async () => {
           Snippet not found
         </h3>
         <button
-          class="text-xs text-accent-500 hover:text-accent-600 font-medium mt-2"
+          class="text-xs text-primary-500 hover:text-primary-600 font-medium mt-2"
           @click="router.push('/snippets')"
         >
           Back to snippets
@@ -213,7 +213,7 @@ onMounted(async () => {
         >
           <UIcon
             name="heroicons:light-bulb"
-            class="size-3.5 mt-0.5 shrink-0 text-accent-400"
+            class="size-3.5 mt-0.5 shrink-0 text-primary-400"
           />
           {{ tip }}
         </li>

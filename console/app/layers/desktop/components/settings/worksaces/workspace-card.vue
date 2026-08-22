@@ -24,7 +24,7 @@ function formatDate(iso: string) {
   <div
     class="group bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-100 dark:border-gray-700 hover:shadow-sm transition-shadow flex items-center gap-4"
   >
-    <UIcon name="heroicons:briefcase" class="size-5 text-accent-500 shrink-0" />
+    <UIcon name="heroicons:briefcase" class="size-5 text-primary-500 shrink-0" />
     <div class="flex-1 min-w-0">
       <div class="flex items-center gap-2">
         <h3
@@ -34,7 +34,7 @@ function formatDate(iso: string) {
         </h3>
         <span
           v-if="workspace.isDefault"
-          class="px-1.5 py-0.5 rounded text-[10px] font-medium bg-accent-100 dark:bg-accent-900 text-accent-600 dark:text-accent-300 shrink-0"
+          class="px-1.5 py-0.5 rounded text-[10px] font-medium bg-primary-100 dark:bg-primary-900 text-primary-600 dark:text-primary-300 shrink-0"
         >
           default
         </span>
@@ -65,7 +65,7 @@ function formatDate(iso: string) {
         :text="workspace.isHidden ? 'Show workspace' : 'Hide workspace'"
       >
         <button
-          class="text-gray-400 hover:text-accent-500 transition-colors"
+          class="text-gray-400 hover:text-primary-500 transition-colors"
           @click="emit('toggleHidden', workspace.identifier)"
         >
           <UIcon
@@ -94,7 +94,7 @@ function formatDate(iso: string) {
       <UTooltip text="Set as default workspace">
         <button
           v-if="!workspace.isDefault"
-          class="text-gray-400 hover:text-accent-500 transition-colors"
+          class="text-gray-400 hover:text-primary-500 transition-colors"
           @click="emit('setDefault', workspace.identifier)"
         >
           <UIcon name="heroicons:star" class="size-4" />

@@ -53,10 +53,6 @@
         </a>
       </div>
 
-      <p class="text-xs text-slate-300 dark:text-gray-800 flex items-center gap-1">
-        &copy; {{ new Date().getFullYear() }} almonds. Built with
-        <UIcon name="i-heroicons-heart" class="size-3 text-accent-500" />
-      </p>
-    </div>
+-primary
   </footer>
 </template>

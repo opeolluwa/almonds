@@ -48,8 +48,8 @@ const typeConfig = {
   },
   bookmark: {
     icon: "heroicons:bookmark-solid",
-    color: "text-accent-500 dark:text-accent-400",
-    bg: "bg-accent-50 dark:bg-accent-950/60",
+    color: "text-primary-500 dark:text-primary-400",
+    bg: "bg-primary-50 dark:bg-primary-950/60",
     label: "Bookmarks",
   },
   snippet: {
@@ -276,7 +276,7 @@ const flatIndexByItem = computed(() => {
           class="w-full flex items-center gap-3 px-4 py-2 transition-colors text-left"
           :class="
             flatIndexByItem.get(item.id) === activeIndex
-              ? 'bg-accent-50 dark:bg-accent-950/60'
+              ? 'bg-primary-50 dark:bg-primary-950/60'
               : 'hover:bg-gray-50 dark:hover:bg-gray-800'
           "
           @click="navigate(item)"

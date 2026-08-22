@@ -142,7 +142,7 @@ onMounted(async () => {
           Note not found
         </h3>
         <button
-          class="text-xs text-accent-500 hover:text-accent-600 font-medium mt-2"
+          class="text-xs text-primary-500 hover:text-primary-600 font-medium mt-2"
           @click="router.push('/notes')"
         >
           Back to notes
@@ -211,7 +211,7 @@ onMounted(async () => {
             :loading="submitting"
             :disabled="!hasChanges"
             :ui="{
-              base: 'bg-accent-500 hover:bg-accent-600 disabled:bg-accent-600 disabled:text-gray-100 disabled:cursor-not-allowed py-2',
+              base: 'bg-primary-500 hover:bg-primary-600 disabled:bg-primary-600 disabled:text-gray-100 disabled:cursor-not-allowed py-2',
             }"
             @click="handleSave"
           >
@@ -222,7 +222,7 @@ onMounted(async () => {
             variant="ghost"
             size="sm"
             :disabled="submitting"
-            :ui="{ base: 'text-accent-500' }"
+            :ui="{ base: 'text-primary-500' }"
             @click="router.push('/notes')"
           >
             Discard
@@ -291,7 +291,7 @@ onMounted(async () => {
             >
               <UIcon
                 name="heroicons:light-bulb"
-                class="size-3.5 mt-0.5 shrink-0 text-accent-400"
+                class="size-3.5 mt-0.5 shrink-0 text-primary-400"
               />
               {{ tip }}
             </li>
