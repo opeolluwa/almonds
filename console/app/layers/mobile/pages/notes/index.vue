@@ -3,10 +3,13 @@ import EmptyState from "@shared/components/app/EmptyState.vue";
 import type { NoteSort } from "@shared/components/notes";
 import { useNoteStore } from "@shared/stores/notes";
 import NotesCard from "@shared/components/notes/notes-card.vue";
-
 const noteStore = useNoteStore();
 const { searchQuery, clearSearch } = useAppSearch();
 const sortBy = ref<NoteSort>("date-newest");
+
+definePageMeta({
+  layout: "notes",
+});
 
 onMounted(async () => {
   await noteStore.fetchNotes();
@@ -89,11 +92,11 @@ const filteredNotes = computed(() => {
 <template>
   <div>
     <!-- Create note FAB -->
-    <div
-      v-if="!noteStore.loading && noteStore.notes.length > 0"
-      class="fixed bottom-20 right-5 z-40"
-    >
-      <AppFab aria-label="Add note" @click="navigateTo('/notes/create-notes')" />
+    <div v-if="!noteStore.loading && noteStore.notes.length > 0">
+      <AppFab
+        aria-label="Add note"
+        @click="navigateTo('/notes/create-notes')"
+      />
     </div>
 
     <!-- Loading -->
@@ -125,7 +128,6 @@ const filteredNotes = computed(() => {
             icon="heroicons:magnifying-glass"
             placeholder="Search notes..."
             size="sm"
-
           />
           <UDropdownMenu
             :items="sortItems"
