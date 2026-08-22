@@ -2,6 +2,7 @@
 import { useNoteStore } from "@shared/stores/notes";
 import { onBeforeRouteLeave } from "vue-router";
 import EditorToolBar from "@mobile/components/notes/EditorToolBar.vue";
+import NoteTitleInput from "@shared/components/notes/note-title-input.vue";
 definePageMeta({ name: "New note", layout: "notes", keepalive: true });
 
 const router = useRouter();

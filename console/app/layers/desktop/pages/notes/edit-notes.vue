@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useNoteStore } from "@shared/stores/notes";
 import { onBeforeRouteLeave } from "vue-router";
-
+import NoteTitleInput from "@shared/components/notes/note-title-input.vue";
 definePageMeta({ layout: false, keepalive: true, name: "Edit notes" });
 
 const route = useRoute();
