@@ -1,10 +1,39 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
-/* @plugin 'tailwind-scrollbar'; */
-
 @plugin 'tailwind-scrollbar' {
   nocompatible: true;
 }
+
+
+@import "tailwindcss";
+
+@utility ripple {
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 50% auto auto 50%;
+    width: 0;
+    height: 0;
+    border-radius: 9999px;
+    background: rgb(255 255 255 / 0.25);
+    transform: translate(-50%, -50%);
+    transition:
+      width 0.3s ease,
+      height 0.3s ease,
+      opacity 0.3s ease;
+    opacity: 0;
+  }
+
+  &:active::after {
+    width: 200%;
+    height: 200%;
+    opacity: 1;
+  }
+}
+
 
 :root {
   --app-primary-50: #f0f9ff;

@@ -52,38 +52,35 @@ async function handleSubmit() {
 
 <template>
   <div class="flex flex-col flex-1">
-    <div class="flex items-center justify-between gap-2">
+    <div class="flex flex-col gap-1">
       <h2 class="text-lg font-semibold">Welcome back, Adeoye</h2>
-      <NuxtLink
-        to="/auth/login"
-        class="text-xs text-primary-500 hover:text-primary-600 font-medium whitespace-nowrap"
-      >
-        Not Adeoye?
-      </NuxtLink>
+      <p class="text-sm text-gray-500 dark:text-gray-400">
+        Enter your password to continue.
+      </p>
     </div>
-    <p class="text-sm text-gray-500 dark:text-gray-400">
-      Enter password to continue.
-    </p>
-
     <form class="flex flex-col mt-4" @submit.prevent="handleSubmit">
-      <AppInput
-        v-model="password"
-        type="password"
-        name="password"
-        label="Password"
-        placeholder="••••••••"
-        size="lg"
-        :disabled="loading"
-      />
-      <div class="flex justify-end mt-1">
-        <NuxtLink
-          to="/auth/reset-password"
-          class="text-xs text-primary-500 hover:text-primary-600 font-medium"
-        >
-          Forgot password?
-        </NuxtLink>
+      <div>
+        <AppInput
+          v-model="password"
+          type="password"
+          name="password"
+          label="Password"
+          placeholder="••••••••"
+          size="lg"
+          :disabled="loading"
+        />
+        <div class="flex justify-end mt-1">
+          <NuxtLink
+            to="/auth/reset-password"
+            class="text-xs text-primary-500 hover:text-primary-600 font-medium"
+          >
+            Forgot password?
+          </NuxtLink>
+        </div>
       </div>
-      <p v-if="error" class="text-xs text-red-500 -mt-3">{{ error }}</p>
+      <p v-if="error" class="text-xs text-red-500 -mt-3">
+        {{ error }}
+      </p>
 
       <p v-if="submitError" class="text-sm text-red-500">{{ submitError }}</p>
 

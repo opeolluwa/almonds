@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import NotesCard from "@desktop/components/notes/notes-card.vue";
+import NotesCard from "@shared/components/notes/notes-card.vue";
+import type { NoteSort } from "@shared/components/notes";
 import { useNoteStore } from "@shared/stores/notes";
+import { formatDate } from "@shared/utils/date";
+
 definePageMeta({ layout: false });
 
 const noteStore = useNoteStore();
 const router = useRouter();
 const { searchQuery, setSearch, clearSearch } = useAppSearch();
-type NoteSort = "name-asc" | "name-desc" | "date-newest" | "date-oldest";
 const sortBy = ref<NoteSort>("date-newest");
 
 const sortItems = computed(() => [
@@ -79,14 +81,6 @@ const filteredNotes = computed(() => {
     }
   });
 });
-
-function formatDate(dateStr: string) {
-  return new Date(dateStr).toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
-}
 
 onMounted(async () => {
   setSearch({ placeholder: "Search notes..." });

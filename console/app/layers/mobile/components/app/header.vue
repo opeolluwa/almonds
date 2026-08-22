@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import { useAuthStore } from "@shared/stores/auth";
 import { primaryRoutes, secondaryRoutes } from "@shared/data/routes";
 
 const route = useRoute();
 const router = useRouter();
-const authStore = useAuthStore();
 const { toggleMobileNav } = useMobileNav();
 
 const topLevelPaths = [...primaryRoutes, ...secondaryRoutes].map(
@@ -16,14 +14,14 @@ const isTopLevel = computed(() => topLevelPaths.includes(route.path));
 <template>
   <header
     id="mobile_app_header"
-    class="absolute top-0 py-7 flex items-center justify-between px-6 z-50 left-0 w-full bg-white dark:bg-app-dark-800"
+    class="absolute top-0 max-h-20 py-3.5 flex items-center justify-between px-6 z-50 left-0 w-full bg-white dark:bg-app-dark-800"
   >
     <UButton
       v-if="isTopLevel"
-      size="sm"
+      size="md"
       color="neutral"
       variant="ghost"
-      icon="ri:menu-line"
+      icon="heroicons:bars-3"
       aria-label="Open menu"
       @click="toggleMobileNav()"
     />
@@ -33,23 +31,12 @@ const isTopLevel = computed(() => topLevelPaths.includes(route.path));
 
     <div class="flex items-center gap-1">
       <UButton
-        size="sm"
+        size="md"
         color="neutral"
         variant="ghost"
         icon="heroicons:bell"
         aria-label="Notifications"
         @click="navigateTo('/notifications')"
-      />
-
-      <UUser
-        size="sm"
-        class="cursor-pointer"
-        :avatar="
-          authStore.isGuest || !authStore.isAuthenticated
-            ? { icon: 'heroicons:user' }
-            : { src: 'https://i.pravatar.cc/150?u=john-doe' }
-        "
-        @click="navigateTo('/settings/profile')"
       />
     </div>
   </header>

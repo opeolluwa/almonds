@@ -109,10 +109,7 @@ const routes = [
           <div
             class="size-10 shrink-0 rounded-lg flex items-center justify-center"
           >
-            <UIcon
-              :name="item.icon"
-              class="size-5 text-primary-700 dark:text-primary-300"
-            />
+            <UIcon :name="item.icon" class="size-5" />
           </div>
           <div class="min-w-0 flex-1">
             <h3

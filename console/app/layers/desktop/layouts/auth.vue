@@ -1,7 +1,7 @@
 <template>
   <div
     id="auth_layout"
-    class="h-screen bg-gray-50 w-full dark:bg-surface-950 flex flex-col items-center justify-center md:p-6 relative overflow-hidden"
+    class="h-screen bg-gray-50 w-full dark:bg-app-dark-800 flex flex-col items-center justify-center md:p-6 relative overflow-hidden"
     :class="{ 'rounded-xl': !IS_WEB }"
   >
     <div
